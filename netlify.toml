@@ -50,3 +50,8 @@
   from = "/plataforma/ic-web-banking"
   to = "/plataforma-ic-web-banking.html"
   status = 200
+
+[[redirects]]
+  from = "/plataforma/ic-social-banking"
+  to = "/plataforma-ic-social-banking.html"
+  status = 200

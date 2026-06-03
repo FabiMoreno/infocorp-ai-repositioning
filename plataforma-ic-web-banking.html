@@ -1,0 +1,1822 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IC Web Banking — Infocorp</title>
+  <meta name="description" content="La banca responsive y sin fricción. Touch-first, design system compartido con app móvil, performance Lighthouse 96+ y WCAG 2.1 AA por diseño." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,700&display=swap" rel="stylesheet" />
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/split-type@0.3.4/umd/index.min.js"></script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:         #F8FAFC;
+      --bg-alt:     #F1F5F9;
+      --white:      #FFFFFF;
+      --ink:        #0F1729;
+      --ink-deep:   #0A1226;
+      --sec:        #334155;
+      --muted:      #64748B;
+      --border:     #E2E8F0;
+      --surface:    #EBEEF5;
+
+      /* CHANNELS accent — Web Banking */
+      --accent:     #2CA4FF;
+      --accent-d:   #0080E0;
+      --accent-l:   #DBF1FF;
+      --accent-2:   #7AD5FF;
+      --accent-2-l: #BAE0FF;
+
+      --brand:      #0063F2;
+      --brand-d:    #004fd4;
+      --brand-l:    #DBEAFE;
+      --cyan:       #2CA4FF;
+      --cyan-l:     #BAE0FF;
+      --navy:       #051030;
+      --navy-2:     #0A1A48;
+      --navy-3:     #0E2461;
+      --teal:       #18BCBC;
+      --purple:     #7B5BFF;
+      --green:      #22C55E;
+      --amber:      #F59E0B;
+      --pink:       #FF6BB5;
+
+      --font:       'Plus Jakarta Sans', sans-serif;
+      --ease:       cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font); background: var(--bg); color: var(--ink);
+      overflow-x: hidden; -webkit-font-smoothing: antialiased;
+    }
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
+    img, svg { display: block; max-width: 100%; }
+
+    .label {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--accent);
+    }
+    .label.on-dark { color: var(--accent-2); }
+    .container { max-width: 1240px; margin: 0 auto; padding: 0 64px; }
+
+    .cursor-glow {
+      position: fixed; width: 480px; height: 480px;
+      border-radius: 50%; pointer-events: none; z-index: 1;
+      background: radial-gradient(circle, rgba(44,164,255,0.10) 0%, transparent 60%);
+      transform: translate(-50%, -50%); mix-blend-mode: multiply;
+    }
+
+    /* ── NAV ─────────────────────────────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100; height: 68px;
+      background: rgba(255,255,255,0.85);
+      backdrop-filter: blur(20px) saturate(180%);
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.3s, box-shadow 0.3s;
+      transform: translateY(-100%); animation: nav-in 0.6s 0.05s var(--ease) forwards;
+    }
+    nav.scrolled { border-color: var(--border); box-shadow: 0 1px 24px rgba(15,23,41,0.07); }
+    @keyframes nav-in { to { transform: translateY(0); } }
+    .nav-inner { max-width: 1240px; margin: 0 auto; padding: 0 64px; height: 100%; display: flex; align-items: center; gap: 40px; }
+    .nav-logo { font-size: 18px; font-weight: 700; color: var(--ink); letter-spacing: -0.3px; flex-shrink: 0; }
+    .nav-logo span { color: var(--brand); }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a { font-size: 14px; color: var(--sec); transition: color 0.2s; position: relative; }
+    .nav-links a:hover { color: var(--ink); }
+    .nav-links a.active { color: var(--accent); font-weight: 600; }
+    .nav-links a.active::after {
+      content: ''; position: absolute; left: 0; right: 0; bottom: -22px;
+      height: 2px; background: var(--accent); border-radius: 2px;
+    }
+    .nav-crumb {
+      font-size: 11px; color: var(--muted);
+      margin-left: 4px; letter-spacing: 0.06em; text-transform: uppercase;
+    }
+    .nav-crumb::before { content: '/ '; color: var(--border); }
+    .nav-cta {
+      margin-left: auto; padding: 9px 22px;
+      background: var(--accent); color: #fff;
+      font-size: 13px; font-weight: 600; border-radius: 6px;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+      box-shadow: 0 2px 12px rgba(44,164,255,0.25);
+      position: relative; overflow: hidden;
+    }
+    .nav-cta::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.25) 50%, transparent 60%);
+      transform: translateX(-100%); transition: transform 0.5s;
+    }
+    .nav-cta:hover::after { transform: translateX(100%); }
+    .nav-cta:hover { background: var(--accent-d); transform: translateY(-1px); box-shadow: 0 4px 20px rgba(44,164,255,0.35); }
+
+    .btn { display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 24px; border-radius: 8px; font-weight: 600; font-size: 14px;
+      transition: all 0.2s; cursor: pointer; border: none; font-family: var(--font);
+    }
+    .btn-primary { background: var(--accent); color: #fff;
+      box-shadow: 0 2px 12px rgba(44,164,255,0.25); }
+    .btn-primary:hover { background: var(--accent-d); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(44,164,255,0.35); }
+    .btn-ghost { background: transparent; color: var(--accent); border: 1px solid rgba(44,164,255,0.3); }
+    .btn-ghost:hover { background: var(--accent-l); border-color: var(--accent); }
+    .btn-white { background: #fff; color: var(--accent);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15); }
+    .btn-white:hover { transform: translateY(-1px); box-shadow: 0 8px 30px rgba(0,0,0,0.25); }
+    .btn-arrow::after { content: '→'; margin-left: 4px; transition: transform 0.2s; }
+    .btn-arrow:hover::after { transform: translateX(4px); }
+
+    /* ╔═══════════════════════════════════════════════════════════════════╗
+       ║  SECTION 2 — HERO with multi-device mockup                         ║
+       ╚═══════════════════════════════════════════════════════════════════╝ */
+    .wb-hero {
+      position: relative; min-height: 100vh;
+      background: linear-gradient(135deg, var(--navy) 0%, #0A2C6B 60%, #0653A8 100%);
+      color: #fff; overflow: hidden;
+      padding: 168px 0 100px;
+      display: flex; align-items: center;
+    }
+    .wb-hero::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 80% 40%, rgba(44,164,255,0.30), transparent 50%),
+                  radial-gradient(ellipse at 20% 90%, rgba(122,213,255,0.18), transparent 55%);
+    }
+    .wb-hero-grid {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse at center, #000 35%, transparent 75%);
+      -webkit-mask-image: radial-gradient(ellipse at center, #000 35%, transparent 75%);
+    }
+    .wb-hero-inner {
+      position: relative; z-index: 3;
+      max-width: 1240px; margin: 0 auto; padding: 0 64px;
+      display: grid; grid-template-columns: 1fr 1.1fr; gap: 60px;
+      align-items: center; width: 100%;
+    }
+    .wb-hero-label {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 14px; border-radius: 20px;
+      background: rgba(122,213,255,0.14);
+      border: 1px solid rgba(122,213,255,0.3);
+      font-size: 11px; font-weight: 600; letter-spacing: 0.18em;
+      color: var(--accent-2); text-transform: uppercase;
+      margin-bottom: 28px;
+    }
+    .wb-hero-label::before {
+      content: ''; width: 6px; height: 6px; border-radius: 50%;
+      background: var(--accent-2); box-shadow: 0 0 8px var(--accent-2);
+      animation: wb-pulse 2s ease-in-out infinite;
+    }
+    @keyframes wb-pulse {
+      0%,100% { box-shadow: 0 0 0 0 rgba(122,213,255,0.5); }
+      50% { box-shadow: 0 0 0 6px rgba(122,213,255,0); }
+    }
+    .wb-hero-h1 {
+      font-size: clamp(48px, 5.4vw, 78px);
+      font-weight: 800; line-height: 1.04;
+      letter-spacing: -2.2px; margin-bottom: 24px; color: #fff;
+    }
+    .wb-hero-h1 em,
+    .wb-hero-h1 em .char,
+    .wb-hero-h1 em .word {
+      font-style: normal; font-weight: 800;
+      background: linear-gradient(135deg, var(--accent-2) 0%, #B8E5FF 100%);
+      -webkit-background-clip: text; background-clip: text;
+      color: transparent; -webkit-text-fill-color: transparent;
+    }
+    .wb-hero-sub {
+      font-size: 18px; line-height: 1.55; color: rgba(255,255,255,0.72);
+      max-width: 540px; margin-bottom: 36px;
+    }
+    .wb-hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+    .wb-hero-actions .btn-primary { background: #fff; color: var(--accent-d); box-shadow: 0 4px 20px rgba(0,0,0,0.18); }
+    .wb-hero-actions .btn-primary:hover { background: #F1F8FF; }
+    .wb-hero-actions .btn-ghost { color: #fff; border-color: rgba(255,255,255,0.25); }
+    .wb-hero-actions .btn-ghost:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.5); }
+
+    /* Multi-device stage — Desktop + Tablet + Phone */
+    .wb-devices {
+      position: relative;
+      width: 100%;
+      height: 540px;
+      perspective: 1800px;
+    }
+    .wb-monitor {
+      position: absolute;
+      top: 4%; left: 4%;
+      width: 70%;
+      transform: rotateY(-8deg) rotateX(2deg);
+      animation: wb-monitor-float 8s ease-in-out infinite;
+      filter: drop-shadow(0 30px 80px rgba(44,164,255,0.4)) drop-shadow(0 15px 40px rgba(0,0,0,0.4));
+    }
+    @keyframes wb-monitor-float {
+      0%,100% { transform: rotateY(-8deg) rotateX(2deg) translateY(0); }
+      50% { transform: rotateY(-6deg) rotateX(2deg) translateY(-8px); }
+    }
+    .wb-monitor-bezel {
+      background: linear-gradient(180deg, #1A1A1A 0%, #0A0A0A 100%);
+      border-radius: 14px 14px 6px 6px;
+      padding: 10px 10px 24px;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.05);
+      position: relative;
+    }
+    .wb-monitor-bezel::after {
+      content: 'Infocorp · IC Web Banking';
+      position: absolute; bottom: 5px; left: 50%; transform: translateX(-50%);
+      font-size: 8px; color: rgba(255,255,255,0.3); letter-spacing: 0.08em;
+    }
+    .wb-monitor-screen {
+      background: #061640;
+      border-radius: 6px;
+      overflow: hidden;
+      aspect-ratio: 16/10;
+    }
+    /* Monitor stand */
+    .wb-monitor::after {
+      content: '';
+      position: absolute; left: 50%; bottom: -32px;
+      transform: translateX(-50%);
+      width: 80px; height: 32px;
+      background: linear-gradient(180deg, #1A1A1A 0%, #0A0A0A 100%);
+      clip-path: polygon(30% 0, 70% 0, 100% 100%, 0 100%);
+    }
+
+    /* Tablet */
+    .wb-tablet {
+      position: absolute;
+      top: 30%; right: 6%;
+      width: 30%;
+      transform: rotateY(15deg) rotateX(-3deg) rotateZ(4deg);
+      animation: wb-tablet-float 8s ease-in-out infinite;
+      animation-delay: -2s;
+      filter: drop-shadow(0 24px 50px rgba(0,0,0,0.5));
+      z-index: 2;
+    }
+    @keyframes wb-tablet-float {
+      0%,100% { transform: rotateY(15deg) rotateX(-3deg) rotateZ(4deg) translateY(0); }
+      50% { transform: rotateY(12deg) rotateX(-3deg) rotateZ(4deg) translateY(-10px); }
+    }
+    .wb-tablet-body {
+      background: #1A1A1A;
+      border-radius: 22px;
+      padding: 10px;
+      box-shadow: inset 0 0 0 1.5px rgba(255,255,255,0.06);
+    }
+    .wb-tablet-screen {
+      background: #061640;
+      border-radius: 14px;
+      overflow: hidden;
+      aspect-ratio: 3/4;
+    }
+
+    /* Phone */
+    .wb-phone-mini {
+      position: absolute;
+      bottom: 4%; left: 18%;
+      width: 16%;
+      transform: rotateY(-12deg) rotateX(4deg) rotateZ(-3deg);
+      animation: wb-phone-float 8s ease-in-out infinite;
+      animation-delay: -4s;
+      filter: drop-shadow(0 18px 40px rgba(0,0,0,0.5));
+      z-index: 3;
+    }
+    @keyframes wb-phone-float {
+      0%,100% { transform: rotateY(-12deg) rotateX(4deg) rotateZ(-3deg) translateY(0); }
+      50% { transform: rotateY(-10deg) rotateX(4deg) rotateZ(-3deg) translateY(-12px); }
+    }
+    .wb-phone-mini-body {
+      background: #0A0A0A;
+      border-radius: 22px;
+      padding: 7px;
+      box-shadow: inset 0 0 0 1.5px rgba(255,255,255,0.06);
+    }
+    .wb-phone-mini-screen {
+      background: #061640;
+      border-radius: 16px;
+      overflow: hidden;
+      aspect-ratio: 9/19;
+    }
+
+    /* Shared dashboard UI for screens */
+    .wb-ui {
+      width: 100%; height: 100%;
+      padding: 14px;
+      display: flex; flex-direction: column; gap: 10px;
+      background: linear-gradient(180deg, #061640 0%, #0A2356 100%);
+      color: #fff;
+    }
+    .wb-ui-topbar {
+      display: flex; align-items: center; gap: 10px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .wb-ui-logo {
+      width: 18px; height: 18px; border-radius: 5px;
+      background: linear-gradient(135deg, var(--accent-2), var(--accent));
+    }
+    .wb-ui-logo-text {
+      font-size: 9px; font-weight: 800; color: #fff; letter-spacing: 0.04em;
+    }
+    .wb-ui-nav {
+      display: flex; gap: 6px; margin-left: auto;
+    }
+    .wb-ui-nav-item {
+      padding: 3px 7px; border-radius: 4px;
+      font-size: 7px; font-weight: 700; color: rgba(255,255,255,0.5);
+      background: transparent;
+    }
+    .wb-ui-nav-item.active { background: rgba(122,213,255,0.18); color: var(--accent-2); }
+    .wb-ui-avatar {
+      width: 16px; height: 16px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), #FFD9B8);
+    }
+    .wb-ui-greet {
+      font-size: 8px; color: rgba(255,255,255,0.5);
+      margin-top: 4px;
+    }
+    .wb-ui-greet b { color: #fff; font-weight: 700; }
+    .wb-ui-balance-card {
+      background: linear-gradient(135deg, rgba(44,164,255,0.18), rgba(122,213,255,0.05));
+      border: 1px solid rgba(122,213,255,0.2);
+      border-radius: 10px;
+      padding: 12px;
+      position: relative; overflow: hidden;
+    }
+    .wb-ui-balance-card::after {
+      content: ''; position: absolute; right: -20px; top: -20px;
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(122,213,255,0.15), transparent 70%);
+    }
+    .wb-ui-balance-label {
+      font-size: 7px; color: rgba(255,255,255,0.5);
+      letter-spacing: 0.08em; text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+    .wb-ui-balance-num {
+      font-size: 18px; font-weight: 800; color: #fff;
+      letter-spacing: -0.4px; line-height: 1;
+      font-variant-numeric: tabular-nums;
+    }
+    .wb-ui-balance-sub {
+      font-size: 7px; color: rgba(255,255,255,0.4); margin-top: 4px;
+    }
+    .wb-ui-row {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px;
+    }
+    .wb-ui-chip {
+      background: rgba(255,255,255,0.04);
+      border-radius: 7px;
+      padding: 6px 4px;
+      display: flex; flex-direction: column; align-items: center; gap: 3px;
+    }
+    .wb-ui-chip-icon {
+      width: 14px; height: 14px; border-radius: 50%;
+      background: rgba(122,213,255,0.18);
+    }
+    .wb-ui-chip-label {
+      font-size: 6px; color: rgba(255,255,255,0.65);
+    }
+    .wb-ui-section-title {
+      font-size: 7px; font-weight: 700; letter-spacing: 0.08em;
+      text-transform: uppercase; color: rgba(255,255,255,0.45);
+      margin-top: 2px;
+    }
+    .wb-ui-tx-row {
+      display: flex; align-items: center; gap: 6px;
+      padding: 4px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+    .wb-ui-tx-dot {
+      width: 12px; height: 12px; border-radius: 4px;
+      background: rgba(255,255,255,0.06);
+      flex-shrink: 0;
+    }
+    .wb-ui-tx-name { font-size: 7px; font-weight: 600; color: #fff; flex: 1; }
+    .wb-ui-tx-amt { font-size: 7px; font-weight: 700; color: var(--accent-2); font-variant-numeric: tabular-nums; }
+
+    /* Tablet adjusts spacing */
+    .wb-tablet .wb-ui { padding: 10px; gap: 7px; }
+    .wb-tablet .wb-ui-nav { display: none; }
+    .wb-tablet .wb-ui-row { grid-template-columns: repeat(2, 1fr); }
+
+    /* Phone adjusts further */
+    .wb-phone-mini .wb-ui { padding: 8px 7px; gap: 5px; }
+    .wb-phone-mini .wb-ui-nav { display: none; }
+    .wb-phone-mini .wb-ui-row { grid-template-columns: repeat(2, 1fr); gap: 4px; }
+    .wb-phone-mini .wb-ui-balance-num { font-size: 12px; }
+    .wb-phone-mini .wb-ui-tx-row { display: none; }
+    .wb-phone-mini .wb-ui-tx-row:nth-child(-n+2) { display: flex; }
+
+    /* Floating tags */
+    .wb-floating-tag {
+      position: absolute; padding: 9px 14px;
+      border-radius: 12px;
+      background: #fff;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.18);
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 11px; font-weight: 700; color: var(--ink);
+      z-index: 6;
+      animation: wb-tag-float 6s ease-in-out infinite;
+    }
+    .wb-floating-tag svg { width: 14px; height: 14px; color: var(--accent); }
+    .wb-floating-tag.tag-1 { top: 2%; right: 12%; }
+    .wb-floating-tag.tag-2 { bottom: 30%; left: 0; animation-delay: -2s; background: linear-gradient(135deg, var(--accent), var(--accent-d)); color: #fff; }
+    .wb-floating-tag.tag-2 svg { color: #fff; }
+    .wb-floating-tag.tag-3 { bottom: 0%; right: 2%; animation-delay: -4s; }
+    @keyframes wb-tag-float {
+      0%,100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    /* ╔═══════════════════════════════════════════════════════════════════╗
+       ║  SECTION 3 — STATS STRIP                                            ║
+       ╚═══════════════════════════════════════════════════════════════════╝ */
+    .wb-stats { background: var(--bg); padding: 80px 0; position: relative; }
+    .wb-stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; align-items: center; }
+    .wb-stat {
+      position: relative; padding: 20px 24px;
+      border-left: 3px solid var(--accent-l);
+      transition: border-color 0.3s var(--ease);
+    }
+    .wb-stat:hover { border-left-color: var(--accent); }
+    .wb-stat-num {
+      font-size: 44px; font-weight: 800; color: var(--ink);
+      line-height: 1; letter-spacing: -1.6px;
+      font-variant-numeric: tabular-nums;
+      margin-bottom: 8px;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-d) 100%);
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .wb-stat-desc { font-size: 13px; line-height: 1.5; color: var(--sec); }
+
+    /* ╔═══════════════════════════════════════════════════════════════════╗
+       ║  SECTION 4 — PROBLEM → SOLUTION                                     ║
+       ╚═══════════════════════════════════════════════════════════════════╝ */
+    .wb-problem { padding: 140px 0; background: #fff; position: relative; overflow: hidden; }
+    .wb-problem-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+    .wb-problem-h2 {
+      font-size: clamp(36px, 3.6vw, 50px);
+      font-weight: 800; line-height: 1.08; letter-spacing: -1.5px;
+      margin: 12px 0 20px;
+    }
+    .wb-problem-h2 em { font-style: normal; color: var(--accent); }
+    .wb-problem-list { display: flex; flex-direction: column; gap: 14px; }
+    .wb-problem-item {
+      display: flex; gap: 14px; align-items: flex-start;
+      padding: 16px 18px;
+      background: #FEF2F2;
+      border-left: 3px solid #FCA5A5;
+      border-radius: 8px;
+    }
+    .wb-problem-item svg { width: 18px; height: 18px; color: #DC2626; flex-shrink: 0; margin-top: 1px; }
+    .wb-problem-item-text { font-size: 14px; line-height: 1.5; color: #7F1D1D; }
+    .wb-problem-item-text strong { color: #991B1B; font-weight: 700; }
+
+    .wb-arrow-down {
+      display: flex; align-items: center; justify-content: center; gap: 14px;
+      margin: 24px 0;
+      color: var(--accent); font-weight: 700; font-size: 13px;
+      letter-spacing: 0.1em; text-transform: uppercase;
+    }
+    .wb-arrow-down::before, .wb-arrow-down::after {
+      content: ''; flex: 1; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--accent-l), transparent);
+    }
+
+    .wb-solution-list { display: flex; flex-direction: column; gap: 14px; }
+    .wb-solution-item {
+      display: flex; gap: 14px; align-items: flex-start;
+      padding: 16px 18px;
+      background: #ECFDF5;
+      border-left: 3px solid #6EE7B7;
+      border-radius: 8px;
+    }
+    .wb-solution-item svg { width: 18px; height: 18px; color: #059669; flex-shrink: 0; margin-top: 1px; }
+    .wb-solution-item-text { font-size: 14px; line-height: 1.5; color: #064E3B; }
+    .wb-solution-item-text strong { color: #047857; font-weight: 700; }
+
+    /* Web performance visual */
+    .wb-perf {
+      position: relative;
+      aspect-ratio: 1/1;
+      border-radius: 24px;
+      background: linear-gradient(135deg, #F0F9FF 0%, #DBEAFE 100%);
+      padding: 40px;
+      overflow: hidden;
+    }
+    .wb-perf::before {
+      content: ''; position: absolute; inset: 0;
+      background-image: radial-gradient(circle at 1px 1px, rgba(44,164,255,0.10) 1px, transparent 0);
+      background-size: 24px 24px;
+    }
+    .wb-perf-head {
+      position: relative;
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    .wb-perf-head-label {
+      font-size: 10px; font-weight: 800; color: var(--accent-d);
+      letter-spacing: 0.16em; text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .wb-perf-head-title {
+      font-size: 15px; font-weight: 700; color: var(--ink);
+      letter-spacing: -0.2px;
+    }
+    .wb-perf-bars {
+      position: relative;
+      display: flex; flex-direction: column; gap: 14px;
+    }
+    .wb-perf-row { }
+    .wb-perf-row-head {
+      display: flex; justify-content: space-between; align-items: baseline;
+      margin-bottom: 6px;
+    }
+    .wb-perf-row-label {
+      font-size: 12px; font-weight: 700; color: var(--ink);
+    }
+    .wb-perf-row-num {
+      font-size: 13px; font-weight: 800;
+      font-variant-numeric: tabular-nums;
+    }
+    .wb-perf-row-num.us { color: var(--accent-d); }
+    .wb-perf-row-num.them { color: var(--muted); }
+    .wb-perf-bar {
+      height: 10px; border-radius: 6px;
+      background: rgba(255,255,255,0.7);
+      overflow: hidden; position: relative;
+    }
+    .wb-perf-bar-fill {
+      height: 100%; border-radius: inherit;
+      background: linear-gradient(90deg, var(--accent), var(--accent-d));
+    }
+    .wb-perf-bar-fill.them {
+      background: linear-gradient(90deg, #FCA5A5, #DC2626);
+    }
+    .wb-perf-foot {
+      position: relative;
+      margin-top: 22px; padding-top: 20px;
+      border-top: 1px solid rgba(15,23,41,0.08);
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+      text-align: center;
+    }
+    .wb-perf-foot-num {
+      font-size: 22px; font-weight: 800; color: var(--accent-d);
+      font-variant-numeric: tabular-nums; letter-spacing: -0.6px;
+      line-height: 1;
+    }
+    .wb-perf-foot-lbl {
+      font-size: 10px; color: var(--muted);
+      letter-spacing: 0.05em; text-transform: uppercase;
+      margin-top: 4px;
+    }
+
+    /* ╔═══════════════════════════════════════════════════════════════════╗
+       ║  SECTION 5 — CAPABILITIES                                           ║
+       ╚═══════════════════════════════════════════════════════════════════╝ */
+    .wb-caps { padding: 140px 0; background: var(--bg); position: relative; overflow: hidden; }
+    .wb-caps::before {
+      content: ''; position: absolute; inset: 0;
+      background-image: radial-gradient(circle at 1px 1px, rgba(15,23,41,0.05) 1px, transparent 0);
+      background-size: 32px 32px;
+      mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%);
+      -webkit-mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%);
+    }
+    .wb-caps-head { text-align: center; margin-bottom: 64px; position: relative; z-index: 2; }
+    .wb-caps-head h2 {
+      font-size: clamp(36px, 3.6vw, 50px);
+      font-weight: 800; line-height: 1.08; letter-spacing: -1.5px;
+      margin: 12px 0 16px;
+    }
+    .wb-caps-head h2 em { font-style: normal; color: var(--accent); }
+    .wb-caps-head p {
+      font-size: 17px; line-height: 1.6; color: var(--sec);
+      max-width: 620px; margin: 0 auto;
+    }
+    .wb-caps-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;
+      position: relative; z-index: 2;
+    }
+    .wb-cap-card {
+      background: #fff; border: 1px solid var(--border);
+      border-radius: 16px; padding: 28px 24px;
+      transition: all 0.3s var(--ease);
+      position: relative; overflow: hidden;
+    }
+    .wb-cap-card::before {
+      content: ''; position: absolute; left: 0; top: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      transform: scaleX(0); transform-origin: left;
+      transition: transform 0.4s var(--ease);
+    }
+    .wb-cap-card:hover::before { transform: scaleX(1); }
+    .wb-cap-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 50px rgba(15,23,41,0.08);
+      border-color: rgba(44,164,255,0.2);
+    }
+    .wb-cap-icon {
+      width: 48px; height: 56px;
+      clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+      background: linear-gradient(135deg, var(--accent), var(--accent-d));
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 20px;
+      box-shadow: 0 8px 20px rgba(44,164,255,0.25);
+    }
+    .wb-cap-icon svg { width: 22px; height: 22px; color: #fff; }
+    .wb-cap-card h4 {
+      font-size: 17px; font-weight: 700; color: var(--ink);
+      margin-bottom: 10px; line-height: 1.3;
+    }
+    .wb-cap-card p { font-size: 13px; line-height: 1.55; color: var(--sec); }
+
+    /* ╔═══════════════════════════════════════════════════════════════════╗
+       ║  SECTION 6 — IN ACTION — Responsive transformer                    ║
+       ╚═══════════════════════════════════════════════════════════════════╝ */
+    .wb-action {
+      padding: 140px 0;
+      background: linear-gradient(180deg, var(--navy) 0%, #0A2C6B 100%);
+      color: #fff;
+      position: relative; overflow: hidden;
+    }
+    .wb-action::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 30% 50%, rgba(44,164,255,0.25), transparent 50%),
+                  radial-gradient(ellipse at 80% 70%, rgba(122,213,255,0.18), transparent 55%);
+    }
+    .wb-action-head { text-align: center; margin-bottom: 70px; position: relative; z-index: 2; }
+    .wb-action-head h2 {
+      font-size: clamp(36px, 3.6vw, 50px);
+      font-weight: 800; line-height: 1.08; letter-spacing: -1.5px;
+      margin: 12px 0 16px;
+    }
+    .wb-action-head h2 em { font-style: normal; color: var(--accent-2); }
+    .wb-action-head p {
+      font-size: 17px; line-height: 1.6; color: rgba(255,255,255,0.72);
+      max-width: 620px; margin: 0 auto;
+    }
+    .wb-transformer {
+      position: relative; z-index: 2;
+      max-width: 1100px; margin: 0 auto;
+    }
+    .wb-bp-tabs {
+      display: flex; justify-content: center; gap: 12px;
+      margin-bottom: 36px;
+    }
+    .wb-bp-tab {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 10px 18px; border-radius: 24px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: rgba(255,255,255,0.65);
+      font-size: 13px; font-weight: 700;
+      cursor: pointer; transition: all 0.25s var(--ease);
+    }
+    .wb-bp-tab svg { width: 14px; height: 14px; }
+    .wb-bp-tab:hover { background: rgba(255,255,255,0.1); color: #fff; }
+    .wb-bp-tab.active {
+      background: linear-gradient(135deg, var(--accent), var(--accent-d));
+      color: #fff;
+      border-color: var(--accent);
+      box-shadow: 0 8px 24px rgba(44,164,255,0.35);
+    }
+
+    .wb-bp-stage {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px;
+      padding: 40px;
+      position: relative;
+      min-height: 460px;
+      backdrop-filter: blur(12px);
+      transition: all 0.4s var(--ease);
+    }
+
+    .wb-bp-meta {
+      position: absolute; top: 18px; right: 24px;
+      display: flex; gap: 18px;
+      font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.5);
+      letter-spacing: 0.08em; text-transform: uppercase;
+    }
+    .wb-bp-meta span b { color: var(--accent-2); margin-right: 4px; font-size: 12px; }
+
+    .wb-bp-frame {
+      position: relative;
+      margin: 0 auto;
+      transition: width 0.5s var(--ease);
+      background: #061640;
+      border-radius: 12px;
+      box-shadow: 0 18px 50px rgba(0,0,0,0.4);
+      overflow: hidden;
+    }
+    .wb-bp-frame.desktop { width: 100%; max-width: 880px; aspect-ratio: 16/10; }
+    .wb-bp-frame.tablet { width: 540px; aspect-ratio: 3/4; }
+    .wb-bp-frame.phone { width: 260px; aspect-ratio: 9/19; }
+
+    /* Reuse UI inside frame */
+    .wb-bp-frame .wb-ui { padding: 18px; gap: 12px; }
+    .wb-bp-frame.tablet .wb-ui { padding: 14px; gap: 10px; }
+    .wb-bp-frame.tablet .wb-ui-nav { display: none; }
+    .wb-bp-frame.tablet .wb-ui-row { grid-template-columns: repeat(2, 1fr); }
+    .wb-bp-frame.phone .wb-ui { padding: 10px; gap: 7px; }
+    .wb-bp-frame.phone .wb-ui-nav { display: none; }
+    .wb-bp-frame.phone .wb-ui-row { grid-template-columns: repeat(2, 1fr); gap: 4px; }
+    .wb-bp-frame.phone .wb-ui-balance-num { font-size: 14px; }
+    .wb-bp-frame.desktop .wb-ui-balance-num { font-size: 26px; }
+    .wb-bp-frame.tablet .wb-ui-balance-num { font-size: 20px; }
+
+    .wb-bp-stats {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
+      margin-top: 36px;
+      padding-top: 28px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+    .wb-bp-stat {
+      text-align: center;
+    }
+    .wb-bp-stat-num {
+      font-size: 24px; font-weight: 800; color: #fff;
+      letter-spacing: -0.6px; line-height: 1;
+      font-variant-numeric: tabular-nums;
+      background: linear-gradient(135deg, #fff, var(--accent-2));
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .wb-bp-stat-lbl {
+      font-size: 10px; color: rgba(255,255,255,0.6);
+      letter-spacing: 0.06em; text-transform: uppercase;
+      margin-top: 6px;
+    }
+
+    /* ╔═══════════════════════════════════════════════════════════════════╗
+       ║  SECTION 7 — MODULAR FIT                                            ║
+       ╚═══════════════════════════════════════════════════════════════════╝ */
+    .wb-modular {
+      padding: 140px 0;
+      background: linear-gradient(180deg, var(--bg) 0%, #fff 100%);
+      position: relative; overflow: hidden;
+    }
+    .wb-modular::before {
+      content: ''; position: absolute; inset: 0;
+      background-image: radial-gradient(circle at 1px 1px, rgba(44,164,255,0.06) 1px, transparent 0);
+      background-size: 28px 28px;
+      mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%);
+      -webkit-mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%);
+    }
+    .wb-mod-head { text-align: center; margin-bottom: 50px; position: relative; z-index: 2; }
+    .wb-mod-head h2 {
+      font-size: clamp(36px, 3.6vw, 50px);
+      font-weight: 800; line-height: 1.08; letter-spacing: -1.5px;
+      margin: 12px 0 16px;
+    }
+    .wb-mod-head h2 em { font-style: normal; color: var(--accent); }
+    .wb-mod-head p {
+      font-size: 17px; line-height: 1.6; color: var(--sec);
+      max-width: 620px; margin: 0 auto;
+    }
+    .wb-mod-composer {
+      position: relative; z-index: 2;
+      max-width: 1080px; margin: 0 auto;
+      background: #fff; border: 1px solid var(--border);
+      border-radius: 24px; padding: 40px;
+      box-shadow: 0 30px 80px rgba(15,23,41,0.08);
+    }
+    .wb-mod-zone { margin-bottom: 36px; padding-bottom: 36px; border-bottom: 1px dashed var(--border); }
+    .wb-mod-zone:last-of-type { border-bottom: none; padding-bottom: 0; margin-bottom: 0; }
+    .wb-mod-zone-head {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 24px; gap: 16px;
+    }
+    .wb-mod-zone-title {
+      display: flex; align-items: center; gap: 12px;
+      font-size: 14px; font-weight: 700; color: var(--ink);
+      letter-spacing: 0.04em; text-transform: uppercase;
+    }
+    .wb-mod-zone-title::before {
+      content: ''; display: inline-block;
+      width: 18px; height: 1.5px; background: var(--accent); border-radius: 1.5px;
+    }
+    .wb-mod-zone-title.complement { color: var(--muted); }
+    .wb-mod-zone-title.complement::before { background: var(--muted); }
+    .wb-mod-counter {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 4px 12px; border-radius: 20px;
+      background: var(--accent-l); color: var(--accent-d);
+      font-size: 12px; font-weight: 700;
+    }
+    .wb-mod-counter.muted { background: var(--bg-alt); color: var(--sec); }
+    .wb-mod-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .wb-mod-card {
+      position: relative; border-radius: 14px;
+      padding: 20px 16px 16px;
+      transition: all 0.3s var(--ease);
+      display: flex; flex-direction: column;
+      min-height: 168px; overflow: hidden;
+    }
+    .wb-mod-card-icon {
+      width: 38px; height: 44px;
+      clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 12px;
+    }
+    .wb-mod-card-icon svg { width: 16px; height: 16px; }
+    .wb-mod-card-name { font-size: 13px; font-weight: 700; line-height: 1.25; margin-bottom: 4px; }
+    .wb-mod-card-desc { font-size: 11px; line-height: 1.4; flex: 1; margin-bottom: 12px; }
+    .wb-mod-card-action {
+      display: inline-flex; align-items: center; justify-content: center; gap: 5px;
+      padding: 6px 10px; border-radius: 8px;
+      font-size: 11px; font-weight: 700; letter-spacing: 0.02em;
+      align-self: flex-start;
+    }
+    .wb-mod-card.spotlight {
+      background: linear-gradient(140deg, var(--accent) 0%, var(--accent-d) 70%, var(--navy-3) 130%);
+      color: #fff;
+      box-shadow: 0 18px 50px rgba(44,164,255,0.4);
+      border: 2px solid var(--accent);
+      grid-column: span 2;
+      min-height: 200px;
+      transform: scale(1.02);
+      position: relative;
+    }
+    .wb-mod-card.spotlight::after {
+      content: 'ESTÁS ACÁ';
+      position: absolute; top: 14px; right: 14px;
+      background: rgba(255,255,255,0.2); color: #fff;
+      padding: 4px 8px; border-radius: 6px;
+      font-size: 9px; font-weight: 800; letter-spacing: 0.12em;
+      backdrop-filter: blur(8px);
+    }
+    .wb-mod-card.spotlight .wb-mod-card-icon {
+      background: rgba(255,255,255,0.22);
+      border: 1px solid rgba(255,255,255,0.4);
+      width: 48px; height: 56px;
+    }
+    .wb-mod-card.spotlight .wb-mod-card-icon svg { width: 20px; height: 20px; color: #fff; }
+    .wb-mod-card.spotlight .wb-mod-card-name { font-size: 18px; }
+    .wb-mod-card.spotlight .wb-mod-card-desc { color: rgba(255,255,255,0.78); font-size: 13px; }
+    .wb-mod-card.active {
+      background: linear-gradient(140deg, var(--accent-l) 0%, #EEF7FF 100%);
+      border: 1px solid var(--accent);
+      color: var(--ink);
+    }
+    .wb-mod-card.active .wb-mod-card-icon {
+      background: linear-gradient(135deg, var(--accent), var(--accent-d));
+    }
+    .wb-mod-card.active .wb-mod-card-icon svg { color: #fff; }
+    .wb-mod-card.active .wb-mod-card-desc { color: var(--sec); }
+    .wb-mod-card.active .wb-mod-card-action {
+      background: #fff; color: var(--accent-d); border: 1px solid rgba(44,164,255,0.2);
+    }
+    .wb-mod-card.active .wb-mod-card-action::before { content: '✓'; font-size: 11px; font-weight: 800; }
+    .wb-mod-card.active:hover { transform: translateY(-3px); box-shadow: 0 12px 28px rgba(44,164,255,0.18); }
+    .wb-mod-card.available {
+      background: var(--bg);
+      color: var(--ink);
+      border: 1.5px dashed rgba(15,23,41,0.18);
+      cursor: pointer;
+    }
+    .wb-mod-card.available .wb-mod-card-icon {
+      background: linear-gradient(135deg, var(--accent-l), #EBF2FF);
+      border: 1px solid rgba(44,164,255,0.15);
+    }
+    .wb-mod-card.available .wb-mod-card-icon svg { color: var(--accent-d); }
+    .wb-mod-card.available .wb-mod-card-desc { color: var(--muted); }
+    .wb-mod-card.available .wb-mod-card-action {
+      background: #fff; color: var(--accent-d); border: 1px solid rgba(44,164,255,0.25);
+    }
+    .wb-mod-card.available:hover {
+      transform: translateY(-3px); border-color: var(--accent);
+      background: #fff; box-shadow: 0 12px 28px rgba(44,164,255,0.12);
+    }
+    .wb-mod-card.available:hover .wb-mod-card-action { background: var(--accent); color: #fff; }
+    .wb-mod-card.available .wb-mod-card-action::before { content: '+'; font-size: 14px; font-weight: 800; }
+    .wb-mod-hint {
+      display: flex; align-items: center; gap: 8px;
+      justify-content: center;
+      font-size: 12px; color: var(--muted);
+      margin-top: 28px; padding: 14px 20px;
+      background: var(--bg);
+      border-radius: 12px;
+      border: 1px dashed var(--border);
+    }
+    .wb-mod-hint svg { width: 16px; height: 16px; color: var(--accent); flex-shrink: 0; }
+
+    /* ╔═══════════════════════════════════════════════════════════════════╗
+       ║  SECTION 8 — CASE STUDY                                             ║
+       ╚═══════════════════════════════════════════════════════════════════╝ */
+    .wb-case { padding: 140px 0; background: #fff; position: relative; overflow: hidden; }
+    .wb-case-card {
+      max-width: 1100px; margin: 0 auto;
+      background: linear-gradient(135deg, #F0F9FF 0%, #DBEAFE 100%);
+      border-radius: 28px; padding: 60px;
+      position: relative; overflow: hidden;
+      box-shadow: 0 30px 80px rgba(44,164,255,0.12);
+    }
+    .wb-case-card::before {
+      content: ''; position: absolute; right: -100px; top: -100px;
+      width: 360px; height: 360px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(44,164,255,0.12), transparent 70%);
+    }
+    .wb-case-grid {
+      position: relative; z-index: 2;
+      display: grid; grid-template-columns: 1fr 1.3fr; gap: 60px;
+      align-items: center;
+    }
+    .wb-case-customer { text-align: center; }
+    .wb-case-logo {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 92px; height: 92px; border-radius: 22px;
+      background: linear-gradient(135deg, #1E40AF 0%, #0E3D9C 100%);
+      color: #fff;
+      font-size: 28px; font-weight: 800;
+      letter-spacing: -1px;
+      margin-bottom: 18px;
+      box-shadow: 0 16px 36px rgba(30,64,175,0.25);
+    }
+    .wb-case-customer-name {
+      font-size: 18px; font-weight: 700; color: var(--ink);
+      margin-bottom: 4px;
+    }
+    .wb-case-customer-role {
+      font-size: 13px; color: var(--muted); margin-bottom: 24px;
+    }
+    .wb-case-flag {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 14px; border-radius: 20px;
+      background: var(--accent-l);
+      font-size: 11px; font-weight: 700; color: var(--accent-d);
+      letter-spacing: 0.06em; text-transform: uppercase;
+    }
+    .wb-case-content { position: relative; }
+    .wb-case-quote-mark {
+      font-size: 80px; line-height: 0.8;
+      color: var(--accent); opacity: 0.2;
+      margin-bottom: -16px;
+      font-family: Georgia, serif;
+    }
+    .wb-case-quote {
+      font-size: clamp(22px, 2.2vw, 30px);
+      font-weight: 700; line-height: 1.35; color: var(--ink);
+      letter-spacing: -0.5px;
+      margin-bottom: 32px;
+    }
+    .wb-case-metrics {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+      padding-top: 28px;
+      border-top: 1px solid rgba(15,23,41,0.08);
+    }
+    .wb-case-metric-num {
+      font-size: 32px; font-weight: 800; line-height: 1;
+      letter-spacing: -1px; margin-bottom: 6px;
+      font-variant-numeric: tabular-nums;
+      background: linear-gradient(135deg, var(--accent), var(--accent-d));
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .wb-case-metric-desc { font-size: 12px; color: var(--sec); line-height: 1.45; }
+
+    /* ╔═══════════════════════════════════════════════════════════════════╗
+       ║  SECTION 9 — CTA BAND                                               ║
+       ╚═══════════════════════════════════════════════════════════════════╝ */
+    .cta-band {
+      position: relative;
+      padding: 120px 0;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-d) 60%, var(--navy-3) 100%);
+      color: #fff; text-align: center;
+      overflow: hidden;
+    }
+    .cta-band::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 50% 0%, rgba(122,213,255,0.35), transparent 60%);
+    }
+    .cta-band .container { position: relative; z-index: 2; }
+    .cta-h2 {
+      font-size: clamp(40px, 4vw, 60px);
+      font-weight: 800; line-height: 1.08; letter-spacing: -1.5px;
+      margin-bottom: 18px;
+    }
+    .cta-sub {
+      font-size: 18px; line-height: 1.6; color: rgba(255,255,255,0.85);
+      max-width: 540px; margin: 0 auto 32px;
+    }
+    .cta-fine { font-size: 13px; color: rgba(255,255,255,0.65); margin-top: 20px; }
+
+    /* ╔═══════════════════════════════════════════════════════════════════╗
+       ║  SECTION 10 — FOOTER                                                ║
+       ╚═══════════════════════════════════════════════════════════════════╝ */
+    footer {
+      background: var(--ink-deep); color: rgba(255,255,255,0.65);
+      padding: 80px 0 30px;
+    }
+    .footer-inner {
+      max-width: 1240px; margin: 0 auto; padding: 0 64px;
+      display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 64px;
+      margin-bottom: 60px;
+    }
+    .footer-logo { font-size: 22px; font-weight: 800; color: #fff; margin-bottom: 14px; }
+    .footer-logo span { color: var(--accent-2); }
+    .footer-tagline { font-size: 14px; line-height: 1.55; color: rgba(255,255,255,0.6); max-width: 240px; }
+    .footer-col-title {
+      font-size: 13px; font-weight: 700; color: #fff;
+      letter-spacing: 0.05em; text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    .footer-links { display: flex; flex-direction: column; gap: 10px; }
+    .footer-links a { font-size: 14px; color: rgba(255,255,255,0.6); transition: color 0.2s; }
+    .footer-links a:hover { color: var(--accent-2); }
+    .footer-helping {
+      text-align: center; padding: 40px 0 30px;
+      font-size: 14px; color: rgba(255,255,255,0.55);
+    }
+    .footer-helping em { font-style: normal; color: var(--pink); font-weight: 700; }
+    .footer-helping em::before { content: '♥ '; color: var(--pink); }
+    .footer-bottom {
+      max-width: 1240px; margin: 0 auto; padding: 24px 64px 0;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      display: flex; justify-content: space-between;
+      font-size: 13px; color: rgba(255,255,255,0.45);
+    }
+
+    @media (max-width: 980px) {
+      .wb-hero-inner { grid-template-columns: 1fr; gap: 60px; }
+      .wb-devices { height: 400px; }
+      .wb-stats-grid { grid-template-columns: repeat(2, 1fr); gap: 24px; }
+      .wb-problem-grid { grid-template-columns: 1fr; gap: 50px; }
+      .wb-caps-grid { grid-template-columns: repeat(2, 1fr); }
+      .wb-bp-frame.desktop { max-width: 100%; }
+      .wb-mod-grid { grid-template-columns: repeat(3, 1fr); }
+      .wb-mod-card.spotlight { grid-column: span 3; }
+      .wb-case-grid { grid-template-columns: 1fr; gap: 32px; text-align: center; }
+      .wb-case-card { padding: 40px 32px; }
+      .footer-inner { grid-template-columns: 1fr 1fr; gap: 40px; }
+    }
+    @media (max-width: 600px) {
+      .container, .nav-inner, .footer-inner, .footer-bottom { padding-left: 24px; padding-right: 24px; }
+      .wb-stats-grid, .wb-caps-grid { grid-template-columns: 1fr; }
+      .wb-mod-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+      .wb-mod-card.spotlight { grid-column: span 2; }
+      .nav-links { display: none; }
+      .nav-crumb { display: none; }
+      .wb-hero { padding-top: 130px; padding-bottom: 60px; min-height: auto; }
+      .wb-stats, .wb-problem, .wb-caps, .wb-action, .wb-modular, .wb-case, .cta-band { padding: 80px 0; }
+      .wb-case-metrics { grid-template-columns: 1fr; }
+      .wb-bp-tabs { flex-wrap: wrap; }
+      .wb-bp-stats { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+<div class="cursor-glow" id="cursorGlow"></div>
+
+<!-- ═══ 1. NAV ═══ -->
+<nav id="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">info<span>corp</span></a>
+    <ul class="nav-links">
+      <li><a href="plataforma.html" class="active">Productos <span class="nav-crumb">IC Web Banking</span></a></li>
+      <li><a href="soluciones-personas.html">Soluciones</a></li>
+      <li><a href="#">Clientes</a></li>
+      <li><a href="#">Recursos</a></li>
+    </ul>
+    <a href="#demo" class="nav-cta">Solicitar demo</a>
+  </div>
+</nav>
+
+<!-- ═══ 2. HERO ═══ -->
+<section class="wb-hero">
+  <div class="wb-hero-grid"></div>
+  <div class="wb-hero-inner">
+    <div>
+      <span class="wb-hero-label" id="heroLabel">IC Web Banking · CHANNELS</span>
+      <h1 class="wb-hero-h1" id="heroH1">La banca, <em>responsive</em> y sin fricción</h1>
+      <p class="wb-hero-sub" id="heroSub">Una sola web que funciona perfecta en cualquier pantalla. Touch-first, design system compartido con tu app, performance Lighthouse 96+ y WCAG 2.1 AA por diseño.</p>
+      <div class="wb-hero-actions" id="heroActions">
+        <a href="#demo" class="btn btn-primary btn-arrow">Solicitá una demo</a>
+        <a href="#how" class="btn btn-ghost">Ver responsive en vivo</a>
+      </div>
+    </div>
+
+    <!-- Multi-device mockup -->
+    <div class="wb-devices" id="devicesStage">
+      <span class="wb-floating-tag tag-1">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        Lighthouse 96
+      </span>
+      <span class="wb-floating-tag tag-2">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Carga 1.8s
+      </span>
+      <span class="wb-floating-tag tag-3">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33"/></svg>
+        WCAG 2.1 AA
+      </span>
+
+      <!-- Desktop monitor -->
+      <div class="wb-monitor">
+        <div class="wb-monitor-bezel">
+          <div class="wb-monitor-screen">
+            <div class="wb-ui">
+              <div class="wb-ui-topbar">
+                <div class="wb-ui-logo"></div>
+                <div class="wb-ui-logo-text">MIBANCO</div>
+                <div class="wb-ui-nav">
+                  <div class="wb-ui-nav-item active">Inicio</div>
+                  <div class="wb-ui-nav-item">Cuentas</div>
+                  <div class="wb-ui-nav-item">Transfer</div>
+                  <div class="wb-ui-nav-item">Pagos</div>
+                  <div class="wb-ui-nav-item">Inversiones</div>
+                </div>
+                <div class="wb-ui-avatar"></div>
+              </div>
+              <div class="wb-ui-greet">Buenas tardes, <b>Fernanda</b></div>
+              <div class="wb-ui-balance-card">
+                <div class="wb-ui-balance-label">Patrimonio total</div>
+                <div class="wb-ui-balance-num">$84,250.40</div>
+                <div class="wb-ui-balance-sub">3 cuentas · 2 inversiones</div>
+              </div>
+              <div class="wb-ui-row">
+                <div class="wb-ui-chip"><div class="wb-ui-chip-icon"></div><div class="wb-ui-chip-label">Enviar</div></div>
+                <div class="wb-ui-chip"><div class="wb-ui-chip-icon"></div><div class="wb-ui-chip-label">Cobrar</div></div>
+                <div class="wb-ui-chip"><div class="wb-ui-chip-icon"></div><div class="wb-ui-chip-label">Pagar</div></div>
+                <div class="wb-ui-chip"><div class="wb-ui-chip-icon"></div><div class="wb-ui-chip-label">Invertir</div></div>
+              </div>
+              <div class="wb-ui-section-title">Movimientos</div>
+              <div class="wb-ui-tx-row">
+                <div class="wb-ui-tx-dot"></div>
+                <div class="wb-ui-tx-name">Sueldo</div>
+                <div class="wb-ui-tx-amt" style="color:#22C55E">+$3,200</div>
+              </div>
+              <div class="wb-ui-tx-row">
+                <div class="wb-ui-tx-dot"></div>
+                <div class="wb-ui-tx-name">Spotify</div>
+                <div class="wb-ui-tx-amt" style="color:#FF6B6B">-$9.99</div>
+              </div>
+              <div class="wb-ui-tx-row">
+                <div class="wb-ui-tx-dot"></div>
+                <div class="wb-ui-tx-name">Transfer a Juan</div>
+                <div class="wb-ui-tx-amt" style="color:#FF6B6B">-$200</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tablet -->
+      <div class="wb-tablet">
+        <div class="wb-tablet-body">
+          <div class="wb-tablet-screen">
+            <div class="wb-ui">
+              <div class="wb-ui-topbar">
+                <div class="wb-ui-logo"></div>
+                <div class="wb-ui-logo-text">MIBANCO</div>
+                <div class="wb-ui-avatar"></div>
+              </div>
+              <div class="wb-ui-greet">Buenas, <b>Fernanda</b></div>
+              <div class="wb-ui-balance-card">
+                <div class="wb-ui-balance-label">Patrimonio</div>
+                <div class="wb-ui-balance-num">$84,250.40</div>
+              </div>
+              <div class="wb-ui-row">
+                <div class="wb-ui-chip"><div class="wb-ui-chip-icon"></div><div class="wb-ui-chip-label">Enviar</div></div>
+                <div class="wb-ui-chip"><div class="wb-ui-chip-icon"></div><div class="wb-ui-chip-label">Cobrar</div></div>
+              </div>
+              <div class="wb-ui-section-title">Movimientos</div>
+              <div class="wb-ui-tx-row">
+                <div class="wb-ui-tx-dot"></div>
+                <div class="wb-ui-tx-name">Sueldo</div>
+                <div class="wb-ui-tx-amt" style="color:#22C55E">+$3,200</div>
+              </div>
+              <div class="wb-ui-tx-row">
+                <div class="wb-ui-tx-dot"></div>
+                <div class="wb-ui-tx-name">Spotify</div>
+                <div class="wb-ui-tx-amt" style="color:#FF6B6B">-$9.99</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phone mini -->
+      <div class="wb-phone-mini">
+        <div class="wb-phone-mini-body">
+          <div class="wb-phone-mini-screen">
+            <div class="wb-ui">
+              <div class="wb-ui-topbar">
+                <div class="wb-ui-logo"></div>
+                <div class="wb-ui-avatar"></div>
+              </div>
+              <div class="wb-ui-balance-card">
+                <div class="wb-ui-balance-label">Patrimonio</div>
+                <div class="wb-ui-balance-num">$84K</div>
+              </div>
+              <div class="wb-ui-row">
+                <div class="wb-ui-chip"><div class="wb-ui-chip-icon"></div></div>
+                <div class="wb-ui-chip"><div class="wb-ui-chip-icon"></div></div>
+              </div>
+              <div class="wb-ui-tx-row">
+                <div class="wb-ui-tx-dot"></div>
+                <div class="wb-ui-tx-name">Sueldo</div>
+                <div class="wb-ui-tx-amt" style="color:#22C55E">+$3.2K</div>
+              </div>
+              <div class="wb-ui-tx-row">
+                <div class="wb-ui-tx-dot"></div>
+                <div class="wb-ui-tx-name">Spotify</div>
+                <div class="wb-ui-tx-amt" style="color:#FF6B6B">-$10</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 3. STATS STRIP ═══ -->
+<section class="wb-stats">
+  <div class="container wb-stats-grid">
+    <div class="wb-stat">
+      <div class="wb-stat-num" data-target="1.8" data-suffix="s">0s</div>
+      <div class="wb-stat-desc">tiempo de carga<br>(Core Web Vitals verde)</div>
+    </div>
+    <div class="wb-stat">
+      <div class="wb-stat-num" data-target="96" data-suffix="">0</div>
+      <div class="wb-stat-desc">score Lighthouse<br>en producción</div>
+    </div>
+    <div class="wb-stat">
+      <div class="wb-stat-num" data-target="100" data-suffix="%">0%</div>
+      <div class="wb-stat-desc">cumplimiento<br>WCAG 2.1 AA</div>
+    </div>
+    <div class="wb-stat">
+      <div class="wb-stat-num" data-target="30" data-prefix="+" data-suffix="%">+0%</div>
+      <div class="wb-stat-desc">conversión vs.<br>web tradicional</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 4. PROBLEM → SOLUTION ═══ -->
+<section class="wb-problem">
+  <div class="container wb-problem-grid">
+    <div>
+      <span class="label">EL RETO · LA SOLUCIÓN</span>
+      <h2 class="wb-problem-h2 split-lines">Si la web no <em>sigue el</em><br>ritmo de la app, el cliente se va</h2>
+
+      <div class="wb-problem-list">
+        <div class="wb-problem-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <div class="wb-problem-item-text"><strong>Webs corporativas pesadas:</strong> 6 segundos de carga, frameworks duplicados, scripts de medición sobre scripts de medición.</div>
+        </div>
+        <div class="wb-problem-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <div class="wb-problem-item-text"><strong>Versión "mobile" que es CSS achicado:</strong> botones imposibles de tocar, formularios fuera de pantalla, scroll horizontal accidental.</div>
+        </div>
+        <div class="wb-problem-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <div class="wb-problem-item-text"><strong>Web y App que parecen bancos distintos:</strong> mismo logo, distinto lenguaje, distinta lógica. El cliente se confunde y abandona.</div>
+        </div>
+      </div>
+
+      <div class="wb-arrow-down">Lo que cambiamos</div>
+
+      <div class="wb-solution-list">
+        <div class="wb-solution-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+          <div class="wb-solution-item-text"><strong>Performance budget de 1.8s.</strong> Si una funcionalidad nueva rompe el budget, no entra. Core Web Vitals verde en producción.</div>
+        </div>
+        <div class="wb-solution-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+          <div class="wb-solution-item-text"><strong>Touch-first responsive real.</strong> Áreas táctiles, gestos y formularios pensados para el dedo antes que para el mouse. La compatibilidad con desktop viene gratis.</div>
+        </div>
+        <div class="wb-solution-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+          <div class="wb-solution-item-text"><strong>Design system compartido con la app.</strong> Mismo lenguaje, mismas reglas, misma marca. El cliente abre la web o la app y sabe dónde está.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Performance visual -->
+    <div class="wb-perf">
+      <div class="wb-perf-head">
+        <div class="wb-perf-head-label">Benchmark vs banca tradicional</div>
+        <div class="wb-perf-head-title">Core Web Vitals · LCP</div>
+      </div>
+      <div class="wb-perf-bars">
+        <div class="wb-perf-row">
+          <div class="wb-perf-row-head">
+            <div class="wb-perf-row-label">IC Web Banking</div>
+            <div class="wb-perf-row-num us">1.8s</div>
+          </div>
+          <div class="wb-perf-bar"><div class="wb-perf-bar-fill" style="width: 28%"></div></div>
+        </div>
+        <div class="wb-perf-row">
+          <div class="wb-perf-row-head">
+            <div class="wb-perf-row-label">Banco A (referente regional)</div>
+            <div class="wb-perf-row-num them">3.4s</div>
+          </div>
+          <div class="wb-perf-bar"><div class="wb-perf-bar-fill them" style="width: 54%"></div></div>
+        </div>
+        <div class="wb-perf-row">
+          <div class="wb-perf-row-head">
+            <div class="wb-perf-row-label">Banco B</div>
+            <div class="wb-perf-row-num them">5.1s</div>
+          </div>
+          <div class="wb-perf-bar"><div class="wb-perf-bar-fill them" style="width: 82%"></div></div>
+        </div>
+        <div class="wb-perf-row">
+          <div class="wb-perf-row-head">
+            <div class="wb-perf-row-label">Banco C</div>
+            <div class="wb-perf-row-num them">6.2s</div>
+          </div>
+          <div class="wb-perf-bar"><div class="wb-perf-bar-fill them" style="width: 100%"></div></div>
+        </div>
+      </div>
+      <div class="wb-perf-foot">
+        <div>
+          <div class="wb-perf-foot-num">96</div>
+          <div class="wb-perf-foot-lbl">Lighthouse</div>
+        </div>
+        <div>
+          <div class="wb-perf-foot-num">A+</div>
+          <div class="wb-perf-foot-lbl">SSL Labs</div>
+        </div>
+        <div>
+          <div class="wb-perf-foot-num">100%</div>
+          <div class="wb-perf-foot-lbl">WCAG AA</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 5. CAPABILITIES ═══ -->
+<section class="wb-caps" id="how">
+  <div class="container wb-caps-head">
+    <span class="label">Qué hace</span>
+    <h2 class="split-lines">Cuatro fundamentos<br>de una web que <em>convierte</em></h2>
+    <p>No alcanza con que la web cargue rápido. Tiene que ser igual de buena en todas las pantallas y conectarse con el resto del banco sin esfuerzo.</p>
+  </div>
+  <div class="container wb-caps-grid">
+    <div class="wb-cap-card">
+      <div class="wb-cap-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 10v6m11-11h-6m-10 0H1"/></svg>
+      </div>
+      <h4>Touch-first design</h4>
+      <p>Áreas táctiles de 44px+, gestos nativos, formularios que respetan el teclado y la zoom-safety. Pensada para el dedo, escala al mouse.</p>
+    </div>
+    <div class="wb-cap-card">
+      <div class="wb-cap-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      </div>
+      <h4>Design system compartido</h4>
+      <p>Mismo lenguaje visual y de interacción que IC Mobile Banking. El cliente abre web o app y sabe instintivamente dónde está.</p>
+    </div>
+    <div class="wb-cap-card">
+      <div class="wb-cap-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+      </div>
+      <h4>Performance budget</h4>
+      <p>Lighthouse 96+, LCP &lt; 1.8s, CLS &lt; 0.05. Auditado en cada deploy. Si una feature rompe el budget, vuelve a refactor.</p>
+    </div>
+    <div class="wb-cap-card">
+      <div class="wb-cap-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s-8-4.5-8-12V5l8-3 8 3v5c0 7.5-8 12-8 12z"/><polyline points="9 12 11 14 15 10"/></svg>
+      </div>
+      <h4>Accesibilidad WCAG 2.1 AA</h4>
+      <p>Contrast ratios, navegación por teclado, screen reader compatible. Compliance regulatorio + audiencia que crece todos los días.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 6. IN ACTION — Responsive transformer ═══ -->
+<section class="wb-action">
+  <div class="container wb-action-head">
+    <span class="label on-dark">CÓMO FUNCIONA</span>
+    <h2 class="split-lines">Una sola web, <em>cualquier pantalla</em></h2>
+    <p>Tocá los tabs y mirá cómo el mismo dashboard se reorganiza para cada dispositivo, sin perder funcionalidad ni performance.</p>
+  </div>
+
+  <div class="container wb-transformer">
+    <div class="wb-bp-tabs" role="tablist">
+      <button class="wb-bp-tab active" data-bp="desktop" role="tab">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        Desktop
+      </button>
+      <button class="wb-bp-tab" data-bp="tablet" role="tab">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+        Tablet
+      </button>
+      <button class="wb-bp-tab" data-bp="phone" role="tab">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+        Phone
+      </button>
+    </div>
+
+    <div class="wb-bp-stage">
+      <div class="wb-bp-meta">
+        <span><b id="bpW">1440</b>px</span>
+        <span><b id="bpLcp">1.8</b>s LCP</span>
+      </div>
+
+      <div class="wb-bp-frame desktop" id="bpFrame">
+        <div class="wb-ui">
+          <div class="wb-ui-topbar">
+            <div class="wb-ui-logo"></div>
+            <div class="wb-ui-logo-text">MIBANCO</div>
+            <div class="wb-ui-nav">
+              <div class="wb-ui-nav-item active">Inicio</div>
+              <div class="wb-ui-nav-item">Cuentas</div>
+              <div class="wb-ui-nav-item">Transfer</div>
+              <div class="wb-ui-nav-item">Pagos</div>
+            </div>
+            <div class="wb-ui-avatar"></div>
+          </div>
+          <div class="wb-ui-greet">Buenas tardes, <b>Fernanda</b></div>
+          <div class="wb-ui-balance-card">
+            <div class="wb-ui-balance-label">Patrimonio total</div>
+            <div class="wb-ui-balance-num">$84,250.40</div>
+            <div class="wb-ui-balance-sub">3 cuentas activas</div>
+          </div>
+          <div class="wb-ui-row">
+            <div class="wb-ui-chip"><div class="wb-ui-chip-icon"></div><div class="wb-ui-chip-label">Enviar</div></div>
+            <div class="wb-ui-chip"><div class="wb-ui-chip-icon"></div><div class="wb-ui-chip-label">Cobrar</div></div>
+            <div class="wb-ui-chip"><div class="wb-ui-chip-icon"></div><div class="wb-ui-chip-label">Pagar</div></div>
+            <div class="wb-ui-chip"><div class="wb-ui-chip-icon"></div><div class="wb-ui-chip-label">Invertir</div></div>
+          </div>
+          <div class="wb-ui-section-title">Movimientos</div>
+          <div class="wb-ui-tx-row">
+            <div class="wb-ui-tx-dot"></div>
+            <div class="wb-ui-tx-name">Sueldo</div>
+            <div class="wb-ui-tx-amt" style="color:#22C55E">+$3,200</div>
+          </div>
+          <div class="wb-ui-tx-row">
+            <div class="wb-ui-tx-dot"></div>
+            <div class="wb-ui-tx-name">Spotify</div>
+            <div class="wb-ui-tx-amt" style="color:#FF6B6B">-$9.99</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="wb-bp-stats">
+        <div class="wb-bp-stat">
+          <div class="wb-bp-stat-num" id="bpLighthouse">96</div>
+          <div class="wb-bp-stat-lbl">Lighthouse</div>
+        </div>
+        <div class="wb-bp-stat">
+          <div class="wb-bp-stat-num" id="bpLcpStat">1.8s</div>
+          <div class="wb-bp-stat-lbl">LCP</div>
+        </div>
+        <div class="wb-bp-stat">
+          <div class="wb-bp-stat-num" id="bpCls">0.03</div>
+          <div class="wb-bp-stat-lbl">CLS</div>
+        </div>
+        <div class="wb-bp-stat">
+          <div class="wb-bp-stat-num" id="bpFid">12ms</div>
+          <div class="wb-bp-stat-lbl">FID</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 7. MODULAR FIT ═══ -->
+<section class="wb-modular">
+  <div class="container wb-mod-head">
+    <span class="label">DÓNDE ENCAJA EN LA SUITE</span>
+    <h2 class="split-lines">Web Banking <em>completa</em><br>la experiencia digital</h2>
+    <p>Web es el canal de descubrimiento, de operaciones complejas y de horario de oficina. Conectado a Smart Platform y compartiendo design system con Mobile, se vuelve indistinguible de tu app.</p>
+  </div>
+
+  <div class="container">
+    <div class="wb-mod-composer">
+      <div class="wb-mod-zone">
+        <div class="wb-mod-zone-head">
+          <div class="wb-mod-zone-title">Esta plataforma</div>
+          <div class="wb-mod-counter">Estás explorando</div>
+        </div>
+        <div class="wb-mod-grid">
+          <div class="wb-mod-card spotlight">
+            <div class="wb-mod-card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/></svg>
+            </div>
+            <div class="wb-mod-card-name">IC Web Banking</div>
+            <div class="wb-mod-card-desc">Canal web responsive con design system compartido y performance verificada.</div>
+            <span class="wb-mod-card-action" style="opacity:0;">Activa</span>
+          </div>
+          <div class="wb-mod-card active" data-id="smart">
+            <div class="wb-mod-card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            </div>
+            <div class="wb-mod-card-name">IC Smart Platform</div>
+            <div class="wb-mod-card-desc">El motor que orquesta canales.</div>
+            <span class="wb-mod-card-action">Recomendada</span>
+          </div>
+          <div class="wb-mod-card active" data-id="mobile">
+            <div class="wb-mod-card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/></svg>
+            </div>
+            <div class="wb-mod-card-name">IC Mobile Banking</div>
+            <div class="wb-mod-card-desc">Comparte design system con Web.</div>
+            <span class="wb-mod-card-action">Recomendada</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="wb-mod-zone">
+        <div class="wb-mod-zone-head">
+          <div class="wb-mod-zone-title complement">Sumá según tu estrategia</div>
+          <div class="wb-mod-counter muted">8 plataformas disponibles</div>
+        </div>
+        <div class="wb-mod-grid">
+          <div class="wb-mod-card available">
+            <div class="wb-mod-card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            </div>
+            <div class="wb-mod-card-name">IC Marketing Automation</div>
+            <div class="wb-mod-card-desc">Personalización por segmento web.</div>
+            <span class="wb-mod-card-action">Sumar</span>
+          </div>
+          <div class="wb-mod-card available">
+            <div class="wb-mod-card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+            </div>
+            <div class="wb-mod-card-name">IC Analytics (GURU)</div>
+            <div class="wb-mod-card-desc">Eventos web + heatmaps + IA.</div>
+            <span class="wb-mod-card-action">Sumar</span>
+          </div>
+          <div class="wb-mod-card available">
+            <div class="wb-mod-card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s-8-4.5-8-12V5l8-3 8 3v5c0 7.5-8 12-8 12z"/></svg>
+            </div>
+            <div class="wb-mod-card-name">IC Onboarding</div>
+            <div class="wb-mod-card-desc">Alta digital desde la web.</div>
+            <span class="wb-mod-card-action">Sumar</span>
+          </div>
+          <div class="wb-mod-card available">
+            <div class="wb-mod-card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/></svg>
+            </div>
+            <div class="wb-mod-card-name">IC Public Portal</div>
+            <div class="wb-mod-card-desc">Sitio institucional + Web Banking.</div>
+            <span class="wb-mod-card-action">Sumar</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="wb-mod-hint">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+        Web + Smart Platform + Mobile garantiza continuidad. El resto se suma cuando lo necesite tu roadmap.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 8. CASE STUDY ═══ -->
+<section class="wb-case">
+  <div class="container">
+    <div class="wb-case-card">
+      <div class="wb-case-grid">
+        <div class="wb-case-customer">
+          <div class="wb-case-logo">A</div>
+          <div class="wb-case-customer-name">Banco Agrario</div>
+          <div class="wb-case-customer-role">VP Canales Digitales</div>
+          <span class="wb-case-flag">Caso real · Colombia</span>
+        </div>
+        <div class="wb-case-content">
+          <div class="wb-case-quote-mark">"</div>
+          <blockquote class="wb-case-quote">Pasamos de una web que tardaba 6 segundos en cargar a una que carga en menos de dos. Y lo más importante: ya no recibimos llamadas pidiendo ayuda para encontrar el botón de transferir.</blockquote>
+          <div class="wb-case-metrics">
+            <div>
+              <div class="wb-case-metric-num" data-target="71" data-suffix="%">0%</div>
+              <div class="wb-case-metric-desc">menos tiempo<br>de carga</div>
+            </div>
+            <div>
+              <div class="wb-case-metric-num" data-target="34" data-prefix="+" data-suffix="%">+0%</div>
+              <div class="wb-case-metric-desc">conversión<br>en altas</div>
+            </div>
+            <div>
+              <div class="wb-case-metric-num" data-target="48" data-suffix="%">0%</div>
+              <div class="wb-case-metric-desc">menos llamadas<br>de soporte</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 9. CTA BAND ═══ -->
+<section class="cta-band" id="demo">
+  <div class="container">
+    <h2 class="cta-h2 split-lines">¿Vamos a hacer la web<br>que tu banco necesita?</h2>
+    <p class="cta-sub">Ayudamos a las personas a amar a su banco. Hablemos del tuyo.</p>
+    <a href="#" class="btn btn-white btn-arrow">¿Conversamos?</a>
+    <div class="cta-fine">Sin compromisos · Demo personalizada · 30 minutos</div>
+  </div>
+</section>
+
+<!-- ═══ 10. FOOTER ═══ -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-logo">info<span>corp</span></div>
+      <p class="footer-tagline">Desde Uruguay, hacia el mundo.</p>
+    </div>
+    <div>
+      <div class="footer-col-title">IC Banking Suite</div>
+      <ul class="footer-links">
+        <li><a href="plataforma-ic-smart-platform.html">IC Smart Platform</a></li>
+        <li><a href="plataforma-ic-mobile-banking.html">IC Mobile Banking</a></li>
+        <li><a href="plataforma-ic-web-banking.html">IC Web Banking</a></li>
+        <li><a href="plataforma.html">IC Social Banking (SARA)</a></li>
+        <li><a href="plataforma.html">IC Analytics (GURU)</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Compañía</div>
+      <ul class="footer-links">
+        <li><a href="#">Sobre nosotros</a></li>
+        <li><a href="#">Método B-Fly</a></li>
+        <li><a href="#">Casos de éxito</a></li>
+        <li><a href="#">Carreras</a></li>
+        <li><a href="#">Blog</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Recursos</div>
+      <ul class="footer-links">
+        <li><a href="#">Estudio Banca Digital 2025</a></li>
+        <li><a href="#">Privacidad</a></li>
+        <li><a href="#">Términos</a></li>
+        <li><a href="#">Seguridad</a></li>
+      </ul>
+    </div>
+  </div>
+  <p class="footer-helping">Helping people <em>love</em> their bank</p>
+  <div class="footer-bottom">
+    <span>© 2025 Infocorp Group</span>
+    <span>Lima, Perú · hola@infocorp.net</span>
+  </div>
+</footer>
+
+<script>
+gsap.registerPlugin(ScrollTrigger);
+
+const glow = document.getElementById('cursorGlow');
+let mx=0, my=0, gx=0, gy=0;
+window.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; }, {passive:true});
+(function lerp(){ gx+=(mx-gx)*0.08; gy+=(my-gy)*0.08; if(glow){ glow.style.left=gx+'px'; glow.style.top=gy+'px'; } requestAnimationFrame(lerp); })();
+
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 20), {passive:true});
+
+// Hero entrance
+gsap.set('#heroLabel',   { y: 12, opacity: 0 });
+gsap.set('#heroSub',     { y: 16, opacity: 0 });
+gsap.set('#heroActions', { y: 16, opacity: 0 });
+gsap.set('#devicesStage',{ scale: 0.85, opacity: 0 });
+
+const heroTL = gsap.timeline({ delay: 0.15 });
+heroTL.to('#heroLabel', { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }, 0.2);
+
+const heroSplit = new SplitType('#heroH1', { types: 'words,chars', tagName: 'span' });
+heroTL.fromTo(heroSplit.chars,
+  { y: 60, opacity: 0, rotationX: -40 },
+  { y: 0, opacity: 1, rotationX: 0, duration: 0.7, stagger: 0.012, ease: 'power3.out', transformOrigin: '50% 100%' },
+  0.4
+);
+heroTL.to('#heroSub',      { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' }, 0.9);
+heroTL.to('#heroActions',  { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' }, 1.0);
+heroTL.to('#devicesStage', { opacity: 1, scale: 1, duration: 1.1, ease: 'power3.out' }, 0.6);
+
+document.querySelectorAll('.split-lines').forEach(el => {
+  const split = new SplitType(el, { types: 'lines', tagName: 'span' });
+  split.lines.forEach(line => {
+    line.style.overflow = 'hidden';
+    line.style.display = 'block';
+  });
+  gsap.fromTo(split.lines,
+    { y: '100%', opacity: 0 },
+    { y: '0%', opacity: 1, duration: 0.85, stagger: 0.12, ease: 'power3.out',
+      scrollTrigger: { trigger: el, start: 'top 82%', toggleActions: 'play none none none' } }
+  );
+});
+
+// Counters
+document.querySelectorAll('.wb-stat-num, .wb-case-metric-num').forEach(el => {
+  const target = parseFloat(el.dataset.target);
+  const prefix = el.dataset.prefix || '';
+  const suffix = el.dataset.suffix || '';
+  if (isNaN(target)) return;
+  el.textContent = prefix + '0' + suffix;
+  ScrollTrigger.create({
+    trigger: el, start: 'top 88%', once: true,
+    onEnter: () => {
+      gsap.fromTo({ v: 0 }, { v: target },
+        { duration: 1.4, ease: 'power2.out',
+          onUpdate: function(){
+            const v = this.targets()[0].v;
+            const isFloat = target % 1 !== 0;
+            el.textContent = prefix + (isFloat ? v.toFixed(1) : Math.round(v)) + suffix;
+          }
+        }
+      );
+    }
+  });
+});
+
+gsap.fromTo('.wb-stat', { x: -20, opacity: 0 },
+  { x: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: 'power3.out',
+    scrollTrigger: { trigger: '.wb-stats-grid', start: 'top 85%' } });
+gsap.fromTo('.wb-problem-item', { x: -30, opacity: 0 },
+  { x: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: 'power3.out',
+    scrollTrigger: { trigger: '.wb-problem-list', start: 'top 82%' } });
+gsap.fromTo('.wb-solution-item', { x: -30, opacity: 0 },
+  { x: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: 'power3.out',
+    scrollTrigger: { trigger: '.wb-solution-list', start: 'top 82%' } });
+gsap.fromTo('.wb-perf', { x: 40, opacity: 0 },
+  { x: 0, opacity: 1, duration: 0.9, ease: 'power3.out',
+    scrollTrigger: { trigger: '.wb-perf', start: 'top 82%' } });
+gsap.fromTo('.wb-cap-card', { y: 30, opacity: 0 },
+  { y: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: 'power3.out',
+    scrollTrigger: { trigger: '.wb-caps-grid', start: 'top 82%' } });
+gsap.fromTo('.wb-transformer', { y: 30, opacity: 0 },
+  { y: 0, opacity: 1, duration: 0.9, ease: 'power3.out',
+    scrollTrigger: { trigger: '.wb-transformer', start: 'top 80%' } });
+gsap.fromTo('.wb-mod-composer', { y: 40, opacity: 0 },
+  { y: 0, opacity: 1, duration: 0.9, ease: 'power3.out',
+    scrollTrigger: { trigger: '.wb-mod-composer', start: 'top 82%' } });
+gsap.fromTo('.wb-mod-card', { scale: 0.9, opacity: 0 },
+  { scale: 1, opacity: 1, duration: 0.6, stagger: 0.06, ease: 'back.out(1.4)',
+    scrollTrigger: { trigger: '.wb-mod-composer', start: 'top 78%' } });
+gsap.fromTo('.wb-case-card', { y: 40, opacity: 0 },
+  { y: 0, opacity: 1, duration: 0.9, ease: 'power3.out',
+    scrollTrigger: { trigger: '.wb-case-card', start: 'top 82%' } });
+
+const ctaSplit = new SplitType('.cta-h2', { types: 'chars', tagName: 'span' });
+gsap.fromTo(ctaSplit.chars, { y: 40, opacity: 0 },
+  { y: 0, opacity: 1, duration: 0.6, stagger: 0.025, ease: 'power3.out',
+    scrollTrigger: { trigger: '.cta-band', start: 'top 75%' } });
+gsap.fromTo('.cta-sub, .cta-band .btn-white, .cta-fine', { y: 20, opacity: 0 },
+  { y: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: 'power3.out',
+    scrollTrigger: { trigger: '.cta-band', start: 'top 70%' } });
+
+// ── Responsive transformer interactivity ──
+const BP_DATA = {
+  desktop: { w: 1440, lcp: 1.8, lh: 96, cls: 0.03, fid: '12ms' },
+  tablet:  { w: 768,  lcp: 1.6, lh: 95, cls: 0.04, fid: '14ms' },
+  phone:   { w: 375,  lcp: 1.4, lh: 94, cls: 0.05, fid: '18ms' }
+};
+const frame = document.getElementById('bpFrame');
+const bpW = document.getElementById('bpW');
+const bpLcp = document.getElementById('bpLcp');
+const bpLh = document.getElementById('bpLighthouse');
+const bpLcpStat = document.getElementById('bpLcpStat');
+const bpCls = document.getElementById('bpCls');
+const bpFid = document.getElementById('bpFid');
+
+document.querySelectorAll('.wb-bp-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.wb-bp-tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    const bp = tab.dataset.bp;
+    frame.className = 'wb-bp-frame ' + bp;
+    const d = BP_DATA[bp];
+    bpW.textContent = d.w;
+    bpLcp.textContent = d.lcp;
+    bpLh.textContent = d.lh;
+    bpLcpStat.textContent = d.lcp + 's';
+    bpCls.textContent = d.cls.toFixed(2);
+    bpFid.textContent = d.fid;
+  });
+});
+
+// Modular cards click
+document.querySelectorAll('.wb-mod-card.available, .wb-mod-card.active').forEach(card => {
+  if (card.classList.contains('spotlight')) return;
+  card.addEventListener('click', () => {
+    if (card.classList.contains('available')) {
+      card.classList.remove('available');
+      card.classList.add('active');
+      card.querySelector('.wb-mod-card-action').textContent = 'Sumada';
+    } else {
+      card.classList.remove('active');
+      card.classList.add('available');
+      card.querySelector('.wb-mod-card-action').textContent = 'Sumar';
+    }
+  });
+});
+</script>
+
+</body>
+</html>

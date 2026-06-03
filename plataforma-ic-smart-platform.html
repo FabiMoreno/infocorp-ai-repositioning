@@ -1,0 +1,1671 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IC Smart Platform — Infocorp</title>
+  <meta name="description" content="El motor que conecta tu banco. Una plataforma única que orquesta canales, datos y procesos con una capa de inteligencia que escala con tu estrategia." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,700&display=swap" rel="stylesheet" />
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/split-type@0.3.4/umd/index.min.js"></script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:         #F8FAFC;
+      --bg-alt:     #F1F5F9;
+      --white:      #FFFFFF;
+      --ink:        #0F1729;
+      --ink-deep:   #0A1226;
+      --sec:        #334155;
+      --muted:      #64748B;
+      --border:     #E2E8F0;
+      --surface:    #EBEEF5;
+
+      /* CORE accent — Smart Platform uses brand blue */
+      --accent:     #0063F2;
+      --accent-d:   #004fd4;
+      --accent-l:   #DBEAFE;
+      --accent-2:   #2CA4FF;
+      --accent-2-l: #BAE0FF;
+
+      --brand:      #0063F2;
+      --brand-d:    #004fd4;
+      --brand-l:    #DBEAFE;
+      --cyan:       #2CA4FF;
+      --cyan-l:     #BAE0FF;
+      --navy:       #051030;
+      --navy-2:     #0A1A48;
+      --navy-3:     #0E2461;
+      --teal:       #18BCBC;
+      --purple:     #7B5BFF;
+      --green:      #22C55E;
+      --amber:      #F59E0B;
+
+      --font:       'Plus Jakarta Sans', sans-serif;
+      --ease:       cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font); background: var(--bg); color: var(--ink);
+      overflow-x: hidden; -webkit-font-smoothing: antialiased;
+    }
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
+    img, svg { display: block; max-width: 100%; }
+
+    .label {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--accent);
+    }
+    .label.on-dark { color: var(--accent-2); }
+    .container { max-width: 1240px; margin: 0 auto; padding: 0 64px; }
+    .gsap-hidden { opacity: 0; }
+
+    .cursor-glow {
+      position: fixed; width: 480px; height: 480px;
+      border-radius: 50%; pointer-events: none; z-index: 1;
+      background: radial-gradient(circle, rgba(0,99,242,0.10) 0%, transparent 60%);
+      transform: translate(-50%, -50%); mix-blend-mode: multiply;
+    }
+
+    /* ── NAV ─────────────────────────────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100; height: 68px;
+      background: rgba(255,255,255,0.85);
+      backdrop-filter: blur(20px) saturate(180%);
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.3s, box-shadow 0.3s, background 0.3s;
+      transform: translateY(-100%); animation: nav-in 0.6s 0.05s var(--ease) forwards;
+    }
+    nav.scrolled { border-color: var(--border); box-shadow: 0 1px 24px rgba(15,23,41,0.07); }
+    @keyframes nav-in { to { transform: translateY(0); } }
+    .nav-inner { max-width: 1240px; margin: 0 auto; padding: 0 64px; height: 100%; display: flex; align-items: center; gap: 40px; }
+    .nav-logo { font-size: 18px; font-weight: 700; color: var(--ink); letter-spacing: -0.3px; flex-shrink: 0; }
+    .nav-logo span { color: var(--brand); }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a { font-size: 14px; color: var(--sec); transition: color 0.2s; position: relative; }
+    .nav-links a:hover { color: var(--ink); }
+    .nav-links a.active { color: var(--accent); font-weight: 600; }
+    .nav-links a.active::after {
+      content: ''; position: absolute; left: 0; right: 0; bottom: -22px;
+      height: 2px; background: var(--accent); border-radius: 2px;
+    }
+    /* Breadcrumb sub-link below active item */
+    .nav-crumb {
+      font-size: 11px; color: var(--muted);
+      margin-left: 4px; letter-spacing: 0.06em; text-transform: uppercase;
+    }
+    .nav-crumb::before { content: '/ '; color: var(--border); }
+    .nav-cta {
+      margin-left: auto; padding: 9px 22px;
+      background: var(--accent); color: #fff;
+      font-size: 13px; font-weight: 600; border-radius: 6px;
+      border: none; font-family: var(--font);
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+      box-shadow: 0 2px 12px rgba(0,99,242,0.25);
+      position: relative; overflow: hidden;
+    }
+    .nav-cta::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.25) 50%, transparent 60%);
+      transform: translateX(-100%); transition: transform 0.5s;
+    }
+    .nav-cta:hover::after { transform: translateX(100%); }
+    .nav-cta:hover { background: var(--accent-d); transform: translateY(-1px); box-shadow: 0 4px 20px rgba(0,99,242,0.35); }
+
+    .btn { display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 24px; border-radius: 8px; font-weight: 600; font-size: 14px;
+      transition: all 0.2s; cursor: pointer; border: none; font-family: var(--font);
+    }
+    .btn-primary { background: var(--accent); color: #fff;
+      box-shadow: 0 2px 12px rgba(0,99,242,0.25); }
+    .btn-primary:hover { background: var(--accent-d); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(0,99,242,0.35); }
+    .btn-ghost { background: transparent; color: var(--accent); border: 1px solid rgba(0,99,242,0.3); }
+    .btn-ghost:hover { background: var(--accent-l); border-color: var(--accent); }
+    .btn-white { background: #fff; color: var(--accent);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15); }
+    .btn-white:hover { transform: translateY(-1px); box-shadow: 0 8px 30px rgba(0,0,0,0.25); }
+    .btn-arrow::after { content: '→'; margin-left: 4px; transition: transform 0.2s; }
+    .btn-arrow:hover::after { transform: translateX(4px); }
+
+    /* ╔═══════════════════════════════════════════════════════════════════╗
+       ║  SECTION 2 — HERO (Navy con hexagon hub + visual orquestación)      ║
+       ╚═══════════════════════════════════════════════════════════════════╝ */
+    .sp-hero {
+      position: relative;
+      min-height: 100vh;
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-2) 60%, var(--navy-3) 100%);
+      color: #fff; overflow: hidden;
+      padding: 168px 0 100px;
+      display: flex; align-items: center;
+    }
+    .sp-hero::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 80% 50%, rgba(0,99,242,0.30), transparent 50%),
+                  radial-gradient(ellipse at 20% 80%, rgba(45,164,255,0.18), transparent 55%);
+    }
+    .sp-hero-grid {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse at center, #000 35%, transparent 75%);
+      -webkit-mask-image: radial-gradient(ellipse at center, #000 35%, transparent 75%);
+    }
+    .sp-hero-inner {
+      position: relative; z-index: 3;
+      max-width: 1240px; margin: 0 auto; padding: 0 64px;
+      display: grid; grid-template-columns: 1.05fr 1fr; gap: 80px;
+      align-items: center; width: 100%;
+    }
+    .sp-hero-label {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 14px; border-radius: 20px;
+      background: rgba(45,164,255,0.12);
+      border: 1px solid rgba(45,164,255,0.3);
+      font-size: 11px; font-weight: 600; letter-spacing: 0.18em;
+      color: var(--accent-2); text-transform: uppercase;
+      margin-bottom: 28px;
+    }
+    .sp-hero-label::before {
+      content: ''; width: 6px; height: 6px; border-radius: 50%;
+      background: var(--accent-2);
+      box-shadow: 0 0 8px var(--accent-2);
+      animation: sp-pulse-dot 2s ease-in-out infinite;
+    }
+    @keyframes sp-pulse-dot {
+      0%,100% { box-shadow: 0 0 0 0 rgba(45,164,255,0.5); }
+      50% { box-shadow: 0 0 0 6px rgba(45,164,255,0); }
+    }
+    .sp-hero-h1 {
+      font-size: clamp(48px, 5.4vw, 78px);
+      font-weight: 800; line-height: 1.04;
+      letter-spacing: -2.2px; margin-bottom: 24px;
+      color: #fff;
+    }
+    .sp-hero-h1 em,
+    .sp-hero-h1 em .char,
+    .sp-hero-h1 em .word {
+      font-style: normal; font-weight: 800;
+      background: linear-gradient(135deg, var(--accent-2) 0%, #7AD5FF 100%);
+      -webkit-background-clip: text; background-clip: text;
+      color: transparent; -webkit-text-fill-color: transparent;
+    }
+    .sp-hero-h1 em { position: relative; }
+    .sp-hero-sub {
+      font-size: 18px; line-height: 1.55; color: rgba(255,255,255,0.7);
+      max-width: 540px; margin-bottom: 36px;
+    }
+    .sp-hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+    .sp-hero-actions .btn-primary { background: #fff; color: var(--accent); box-shadow: 0 4px 20px rgba(0,0,0,0.18); }
+    .sp-hero-actions .btn-primary:hover { background: #F1F5FF; }
+    .sp-hero-actions .btn-ghost { color: #fff; border-color: rgba(255,255,255,0.25); }
+    .sp-hero-actions .btn-ghost:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.5); }
+
+    /* Hexagonal hub visual */
+    .sp-hex-stage {
+      position: relative; width: 100%; max-width: 560px; height: 560px;
+      margin: 0 auto;
+    }
+    .sp-hex-center {
+      position: absolute; left: 50%; top: 50%;
+      transform: translate(-50%, -50%);
+      width: 170px; height: 196px;
+      clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+      background: linear-gradient(135deg, #fff 0%, #E8F0FE 100%);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 6px; padding: 24px; z-index: 5;
+      box-shadow: 0 20px 60px rgba(0,99,242,0.5), 0 0 0 1px rgba(255,255,255,0.1);
+      animation: sp-pulse-badge 4s ease-in-out infinite;
+    }
+    @keyframes sp-pulse-badge {
+      0%,100% { box-shadow: 0 20px 60px rgba(0,99,242,0.5), 0 0 0 1px rgba(255,255,255,0.1); }
+      50% { box-shadow: 0 25px 80px rgba(45,164,255,0.7), 0 0 0 1px rgba(255,255,255,0.2); }
+    }
+    .sp-hex-center svg { width: 38px; height: 38px; color: var(--accent); }
+    .sp-hex-center-label { font-size: 9px; font-weight: 800; letter-spacing: 0.16em; color: var(--accent); text-transform: uppercase; }
+    .sp-hex-center-text { font-size: 13px; font-weight: 700; color: var(--ink); text-align: center; line-height: 1.1; }
+
+    /* Orbit nodes around the hub */
+    .sp-hex-orbit {
+      position: absolute; left: 50%; top: 50%;
+      width: 420px; height: 420px;
+      transform: translate(-50%, -50%);
+      animation: sp-orbit-rotate 40s linear infinite;
+    }
+    .sp-hex-orbit-inner {
+      position: absolute; left: 50%; top: 50%;
+      width: 280px; height: 280px;
+      transform: translate(-50%, -50%);
+      animation: sp-orbit-rotate 28s linear infinite reverse;
+    }
+    @keyframes sp-orbit-rotate { to { transform: translate(-50%, -50%) rotate(360deg); } }
+    .sp-hex-node {
+      position: absolute;
+      width: 84px; height: 96px;
+      clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+      background: linear-gradient(135deg, rgba(45,164,255,0.18), rgba(0,99,242,0.06));
+      border: 1px solid rgba(45,164,255,0.22);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 4px; padding: 12px;
+      animation: sp-counter-rotate 40s linear infinite;
+    }
+    .sp-hex-orbit-inner .sp-hex-node { animation: sp-counter-rotate-inner 28s linear infinite; }
+    @keyframes sp-counter-rotate { to { transform: translate(-50%, -50%) rotate(-360deg); } }
+    @keyframes sp-counter-rotate-inner { to { transform: translate(-50%, -50%) rotate(360deg); } }
+    .sp-hex-node svg { width: 18px; height: 18px; color: var(--accent-2); }
+    .sp-hex-node-text { font-size: 9px; font-weight: 700; color: rgba(255,255,255,0.85); text-align: center; line-height: 1.1; }
+
+    /* Orbit positions */
+    .sp-hex-orbit .sp-hex-node.p1 { left: 50%; top: 0%; transform: translate(-50%, -50%); }
+    .sp-hex-orbit .sp-hex-node.p2 { right: 0%; top: 50%; transform: translate(50%, -50%); }
+    .sp-hex-orbit .sp-hex-node.p3 { left: 50%; bottom: 0%; transform: translate(-50%, 50%); }
+    .sp-hex-orbit .sp-hex-node.p4 { left: 0%; top: 50%; transform: translate(-50%, -50%); }
+
+    .sp-hex-orbit-inner .sp-hex-node.p1 { left: 50%; top: 0%; transform: translate(-50%, -50%); }
+    .sp-hex-orbit-inner .sp-hex-node.p2 { right: 0%; top: 50%; transform: translate(50%, -50%); }
+    .sp-hex-orbit-inner .sp-hex-node.p3 { left: 50%; bottom: 0%; transform: translate(-50%, 50%); }
+    .sp-hex-orbit-inner .sp-hex-node.p4 { left: 0%; top: 50%; transform: translate(-50%, -50%); }
+
+    /* Orbit ring lines */
+    .sp-hex-stage::before, .sp-hex-stage::after {
+      content: ''; position: absolute; left: 50%; top: 50%;
+      transform: translate(-50%, -50%);
+      border-radius: 50%; pointer-events: none;
+      border: 1px dashed rgba(45,164,255,0.18);
+    }
+    .sp-hex-stage::before { width: 420px; height: 420px; }
+    .sp-hex-stage::after { width: 280px; height: 280px; border-color: rgba(45,164,255,0.12); }
+
+    /* ╔═══════════════════════════════════════════════════════════════════╗
+       ║  SECTION 3 — STATS STRIP                                            ║
+       ╚═══════════════════════════════════════════════════════════════════╝ */
+    .sp-stats {
+      background: var(--bg);
+      padding: 80px 0;
+      position: relative;
+    }
+    .sp-stats-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px;
+      align-items: center;
+    }
+    .sp-stat {
+      position: relative;
+      padding: 20px 24px;
+      border-left: 3px solid var(--accent-l);
+      transition: border-color 0.3s var(--ease);
+    }
+    .sp-stat:hover { border-left-color: var(--accent); }
+    .sp-stat-num {
+      font-size: 44px; font-weight: 800; color: var(--ink);
+      line-height: 1; letter-spacing: -1.6px;
+      font-variant-numeric: tabular-nums;
+      margin-bottom: 8px;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .sp-stat-desc {
+      font-size: 13px; line-height: 1.5; color: var(--sec);
+    }
+
+    /* ╔═══════════════════════════════════════════════════════════════════╗
+       ║  SECTION 4 — PROBLEM → SOLUTION                                     ║
+       ╚═══════════════════════════════════════════════════════════════════╝ */
+    .sp-problem {
+      padding: 140px 0;
+      background: #fff;
+      position: relative;
+      overflow: hidden;
+    }
+    .sp-problem-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
+    }
+    .sp-problem-h2 {
+      font-size: clamp(36px, 3.6vw, 50px);
+      font-weight: 800; line-height: 1.08; letter-spacing: -1.5px;
+      margin: 12px 0 20px;
+    }
+    .sp-problem-h2 em { font-style: normal; color: var(--accent); }
+    .sp-problem-body {
+      font-size: 16px; line-height: 1.65; color: var(--sec);
+      margin-bottom: 24px;
+    }
+    .sp-problem-list { display: flex; flex-direction: column; gap: 14px; }
+    .sp-problem-item {
+      display: flex; gap: 14px; align-items: flex-start;
+      padding: 16px 18px;
+      background: #FEF2F2;
+      border-left: 3px solid #FCA5A5;
+      border-radius: 8px;
+    }
+    .sp-problem-item svg { width: 18px; height: 18px; color: #DC2626; flex-shrink: 0; margin-top: 1px; }
+    .sp-problem-item-text { font-size: 14px; line-height: 1.5; color: #7F1D1D; }
+    .sp-problem-item-text strong { color: #991B1B; font-weight: 700; }
+
+    .sp-arrow-down {
+      display: flex; align-items: center; justify-content: center; gap: 14px;
+      margin: 24px 0;
+      color: var(--accent); font-weight: 700; font-size: 13px;
+      letter-spacing: 0.1em; text-transform: uppercase;
+    }
+    .sp-arrow-down::before, .sp-arrow-down::after {
+      content: ''; flex: 1; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--accent-l), transparent);
+    }
+
+    .sp-solution-list { display: flex; flex-direction: column; gap: 14px; }
+    .sp-solution-item {
+      display: flex; gap: 14px; align-items: flex-start;
+      padding: 16px 18px;
+      background: #ECFDF5;
+      border-left: 3px solid #6EE7B7;
+      border-radius: 8px;
+    }
+    .sp-solution-item svg { width: 18px; height: 18px; color: #059669; flex-shrink: 0; margin-top: 1px; }
+    .sp-solution-item-text { font-size: 14px; line-height: 1.5; color: #064E3B; }
+    .sp-solution-item-text strong { color: #047857; font-weight: 700; }
+
+    /* Right visual — orchestration diagram */
+    .sp-problem-visual {
+      position: relative;
+      aspect-ratio: 1/1;
+      border-radius: 24px;
+      background: linear-gradient(135deg, #F1F5FF 0%, #E0EAFF 100%);
+      padding: 40px;
+      overflow: hidden;
+    }
+    .sp-problem-visual::before {
+      content: ''; position: absolute; inset: 0;
+      background-image: radial-gradient(circle at 1px 1px, rgba(0,99,242,0.08) 1px, transparent 0);
+      background-size: 24px 24px;
+    }
+    .sp-orch-stage {
+      position: relative; width: 100%; height: 100%;
+    }
+    .sp-orch-center {
+      position: absolute; left: 50%; top: 50%;
+      transform: translate(-50%, -50%);
+      width: 120px; height: 138px;
+      clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-d) 100%);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 4px; padding: 16px;
+      box-shadow: 0 12px 32px rgba(0,99,242,0.35);
+      z-index: 3;
+    }
+    .sp-orch-center svg { width: 26px; height: 26px; color: #fff; }
+    .sp-orch-center-text { font-size: 10px; font-weight: 800; color: #fff; text-align: center; line-height: 1.1; }
+    .sp-orch-channel {
+      position: absolute;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px 14px;
+      display: flex; align-items: center; gap: 8px;
+      font-size: 12px; font-weight: 600; color: var(--ink);
+      box-shadow: 0 8px 20px rgba(15,23,41,0.06);
+      z-index: 2;
+    }
+    .sp-orch-channel svg { width: 14px; height: 14px; color: var(--accent); }
+    .sp-orch-channel.c1 { top: 0; left: 30%; }
+    .sp-orch-channel.c2 { top: 18%; right: 0; }
+    .sp-orch-channel.c3 { top: 68%; right: 0; }
+    .sp-orch-channel.c4 { bottom: 0; left: 36%; }
+    .sp-orch-channel.c5 { top: 64%; left: 0; }
+    .sp-orch-channel.c6 { top: 14%; left: 0; }
+    .sp-orch-lines {
+      position: absolute; inset: 0; pointer-events: none; z-index: 1;
+    }
+    .sp-orch-lines path {
+      fill: none; stroke: var(--accent); stroke-width: 1.5; opacity: 0.4;
+      stroke-dasharray: 4 4;
+      animation: sp-dash 18s linear infinite;
+    }
+    @keyframes sp-dash { to { stroke-dashoffset: -200; } }
+
+    /* ╔═══════════════════════════════════════════════════════════════════╗
+       ║  SECTION 5 — CAPABILITIES GRID                                      ║
+       ╚═══════════════════════════════════════════════════════════════════╝ */
+    .sp-caps {
+      padding: 140px 0;
+      background: var(--bg);
+      position: relative; overflow: hidden;
+    }
+    .sp-caps::before {
+      content: ''; position: absolute; inset: 0;
+      background-image: radial-gradient(circle at 1px 1px, rgba(15,23,41,0.05) 1px, transparent 0);
+      background-size: 32px 32px;
+      mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%);
+      -webkit-mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%);
+    }
+    .sp-caps-head { text-align: center; margin-bottom: 64px; position: relative; z-index: 2; }
+    .sp-caps-head h2 {
+      font-size: clamp(36px, 3.6vw, 50px);
+      font-weight: 800; line-height: 1.08; letter-spacing: -1.5px;
+      margin: 12px 0 16px;
+    }
+    .sp-caps-head h2 em { font-style: normal; color: var(--accent); }
+    .sp-caps-head p {
+      font-size: 17px; line-height: 1.6; color: var(--sec);
+      max-width: 620px; margin: 0 auto;
+    }
+    .sp-caps-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;
+      position: relative; z-index: 2;
+    }
+    .sp-cap-card {
+      background: #fff; border: 1px solid var(--border);
+      border-radius: 16px; padding: 28px 24px;
+      transition: all 0.3s var(--ease);
+      position: relative; overflow: hidden;
+    }
+    .sp-cap-card::before {
+      content: ''; position: absolute; left: 0; top: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      transform: scaleX(0); transform-origin: left;
+      transition: transform 0.4s var(--ease);
+    }
+    .sp-cap-card:hover::before { transform: scaleX(1); }
+    .sp-cap-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 50px rgba(15,23,41,0.08);
+      border-color: rgba(0,99,242,0.2);
+    }
+    .sp-cap-icon {
+      width: 48px; height: 56px;
+      clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 20px;
+      box-shadow: 0 8px 20px rgba(0,99,242,0.25);
+    }
+    .sp-cap-icon svg { width: 22px; height: 22px; color: #fff; }
+    .sp-cap-card h4 {
+      font-size: 17px; font-weight: 700; color: var(--ink);
+      margin-bottom: 10px; line-height: 1.3;
+    }
+    .sp-cap-card p {
+      font-size: 13px; line-height: 1.55; color: var(--sec);
+    }
+
+    /* ╔═══════════════════════════════════════════════════════════════════╗
+       ║  SECTION 6 — IN ACTION (mockup + steps)                             ║
+       ╚═══════════════════════════════════════════════════════════════════╝ */
+    .sp-action {
+      padding: 140px 0;
+      background: linear-gradient(180deg, var(--navy) 0%, var(--navy-2) 100%);
+      color: #fff;
+      position: relative; overflow: hidden;
+    }
+    .sp-action::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 30% 50%, rgba(0,99,242,0.25), transparent 50%),
+                  radial-gradient(ellipse at 80% 70%, rgba(45,164,255,0.18), transparent 55%);
+    }
+    .sp-action-inner {
+      position: relative; z-index: 2;
+      display: grid; grid-template-columns: 1fr 1.05fr; gap: 80px;
+      align-items: center;
+    }
+    .sp-action-h2 {
+      font-size: clamp(36px, 3.6vw, 50px);
+      font-weight: 800; line-height: 1.08; letter-spacing: -1.5px;
+      margin: 12px 0 24px;
+    }
+    .sp-action-h2 em { font-style: normal; color: var(--accent-2); }
+    .sp-action-sub {
+      font-size: 16px; line-height: 1.6; color: rgba(255,255,255,0.7);
+      margin-bottom: 36px;
+    }
+    .sp-steps { display: flex; flex-direction: column; gap: 20px; }
+    .sp-step {
+      display: flex; gap: 18px;
+      padding: 18px 22px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px;
+      transition: all 0.25s var(--ease);
+    }
+    .sp-step:hover {
+      background: rgba(255,255,255,0.07);
+      border-color: rgba(45,164,255,0.3);
+    }
+    .sp-step-num {
+      width: 38px; height: 38px; border-radius: 10px; flex-shrink: 0;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; font-weight: 800; color: #fff;
+      box-shadow: 0 4px 12px rgba(0,99,242,0.4);
+    }
+    .sp-step-text h5 {
+      font-size: 16px; font-weight: 700; color: #fff;
+      margin-bottom: 6px;
+    }
+    .sp-step-text p {
+      font-size: 13px; line-height: 1.55; color: rgba(255,255,255,0.65);
+    }
+
+    /* Orchestration mockup right */
+    .sp-action-mock {
+      position: relative;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 20px;
+      padding: 28px;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 30px 80px rgba(0,99,242,0.25);
+    }
+    .sp-action-mock-head {
+      display: flex; align-items: center; justify-content: space-between;
+      padding-bottom: 18px;
+      margin-bottom: 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .sp-action-mock-title {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 12px; font-weight: 700; color: #fff; letter-spacing: 0.04em; text-transform: uppercase;
+    }
+    .sp-action-mock-title svg { width: 16px; height: 16px; color: var(--accent-2); }
+    .sp-action-mock-dot {
+      width: 8px; height: 8px; border-radius: 50%; background: var(--green);
+      box-shadow: 0 0 12px var(--green);
+      animation: sp-pulse-dot 2s ease-in-out infinite;
+    }
+    .sp-action-mock-status {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 10px; font-weight: 700; color: var(--green);
+      letter-spacing: 0.06em; text-transform: uppercase;
+    }
+
+    .sp-flow-stage {
+      position: relative; height: 280px;
+    }
+    .sp-flow-input, .sp-flow-output {
+      position: absolute;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 11px; font-weight: 600; color: #fff;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .sp-flow-input::before {
+      content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--accent-2);
+    }
+    .sp-flow-output::before {
+      content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--green);
+    }
+    .sp-flow-input.i1 { top: 6%; left: 0; }
+    .sp-flow-input.i2 { top: 36%; left: 0; }
+    .sp-flow-input.i3 { top: 66%; left: 0; }
+    .sp-flow-output.o1 { top: 6%; right: 0; }
+    .sp-flow-output.o2 { top: 36%; right: 0; }
+    .sp-flow-output.o3 { top: 66%; right: 0; }
+    .sp-flow-engine {
+      position: absolute; left: 50%; top: 50%;
+      transform: translate(-50%, -50%);
+      width: 80px; height: 92px;
+      clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 8px 24px rgba(0,99,242,0.5);
+    }
+    .sp-flow-engine svg { width: 24px; height: 24px; color: #fff; }
+    .sp-flow-lines {
+      position: absolute; inset: 0;
+    }
+    .sp-flow-lines path {
+      fill: none; stroke: var(--accent-2); stroke-width: 1.2; opacity: 0.35;
+      stroke-dasharray: 4 4;
+      animation: sp-dash 12s linear infinite;
+    }
+
+    .sp-action-mock-foot {
+      margin-top: 20px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+    }
+    .sp-mock-metric { text-align: center; }
+    .sp-mock-metric-num {
+      font-size: 18px; font-weight: 800; color: var(--accent-2);
+      font-variant-numeric: tabular-nums; letter-spacing: -0.4px;
+    }
+    .sp-mock-metric-lbl {
+      font-size: 9px; color: rgba(255,255,255,0.5);
+      letter-spacing: 0.06em; text-transform: uppercase;
+      margin-top: 2px;
+    }
+
+    /* ╔═══════════════════════════════════════════════════════════════════╗
+       ║  SECTION 7 — MODULAR FIT (composer reuse w/ spotlight)              ║
+       ╚═══════════════════════════════════════════════════════════════════╝ */
+    .sp-modular {
+      padding: 140px 0;
+      background: linear-gradient(180deg, var(--bg) 0%, #fff 100%);
+      position: relative; overflow: hidden;
+    }
+    .sp-modular::before {
+      content: ''; position: absolute; inset: 0;
+      background-image: radial-gradient(circle at 1px 1px, rgba(0,99,242,0.06) 1px, transparent 0);
+      background-size: 28px 28px;
+      mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%);
+      -webkit-mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%);
+    }
+    .sp-mod-head { text-align: center; margin-bottom: 50px; position: relative; z-index: 2; }
+    .sp-mod-head h2 {
+      font-size: clamp(36px, 3.6vw, 50px);
+      font-weight: 800; line-height: 1.08; letter-spacing: -1.5px;
+      margin: 12px 0 16px;
+    }
+    .sp-mod-head h2 em { font-style: normal; color: var(--accent); }
+    .sp-mod-head p {
+      font-size: 17px; line-height: 1.6; color: var(--sec);
+      max-width: 620px; margin: 0 auto;
+    }
+    .sp-mod-composer {
+      position: relative; z-index: 2;
+      max-width: 1080px; margin: 0 auto;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 40px;
+      box-shadow: 0 30px 80px rgba(15,23,41,0.08);
+    }
+    .sp-mod-zone { margin-bottom: 36px; padding-bottom: 36px; border-bottom: 1px dashed var(--border); }
+    .sp-mod-zone:last-of-type { border-bottom: none; padding-bottom: 0; margin-bottom: 0; }
+    .sp-mod-zone-head {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 24px; gap: 16px;
+    }
+    .sp-mod-zone-title {
+      display: flex; align-items: center; gap: 12px;
+      font-size: 14px; font-weight: 700; color: var(--ink);
+      letter-spacing: 0.04em; text-transform: uppercase;
+    }
+    .sp-mod-zone-title::before {
+      content: ''; display: inline-block;
+      width: 18px; height: 1.5px; background: var(--accent); border-radius: 1.5px;
+    }
+    .sp-mod-zone-title.complement { color: var(--muted); }
+    .sp-mod-zone-title.complement::before { background: var(--muted); }
+    .sp-mod-counter {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 4px 12px; border-radius: 20px;
+      background: var(--accent-l); color: var(--accent);
+      font-size: 12px; font-weight: 700;
+    }
+    .sp-mod-counter.muted { background: var(--bg-alt); color: var(--sec); }
+
+    .sp-mod-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px;
+    }
+    .sp-mod-card {
+      position: relative;
+      border-radius: 14px;
+      padding: 20px 16px 16px;
+      transition: all 0.3s var(--ease);
+      display: flex; flex-direction: column;
+      min-height: 168px; overflow: hidden;
+    }
+    .sp-mod-card-icon {
+      width: 38px; height: 44px;
+      clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 12px;
+    }
+    .sp-mod-card-icon svg { width: 16px; height: 16px; }
+    .sp-mod-card-name { font-size: 13px; font-weight: 700; line-height: 1.25; margin-bottom: 4px; }
+    .sp-mod-card-desc { font-size: 11px; line-height: 1.4; flex: 1; margin-bottom: 12px; }
+    .sp-mod-card-action {
+      display: inline-flex; align-items: center; justify-content: center; gap: 5px;
+      padding: 6px 10px; border-radius: 8px;
+      font-size: 11px; font-weight: 700; letter-spacing: 0.02em;
+      align-self: flex-start;
+    }
+
+    /* SPOTLIGHT — Smart Platform itself */
+    .sp-mod-card.spotlight {
+      background: linear-gradient(140deg, var(--accent) 0%, var(--accent-d) 70%, var(--navy-3) 130%);
+      color: #fff;
+      box-shadow: 0 18px 50px rgba(0,99,242,0.4);
+      border: 2px solid var(--accent);
+      grid-column: span 2;
+      min-height: 200px;
+      transform: scale(1.02);
+      position: relative;
+    }
+    .sp-mod-card.spotlight::after {
+      content: 'ESTÁS ACÁ';
+      position: absolute; top: 14px; right: 14px;
+      background: rgba(255,255,255,0.2);
+      color: #fff;
+      padding: 4px 8px; border-radius: 6px;
+      font-size: 9px; font-weight: 800; letter-spacing: 0.12em;
+      backdrop-filter: blur(8px);
+    }
+    .sp-mod-card.spotlight .sp-mod-card-icon {
+      background: rgba(255,255,255,0.22);
+      border: 1px solid rgba(255,255,255,0.4);
+      width: 48px; height: 56px;
+    }
+    .sp-mod-card.spotlight .sp-mod-card-icon svg { width: 20px; height: 20px; color: #fff; }
+    .sp-mod-card.spotlight .sp-mod-card-name { font-size: 18px; }
+    .sp-mod-card.spotlight .sp-mod-card-desc { color: rgba(255,255,255,0.78); font-size: 13px; }
+
+    /* Active complementary cards */
+    .sp-mod-card.active {
+      background: linear-gradient(140deg, var(--accent-l) 0%, #EEF4FF 100%);
+      border: 1px solid var(--accent);
+      color: var(--ink);
+    }
+    .sp-mod-card.active .sp-mod-card-icon {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    }
+    .sp-mod-card.active .sp-mod-card-icon svg { color: #fff; }
+    .sp-mod-card.active .sp-mod-card-desc { color: var(--sec); }
+    .sp-mod-card.active .sp-mod-card-action {
+      background: #fff; color: var(--accent); border: 1px solid rgba(0,99,242,0.2);
+    }
+    .sp-mod-card.active .sp-mod-card-action::before { content: '✓'; font-size: 11px; font-weight: 800; }
+    .sp-mod-card.active:hover { transform: translateY(-3px); box-shadow: 0 12px 28px rgba(0,99,242,0.18); }
+
+    /* Available cards */
+    .sp-mod-card.available {
+      background: var(--bg);
+      color: var(--ink);
+      border: 1.5px dashed rgba(15,23,41,0.18);
+      cursor: pointer;
+    }
+    .sp-mod-card.available .sp-mod-card-icon {
+      background: linear-gradient(135deg, var(--accent-l), #EBF2FF);
+      border: 1px solid rgba(0,99,242,0.15);
+    }
+    .sp-mod-card.available .sp-mod-card-icon svg { color: var(--accent); }
+    .sp-mod-card.available .sp-mod-card-desc { color: var(--muted); }
+    .sp-mod-card.available .sp-mod-card-action {
+      background: #fff; color: var(--accent); border: 1px solid rgba(0,99,242,0.25);
+    }
+    .sp-mod-card.available:hover {
+      transform: translateY(-3px); border-color: var(--accent);
+      background: #fff;
+      box-shadow: 0 12px 28px rgba(0,99,242,0.12);
+    }
+    .sp-mod-card.available:hover .sp-mod-card-action { background: var(--accent); color: #fff; }
+    .sp-mod-card.available .sp-mod-card-action::before { content: '+'; font-size: 14px; font-weight: 800; }
+
+    .sp-mod-hint {
+      display: flex; align-items: center; gap: 8px;
+      justify-content: center;
+      font-size: 12px; color: var(--muted);
+      margin-top: 28px; padding: 14px 20px;
+      background: var(--bg);
+      border-radius: 12px;
+      border: 1px dashed var(--border);
+    }
+    .sp-mod-hint svg { width: 16px; height: 16px; color: var(--accent); flex-shrink: 0; }
+
+    /* ╔═══════════════════════════════════════════════════════════════════╗
+       ║  SECTION 8 — CASE STUDY                                             ║
+       ╚═══════════════════════════════════════════════════════════════════╝ */
+    .sp-case {
+      padding: 140px 0;
+      background: #fff;
+      position: relative; overflow: hidden;
+    }
+    .sp-case-card {
+      max-width: 1100px; margin: 0 auto;
+      background: linear-gradient(135deg, #F8FAFC 0%, #EEF4FF 100%);
+      border-radius: 28px;
+      padding: 60px;
+      position: relative; overflow: hidden;
+      box-shadow: 0 30px 80px rgba(15,23,41,0.08);
+    }
+    .sp-case-card::before {
+      content: ''; position: absolute; right: -100px; top: -100px;
+      width: 360px; height: 360px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(0,99,242,0.10), transparent 70%);
+    }
+    .sp-case-grid {
+      position: relative; z-index: 2;
+      display: grid; grid-template-columns: 1fr 1.3fr; gap: 60px;
+      align-items: center;
+    }
+
+    .sp-case-customer { text-align: center; }
+    .sp-case-logo {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 92px; height: 92px; border-radius: 22px;
+      background: linear-gradient(135deg, #DC2626 0%, #991B1B 100%);
+      color: #fff;
+      font-size: 28px; font-weight: 800;
+      letter-spacing: -1px;
+      margin-bottom: 18px;
+      box-shadow: 0 16px 36px rgba(220,38,38,0.25);
+    }
+    .sp-case-customer-name {
+      font-size: 18px; font-weight: 700; color: var(--ink);
+      margin-bottom: 4px;
+    }
+    .sp-case-customer-role {
+      font-size: 13px; color: var(--muted);
+      margin-bottom: 24px;
+    }
+    .sp-case-flag {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 14px; border-radius: 20px;
+      background: var(--accent-l);
+      font-size: 11px; font-weight: 700; color: var(--accent);
+      letter-spacing: 0.06em; text-transform: uppercase;
+    }
+
+    .sp-case-content { position: relative; }
+    .sp-case-quote-mark {
+      font-size: 80px; line-height: 0.8;
+      color: var(--accent); opacity: 0.2;
+      margin-bottom: -16px;
+      font-family: Georgia, serif;
+    }
+    .sp-case-quote {
+      font-size: clamp(22px, 2.2vw, 30px);
+      font-weight: 700; line-height: 1.35; color: var(--ink);
+      letter-spacing: -0.5px;
+      margin-bottom: 32px;
+    }
+    .sp-case-metrics {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+      padding-top: 28px;
+      border-top: 1px solid rgba(15,23,41,0.08);
+    }
+    .sp-case-metric { }
+    .sp-case-metric-num {
+      font-size: 32px; font-weight: 800; line-height: 1;
+      letter-spacing: -1px; margin-bottom: 6px;
+      font-variant-numeric: tabular-nums;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .sp-case-metric-desc {
+      font-size: 12px; color: var(--sec);
+      line-height: 1.45;
+    }
+
+    /* ╔═══════════════════════════════════════════════════════════════════╗
+       ║  SECTION 9 — CTA BAND                                               ║
+       ╚═══════════════════════════════════════════════════════════════════╝ */
+    .cta-band {
+      position: relative;
+      padding: 120px 0;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-d) 60%, var(--navy-3) 100%);
+      color: #fff; text-align: center;
+      overflow: hidden;
+    }
+    .cta-band::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 50% 0%, rgba(45,164,255,0.35), transparent 60%);
+    }
+    .cta-band .container { position: relative; z-index: 2; }
+    .cta-h2 {
+      font-size: clamp(40px, 4vw, 60px);
+      font-weight: 800; line-height: 1.08; letter-spacing: -1.5px;
+      margin-bottom: 18px;
+    }
+    .cta-sub {
+      font-size: 18px; line-height: 1.6; color: rgba(255,255,255,0.85);
+      max-width: 540px; margin: 0 auto 32px;
+    }
+    .cta-fine {
+      font-size: 13px; color: rgba(255,255,255,0.65);
+      margin-top: 20px;
+    }
+
+    /* ╔═══════════════════════════════════════════════════════════════════╗
+       ║  SECTION 10 — FOOTER                                                ║
+       ╚═══════════════════════════════════════════════════════════════════╝ */
+    footer {
+      background: var(--ink-deep); color: rgba(255,255,255,0.65);
+      padding: 80px 0 30px;
+      position: relative; overflow: hidden;
+    }
+    .footer-inner {
+      max-width: 1240px; margin: 0 auto; padding: 0 64px;
+      display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 64px;
+      margin-bottom: 60px;
+    }
+    .footer-logo { font-size: 22px; font-weight: 800; color: #fff; margin-bottom: 14px; }
+    .footer-logo span { color: var(--accent-2); }
+    .footer-tagline { font-size: 14px; line-height: 1.55; color: rgba(255,255,255,0.6); max-width: 240px; }
+    .footer-col-title {
+      font-size: 13px; font-weight: 700; color: #fff;
+      letter-spacing: 0.05em; text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    .footer-links { display: flex; flex-direction: column; gap: 10px; }
+    .footer-links a { font-size: 14px; color: rgba(255,255,255,0.6); transition: color 0.2s; }
+    .footer-links a:hover { color: var(--accent-2); }
+    .footer-helping {
+      text-align: center; padding: 40px 0 30px;
+      font-size: 14px; color: rgba(255,255,255,0.55);
+    }
+    .footer-helping em {
+      font-style: normal; color: #FF6BB5; font-weight: 700;
+    }
+    .footer-helping em::before { content: '♥ '; color: #FF6BB5; }
+    .footer-bottom {
+      max-width: 1240px; margin: 0 auto; padding: 24px 64px 0;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      display: flex; justify-content: space-between;
+      font-size: 13px; color: rgba(255,255,255,0.45);
+    }
+
+    /* ── Responsive ──────────────────────────────────────────────────── */
+    @media (max-width: 980px) {
+      .sp-hero-inner { grid-template-columns: 1fr; gap: 60px; }
+      .sp-hex-stage { transform: scale(0.8); }
+      .sp-stats-grid { grid-template-columns: repeat(2, 1fr); gap: 24px; }
+      .sp-problem-grid { grid-template-columns: 1fr; gap: 50px; }
+      .sp-caps-grid { grid-template-columns: repeat(2, 1fr); }
+      .sp-action-inner { grid-template-columns: 1fr; gap: 50px; }
+      .sp-mod-grid { grid-template-columns: repeat(3, 1fr); }
+      .sp-mod-card.spotlight { grid-column: span 3; }
+      .sp-case-grid { grid-template-columns: 1fr; gap: 32px; text-align: center; }
+      .sp-case-card { padding: 40px 32px; }
+      .footer-inner { grid-template-columns: 1fr 1fr; gap: 40px; }
+    }
+    @media (max-width: 600px) {
+      .container, .nav-inner, .footer-inner, .footer-bottom { padding-left: 24px; padding-right: 24px; }
+      .sp-stats-grid, .sp-caps-grid { grid-template-columns: 1fr; }
+      .sp-mod-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+      .sp-mod-card.spotlight { grid-column: span 2; }
+      .nav-links { display: none; }
+      .nav-crumb { display: none; }
+      .sp-hero { padding-top: 130px; padding-bottom: 60px; min-height: auto; }
+      .sp-stats, .sp-problem, .sp-caps, .sp-action, .sp-modular, .sp-case, .cta-band { padding: 80px 0; }
+      .sp-case-metrics { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="cursor-glow" id="cursorGlow"></div>
+
+<!-- ═══ 1. NAV ═══ -->
+<nav id="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">info<span>corp</span></a>
+    <ul class="nav-links">
+      <li><a href="plataforma.html" class="active">Productos <span class="nav-crumb">IC Smart Platform</span></a></li>
+      <li><a href="soluciones-personas.html">Soluciones</a></li>
+      <li><a href="#">Clientes</a></li>
+      <li><a href="#">Recursos</a></li>
+    </ul>
+    <a href="#demo" class="nav-cta">Solicitar demo</a>
+  </div>
+</nav>
+
+<!-- ═══ 2. HERO ═══ -->
+<section class="sp-hero">
+  <div class="sp-hero-grid"></div>
+  <div class="sp-hero-inner">
+    <div class="sp-hero-content">
+      <span class="sp-hero-label" id="heroLabel">IC Smart Platform · CORE</span>
+      <h1 class="sp-hero-h1" id="heroH1">El motor que <em>conecta tu banco</em></h1>
+      <p class="sp-hero-sub" id="heroSub">Una plataforma única que orquesta canales, datos y procesos. Una capa de inteligencia que mantiene la consistencia, acelera releases y se adapta al ritmo de tu estrategia.</p>
+      <div class="sp-hero-actions" id="heroActions">
+        <a href="#demo" class="btn btn-primary btn-arrow">Solicitá una demo</a>
+        <a href="#how" class="btn btn-ghost">Conocer arquitectura</a>
+      </div>
+    </div>
+
+    <!-- Hexagonal hub stage -->
+    <div class="sp-hex-stage" id="hexStage">
+      <div class="sp-hex-orbit">
+        <div class="sp-hex-node p1">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/></svg>
+          <div class="sp-hex-node-text">Mobile</div>
+        </div>
+        <div class="sp-hex-node p2">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/></svg>
+          <div class="sp-hex-node-text">Web</div>
+        </div>
+        <div class="sp-hex-node p3">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <div class="sp-hex-node-text">Social</div>
+        </div>
+        <div class="sp-hex-node p4">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          <div class="sp-hex-node-text">Marketing</div>
+        </div>
+      </div>
+      <div class="sp-hex-orbit-inner">
+        <div class="sp-hex-node p1">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          <div class="sp-hex-node-text">Analytics</div>
+        </div>
+        <div class="sp-hex-node p2">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+          <div class="sp-hex-node-text">Onboard</div>
+        </div>
+        <div class="sp-hex-node p3">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33"/></svg>
+          <div class="sp-hex-node-text">Back-Office</div>
+        </div>
+        <div class="sp-hex-node p4">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4M6 12H2M12 22v-4M12 6V2"/><circle cx="12" cy="12" r="4"/></svg>
+          <div class="sp-hex-node-text">Open APIs</div>
+        </div>
+      </div>
+
+      <div class="sp-hex-center">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+          <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+        </svg>
+        <div class="sp-hex-center-label">IC SMART</div>
+        <div class="sp-hex-center-text">Platform</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 3. STATS STRIP ═══ -->
+<section class="sp-stats">
+  <div class="container sp-stats-grid">
+    <div class="sp-stat">
+      <div class="sp-stat-num" data-target="99.9" data-suffix="%">0%</div>
+      <div class="sp-stat-desc">uptime garantizado<br>con redundancia activa</div>
+    </div>
+    <div class="sp-stat">
+      <div class="sp-stat-num" data-target="120" data-suffix="M+">0M+</div>
+      <div class="sp-stat-desc">transacciones procesadas<br>cada mes</div>
+    </div>
+    <div class="sp-stat">
+      <div class="sp-stat-num" data-target="30" data-prefix="+">+0</div>
+      <div class="sp-stat-desc">integraciones nativas<br>listas para usar</div>
+    </div>
+    <div class="sp-stat">
+      <div class="sp-stat-num" data-target="40" data-prefix="+">+0</div>
+      <div class="sp-stat-desc">bancos en producción<br>en LATAM y Caribe</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 4. PROBLEM → SOLUTION ═══ -->
+<section class="sp-problem">
+  <div class="container sp-problem-grid">
+    <div>
+      <span class="label">El reto · La solución</span>
+      <h2 class="sp-problem-h2 split-lines">Por qué <em>importa</em><br>tener un motor central</h2>
+
+      <div class="sp-problem-list">
+        <div class="sp-problem-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <div class="sp-problem-item-text"><strong>Islas tecnológicas:</strong> cada canal tiene su backend, su lógica, su roadmap. Duplicación que no escala.</div>
+        </div>
+        <div class="sp-problem-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <div class="sp-problem-item-text"><strong>Experiencias inconsistentes:</strong> el cliente paga distinto en web que en app. Cada canal "interpreta" el banco a su manera.</div>
+        </div>
+        <div class="sp-problem-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <div class="sp-problem-item-text"><strong>Releases lentos:</strong> cambiar algo simple — un nuevo producto, una promo — toma meses porque hay que tocar 5 sistemas.</div>
+        </div>
+      </div>
+
+      <div class="sp-arrow-down">Cómo lo resolvemos</div>
+
+      <div class="sp-solution-list">
+        <div class="sp-solution-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+          <div class="sp-solution-item-text"><strong>Una sola capa de orquestación</strong> que absorbe las particularidades de los sistemas core y expone una experiencia consistente a cualquier canal.</div>
+        </div>
+        <div class="sp-solution-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+          <div class="sp-solution-item-text"><strong>Lo que se decide acá, se ve en todos lados:</strong> reglas de negocio, productos, beneficios. Un solo lugar para gobernar la experiencia.</div>
+        </div>
+        <div class="sp-solution-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+          <div class="sp-solution-item-text"><strong>Releases en semanas, no meses,</strong> con componentes reutilizables y APIs que aceleran la entrega sin sacrificar control ni compliance.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Orchestration visual -->
+    <div class="sp-problem-visual">
+      <div class="sp-orch-stage">
+        <svg class="sp-orch-lines" viewBox="0 0 400 400" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M 200 200 L 140 30"/>
+          <path d="M 200 200 L 380 90"/>
+          <path d="M 200 200 L 380 290"/>
+          <path d="M 200 200 L 160 380"/>
+          <path d="M 200 200 L 20 290"/>
+          <path d="M 200 200 L 20 70"/>
+        </svg>
+        <div class="sp-orch-center">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          <div class="sp-orch-center-text">IC Smart<br>Platform</div>
+        </div>
+        <div class="sp-orch-channel c1">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/></svg>
+          Mobile App
+        </div>
+        <div class="sp-orch-channel c2">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/></svg>
+          Web Banking
+        </div>
+        <div class="sp-orch-channel c3">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          WhatsApp · SARA
+        </div>
+        <div class="sp-orch-channel c4">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          Campañas
+        </div>
+        <div class="sp-orch-channel c5">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4M6 12H2M12 22v-4M12 6V2"/><circle cx="12" cy="12" r="4"/></svg>
+          Open APIs
+        </div>
+        <div class="sp-orch-channel c6">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82"/></svg>
+          Back-Office
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 5. CAPABILITIES GRID ═══ -->
+<section class="sp-caps" id="how">
+  <div class="container sp-caps-head">
+    <span class="label">Qué hace</span>
+    <h2 class="split-lines">Cuatro capacidades<br>en un solo <em>core</em></h2>
+    <p>Lo que Smart Platform entrega de fábrica para que el banco pueda concentrarse en su estrategia, no en plomería técnica.</p>
+  </div>
+  <div class="container sp-caps-grid">
+    <div class="sp-cap-card">
+      <div class="sp-cap-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v6M12 17v6M4.22 4.22l4.24 4.24M15.54 15.54l4.24 4.24M1 12h6M17 12h6M4.22 19.78l4.24-4.24M15.54 8.46l4.24-4.24"/></svg>
+      </div>
+      <h4>Orquestación omnicanal</h4>
+      <p>Un solo backbone que mantiene la coherencia entre canales: lo que pasa en una app, se refleja en web, social y back-office en tiempo real.</p>
+    </div>
+    <div class="sp-cap-card">
+      <div class="sp-cap-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s-8-4.5-8-12V5l8-3 8 3v5c0 7.5-8 12-8 12z"/><polyline points="9 12 11 14 15 10"/></svg>
+      </div>
+      <h4>Identidad y seguridad central</h4>
+      <p>Una capa de identidad unificada con autenticación multi-factor y permisos granulares. Compliance bancario y trazabilidad para auditoría.</p>
+    </div>
+    <div class="sp-cap-card">
+      <div class="sp-cap-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4M6 12H2M12 22v-4M12 6V2"/><circle cx="12" cy="12" r="4"/></svg>
+      </div>
+      <h4>Open APIs nativas</h4>
+      <p>Capa Open API construida desde el día uno para integrar fintechs, terceros y crear marketplace de servicios sin comprometer la seguridad.</p>
+    </div>
+    <div class="sp-cap-card">
+      <div class="sp-cap-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      </div>
+      <h4>Inteligencia de datos embebida</h4>
+      <p>Capa analítica integrada que recoge eventos y los normaliza para entender al cliente, validar decisiones y entrenar modelos de IA.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 6. IN ACTION (Orchestration mockup) ═══ -->
+<section class="sp-action">
+  <div class="container sp-action-inner">
+    <div>
+      <span class="label on-dark">CÓMO FUNCIONA</span>
+      <h2 class="sp-action-h2 split-lines">Smart Platform <em>en acción</em></h2>
+      <p class="sp-action-sub">Un ejemplo: un cliente solicita un préstamo desde WhatsApp. Esto es lo que pasa atrás de la conversación, en menos de 4 segundos.</p>
+
+      <div class="sp-steps">
+        <div class="sp-step">
+          <div class="sp-step-num">1</div>
+          <div class="sp-step-text">
+            <h5>Recibe el evento desde cualquier canal</h5>
+            <p>WhatsApp, web, app o sucursal. Smart Platform normaliza el input.</p>
+          </div>
+        </div>
+        <div class="sp-step">
+          <div class="sp-step-num">2</div>
+          <div class="sp-step-text">
+            <h5>Enriquece el contexto</h5>
+            <p>Identidad, historial, riesgo, preferencias. Todo unificado en una sola vista del cliente.</p>
+          </div>
+        </div>
+        <div class="sp-step">
+          <div class="sp-step-num">3</div>
+          <div class="sp-step-text">
+            <h5>Decide la mejor respuesta</h5>
+            <p>Reglas de negocio + modelos de IA. Aprobación, pricing, ofertas — orquestados en una sola capa.</p>
+          </div>
+        </div>
+        <div class="sp-step">
+          <div class="sp-step-num">4</div>
+          <div class="sp-step-text">
+            <h5>Entrega consistencia en todos los canales</h5>
+            <p>La respuesta llega al cliente por el canal que prefiera, pero el back-office y los reportes la ven al mismo tiempo.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mockup -->
+    <div class="sp-action-mock">
+      <div class="sp-action-mock-head">
+        <div class="sp-action-mock-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          Smart Platform · Live
+        </div>
+        <div class="sp-action-mock-status">
+          <span class="sp-action-mock-dot"></span> Activo
+        </div>
+      </div>
+
+      <div class="sp-flow-stage">
+        <svg class="sp-flow-lines" viewBox="0 0 400 280" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M 70 30 Q 140 30 200 140"/>
+          <path d="M 70 130 Q 140 130 200 140"/>
+          <path d="M 70 230 Q 140 230 200 140"/>
+          <path d="M 200 140 Q 280 30 330 30"/>
+          <path d="M 200 140 Q 280 130 330 130"/>
+          <path d="M 200 140 Q 280 230 330 230"/>
+        </svg>
+
+        <div class="sp-flow-input i1">WhatsApp · "Préstamo"</div>
+        <div class="sp-flow-input i2">Web · Login</div>
+        <div class="sp-flow-input i3">App · Push tap</div>
+
+        <div class="sp-flow-engine">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        </div>
+
+        <div class="sp-flow-output o1">Oferta aprobada</div>
+        <div class="sp-flow-output o2">Push enviado</div>
+        <div class="sp-flow-output o3">Log auditoría</div>
+      </div>
+
+      <div class="sp-action-mock-foot">
+        <div class="sp-mock-metric">
+          <div class="sp-mock-metric-num">3.8s</div>
+          <div class="sp-mock-metric-lbl">Tiempo total</div>
+        </div>
+        <div class="sp-mock-metric">
+          <div class="sp-mock-metric-num">7</div>
+          <div class="sp-mock-metric-lbl">Canales sync</div>
+        </div>
+        <div class="sp-mock-metric">
+          <div class="sp-mock-metric-num">100%</div>
+          <div class="sp-mock-metric-lbl">Auditable</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 7. MODULAR FIT — Composer with spotlight on Smart Platform ═══ -->
+<section class="sp-modular">
+  <div class="container sp-mod-head">
+    <span class="label">DÓNDE ENCAJA EN LA SUITE</span>
+    <h2 class="split-lines">Smart Platform es el <em>motor.</em><br>Vos elegís qué canales sumar.</h2>
+    <p>Por sí solo orquesta. Combinado con el resto del IC Banking Suite, multiplica. Estas son las plataformas que más se sumarán a la solución.</p>
+  </div>
+
+  <div class="container">
+    <div class="sp-mod-composer">
+      <!-- Active core -->
+      <div class="sp-mod-zone">
+        <div class="sp-mod-zone-head">
+          <div class="sp-mod-zone-title">Plataforma core</div>
+          <div class="sp-mod-counter">
+            Activa por diseño
+          </div>
+        </div>
+        <div class="sp-mod-grid">
+          <!-- Spotlight: Smart Platform itself (span 2) -->
+          <div class="sp-mod-card spotlight">
+            <div class="sp-mod-card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            </div>
+            <div class="sp-mod-card-name">IC Smart Platform</div>
+            <div class="sp-mod-card-desc">El motor central. Conecta canales, datos y procesos en una sola capa de orquestación inteligente.</div>
+            <span class="sp-mod-card-action" style="opacity:0;">Activa</span>
+          </div>
+
+          <!-- Active complementaries (recommended) -->
+          <div class="sp-mod-card active" data-id="mobile">
+            <div class="sp-mod-card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/></svg>
+            </div>
+            <div class="sp-mod-card-name">IC Mobile Banking</div>
+            <div class="sp-mod-card-desc">Canal de app nativa.</div>
+            <span class="sp-mod-card-action">Recomendada</span>
+          </div>
+          <div class="sp-mod-card active" data-id="web">
+            <div class="sp-mod-card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/></svg>
+            </div>
+            <div class="sp-mod-card-name">IC Web Banking</div>
+            <div class="sp-mod-card-desc">Canal responsive.</div>
+            <span class="sp-mod-card-action">Recomendada</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Optional add-ons -->
+      <div class="sp-mod-zone">
+        <div class="sp-mod-zone-head">
+          <div class="sp-mod-zone-title complement">Sumá según tu estrategia</div>
+          <div class="sp-mod-counter muted">8 plataformas disponibles</div>
+        </div>
+        <div class="sp-mod-grid">
+          <div class="sp-mod-card available">
+            <div class="sp-mod-card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            </div>
+            <div class="sp-mod-card-name">IC Social Banking</div>
+            <div class="sp-mod-card-desc">Banca en WhatsApp con SARA.</div>
+            <span class="sp-mod-card-action">Sumar</span>
+          </div>
+          <div class="sp-mod-card available">
+            <div class="sp-mod-card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            </div>
+            <div class="sp-mod-card-name">IC Marketing Automation</div>
+            <div class="sp-mod-card-desc">Campañas microsegmentadas.</div>
+            <span class="sp-mod-card-action">Sumar</span>
+          </div>
+          <div class="sp-mod-card available">
+            <div class="sp-mod-card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+            </div>
+            <div class="sp-mod-card-name">IC Analytics (GURU)</div>
+            <div class="sp-mod-card-desc">Insights asistidos por IA.</div>
+            <span class="sp-mod-card-action">Sumar</span>
+          </div>
+          <div class="sp-mod-card available">
+            <div class="sp-mod-card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s-8-4.5-8-12V5l8-3 8 3v5c0 7.5-8 12-8 12z"/></svg>
+            </div>
+            <div class="sp-mod-card-name">IC Onboarding</div>
+            <div class="sp-mod-card-desc">Alta 100% digital.</div>
+            <span class="sp-mod-card-action">Sumar</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sp-mod-hint">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+        Empezás con Smart Platform + 1 o 2 canales y vas sumando módulos a tu ritmo. Sin lock-in, sin big-bangs.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 8. CASE STUDY ═══ -->
+<section class="sp-case">
+  <div class="container">
+    <div class="sp-case-card">
+      <div class="sp-case-grid">
+        <div class="sp-case-customer">
+          <div class="sp-case-logo">F</div>
+          <div class="sp-case-customer-name">Banco Ficohsa</div>
+          <div class="sp-case-customer-role">CIO · Banca Digital</div>
+          <span class="sp-case-flag">Caso real · Honduras</span>
+        </div>
+        <div class="sp-case-content">
+          <div class="sp-case-quote-mark">"</div>
+          <blockquote class="sp-case-quote">Con IC Smart Platform unificamos 7 canales en 90 días. Lo que antes era un release trimestral hoy lo hacemos cada 2 semanas, sin perder consistencia ni control.</blockquote>
+          <div class="sp-case-metrics">
+            <div class="sp-case-metric">
+              <div class="sp-case-metric-num" data-target="200" data-prefix="+" data-suffix="%">+0%</div>
+              <div class="sp-case-metric-desc">clientes activos<br>en el primer año</div>
+            </div>
+            <div class="sp-case-metric">
+              <div class="sp-case-metric-num" data-target="60" data-suffix="%">0%</div>
+              <div class="sp-case-metric-desc">menos tiempo<br>por release</div>
+            </div>
+            <div class="sp-case-metric">
+              <div class="sp-case-metric-num"><span data-target="3">0</span>&nbsp;meses</div>
+              <div class="sp-case-metric-desc">time-to-production<br>desde el kick-off</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 9. CTA BAND ═══ -->
+<section class="cta-band" id="demo">
+  <div class="container">
+    <h2 class="cta-h2 split-lines">¿Hablamos de cómo<br>encajaría en tu banco?</h2>
+    <p class="cta-sub">Ayudamos a las personas a amar a su banco. Hablemos del tuyo.</p>
+    <a href="#" class="btn btn-white btn-arrow">¿Conversamos?</a>
+    <div class="cta-fine">Sin compromisos · Demo personalizada · 30 minutos</div>
+  </div>
+</section>
+
+<!-- ═══ 10. FOOTER ═══ -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-logo">info<span>corp</span></div>
+      <p class="footer-tagline">Desde Uruguay, hacia el mundo.</p>
+    </div>
+    <div>
+      <div class="footer-col-title">IC Banking Suite</div>
+      <ul class="footer-links">
+        <li><a href="plataforma-ic-smart-platform.html">IC Smart Platform</a></li>
+        <li><a href="plataforma.html">IC Mobile Banking</a></li>
+        <li><a href="plataforma.html">IC Web Banking</a></li>
+        <li><a href="plataforma.html">IC Social Banking (SARA)</a></li>
+        <li><a href="plataforma.html">IC Analytics (GURU)</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Compañía</div>
+      <ul class="footer-links">
+        <li><a href="#">Sobre nosotros</a></li>
+        <li><a href="#">Método B-Fly</a></li>
+        <li><a href="#">Casos de éxito</a></li>
+        <li><a href="#">Carreras</a></li>
+        <li><a href="#">Blog</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Recursos</div>
+      <ul class="footer-links">
+        <li><a href="#">Estudio Banca Digital 2025</a></li>
+        <li><a href="#">Privacidad</a></li>
+        <li><a href="#">Términos</a></li>
+        <li><a href="#">Seguridad</a></li>
+      </ul>
+    </div>
+  </div>
+  <p class="footer-helping">Helping people <em>love</em> their bank</p>
+  <div class="footer-bottom">
+    <span>© 2025 Infocorp Group</span>
+    <span>Lima, Perú · hola@infocorp.net</span>
+  </div>
+</footer>
+
+<script>
+gsap.registerPlugin(ScrollTrigger);
+
+// Cursor glow
+const glow = document.getElementById('cursorGlow');
+let mx=0, my=0, gx=0, gy=0;
+window.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; }, {passive:true});
+(function lerp(){ gx+=(mx-gx)*0.08; gy+=(my-gy)*0.08; if(glow){ glow.style.left=gx+'px'; glow.style.top=gy+'px'; } requestAnimationFrame(lerp); })();
+
+// Nav scroll
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 20), {passive:true});
+
+// Hero entrance
+gsap.set('#heroLabel',   { y: 12, opacity: 0 });
+gsap.set('#heroSub',     { y: 16, opacity: 0 });
+gsap.set('#heroActions', { y: 16, opacity: 0 });
+gsap.set('#hexStage',    { scale: 0.85, opacity: 0 });
+
+const heroTL = gsap.timeline({ delay: 0.15 });
+heroTL.to('#heroLabel', { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }, 0.2);
+
+const heroSplit = new SplitType('#heroH1', { types: 'words,chars', tagName: 'span' });
+heroTL.fromTo(heroSplit.chars,
+  { y: 60, opacity: 0, rotationX: -40 },
+  { y: 0, opacity: 1, rotationX: 0, duration: 0.7, stagger: 0.012, ease: 'power3.out', transformOrigin: '50% 100%' },
+  0.4
+);
+
+heroTL.to('#heroSub',     { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' }, 0.9);
+heroTL.to('#heroActions', { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' }, 1.0);
+heroTL.to('#hexStage',    { opacity: 1, scale: 1, duration: 1.1, ease: 'power3.out' }, 0.6);
+
+// Split-lines on scroll
+document.querySelectorAll('.split-lines').forEach(el => {
+  const split = new SplitType(el, { types: 'lines', tagName: 'span' });
+  split.lines.forEach(line => {
+    line.style.overflow = 'hidden';
+    line.style.display = 'block';
+  });
+  gsap.fromTo(split.lines,
+    { y: '100%', opacity: 0 },
+    {
+      y: '0%', opacity: 1, duration: 0.85, stagger: 0.12, ease: 'power3.out',
+      scrollTrigger: { trigger: el, start: 'top 82%', toggleActions: 'play none none none' }
+    }
+  );
+});
+
+// Stats counter
+document.querySelectorAll('.sp-stat-num, .sp-case-metric-num, .sp-mock-metric-num').forEach(el => {
+  const target = parseFloat(el.dataset.target);
+  const prefix = el.dataset.prefix || '';
+  const suffix = el.dataset.suffix || '';
+  if (isNaN(target)) return;
+  el.textContent = prefix + '0' + suffix;
+  ScrollTrigger.create({
+    trigger: el, start: 'top 88%', once: true,
+    onEnter: () => {
+      gsap.fromTo({ v: 0 }, { v: target },
+        { duration: 1.4, ease: 'power2.out',
+          onUpdate: function(){
+            const v = this.targets()[0].v;
+            const isFloat = target % 1 !== 0;
+            el.textContent = prefix + (isFloat ? v.toFixed(1) : Math.round(v)) + suffix;
+          }
+        }
+      );
+    }
+  });
+});
+
+// Stats stagger
+gsap.fromTo('.sp-stat',
+  { x: -20, opacity: 0 },
+  { x: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: 'power3.out',
+    scrollTrigger: { trigger: '.sp-stats-grid', start: 'top 85%' } }
+);
+
+// Problem/Solution stagger
+gsap.fromTo('.sp-problem-item',
+  { x: -30, opacity: 0 },
+  { x: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: 'power3.out',
+    scrollTrigger: { trigger: '.sp-problem-list', start: 'top 82%' } }
+);
+gsap.fromTo('.sp-solution-item',
+  { x: -30, opacity: 0 },
+  { x: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: 'power3.out',
+    scrollTrigger: { trigger: '.sp-solution-list', start: 'top 82%' } }
+);
+gsap.fromTo('.sp-problem-visual',
+  { x: 40, opacity: 0 },
+  { x: 0, opacity: 1, duration: 0.9, ease: 'power3.out',
+    scrollTrigger: { trigger: '.sp-problem-visual', start: 'top 82%' } }
+);
+
+// Caps cards
+gsap.fromTo('.sp-cap-card',
+  { y: 30, opacity: 0 },
+  { y: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: 'power3.out',
+    scrollTrigger: { trigger: '.sp-caps-grid', start: 'top 82%' } }
+);
+
+// Action steps + mockup
+gsap.fromTo('.sp-step',
+  { x: -30, opacity: 0 },
+  { x: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: 'power3.out',
+    scrollTrigger: { trigger: '.sp-steps', start: 'top 80%' } }
+);
+gsap.fromTo('.sp-action-mock',
+  { x: 40, opacity: 0 },
+  { x: 0, opacity: 1, duration: 0.9, ease: 'power3.out',
+    scrollTrigger: { trigger: '.sp-action-mock', start: 'top 80%' } }
+);
+
+// Modular composer
+gsap.fromTo('.sp-mod-composer',
+  { y: 40, opacity: 0 },
+  { y: 0, opacity: 1, duration: 0.9, ease: 'power3.out',
+    scrollTrigger: { trigger: '.sp-mod-composer', start: 'top 82%' } }
+);
+gsap.fromTo('.sp-mod-card',
+  { scale: 0.9, opacity: 0 },
+  { scale: 1, opacity: 1, duration: 0.6, stagger: 0.06, ease: 'back.out(1.4)',
+    scrollTrigger: { trigger: '.sp-mod-composer', start: 'top 78%' } }
+);
+
+// Case study card
+gsap.fromTo('.sp-case-card',
+  { y: 40, opacity: 0 },
+  { y: 0, opacity: 1, duration: 0.9, ease: 'power3.out',
+    scrollTrigger: { trigger: '.sp-case-card', start: 'top 82%' } }
+);
+
+// CTA band
+const ctaSplit = new SplitType('.cta-h2', { types: 'chars', tagName: 'span' });
+gsap.fromTo(ctaSplit.chars,
+  { y: 40, opacity: 0 },
+  { y: 0, opacity: 1, duration: 0.6, stagger: 0.025, ease: 'power3.out',
+    scrollTrigger: { trigger: '.cta-band', start: 'top 75%' } }
+);
+gsap.fromTo('.cta-sub, .cta-band .btn-white, .cta-fine',
+  { y: 20, opacity: 0 },
+  { y: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: 'power3.out',
+    scrollTrigger: { trigger: '.cta-band', start: 'top 70%' } }
+);
+
+// Modular cards click — visual only (Smart spotlight cannot be removed)
+document.querySelectorAll('.sp-mod-card.available, .sp-mod-card.active').forEach(card => {
+  if (card.classList.contains('spotlight')) return;
+  card.addEventListener('click', () => {
+    if (card.classList.contains('available')) {
+      card.classList.remove('available');
+      card.classList.add('active');
+      card.querySelector('.sp-mod-card-action').textContent = 'Sumada';
+    } else {
+      card.classList.remove('active');
+      card.classList.add('available');
+      card.querySelector('.sp-mod-card-action').textContent = 'Sumar';
+    }
+  });
+});
+</script>
+
+</body>
+</html>

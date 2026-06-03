@@ -1,0 +1,1505 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IC Banking Suite — Infocorp</title>
+  <meta name="description" content="Tecnología para una banca en evolución. Suite digital adaptable y personalizable, con IA aplicada al negocio." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,700&display=swap" rel="stylesheet" />
+
+  <!-- GSAP + ScrollTrigger -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/split-type@0.3.4/umd/index.min.js"></script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:        #F8FAFC;
+      --white:     #FFFFFF;
+      --ink:       #0F1729;
+      --ink-deep:  #0A1226;
+      --sec:       #334155;
+      --muted:     #64748B;
+      --border:    #E2E8F0;
+      --surface:   #EBEEF5;
+      --brand:     #0063F2;
+      --brand-d:   #004fd4;
+      --brand-l:   #DBEAFE;
+      --cyan:      #2CA4FF;
+      --cyan-l:   #BAE0FF;
+      --navy:      #051030;
+      --navy-2:    #0A1A48;
+      --navy-3:    #0E2461;
+      --teal:      #18BCBC;
+      --purple:    #7B5BFF;
+      --font:      'Plus Jakarta Sans', sans-serif;
+      --ease:      cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--ink);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
+    img, svg { display: block; max-width: 100%; }
+
+    .label {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--brand);
+    }
+    .label.on-dark { color: var(--cyan); }
+    .gsap-hidden { opacity: 0; }
+    .container { max-width: 1240px; margin: 0 auto; padding: 0 64px; }
+
+    /* ── Cursor glow (subtle) ────────────────────────────────────────── */
+    .cursor-glow {
+      position: fixed; width: 480px; height: 480px;
+      border-radius: 50%; pointer-events: none; z-index: 1;
+      background: radial-gradient(circle, rgba(0,99,242,0.10) 0%, transparent 60%);
+      transform: translate(-50%, -50%);
+      mix-blend-mode: multiply;
+    }
+
+    /* ── NAV ─────────────────────────────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      height: 68px;
+      background: rgba(255,255,255,0.85);
+      backdrop-filter: blur(20px) saturate(180%);
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.3s, box-shadow 0.3s, background 0.3s;
+      transform: translateY(-100%);
+      animation: nav-in 0.6s 0.05s var(--ease) forwards;
+    }
+    nav.scrolled { border-color: var(--border); box-shadow: 0 1px 24px rgba(15,23,41,0.07); }
+    @keyframes nav-in { to { transform: translateY(0); } }
+    .nav-inner {
+      max-width: 1240px; margin: 0 auto; padding: 0 64px;
+      height: 100%; display: flex; align-items: center; gap: 40px;
+    }
+    .nav-logo { font-size: 18px; font-weight: 700; color: var(--ink); letter-spacing: -0.3px; flex-shrink: 0; }
+    .nav-logo span { color: var(--brand); }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a { font-size: 14px; color: var(--sec); transition: color 0.2s; position: relative; }
+    .nav-links a:hover { color: var(--ink); }
+    .nav-links a.active { color: var(--brand); font-weight: 600; }
+    .nav-links a.active::after {
+      content: ''; position: absolute; left: 0; right: 0; bottom: -22px;
+      height: 2px; background: var(--brand); border-radius: 2px;
+    }
+    .nav-cta {
+      margin-left: auto; padding: 9px 22px;
+      background: var(--brand); color: #fff;
+      font-size: 13px; font-weight: 600; border-radius: 6px;
+      border: none; font-family: var(--font);
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+      box-shadow: 0 2px 12px rgba(0,99,242,0.25);
+      position: relative; overflow: hidden;
+    }
+    .nav-cta::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.25) 50%, transparent 60%);
+      transform: translateX(-100%);
+      transition: transform 0.5s;
+    }
+    .nav-cta:hover::after { transform: translateX(100%); }
+    .nav-cta:hover { background: var(--brand-d); transform: translateY(-1px); box-shadow: 0 4px 20px rgba(0,99,242,0.35); }
+
+    /* ── BUTTONS ─────────────────────────────────────────────────────── */
+    .btn { display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 24px; border-radius: 8px; font-weight: 600; font-size: 14px;
+      transition: all 0.2s; cursor: pointer; border: none; font-family: var(--font);
+    }
+    .btn-primary {
+      background: var(--brand); color: #fff;
+      box-shadow: 0 2px 12px rgba(0,99,242,0.25);
+    }
+    .btn-primary:hover { background: var(--brand-d); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(0,99,242,0.35); }
+    .btn-ghost {
+      background: transparent; color: var(--brand); border: 1px solid rgba(0,99,242,0.3);
+    }
+    .btn-ghost:hover { background: var(--brand-l); border-color: var(--brand); }
+    .btn-white {
+      background: #fff; color: var(--brand);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    }
+    .btn-white:hover { transform: translateY(-1px); box-shadow: 0 8px 30px rgba(0,0,0,0.25); }
+    .btn-arrow::after {
+      content: '→'; margin-left: 4px; transition: transform 0.2s;
+    }
+    .btn-arrow:hover::after { transform: translateX(4px); }
+
+    /* ╔═══════════════════════════════════════════════════════════════════╗
+       ║  HERO — Navy con hexágonos (IC Banking Suite)                       ║
+       ╚═══════════════════════════════════════════════════════════════════╝ */
+    .pf-hero {
+      position: relative;
+      min-height: 100vh;
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-2) 60%, var(--navy-3) 100%);
+      color: #fff;
+      overflow: hidden;
+      padding: 168px 0 100px;
+      display: flex; align-items: center;
+    }
+    .pf-hero::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 80% 50%, rgba(0,99,242,0.25), transparent 50%),
+                  radial-gradient(ellipse at 20% 80%, rgba(45,164,255,0.18), transparent 55%);
+      pointer-events: none;
+    }
+    .pf-hero-grid {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse at center, #000 35%, transparent 75%);
+      -webkit-mask-image: radial-gradient(ellipse at center, #000 35%, transparent 75%);
+    }
+
+    .pf-hero-inner {
+      position: relative; z-index: 3;
+      max-width: 1240px; margin: 0 auto; padding: 0 64px;
+      display: grid; grid-template-columns: 1.05fr 1fr; gap: 80px;
+      align-items: center; width: 100%;
+    }
+    .pf-hero-content { position: relative; z-index: 3; }
+    .pf-hero-label {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 14px; border-radius: 20px;
+      background: rgba(45,164,255,0.12);
+      border: 1px solid rgba(45,164,255,0.3);
+      font-size: 11px; font-weight: 600; letter-spacing: 0.18em;
+      color: var(--cyan); text-transform: uppercase;
+      margin-bottom: 28px;
+    }
+    .pf-hero-label::before {
+      content: ''; width: 6px; height: 6px; border-radius: 50%;
+      background: var(--cyan);
+      box-shadow: 0 0 8px var(--cyan);
+      animation: pulse-dot 2s ease-in-out infinite;
+    }
+    @keyframes pulse-dot {
+      0%,100% { box-shadow: 0 0 0 0 rgba(45,164,255,0.5); }
+      50%      { box-shadow: 0 0 0 6px rgba(45,164,255,0); }
+    }
+
+    .pf-hero-h1 {
+      font-size: clamp(48px, 5.4vw, 76px);
+      font-weight: 800; line-height: 1.04;
+      letter-spacing: -2.2px; margin-bottom: 28px;
+      color: #fff;
+    }
+    .pf-hero-h1 em,
+    .pf-hero-h1 em .char,
+    .pf-hero-h1 em .word {
+      font-style: normal; font-weight: 800;
+      background: linear-gradient(135deg, var(--cyan) 0%, #7AD5FF 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      -webkit-text-fill-color: transparent;
+    }
+    .pf-hero-h1 em { position: relative; }
+    .pf-hero-sub {
+      font-size: 18px; line-height: 1.55; color: rgba(255,255,255,0.7);
+      max-width: 540px; margin-bottom: 36px;
+    }
+    .pf-hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+
+    /* Hexagonal IC Banking Suite badge cluster */
+    .pf-hex-cluster {
+      position: relative; width: 100%; max-width: 540px; height: 540px;
+      margin: 0 auto;
+    }
+    .hex {
+      position: absolute;
+      width: 120px; height: 138px;
+      clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+      background: linear-gradient(135deg, rgba(45,164,255,0.18), rgba(0,99,242,0.05));
+      border: 1px solid rgba(45,164,255,0.15);
+      transition: all 0.4s var(--ease);
+    }
+    .hex-svg-wrap {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+    }
+    .hex-grid {
+      position: absolute; inset: 0;
+      display: grid;
+      grid-template-columns: repeat(5, 78px);
+      grid-template-rows: repeat(5, 68px);
+      justify-content: center; align-content: center;
+      gap: 0;
+    }
+    .hex-cell {
+      position: relative;
+      width: 78px; height: 90px;
+      clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+      background: linear-gradient(135deg, rgba(45,164,255,0.10), rgba(0,99,242,0.04));
+      border: 1px solid rgba(45,164,255,0.18);
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.5s var(--ease);
+      animation: hex-float 6s ease-in-out infinite;
+    }
+    .hex-cell:nth-child(odd) { transform: translateY(45px); }
+    .hex-cell:nth-child(3n) { animation-delay: -2s; }
+    .hex-cell:nth-child(5n) { animation-delay: -4s; }
+    @keyframes hex-float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+    .hex-cell:nth-child(odd) {
+      animation-name: hex-float-odd;
+    }
+    @keyframes hex-float-odd {
+      0%, 100% { transform: translateY(45px); }
+      50% { transform: translateY(39px); }
+    }
+    .hex-cell svg { width: 24px; height: 24px; color: var(--cyan); opacity: 0.6; }
+    .hex-cell.glow {
+      background: linear-gradient(135deg, var(--cyan), var(--brand));
+      box-shadow: 0 0 40px rgba(45,164,255,0.5), inset 0 0 30px rgba(255,255,255,0.15);
+      border: 1px solid var(--cyan);
+    }
+    .hex-cell.glow svg { color: #fff; opacity: 1; }
+
+    .pf-hero-badge {
+      position: absolute; left: 50%; top: 50%;
+      transform: translate(-50%, -50%);
+      width: 170px; height: 196px;
+      clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+      background: linear-gradient(135deg, #fff 0%, #E8F0FE 100%);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 6px; padding: 24px;
+      box-shadow: 0 20px 60px rgba(0,99,242,0.4), 0 0 0 1px rgba(255,255,255,0.1);
+      z-index: 4;
+      animation: badge-pulse 4s ease-in-out infinite;
+    }
+    @keyframes badge-pulse {
+      0%, 100% { box-shadow: 0 20px 60px rgba(0,99,242,0.4), 0 0 0 1px rgba(255,255,255,0.1); }
+      50% { box-shadow: 0 25px 80px rgba(45,164,255,0.6), 0 0 0 1px rgba(255,255,255,0.2); }
+    }
+    .pf-hero-badge-icon {
+      width: 36px; height: 36px;
+      color: var(--brand);
+    }
+    .pf-hero-badge-text {
+      font-size: 13px; font-weight: 700; color: var(--ink);
+      text-align: center; line-height: 1.2;
+    }
+
+    /* ╔═══════════════════════════════════════════════════════════════════╗
+       ║  IA FLOW — Diagrama hub-and-spoke con chips                          ║
+       ╚═══════════════════════════════════════════════════════════════════╝ */
+    .pf-ia {
+      position: relative;
+      padding: 140px 0;
+      background: var(--bg);
+      overflow: hidden;
+    }
+    .pf-ia::before {
+      content: ''; position: absolute; inset: 0;
+      background-image:
+        radial-gradient(circle at 1px 1px, rgba(15,23,41,0.06) 1px, transparent 0);
+      background-size: 32px 32px;
+      mask-image: radial-gradient(ellipse at center, #000 30%, transparent 70%);
+      -webkit-mask-image: radial-gradient(ellipse at center, #000 30%, transparent 70%);
+    }
+    .pf-ia-head { text-align: center; margin-bottom: 80px; position: relative; z-index: 2; }
+    .pf-ia-h2 {
+      font-size: clamp(40px, 4vw, 56px);
+      font-weight: 800; line-height: 1.08; letter-spacing: -1.5px;
+      margin: 12px 0 16px;
+    }
+    .pf-ia-h2 em {
+      font-style: normal; color: var(--brand);
+      text-decoration: underline;
+      text-decoration-color: var(--brand);
+      text-decoration-thickness: 4px;
+      text-underline-offset: 8px;
+    }
+    .pf-ia-sub {
+      font-size: 17px; line-height: 1.6; color: var(--sec);
+      max-width: 580px; margin: 0 auto;
+    }
+
+    /* Flow diagram */
+    .pf-flow {
+      position: relative; z-index: 2;
+      max-width: 1100px; margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr auto 1.1fr 1fr;
+      align-items: center;
+      gap: 32px;
+      min-height: 320px;
+      padding: 40px 0;
+    }
+    .flow-col { display: flex; flex-direction: column; gap: 14px; }
+    .flow-col-r { align-items: flex-end; }
+    .flow-col-l { align-items: flex-start; }
+    .flow-col-c { align-items: center; }
+    .flow-node {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px 22px;
+      font-size: 14px; font-weight: 600;
+      color: var(--ink);
+      box-shadow: 0 4px 16px rgba(15,23,41,0.06);
+      display: inline-flex; align-items: center; gap: 8px;
+      transition: all 0.3s var(--ease);
+      position: relative;
+    }
+    .flow-node:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(15,23,41,0.10); }
+    .flow-node.brand { background: var(--brand-l); border-color: var(--brand); color: var(--brand); }
+    .flow-node.purple { background: rgba(123,91,255,0.08); border-color: rgba(123,91,255,0.4); color: var(--purple); }
+    .flow-node-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: currentColor; opacity: 0.6;
+    }
+
+    .flow-hub {
+      position: relative;
+      width: 132px; height: 152px;
+      clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+      background: linear-gradient(135deg, #fff, #F1F5FF);
+      border: 2px solid var(--brand);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 6px;
+      box-shadow: 0 8px 32px rgba(0,99,242,0.18);
+      animation: hub-pulse 4s ease-in-out infinite;
+    }
+    @keyframes hub-pulse {
+      0%, 100% { box-shadow: 0 8px 32px rgba(0,99,242,0.18); }
+      50% { box-shadow: 0 12px 48px rgba(0,99,242,0.32); }
+    }
+    .flow-hub svg { width: 26px; height: 26px; color: var(--brand); }
+    .flow-hub-text { font-size: 11px; font-weight: 700; color: var(--ink); text-align: center; line-height: 1.2; }
+
+    .flow-lines { position: absolute; inset: 0; pointer-events: none; z-index: 1; }
+    .flow-lines path {
+      fill: none; stroke: var(--brand); stroke-width: 1.5; opacity: 0.35;
+      stroke-dasharray: 4 4;
+      animation: dash-flow 18s linear infinite;
+    }
+    @keyframes dash-flow { to { stroke-dashoffset: -200; } }
+
+    /* Chips that float around */
+    .flow-chip {
+      position: relative;
+      padding: 8px 16px; border-radius: 20px;
+      font-size: 12px; font-weight: 700;
+      background: #fff; color: var(--ink);
+      border: 1px solid var(--border);
+      box-shadow: 0 4px 14px rgba(15,23,41,0.08);
+      letter-spacing: 0.03em;
+      white-space: nowrap;
+    }
+    .flow-chip.brand { background: var(--brand); color: #fff; border-color: var(--brand); }
+    .flow-chip.purple { background: var(--purple); color: #fff; border-color: var(--purple); }
+    .flow-chip.cyan { background: var(--cyan); color: #fff; border-color: var(--cyan); }
+
+    /* Bullets row */
+    .pf-ia-bullets {
+      position: relative; z-index: 2;
+      max-width: 1100px; margin: 80px auto 0;
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 40px;
+      padding-top: 60px;
+      border-top: 1px solid var(--border);
+    }
+    .ia-bullet { padding: 0 4px; }
+    .ia-bullet-icon {
+      width: 40px; height: 40px; border-radius: 10px;
+      background: linear-gradient(135deg, var(--brand-l), #EBF2FF);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 16px;
+      border: 1px solid rgba(0,99,242,0.15);
+    }
+    .ia-bullet-icon svg { width: 20px; height: 20px; color: var(--brand); }
+    .ia-bullet h4 {
+      font-size: 16px; font-weight: 700; color: var(--ink);
+      margin-bottom: 8px;
+    }
+    .ia-bullet p {
+      font-size: 14px; line-height: 1.55; color: var(--sec);
+    }
+    .ia-bullet strong { color: var(--ink); font-weight: 700; }
+
+    /* ╔═══════════════════════════════════════════════════════════════════╗
+       ║  PERSONALIZACIÓN — Phone mockup + bullets                            ║
+       ╚═══════════════════════════════════════════════════════════════════╝ */
+    .pf-personalization {
+      padding: 140px 0; background: #fff;
+      position: relative; overflow: hidden;
+    }
+    .pf-personalization-inner {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 80px;
+      align-items: center;
+    }
+    .pf-pers-h2 {
+      font-size: clamp(38px, 3.8vw, 52px);
+      font-weight: 800; line-height: 1.08; letter-spacing: -1.5px;
+      margin: 14px 0 20px;
+    }
+    .pf-pers-h2 em {
+      font-style: normal; color: var(--brand); font-weight: 800;
+    }
+    .pf-pers-sub {
+      font-size: 17px; line-height: 1.6; color: var(--sec);
+      margin-bottom: 36px;
+    }
+    .pf-pers-cards { display: flex; flex-direction: column; gap: 16px; }
+    .pf-pers-card {
+      display: flex; gap: 16px; align-items: flex-start;
+      padding: 20px; border-radius: 12px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      transition: all 0.25s var(--ease);
+    }
+    .pf-pers-card:hover {
+      background: #fff;
+      box-shadow: 0 8px 28px rgba(15,23,41,0.08);
+      transform: translateX(4px);
+    }
+    .pf-pers-card-icon {
+      width: 44px; height: 44px; border-radius: 10px;
+      flex-shrink: 0;
+      background: linear-gradient(135deg, var(--brand) 0%, var(--cyan) 100%);
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 12px rgba(0,99,242,0.25);
+    }
+    .pf-pers-card-icon svg { width: 22px; height: 22px; color: #fff; }
+    .pf-pers-card-text h4 {
+      font-size: 15px; font-weight: 700; color: var(--ink); margin-bottom: 4px;
+    }
+    .pf-pers-card-text p { font-size: 14px; line-height: 1.55; color: var(--sec); }
+
+    /* Phone mockup */
+    .pf-phone-wrap {
+      position: relative;
+      display: flex; justify-content: center;
+      perspective: 1200px;
+    }
+    .pf-phone {
+      width: 320px; height: 640px; border-radius: 44px;
+      background: linear-gradient(180deg, var(--navy) 0%, var(--navy-2) 100%);
+      padding: 14px;
+      box-shadow:
+        0 30px 80px rgba(0,99,242,0.25),
+        0 0 0 1px rgba(255,255,255,0.05),
+        inset 0 0 0 2px rgba(255,255,255,0.06);
+      position: relative;
+      transform: rotateY(-6deg) rotateX(2deg);
+      transition: transform 0.6s var(--ease);
+    }
+    .pf-phone:hover { transform: rotateY(-2deg) rotateX(0deg); }
+    .pf-phone::before {
+      content: ''; position: absolute; top: 14px; left: 50%;
+      transform: translateX(-50%);
+      width: 100px; height: 26px; border-radius: 14px;
+      background: #000; z-index: 3;
+    }
+    .pf-phone-screen {
+      width: 100%; height: 100%;
+      border-radius: 32px;
+      background: linear-gradient(180deg, #061640 0%, #0A2356 100%);
+      overflow: hidden;
+      position: relative;
+      padding: 56px 18px 18px;
+      color: #fff;
+    }
+    .pf-phone-tabs {
+      display: flex; gap: 8px; margin-bottom: 18px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 24px;
+      padding: 4px;
+    }
+    .pf-phone-tab {
+      flex: 1; text-align: center; padding: 8px 12px;
+      font-size: 12px; font-weight: 600;
+      color: rgba(255,255,255,0.7);
+      border-radius: 20px;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .pf-phone-tab.active { background: var(--cyan); color: var(--navy); }
+    .pf-phone-header {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 20px;
+    }
+    .pf-phone-logo {
+      width: 32px; height: 32px; border-radius: 8px;
+      background: linear-gradient(135deg, var(--cyan), var(--brand));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; font-weight: 800; color: #fff;
+    }
+    .pf-phone-greeting {
+      font-size: 11px; color: rgba(255,255,255,0.6);
+    }
+    .pf-phone-name { font-size: 14px; font-weight: 700; color: #fff; }
+    .pf-phone-balance {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px; padding: 16px;
+      margin-bottom: 14px;
+    }
+    .pf-phone-balance-label {
+      font-size: 10px; color: rgba(255,255,255,0.5);
+      letter-spacing: 0.1em; text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .pf-phone-balance-amount {
+      font-size: 26px; font-weight: 800; color: #fff;
+      letter-spacing: -0.5px;
+      font-variant-numeric: tabular-nums;
+      margin-bottom: 4px;
+    }
+    .pf-phone-balance-card { font-size: 10px; color: rgba(255,255,255,0.5); }
+    .pf-phone-actions {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px;
+      margin-bottom: 14px;
+    }
+    .pf-phone-action {
+      background: rgba(255,255,255,0.04);
+      border-radius: 10px; padding: 10px 6px;
+      display: flex; flex-direction: column; align-items: center; gap: 6px;
+      transition: background 0.2s;
+    }
+    .pf-phone-action:hover { background: rgba(45,164,255,0.15); }
+    .pf-phone-action-icon {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: rgba(45,164,255,0.15);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .pf-phone-action-icon svg { width: 14px; height: 14px; color: var(--cyan); }
+    .pf-phone-action-label { font-size: 9px; color: rgba(255,255,255,0.7); text-align: center; }
+
+    .pf-phone-list-title {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.08em;
+      text-transform: uppercase; color: rgba(255,255,255,0.5);
+      margin-bottom: 8px;
+    }
+    .pf-phone-list-row {
+      display: flex; align-items: center; gap: 10px;
+      padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .pf-phone-list-icon {
+      width: 28px; height: 28px; border-radius: 8px;
+      background: rgba(255,255,255,0.06);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .pf-phone-list-icon svg { width: 14px; height: 14px; color: var(--cyan); }
+    .pf-phone-list-text { flex: 1; }
+    .pf-phone-list-title-row { font-size: 11px; font-weight: 600; color: #fff; }
+    .pf-phone-list-desc { font-size: 10px; color: rgba(255,255,255,0.5); }
+    .pf-phone-list-amount { font-size: 11px; font-weight: 700; color: var(--cyan); }
+
+    .pf-phone-floating {
+      position: absolute; padding: 8px 12px; border-radius: 12px;
+      background: #fff; box-shadow: 0 8px 24px rgba(0,99,242,0.18);
+      font-size: 11px; font-weight: 600; color: var(--ink);
+      display: flex; align-items: center; gap: 8px;
+      animation: float-pill 5s ease-in-out infinite;
+    }
+    .pf-phone-floating::before {
+      content: ''; width: 8px; height: 8px; border-radius: 50%; background: #22C55E;
+      box-shadow: 0 0 8px #22C55E;
+    }
+    .pf-phone-floating.tl { top: 60px; left: -30px; }
+    .pf-phone-floating.br { bottom: 80px; right: -40px; animation-delay: -2.5s; background: var(--brand); color: #fff; }
+    .pf-phone-floating.br::before { background: var(--cyan); }
+    @keyframes float-pill {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    /* ╔═══════════════════════════════════════════════════════════════════╗
+       ║  NO SÓLO HABLAMOS DE IA — Navy con 4 cards                           ║
+       ╚═══════════════════════════════════════════════════════════════════╝ */
+    .pf-ia-funciona {
+      position: relative;
+      padding: 140px 0;
+      background: linear-gradient(180deg, var(--navy) 0%, var(--navy-2) 100%);
+      color: #fff; overflow: hidden;
+    }
+    .pf-ia-funciona::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 30% 50%, rgba(0,99,242,0.25), transparent 50%),
+                  radial-gradient(ellipse at 80% 70%, rgba(45,164,255,0.15), transparent 55%);
+    }
+    .pf-ia-funciona-head { text-align: center; margin-bottom: 64px; position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; }
+    .pf-ia-funciona-icon {
+      display: flex; width: 56px; height: 64px; margin: 0 0 16px;
+      clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+      background: linear-gradient(135deg, var(--cyan), var(--brand));
+      align-items: center; justify-content: center;
+      box-shadow: 0 8px 32px rgba(45,164,255,0.4);
+    }
+    .pf-ia-funciona-icon span { font-size: 20px; font-weight: 800; color: #fff; }
+    .pf-ia-funciona-head .label { margin-bottom: 12px; }
+    .pf-ia-funciona h2 {
+      font-size: clamp(38px, 4vw, 56px);
+      font-weight: 800; line-height: 1.08; letter-spacing: -1.5px;
+      margin-bottom: 16px;
+    }
+    .pf-ia-funciona h2 em {
+      font-style: normal; color: var(--cyan); font-weight: 800;
+    }
+    .pf-ia-funciona-sub {
+      font-size: 17px; line-height: 1.6; color: rgba(255,255,255,0.7);
+      max-width: 580px; margin: 0 auto;
+    }
+    .pf-ia-cards-grid {
+      position: relative; z-index: 2;
+      max-width: 1240px; margin: 0 auto; padding: 0 64px;
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;
+    }
+    .ia-product-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 28px 24px;
+      transition: all 0.3s var(--ease);
+      position: relative; overflow: hidden;
+      backdrop-filter: blur(10px);
+    }
+    .ia-product-card::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(45,164,255,0.08), transparent 60%);
+      opacity: 0; transition: opacity 0.3s;
+    }
+    .ia-product-card:hover::before { opacity: 1; }
+    .ia-product-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(45,164,255,0.4);
+      box-shadow: 0 20px 60px rgba(0,99,242,0.25);
+    }
+    .ia-product-icon {
+      width: 48px; height: 56px;
+      clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+      background: linear-gradient(135deg, var(--cyan), var(--brand));
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 20px;
+      box-shadow: 0 8px 20px rgba(45,164,255,0.4);
+      position: relative; z-index: 2;
+    }
+    .ia-product-icon svg { width: 22px; height: 22px; color: #fff; }
+    .ia-product-card h3 {
+      font-size: 18px; font-weight: 700; color: #fff;
+      margin-bottom: 10px; position: relative; z-index: 2;
+    }
+    .ia-product-card p {
+      font-size: 13px; line-height: 1.55; color: rgba(255,255,255,0.65);
+      margin-bottom: 18px; position: relative; z-index: 2;
+    }
+    .ia-product-card .suite-card-link {
+      font-size: 13px; font-weight: 600; color: var(--cyan);
+      display: inline-flex; align-items: center; gap: 4px;
+      position: relative; z-index: 2;
+      margin-top: auto;
+      transition: gap 0.2s;
+    }
+    .ia-product-card .suite-card-link::after { content: '→'; transition: transform 0.2s; }
+    .ia-product-card:hover .suite-card-link::after { transform: translateX(4px); }
+    .ia-product-card { display: flex; flex-direction: column; }
+
+    /* ╔═══════════════════════════════════════════════════════════════════╗
+       ║  BANKING SUITE — Grid de 12 productos                                ║
+       ╚═══════════════════════════════════════════════════════════════════╝ */
+    .pf-suite {
+      position: relative;
+      padding: 140px 0;
+      background: var(--bg);
+      overflow: hidden;
+    }
+    .pf-suite::before {
+      content: ''; position: absolute; inset: 0;
+      background-image: radial-gradient(circle at 1px 1px, rgba(15,23,41,0.05) 1px, transparent 0);
+      background-size: 28px 28px;
+      mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%);
+      -webkit-mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%);
+    }
+    .pf-suite-ribbon-svg {
+      position: absolute; left: 0; right: 0; top: 0; height: 220px;
+      width: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .pf-suite-ribbon-path {
+      fill: none; stroke: url(#suite-grad);
+      stroke-width: 8; stroke-linecap: round;
+      opacity: 0.6;
+    }
+    .pf-suite-head { text-align: center; margin-bottom: 64px; position: relative; z-index: 2; }
+    .pf-suite-head h2 {
+      font-size: clamp(38px, 3.8vw, 52px);
+      font-weight: 800; line-height: 1.08; letter-spacing: -1.5px;
+      margin: 12px 0;
+    }
+    .pf-suite-head h2 em {
+      font-style: normal; color: var(--brand);
+    }
+    .pf-suite-grid {
+      position: relative; z-index: 2;
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;
+      max-width: 1240px; margin: 0 auto; padding: 0 64px;
+    }
+    .suite-card {
+      background: #fff; border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px;
+      transition: all 0.3s var(--ease);
+      display: flex; flex-direction: column;
+      min-height: 220px;
+      position: relative; overflow: hidden;
+    }
+    .suite-card::before {
+      content: ''; position: absolute; left: 0; top: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, var(--brand), var(--cyan));
+      transform: scaleX(0); transform-origin: left;
+      transition: transform 0.4s var(--ease);
+    }
+    .suite-card:hover::before { transform: scaleX(1); }
+    .suite-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 16px 40px rgba(15,23,41,0.10);
+      border-color: rgba(0,99,242,0.2);
+    }
+    .suite-card-icon {
+      width: 40px; height: 46px;
+      clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+      background: linear-gradient(135deg, var(--brand-l), #EEF4FF);
+      border: 1px solid rgba(0,99,242,0.18);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 16px;
+    }
+    .suite-card-icon svg { width: 18px; height: 18px; color: var(--brand); }
+    .suite-card h3 {
+      font-size: 15px; font-weight: 700; color: var(--ink);
+      margin-bottom: 8px;
+    }
+    .suite-card p {
+      font-size: 13px; line-height: 1.5; color: var(--sec);
+      flex: 1;
+      margin-bottom: 16px;
+    }
+    .suite-card .suite-card-link {
+      font-size: 12px; font-weight: 600; color: var(--brand);
+      display: inline-flex; align-items: center; gap: 4px;
+      margin-top: auto;
+    }
+    .suite-card .suite-card-link::after { content: '→'; transition: transform 0.2s; }
+    .suite-card:hover .suite-card-link::after { transform: translateX(3px); }
+
+    .suite-card.cta {
+      background: linear-gradient(135deg, var(--brand) 0%, var(--brand-d) 100%);
+      color: #fff; border: none;
+      box-shadow: 0 12px 32px rgba(0,99,242,0.28);
+      justify-content: center; align-items: flex-start;
+    }
+    .suite-card.cta::before { display: none; }
+    .suite-card.cta h3 {
+      color: #fff; font-size: 18px; line-height: 1.3;
+      margin-bottom: 20px;
+    }
+    .suite-card.cta:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 20px 50px rgba(0,99,242,0.4);
+    }
+    .suite-cta-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 10px 18px; border-radius: 8px;
+      background: #fff; color: var(--brand);
+      font-size: 13px; font-weight: 600;
+      transition: transform 0.2s;
+    }
+    .suite-cta-btn:hover { transform: translateX(2px); }
+
+    /* ╔═══════════════════════════════════════════════════════════════════╗
+       ║  CTA BAND — Solicitar demo                                           ║
+       ╚═══════════════════════════════════════════════════════════════════╝ */
+    .cta-band {
+      position: relative;
+      padding: 120px 0;
+      background: linear-gradient(135deg, var(--brand) 0%, var(--brand-d) 60%, var(--navy-3) 100%);
+      color: #fff; text-align: center;
+      overflow: hidden;
+    }
+    .cta-band::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 50% 0%, rgba(45,164,255,0.35), transparent 60%);
+    }
+    .cta-band .container { position: relative; z-index: 2; }
+    .cta-h2 {
+      font-size: clamp(40px, 4vw, 60px);
+      font-weight: 800; line-height: 1.08; letter-spacing: -1.5px;
+      margin-bottom: 18px;
+    }
+    .cta-sub {
+      font-size: 18px; line-height: 1.6; color: rgba(255,255,255,0.85);
+      max-width: 540px; margin: 0 auto 32px;
+    }
+    .cta-fine {
+      font-size: 13px; color: rgba(255,255,255,0.65);
+      margin-top: 20px;
+    }
+
+    /* ╔═══════════════════════════════════════════════════════════════════╗
+       ║  FOOTER                                                              ║
+       ╚═══════════════════════════════════════════════════════════════════╝ */
+    footer {
+      background: var(--ink-deep); color: rgba(255,255,255,0.65);
+      padding: 80px 0 30px;
+    }
+    .footer-inner {
+      max-width: 1240px; margin: 0 auto; padding: 0 64px;
+      display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 64px;
+      margin-bottom: 60px;
+    }
+    .footer-logo { font-size: 22px; font-weight: 800; color: #fff; margin-bottom: 14px; }
+    .footer-logo span { color: var(--cyan); }
+    .footer-tagline { font-size: 14px; line-height: 1.55; color: rgba(255,255,255,0.6); max-width: 240px; }
+    .footer-col-title {
+      font-size: 13px; font-weight: 700; color: #fff;
+      letter-spacing: 0.05em; text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    .footer-links { display: flex; flex-direction: column; gap: 10px; }
+    .footer-links a {
+      font-size: 14px; color: rgba(255,255,255,0.6);
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--cyan); }
+    .footer-bottom {
+      max-width: 1240px; margin: 0 auto; padding: 24px 64px 0;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      display: flex; justify-content: space-between;
+      font-size: 13px; color: rgba(255,255,255,0.45);
+    }
+
+    /* ── Responsive ──────────────────────────────────────────────────── */
+    @media (max-width: 980px) {
+      .pf-hero-inner { grid-template-columns: 1fr; gap: 60px; }
+      .pf-hex-cluster { transform: scale(0.85); }
+      .pf-personalization-inner { grid-template-columns: 1fr; gap: 60px; }
+      .pf-flow { grid-template-columns: 1fr; gap: 16px; padding: 30px 16px; }
+      .pf-ia-bullets { grid-template-columns: 1fr; gap: 24px; }
+      .pf-ia-cards-grid { grid-template-columns: repeat(2, 1fr); }
+      .pf-suite-grid { grid-template-columns: repeat(2, 1fr); }
+      .footer-inner { grid-template-columns: 1fr 1fr; gap: 40px; }
+    }
+    @media (max-width: 600px) {
+      .container, .pf-hero-inner, .pf-ia-cards-grid, .pf-suite-grid, .nav-inner, .footer-inner, .footer-bottom { padding-left: 24px; padding-right: 24px; }
+      .pf-ia-cards-grid, .pf-suite-grid { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+      .pf-hero { padding-top: 130px; padding-bottom: 60px; min-height: auto; }
+      .pf-personalization, .pf-ia, .pf-ia-funciona, .pf-suite, .cta-band { padding: 80px 0; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="cursor-glow" id="cursorGlow"></div>
+
+<!-- ═══ NAV ═══ -->
+<nav id="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">info<span>corp</span></a>
+    <ul class="nav-links">
+      <li><a href="plataforma.html" class="active">Productos</a></li>
+      <li><a href="soluciones-personas.html">Soluciones</a></li>
+      <li><a href="#">Clientes</a></li>
+      <li><a href="#">Recursos</a></li>
+    </ul>
+    <a href="#demo" class="nav-cta">Solicitar demo</a>
+  </div>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<section class="pf-hero">
+  <div class="pf-hero-grid"></div>
+
+  <div class="pf-hero-inner">
+    <div class="pf-hero-content">
+      <span class="pf-hero-label" id="heroLabel">IC Banking Suite</span>
+      <h1 class="pf-hero-h1" id="heroH1">Tecnología para una <em>banca en evolución</em></h1>
+      <p class="pf-hero-sub" id="heroSub">Cada banco, cada cliente y cada canal es diferente. Nuestra suite digital ofrece tecnología sólida, adaptable y personalizable que se ajusta a cada estrategia y modelo de negocio.</p>
+      <div class="pf-hero-actions" id="heroActions">
+        <a href="#demo" class="btn btn-primary btn-arrow">Solicitá una demo</a>
+        <a href="#suite" class="btn btn-ghost" style="color:#fff; border-color:rgba(255,255,255,0.25);">Conocé la Suite</a>
+      </div>
+    </div>
+
+    <!-- Hexagonal cluster + central badge -->
+    <div class="pf-hex-cluster" id="hexCluster">
+      <div class="hex-grid">
+        <!-- Row 1 (5 cells, alternating heights) -->
+        <div class="hex-cell"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div>
+        <div class="hex-cell"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
+        <div class="hex-cell glow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg></div>
+        <div class="hex-cell"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
+        <div class="hex-cell"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+        <!-- Row 2 -->
+        <div class="hex-cell"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div>
+        <div class="hex-cell"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 22l1-5h12l1 5M5 3h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/></svg></div>
+        <div class="hex-cell"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></div>
+        <div class="hex-cell"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.37 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.33 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
+        <div class="hex-cell"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M18.4 7L12 13.4 9 10.4 4.4 15"/></svg></div>
+        <!-- Row 3 -->
+        <div class="hex-cell"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s-8-4.5-8-12V5l8-3 8 3v5c0 7.5-8 12-8 12z"/></svg></div>
+        <div class="hex-cell"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
+        <div class="hex-cell"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/><path d="M9 12l2 2 4-4"/></svg></div>
+        <div class="hex-cell"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+        <div class="hex-cell"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+      </div>
+
+      <!-- Central IC Banking Suite badge -->
+      <div class="pf-hero-badge">
+        <svg class="pf-hero-badge-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+          <polyline points="9 22 9 12 15 12 15 22"/>
+        </svg>
+        <div class="pf-hero-badge-text">IC Banking<br>Suite</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ IA Aplicada ═══ -->
+<section class="pf-ia">
+  <div class="container pf-ia-head">
+    <span class="label">INTELIGENCIA APLICADA</span>
+    <h2 class="pf-ia-h2 split-lines">Inteligencia <em>Artificial</em><br>aplicada al negocio.</h2>
+    <p class="pf-ia-sub">Optimizá campañas, reducí costos operativos y mejorá la conversión. Aumentá la capacidad de adaptación a cambios del mercado.</p>
+  </div>
+
+  <div class="container">
+    <!-- Flow diagram -->
+    <div class="pf-flow">
+      <svg class="flow-lines" viewBox="0 0 1100 320" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M 200 110 Q 280 110 350 160" />
+        <path d="M 200 210 Q 280 210 350 160" />
+        <path d="M 480 160 Q 580 110 720 110" />
+        <path d="M 480 160 Q 580 160 720 160" />
+        <path d="M 480 160 Q 580 210 720 210" />
+        <path d="M 920 110 Q 980 110 1020 70" />
+        <path d="M 920 160 Q 980 160 1020 160" />
+        <path d="M 920 210 Q 980 210 1020 250" />
+      </svg>
+
+      <!-- Col 1: input -->
+      <div class="flow-col flow-col-r">
+        <div class="flow-node">
+          <span class="flow-node-dot"></span>
+          Tu negocio
+        </div>
+        <div class="flow-node">
+          <span class="flow-node-dot" style="background:var(--cyan)"></span>
+          Datos &amp; contexto
+        </div>
+      </div>
+
+      <!-- Col 2: Hub -->
+      <div class="flow-hub">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+          <polyline points="9 22 9 12 15 12 15 22"/>
+        </svg>
+        <div class="flow-hub-text">IC Banking<br>Suite</div>
+      </div>
+
+      <!-- Col 3: middle products -->
+      <div class="flow-col flow-col-c">
+        <div class="flow-node brand">IC Marketing Automation</div>
+        <div class="flow-node brand">IC Onboarding &amp; Origination</div>
+        <div class="flow-node purple">AI Agent</div>
+      </div>
+
+      <!-- Col 4: outputs (chips) -->
+      <div class="flow-col flow-col-l">
+        <div class="flow-chip cyan">Customer Experience</div>
+        <div class="flow-chip brand">Conversion</div>
+        <div class="flow-chip purple">B-Fly</div>
+        <div class="flow-chip">SEA</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bullets row -->
+  <div class="container">
+    <div class="pf-ia-bullets">
+      <div class="ia-bullet">
+        <div class="ia-bullet-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z"/></svg>
+        </div>
+        <h4>Modelos AI integrados</h4>
+        <p>Aplicaciones que potencian el <strong>análisis predictivo</strong>, el scoring de clientes y la automatización de recomendaciones personalizadas.</p>
+      </div>
+      <div class="ia-bullet">
+        <div class="ia-bullet-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        <h4>Evolución y escalabilidad</h4>
+        <p>Gracias al soporte de SEA (Software Evolution Area) y al framework B-Fly, tu solución está lista para <strong>integraciones ágiles y mejoras AI-driven</strong>.</p>
+      </div>
+      <div class="ia-bullet">
+        <div class="ia-bullet-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>
+        </div>
+        <h4>Impacto real en áreas clave</h4>
+        <p>Aplicaciones concretas en Marketing Automation, Onboarding Digital, Risk Management y Customer Experience que generan <strong>resultados medibles</strong>.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PERSONALIZACIÓN ═══ -->
+<section class="pf-personalization">
+  <div class="container pf-personalization-inner">
+    <div class="pf-pers-text">
+      <span class="label">PERSONALIZACIÓN</span>
+      <h2 class="pf-pers-h2 split-lines"><em>Personalización</em><br>sin límites.</h2>
+      <p class="pf-pers-sub">Diferenciate frente a la competencia y mejorá engagement, conversión y retención de tus clientes con experiencias únicas para cada perfil.</p>
+
+      <div class="pf-pers-cards">
+        <div class="pf-pers-card">
+          <div class="pf-pers-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><polyline points="2 17 12 22 22 17"/></svg>
+          </div>
+          <div class="pf-pers-card-text">
+            <h4>Plataforma flexible</h4>
+            <p>Personalizá el look &amp; feel y la identidad de tu producto, con recorridos, flujos y mensajes segmentados en todos los canales: web, mobile, social y APIs.</p>
+          </div>
+        </div>
+        <div class="pf-pers-card">
+          <div class="pf-pers-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          </div>
+          <div class="pf-pers-card-text">
+            <h4>Ajustamos funciones, experiencia y estrategias para cada mercado</h4>
+            <p>Cliente y canal, garantizando un UX coherente y una respuesta alineada a los objetivos comerciales.</p>
+          </div>
+        </div>
+        <div class="pf-pers-card">
+          <div class="pf-pers-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+          </div>
+          <div class="pf-pers-card-text">
+            <h4>Toolkit digital de componentes plug &amp; play</h4>
+            <p>Para innovar sin partir de cero y conectar nuevos servicios al ecosistema bancario.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Phone mockup -->
+    <div class="pf-phone-wrap">
+      <div class="pf-phone-floating tl">App store 4.8 ★</div>
+      <div class="pf-phone-floating br">Engagement +42%</div>
+      <div class="pf-phone">
+        <div class="pf-phone-screen">
+          <div class="pf-phone-tabs">
+            <div class="pf-phone-tab active">Clásico</div>
+            <div class="pf-phone-tab">Popular digital</div>
+          </div>
+          <div class="pf-phone-header">
+            <div class="pf-phone-logo">M</div>
+            <div>
+              <div class="pf-phone-greeting">Buenos días,</div>
+              <div class="pf-phone-name">Fernanda</div>
+            </div>
+          </div>
+          <div class="pf-phone-balance">
+            <div class="pf-phone-balance-label">Saldo disponible</div>
+            <div class="pf-phone-balance-amount">$12,548.00</div>
+            <div class="pf-phone-balance-card">Cuenta sueldo •••• 9851</div>
+          </div>
+          <div class="pf-phone-actions">
+            <div class="pf-phone-action">
+              <div class="pf-phone-action-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></div>
+              <div class="pf-phone-action-label">Enviar</div>
+            </div>
+            <div class="pf-phone-action">
+              <div class="pf-phone-action-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="2" x2="12" y2="22"/><polyline points="19 15 12 22 5 15"/></svg></div>
+              <div class="pf-phone-action-label">Cobrar</div>
+            </div>
+            <div class="pf-phone-action">
+              <div class="pf-phone-action-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="6" width="18" height="12" rx="2"/><circle cx="12" cy="12" r="2"/></svg></div>
+              <div class="pf-phone-action-label">Pagar</div>
+            </div>
+            <div class="pf-phone-action">
+              <div class="pf-phone-action-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33"/></svg></div>
+              <div class="pf-phone-action-label">Más</div>
+            </div>
+          </div>
+          <div class="pf-phone-list-title">Movimientos</div>
+          <div class="pf-phone-list-row">
+            <div class="pf-phone-list-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+            <div class="pf-phone-list-text">
+              <div class="pf-phone-list-title-row">Spotify</div>
+              <div class="pf-phone-list-desc">Hoy · 12:42</div>
+            </div>
+            <div class="pf-phone-list-amount" style="color:#FF6B6B">-$9.99</div>
+          </div>
+          <div class="pf-phone-list-row">
+            <div class="pf-phone-list-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></div>
+            <div class="pf-phone-list-text">
+              <div class="pf-phone-list-title-row">Transferencia a Juan</div>
+              <div class="pf-phone-list-desc">Hoy · 09:15</div>
+            </div>
+            <div class="pf-phone-list-amount">-$200.00</div>
+          </div>
+          <div class="pf-phone-list-row">
+            <div class="pf-phone-list-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="2" x2="12" y2="22"/><polyline points="19 15 12 22 5 15"/></svg></div>
+            <div class="pf-phone-list-text">
+              <div class="pf-phone-list-title-row">Cobro Mercado Libre</div>
+              <div class="pf-phone-list-desc">Ayer · 18:30</div>
+            </div>
+            <div class="pf-phone-list-amount" style="color:#22C55E">+$1,250.00</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ NO SÓLO HABLAMOS DE IA — Navy con 4 cards ═══ -->
+<section class="pf-ia-funciona">
+  <div class="pf-ia-funciona-head container">
+    <div class="pf-ia-funciona-icon"><span>IA</span></div>
+    <span class="label on-dark">PRODUCTOS IA EN PRODUCCIÓN</span>
+    <h2 class="split-lines">No sólo hablamos de IA.<br><em>La hacemos funcionar.</em></h2>
+    <p class="pf-ia-funciona-sub">Cuatro soluciones impulsadas por IA, ya en producción en bancos de LATAM, mejorando experiencias, procesos y capacidad de respuesta.</p>
+  </div>
+
+  <div class="pf-ia-cards-grid">
+    <article class="ia-product-card">
+      <div class="ia-product-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      </div>
+      <h3>Conversational Banking</h3>
+      <p>Banca conversacional a través de WhatsApp, Messenger y X. Sin apps, sin fricción.</p>
+      <span class="suite-card-link">Ver más</span>
+    </article>
+    <article class="ia-product-card">
+      <div class="ia-product-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </div>
+      <h3>IC Insight</h3>
+      <p>Información proactiva y recomendaciones alternativas dentro de aplicaciones web o nativas.</p>
+      <span class="suite-card-link">Ver más</span>
+    </article>
+    <article class="ia-product-card">
+      <div class="ia-product-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      </div>
+      <h3>AI Process Automation</h3>
+      <p>Procesador multiagente dirigido por expertos para automatizar procesos de negocio de principio a fin.</p>
+      <span class="suite-card-link">Ver más</span>
+    </article>
+    <article class="ia-product-card">
+      <div class="ia-product-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s-8-4.5-8-12V5l8-3 8 3v5c0 7.5-8 12-8 12z"/></svg>
+      </div>
+      <h3>IC Smart Support Agent <span style="color:var(--cyan)">(GURU)</span></h3>
+      <p>Agente experto en operaciones, interpretación de procedimientos, manuales de productos y observabilidad.</p>
+      <span class="suite-card-link">Ver más</span>
+    </article>
+  </div>
+</section>
+
+<!-- ═══ BANKING SUITE GRID ═══ -->
+<section class="pf-suite" id="suite">
+  <!-- Decorative ribbon -->
+  <svg class="pf-suite-ribbon-svg" viewBox="0 0 1440 220" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="suite-grad" x1="0%" y1="50%" x2="100%" y2="50%">
+        <stop offset="0%" stop-color="#7B5BFF" stop-opacity="0.3"/>
+        <stop offset="50%" stop-color="#0063F2" stop-opacity="0.6"/>
+        <stop offset="100%" stop-color="#2CA4FF" stop-opacity="0.3"/>
+      </linearGradient>
+    </defs>
+    <path class="pf-suite-ribbon-path" d="M -50 100 C 280 -20 480 200 760 100 S 1240 -20 1500 80"/>
+  </svg>
+
+  <div class="container pf-suite-head">
+    <span class="label">CADA PLATAFORMA OFRECE DIFERENTES SOLUCIONES</span>
+    <h2 class="split-lines">Nuestra <em>Banking Suite</em><br>pensada en tus necesidades.</h2>
+  </div>
+
+  <div class="pf-suite-grid">
+    <!-- Card 1 -->
+    <a class="suite-card" href="#">
+      <div class="suite-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="15" y1="3" x2="15" y2="21"/></svg></div>
+      <h3>IC Smart Platform</h3>
+      <p>Base tecnológica modular: soporta crecimiento en transacciones, APIs abiertas y nueva integración de canales.</p>
+      <span class="suite-card-link">Ver más</span>
+    </a>
+    <!-- Card 2 -->
+    <a class="suite-card" href="#">
+      <div class="suite-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></div>
+      <h3>IC Mobile Banking</h3>
+      <p>App nativa adaptada a cada segmento: retail, pyme, empresas. Experiencia consistente en iOS, Web y multicanal de la mano.</p>
+      <span class="suite-card-link">Ver más</span>
+    </a>
+    <!-- Card 3 -->
+    <a class="suite-card" href="#">
+      <div class="suite-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+      <h3>IC Marketing Automation</h3>
+      <p>Microsegmentación basada en data real. Automatización de campañas con motor de AI y modelo de propensión.</p>
+      <span class="suite-card-link">Ver más</span>
+    </a>
+    <!-- Card 4 -->
+    <a class="suite-card" href="#">
+      <div class="suite-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/></svg></div>
+      <h3>IC Web Banking</h3>
+      <p>Canal responsive adaptable a múltiples perfiles de cliente, personalización de dashboards y flujos.</p>
+      <span class="suite-card-link">Ver más</span>
+    </a>
+    <!-- Card 5 -->
+    <a class="suite-card" href="#">
+      <div class="suite-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h4l3-9 4 18 3-9h4"/></svg></div>
+      <h3>IC Open Finance</h3>
+      <p>Open APIs para integración de fintechs y terceros, habilitando ecosistemas regulados y trazables.</p>
+      <span class="suite-card-link">Ver más</span>
+    </a>
+    <!-- Card 6 -->
+    <a class="suite-card" href="#">
+      <div class="suite-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/></svg></div>
+      <h3>IC Social Banking</h3>
+      <p>Open APIs para integración de fintechs y terceros, expansión del canal social con SARA.</p>
+      <span class="suite-card-link">Ver más</span>
+    </a>
+    <!-- Card 7 -->
+    <a class="suite-card" href="#">
+      <div class="suite-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/></svg></div>
+      <h3>IC Public Portal</h3>
+      <p>Portal institucional editable, adaptable al branding y a la estrategia comercial del banco.</p>
+      <span class="suite-card-link">Ver más</span>
+    </a>
+    <!-- Card 8 -->
+    <a class="suite-card" href="#">
+      <div class="suite-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+      <h3>IC Personal Finance</h3>
+      <p>PFM integrado para usuarios finales, con visualizaciones inteligentes y nudges de ahorro.</p>
+      <span class="suite-card-link">Ver más</span>
+    </a>
+    <!-- Card 9 -->
+    <a class="suite-card" href="#">
+      <div class="suite-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
+      <h3>IC Analytics</h3>
+      <p>Dashboards configurables, análisis predictivo y exploración asistida por IA-GURU.</p>
+      <span class="suite-card-link">Ver más</span>
+    </a>
+    <!-- Card 10 -->
+    <a class="suite-card" href="#">
+      <div class="suite-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <h3>IC Onboarding &amp; Origination</h3>
+      <p>Alta 100% digital, validación biométrica, adaptable a normativas locales y firma electrónica.</p>
+      <span class="suite-card-link">Ver más</span>
+    </a>
+    <!-- Card 11 -->
+    <a class="suite-card" href="#">
+      <div class="suite-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 10v6m11-11h-6m-10 0H1"/></svg></div>
+      <h3>IC Back Office</h3>
+      <p>Parametrización flexible, monitoreo en tiempo real, control granular sobre procesos.</p>
+      <span class="suite-card-link">Ver más</span>
+    </a>
+    <!-- CTA card -->
+    <a class="suite-card cta" href="#demo">
+      <h3>Descubrí todo el potencial de nuestra Suite</h3>
+      <span class="suite-cta-btn">Solicitar una demo →</span>
+    </a>
+  </div>
+</section>
+
+<!-- ═══ CTA BAND ═══ -->
+<section class="cta-band" id="demo">
+  <div class="container">
+    <h2 class="cta-h2 split-lines">Transformá tu banco.</h2>
+    <p class="cta-sub">Ayudamos a las personas a amar a su banco. Hablemos sobre el tuyo.</p>
+    <a href="#" class="btn btn-white btn-arrow">¿Conversamos?</a>
+    <div class="cta-fine">Sin compromisos · Demo personalizada · 30 minutos</div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-logo">info<span>corp</span></div>
+      <p class="footer-tagline">Desde Uruguay, hacia el mundo.</p>
+    </div>
+    <div>
+      <div class="footer-col-title">IC Banking Suite</div>
+      <ul class="footer-links">
+        <li><a href="#">IC Mobile Banking</a></li>
+        <li><a href="#">IC Web Banking</a></li>
+        <li><a href="#">IC Social Banking (SARA)</a></li>
+        <li><a href="#">IC Analytics (IC-GURU)</a></li>
+        <li><a href="#">IC Onboarding &amp; Origination</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Compañía</div>
+      <ul class="footer-links">
+        <li><a href="#">Sobre nosotros</a></li>
+        <li><a href="#">Método B-Fly</a></li>
+        <li><a href="#">Casos de éxito</a></li>
+        <li><a href="#">Carreras</a></li>
+        <li><a href="#">Blog</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Recursos</div>
+      <ul class="footer-links">
+        <li><a href="#">Estudio Banca Digital 2025</a></li>
+        <li><a href="#">Privacidad</a></li>
+        <li><a href="#">Términos</a></li>
+        <li><a href="#">Seguridad</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 Infocorp Group</span>
+    <span>Lima, Perú · hola@infocorp.net</span>
+  </div>
+</footer>
+
+<script>
+gsap.registerPlugin(ScrollTrigger);
+
+// ── Cursor glow ─────────────────────────────────────────────────────────
+const glow = document.getElementById('cursorGlow');
+let mx=0, my=0, gx=0, gy=0;
+window.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; }, {passive:true});
+(function lerp(){ gx+=(mx-gx)*0.08; gy+=(my-gy)*0.08; if(glow){ glow.style.left=gx+'px'; glow.style.top=gy+'px'; } requestAnimationFrame(lerp); })();
+
+// ── Nav scroll ─────────────────────────────────────────────────────────
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 20), {passive:true});
+
+// ── HERO entrance ───────────────────────────────────────────────────────
+gsap.set('#heroLabel',   { y: 12, opacity: 0 });
+gsap.set('#heroSub',     { y: 16, opacity: 0 });
+gsap.set('#heroActions', { y: 16, opacity: 0 });
+gsap.set('#hexCluster',  { scale: 0.85, opacity: 0 });
+
+const heroTL = gsap.timeline({ delay: 0.15 });
+heroTL.to('#heroLabel',   { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }, 0.2);
+
+const heroSplit = new SplitType('#heroH1', { types: 'words,chars', tagName: 'span' });
+heroTL.fromTo(heroSplit.chars,
+  { y: 60, opacity: 0, rotationX: -40 },
+  { y: 0, opacity: 1, rotationX: 0, duration: 0.7, stagger: 0.012, ease: 'power3.out', transformOrigin: '50% 100%' },
+  0.4
+);
+
+heroTL.to('#heroSub',     { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' }, 0.9);
+heroTL.to('#heroActions', { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' }, 1.0);
+heroTL.to('#hexCluster',  { opacity: 1, scale: 1, duration: 1.0, ease: 'power3.out' }, 0.5);
+
+// ── Split-lines headlines on scroll ─────────────────────────────────────
+document.querySelectorAll('.split-lines').forEach(el => {
+  const split = new SplitType(el, { types: 'lines', tagName: 'span' });
+  split.lines.forEach(line => {
+    line.style.overflow = 'hidden';
+    line.style.display = 'block';
+  });
+  gsap.fromTo(split.lines,
+    { y: '100%', opacity: 0 },
+    {
+      y: '0%', opacity: 1, duration: 0.85, stagger: 0.12, ease: 'power3.out',
+      scrollTrigger: { trigger: el, start: 'top 82%', toggleActions: 'play none none none' }
+    }
+  );
+});
+
+// ── IA flow nodes stagger ──────────────────────────────────────────────
+gsap.fromTo('.flow-node, .flow-chip',
+  { y: 20, opacity: 0 },
+  { y: 0, opacity: 1, duration: 0.6, stagger: 0.08, ease: 'power3.out',
+    scrollTrigger: { trigger: '.pf-flow', start: 'top 78%' } }
+);
+gsap.fromTo('.flow-hub',
+  { scale: 0.6, opacity: 0 },
+  { scale: 1, opacity: 1, duration: 0.8, ease: 'back.out(1.4)',
+    scrollTrigger: { trigger: '.pf-flow', start: 'top 78%' } }
+);
+
+// ── IA bullets ─────────────────────────────────────────────────────────
+gsap.fromTo('.ia-bullet',
+  { y: 30, opacity: 0 },
+  { y: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: 'power3.out',
+    scrollTrigger: { trigger: '.pf-ia-bullets', start: 'top 80%' } }
+);
+
+// ── Personalización cards ──────────────────────────────────────────────
+gsap.fromTo('.pf-pers-card',
+  { x: -30, opacity: 0 },
+  { x: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: 'power3.out',
+    scrollTrigger: { trigger: '.pf-pers-cards', start: 'top 80%' } }
+);
+gsap.fromTo('.pf-phone-wrap',
+  { x: 50, opacity: 0 },
+  { x: 0, opacity: 1, duration: 1, ease: 'power3.out',
+    scrollTrigger: { trigger: '.pf-phone-wrap', start: 'top 80%' } }
+);
+
+// ── IA Funciona cards ──────────────────────────────────────────────────
+gsap.fromTo('.ia-product-card',
+  { y: 40, opacity: 0 },
+  { y: 0, opacity: 1, duration: 0.8, stagger: 0.12, ease: 'power3.out',
+    scrollTrigger: { trigger: '.pf-ia-cards-grid', start: 'top 82%' } }
+);
+
+// ── Suite grid stagger ─────────────────────────────────────────────────
+gsap.fromTo('.suite-card',
+  { y: 30, opacity: 0 },
+  { y: 0, opacity: 1, duration: 0.6, stagger: 0.05, ease: 'power3.out',
+    scrollTrigger: { trigger: '.pf-suite-grid', start: 'top 85%' } }
+);
+
+// ── CTA band ───────────────────────────────────────────────────────────
+const ctaSplit = new SplitType('.cta-h2', { types: 'chars', tagName: 'span' });
+gsap.fromTo(ctaSplit.chars,
+  { y: 40, opacity: 0 },
+  { y: 0, opacity: 1, duration: 0.6, stagger: 0.025, ease: 'power3.out',
+    scrollTrigger: { trigger: '.cta-band', start: 'top 75%' } }
+);
+gsap.fromTo('.cta-sub, .cta-band .btn-white, .cta-fine',
+  { y: 20, opacity: 0 },
+  { y: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: 'power3.out',
+    scrollTrigger: { trigger: '.cta-band', start: 'top 70%' } }
+);
+
+// ── Phone tab toggle ───────────────────────────────────────────────────
+document.querySelectorAll('.pf-phone-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.pf-phone-tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+  });
+});
+
+// ── Hex cluster: cycle glow ────────────────────────────────────────────
+const hexCells = document.querySelectorAll('.hex-cell');
+let activeIdx = 7; // middle one starts
+setInterval(() => {
+  hexCells.forEach(c => c.classList.remove('glow'));
+  activeIdx = Math.floor(Math.random() * hexCells.length);
+  hexCells[activeIdx].classList.add('glow');
+}, 1800);
+</script>
+
+</body>
+</html>

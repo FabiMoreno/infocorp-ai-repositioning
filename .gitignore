@@ -1,0 +1,14 @@
+# Editor / OS
+.DS_Store
+*.swp
+.idea/
+.vscode/
+
+# Local Claude assistant config (not project code)
+.claude/
+
+# Netlify
+.netlify/
+
+# Logs
+*.log

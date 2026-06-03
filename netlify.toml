@@ -34,3 +34,9 @@
   from = "/plataforma"
   to = "/plataforma.html"
   status = 200
+
+# Experimental — sandbox separado del sitio principal
+[[redirects]]
+  from = "/home-test"
+  to = "/home-test.html"
+  status = 200

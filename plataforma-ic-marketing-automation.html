@@ -1,0 +1,1742 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IC Marketing Automation — Infocorp</title>
+  <meta name="description" content="De 10 a 150 campañas por mes, sin sumar gente. Journey builder visual, microsegmentación con IA, multi-canal y analytics en tiempo real." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,700&display=swap" rel="stylesheet" />
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/split-type@0.3.4/umd/index.min.js"></script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:         #F8FAFC;
+      --bg-alt:     #F1F5F9;
+      --white:      #FFFFFF;
+      --ink:        #0F1729;
+      --ink-deep:   #0A1226;
+      --sec:        #334155;
+      --muted:      #64748B;
+      --border:     #E2E8F0;
+      --surface:    #EBEEF5;
+
+      /* MARKETING accent — purple */
+      --accent:     #7B5BFF;
+      --accent-d:   #5B3AE0;
+      --accent-l:   #EDE8FF;
+      --accent-2:   #B196FF;
+      --accent-2-l: #DDD0FF;
+
+      --brand:      #0063F2;
+      --brand-d:    #004fd4;
+      --brand-l:    #DBEAFE;
+      --cyan:       #2CA4FF;
+      --cyan-l:     #BAE0FF;
+      --navy:       #051030;
+      --navy-2:     #0A1A48;
+      --navy-3:     #0E2461;
+      --purple-deep: #2E1A6B;
+      --teal:       #18BCBC;
+      --green:      #22C55E;
+      --amber:      #F59E0B;
+      --pink:       #FF6BB5;
+
+      --font:       'Plus Jakarta Sans', sans-serif;
+      --ease:       cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font); background: var(--bg); color: var(--ink);
+      overflow-x: hidden; -webkit-font-smoothing: antialiased;
+    }
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
+    img, svg { display: block; max-width: 100%; }
+
+    .label {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--accent);
+    }
+    .label.on-dark { color: var(--accent-2); }
+    .container { max-width: 1240px; margin: 0 auto; padding: 0 64px; }
+
+    .cursor-glow {
+      position: fixed; width: 480px; height: 480px;
+      border-radius: 50%; pointer-events: none; z-index: 1;
+      background: radial-gradient(circle, rgba(123,91,255,0.10) 0%, transparent 60%);
+      transform: translate(-50%, -50%); mix-blend-mode: multiply;
+    }
+
+    /* ── NAV ─────────────────────────────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100; height: 68px;
+      background: rgba(255,255,255,0.85);
+      backdrop-filter: blur(20px) saturate(180%);
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.3s, box-shadow 0.3s;
+      transform: translateY(-100%); animation: nav-in 0.6s 0.05s var(--ease) forwards;
+    }
+    nav.scrolled { border-color: var(--border); box-shadow: 0 1px 24px rgba(15,23,41,0.07); }
+    @keyframes nav-in { to { transform: translateY(0); } }
+    .nav-inner { max-width: 1240px; margin: 0 auto; padding: 0 64px; height: 100%; display: flex; align-items: center; gap: 40px; }
+    .nav-logo { font-size: 18px; font-weight: 700; color: var(--ink); letter-spacing: -0.3px; flex-shrink: 0; }
+    .nav-logo span { color: var(--brand); }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a { font-size: 14px; color: var(--sec); transition: color 0.2s; position: relative; }
+    .nav-links a:hover { color: var(--ink); }
+    .nav-links a.active { color: var(--accent); font-weight: 600; }
+    .nav-links a.active::after {
+      content: ''; position: absolute; left: 0; right: 0; bottom: -22px;
+      height: 2px; background: var(--accent); border-radius: 2px;
+    }
+    .nav-crumb { font-size: 11px; color: var(--muted); margin-left: 4px; letter-spacing: 0.06em; text-transform: uppercase; }
+    .nav-crumb::before { content: '/ '; color: var(--border); }
+    .nav-cta {
+      margin-left: auto; padding: 9px 22px;
+      background: var(--accent); color: #fff;
+      font-size: 13px; font-weight: 600; border-radius: 6px;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+      box-shadow: 0 2px 12px rgba(123,91,255,0.25);
+      position: relative; overflow: hidden;
+    }
+    .nav-cta::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.25) 50%, transparent 60%);
+      transform: translateX(-100%); transition: transform 0.5s;
+    }
+    .nav-cta:hover::after { transform: translateX(100%); }
+    .nav-cta:hover { background: var(--accent-d); transform: translateY(-1px); box-shadow: 0 4px 20px rgba(123,91,255,0.35); }
+
+    .btn { display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 24px; border-radius: 8px; font-weight: 600; font-size: 14px;
+      transition: all 0.2s; cursor: pointer; border: none; font-family: var(--font);
+    }
+    .btn-primary { background: var(--accent); color: #fff;
+      box-shadow: 0 2px 12px rgba(123,91,255,0.25); }
+    .btn-primary:hover { background: var(--accent-d); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(123,91,255,0.35); }
+    .btn-ghost { background: transparent; color: var(--accent); border: 1px solid rgba(123,91,255,0.3); }
+    .btn-ghost:hover { background: var(--accent-l); border-color: var(--accent); }
+    .btn-white { background: #fff; color: var(--accent);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15); }
+    .btn-white:hover { transform: translateY(-1px); box-shadow: 0 8px 30px rgba(0,0,0,0.25); }
+    .btn-arrow::after { content: '→'; margin-left: 4px; transition: transform 0.2s; }
+    .btn-arrow:hover::after { transform: translateX(4px); }
+
+    /* ╔═══════════════════════════════════════════════════════════════════╗
+       ║  SECTION 2 — HERO with journey builder canvas                       ║
+       ╚═══════════════════════════════════════════════════════════════════╝ */
+    .ma-hero {
+      position: relative; min-height: 100vh;
+      background: linear-gradient(135deg, var(--navy) 0%, var(--purple-deep) 60%, #4825B0 100%);
+      color: #fff; overflow: hidden;
+      padding: 168px 0 100px;
+      display: flex; align-items: center;
+    }
+    .ma-hero::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 80% 40%, rgba(123,91,255,0.30), transparent 50%),
+                  radial-gradient(ellipse at 20% 90%, rgba(177,150,255,0.18), transparent 55%);
+    }
+    .ma-hero-grid {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse at center, #000 35%, transparent 75%);
+      -webkit-mask-image: radial-gradient(ellipse at center, #000 35%, transparent 75%);
+    }
+    .ma-hero-inner {
+      position: relative; z-index: 3;
+      max-width: 1240px; margin: 0 auto; padding: 0 64px;
+      display: grid; grid-template-columns: 1fr 1.1fr; gap: 60px;
+      align-items: center; width: 100%;
+    }
+    .ma-hero-label {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 14px; border-radius: 20px;
+      background: rgba(177,150,255,0.14);
+      border: 1px solid rgba(177,150,255,0.3);
+      font-size: 11px; font-weight: 600; letter-spacing: 0.18em;
+      color: var(--accent-2); text-transform: uppercase;
+      margin-bottom: 28px;
+    }
+    .ma-hero-label::before {
+      content: ''; width: 6px; height: 6px; border-radius: 50%;
+      background: var(--accent-2); box-shadow: 0 0 8px var(--accent-2);
+      animation: ma-pulse 2s ease-in-out infinite;
+    }
+    @keyframes ma-pulse {
+      0%,100% { box-shadow: 0 0 0 0 rgba(177,150,255,0.5); }
+      50% { box-shadow: 0 0 0 6px rgba(177,150,255,0); }
+    }
+    .ma-hero-h1 {
+      font-size: clamp(48px, 5.4vw, 78px);
+      font-weight: 800; line-height: 1.04;
+      letter-spacing: -2.2px; margin-bottom: 24px; color: #fff;
+    }
+    .ma-hero-h1 em,
+    .ma-hero-h1 em .char,
+    .ma-hero-h1 em .word {
+      font-style: normal; font-weight: 800;
+      background: linear-gradient(135deg, var(--accent-2) 0%, #DDC9FF 100%);
+      -webkit-background-clip: text; background-clip: text;
+      color: transparent; -webkit-text-fill-color: transparent;
+    }
+    .ma-hero-sub {
+      font-size: 18px; line-height: 1.55; color: rgba(255,255,255,0.72);
+      max-width: 540px; margin-bottom: 36px;
+    }
+    .ma-hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+    .ma-hero-actions .btn-primary { background: #fff; color: var(--accent-d); box-shadow: 0 4px 20px rgba(0,0,0,0.18); }
+    .ma-hero-actions .btn-primary:hover { background: #F8F5FF; }
+    .ma-hero-actions .btn-ghost { color: #fff; border-color: rgba(255,255,255,0.25); }
+    .ma-hero-actions .btn-ghost:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.5); }
+
+    /* Journey builder canvas */
+    .ma-canvas-stage {
+      position: relative;
+      width: 100%;
+      height: 540px;
+    }
+    .ma-canvas {
+      position: relative;
+      width: 100%; height: 100%;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 24px;
+      padding: 28px;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 30px 80px rgba(123,91,255,0.4);
+      overflow: hidden;
+    }
+    .ma-canvas::before {
+      content: ''; position: absolute; inset: 0;
+      background-image:
+        radial-gradient(circle at 1.5px 1.5px, rgba(255,255,255,0.08) 1.5px, transparent 0);
+      background-size: 20px 20px;
+      pointer-events: none;
+    }
+    .ma-canvas-head {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 16px; padding-bottom: 14px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      position: relative;
+    }
+    .ma-canvas-title {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 12px; font-weight: 700; color: #fff;
+      letter-spacing: 0.04em; text-transform: uppercase;
+    }
+    .ma-canvas-title svg { width: 14px; height: 14px; color: var(--accent-2); }
+    .ma-canvas-live {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 10px; font-weight: 700; color: var(--accent-2);
+      letter-spacing: 0.06em; text-transform: uppercase;
+    }
+    .ma-canvas-live::before {
+      content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--accent-2);
+      box-shadow: 0 0 10px var(--accent-2);
+      animation: ma-pulse 2s ease-in-out infinite;
+    }
+
+    /* Journey nodes */
+    .ma-journey {
+      position: relative;
+      height: 380px;
+    }
+    .ma-node {
+      position: absolute;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 12px;
+      padding: 10px 12px;
+      color: #fff;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+      backdrop-filter: blur(10px);
+      display: flex; align-items: center; gap: 8px;
+      min-width: 130px;
+      transition: all 0.3s var(--ease);
+      z-index: 2;
+    }
+    .ma-node:hover {
+      transform: translateY(-2px);
+      border-color: var(--accent-2);
+      box-shadow: 0 12px 28px rgba(123,91,255,0.4);
+    }
+    .ma-node-icon {
+      width: 26px; height: 26px; border-radius: 7px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-d));
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .ma-node-icon svg { width: 14px; height: 14px; color: #fff; }
+    .ma-node-content { line-height: 1.2; }
+    .ma-node-label {
+      font-size: 9px; color: rgba(255,255,255,0.55);
+      letter-spacing: 0.06em; text-transform: uppercase;
+    }
+    .ma-node-name { font-size: 12px; font-weight: 700; color: #fff; }
+
+    .ma-node.trigger { top: 8%; left: 4%; }
+    .ma-node.segment { top: 8%; left: 38%; background: rgba(123,91,255,0.18); border-color: rgba(123,91,255,0.4); }
+    .ma-node.segment .ma-node-icon { background: linear-gradient(135deg, var(--accent-2), var(--accent)); }
+    .ma-node.wait { top: 38%; left: 4%; }
+    .ma-node.ab-test {
+      top: 38%; left: 38%;
+      background: rgba(255,193,7,0.16); border-color: rgba(255,193,7,0.4);
+    }
+    .ma-node.ab-test .ma-node-icon { background: linear-gradient(135deg, #FFC107, #F59E0B); }
+    .ma-node.email { top: 18%; right: 4%; }
+    .ma-node.push { top: 56%; right: 4%; background: rgba(44,164,255,0.16); border-color: rgba(44,164,255,0.4); }
+    .ma-node.push .ma-node-icon { background: linear-gradient(135deg, var(--cyan), var(--brand)); }
+    .ma-node.outcome {
+      bottom: 4%; left: 38%;
+      background: rgba(34,197,94,0.16); border-color: rgba(34,197,94,0.4);
+      min-width: 200px;
+    }
+    .ma-node.outcome .ma-node-icon { background: linear-gradient(135deg, var(--green), #16A34A); }
+    .ma-node-metric {
+      margin-left: auto;
+      font-size: 13px; font-weight: 800; color: #fff;
+      font-variant-numeric: tabular-nums;
+    }
+    .ma-node-metric.up { color: #6BFAA0; }
+
+    /* SVG connecting lines */
+    .ma-lines {
+      position: absolute; inset: 0; pointer-events: none; z-index: 1;
+    }
+    .ma-lines path {
+      fill: none; stroke: var(--accent-2); stroke-width: 1.5;
+      opacity: 0.4;
+      stroke-dasharray: 5 5;
+      animation: ma-flow 12s linear infinite;
+    }
+    @keyframes ma-flow { to { stroke-dashoffset: -200; } }
+
+    /* Floating tags */
+    .ma-floating-tag {
+      position: absolute; padding: 9px 14px;
+      border-radius: 12px;
+      background: #fff;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.18);
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 11px; font-weight: 700; color: var(--ink);
+      z-index: 6;
+      animation: ma-tag-float 6s ease-in-out infinite;
+    }
+    .ma-floating-tag svg { width: 14px; height: 14px; color: var(--accent); }
+    .ma-floating-tag.tag-1 { top: -10px; left: 12%; }
+    .ma-floating-tag.tag-2 { top: 28%; right: -36px; animation-delay: -2s; background: linear-gradient(135deg, var(--accent), var(--accent-d)); color: #fff; }
+    .ma-floating-tag.tag-2 svg { color: #fff; }
+    .ma-floating-tag.tag-3 { bottom: -8px; right: 12%; animation-delay: -4s; }
+    @keyframes ma-tag-float {
+      0%,100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    /* ╔═══════════════════════════════════════════════════════════════════╗
+       ║  SECTION 3 — STATS                                                  ║
+       ╚═══════════════════════════════════════════════════════════════════╝ */
+    .ma-stats { background: var(--bg); padding: 80px 0; position: relative; }
+    .ma-stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; align-items: center; }
+    .ma-stat {
+      position: relative; padding: 20px 24px;
+      border-left: 3px solid var(--accent-l);
+      transition: border-color 0.3s var(--ease);
+    }
+    .ma-stat:hover { border-left-color: var(--accent); }
+    .ma-stat-num {
+      font-size: 44px; font-weight: 800; color: var(--ink);
+      line-height: 1; letter-spacing: -1.6px;
+      font-variant-numeric: tabular-nums;
+      margin-bottom: 8px;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-d) 100%);
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .ma-stat-desc { font-size: 13px; line-height: 1.5; color: var(--sec); }
+
+    /* ╔═══════════════════════════════════════════════════════════════════╗
+       ║  SECTION 4 — PROBLEM → SOLUTION                                     ║
+       ╚═══════════════════════════════════════════════════════════════════╝ */
+    .ma-problem { padding: 140px 0; background: #fff; position: relative; overflow: hidden; }
+    .ma-problem-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+    .ma-problem-h2 {
+      font-size: clamp(36px, 3.6vw, 50px);
+      font-weight: 800; line-height: 1.08; letter-spacing: -1.5px;
+      margin: 12px 0 20px;
+    }
+    .ma-problem-h2 em { font-style: normal; color: var(--accent); }
+    .ma-problem-list { display: flex; flex-direction: column; gap: 14px; }
+    .ma-problem-item {
+      display: flex; gap: 14px; align-items: flex-start;
+      padding: 16px 18px;
+      background: #FEF2F2;
+      border-left: 3px solid #FCA5A5;
+      border-radius: 8px;
+    }
+    .ma-problem-item svg { width: 18px; height: 18px; color: #DC2626; flex-shrink: 0; margin-top: 1px; }
+    .ma-problem-item-text { font-size: 14px; line-height: 1.5; color: #7F1D1D; }
+    .ma-problem-item-text strong { color: #991B1B; font-weight: 700; }
+
+    .ma-arrow-down {
+      display: flex; align-items: center; justify-content: center; gap: 14px;
+      margin: 24px 0;
+      color: var(--accent); font-weight: 700; font-size: 13px;
+      letter-spacing: 0.1em; text-transform: uppercase;
+    }
+    .ma-arrow-down::before, .ma-arrow-down::after {
+      content: ''; flex: 1; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--accent-l), transparent);
+    }
+
+    .ma-solution-list { display: flex; flex-direction: column; gap: 14px; }
+    .ma-solution-item {
+      display: flex; gap: 14px; align-items: flex-start;
+      padding: 16px 18px;
+      background: #ECFDF5;
+      border-left: 3px solid #6EE7B7;
+      border-radius: 8px;
+    }
+    .ma-solution-item svg { width: 18px; height: 18px; color: #059669; flex-shrink: 0; margin-top: 1px; }
+    .ma-solution-item-text { font-size: 14px; line-height: 1.5; color: #064E3B; }
+    .ma-solution-item-text strong { color: #047857; font-weight: 700; }
+
+    /* Capacity chart — Before/After */
+    .ma-capacity {
+      position: relative;
+      aspect-ratio: 1/1;
+      border-radius: 24px;
+      background: linear-gradient(135deg, #F5F3FF 0%, #EDE8FF 100%);
+      padding: 40px;
+      overflow: hidden;
+    }
+    .ma-capacity::before {
+      content: ''; position: absolute; inset: 0;
+      background-image: radial-gradient(circle at 1px 1px, rgba(123,91,255,0.10) 1px, transparent 0);
+      background-size: 24px 24px;
+    }
+    .ma-capacity-head { position: relative; text-align: center; margin-bottom: 24px; }
+    .ma-capacity-head-label {
+      font-size: 10px; font-weight: 800; color: var(--accent-d);
+      letter-spacing: 0.16em; text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .ma-capacity-head-title {
+      font-size: 15px; font-weight: 700; color: var(--ink);
+      letter-spacing: -0.2px;
+    }
+    .ma-capacity-comparison {
+      position: relative;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
+      margin-bottom: 22px;
+    }
+    .ma-cap-side {
+      background: rgba(255,255,255,0.7);
+      border-radius: 14px;
+      padding: 18px 14px;
+      text-align: center;
+    }
+    .ma-cap-side.before { color: var(--muted); }
+    .ma-cap-side.after { background: linear-gradient(135deg, var(--accent), var(--accent-d)); color: #fff; box-shadow: 0 10px 28px rgba(123,91,255,0.3); }
+    .ma-cap-side-label {
+      font-size: 10px; font-weight: 700; letter-spacing: 0.08em;
+      text-transform: uppercase; opacity: 0.7;
+      margin-bottom: 8px;
+    }
+    .ma-cap-side-num {
+      font-size: 42px; font-weight: 800; line-height: 1;
+      letter-spacing: -1.6px;
+      font-variant-numeric: tabular-nums;
+    }
+    .ma-cap-side-unit { font-size: 12px; opacity: 0.7; margin-top: 4px; }
+    .ma-cap-multiplier {
+      position: absolute; left: 50%; top: 50%;
+      transform: translate(-50%, -50%);
+      width: 44px; height: 44px; border-radius: 50%;
+      background: #fff;
+      box-shadow: 0 8px 20px rgba(123,91,255,0.25);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; font-weight: 800; color: var(--accent-d);
+      z-index: 2;
+    }
+    .ma-capacity-foot {
+      position: relative;
+      padding-top: 18px;
+      border-top: 1px solid rgba(15,23,41,0.08);
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px;
+      text-align: center;
+    }
+    .ma-cap-foot-num {
+      font-size: 20px; font-weight: 800; color: var(--accent-d);
+      font-variant-numeric: tabular-nums; letter-spacing: -0.6px; line-height: 1;
+    }
+    .ma-cap-foot-lbl {
+      font-size: 10px; color: var(--muted);
+      letter-spacing: 0.06em; text-transform: uppercase;
+      margin-top: 4px;
+    }
+
+    /* ╔═══════════════════════════════════════════════════════════════════╗
+       ║  SECTION 5 — CAPABILITIES                                           ║
+       ╚═══════════════════════════════════════════════════════════════════╝ */
+    .ma-caps { padding: 140px 0; background: var(--bg); position: relative; overflow: hidden; }
+    .ma-caps::before {
+      content: ''; position: absolute; inset: 0;
+      background-image: radial-gradient(circle at 1px 1px, rgba(15,23,41,0.05) 1px, transparent 0);
+      background-size: 32px 32px;
+      mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%);
+      -webkit-mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%);
+    }
+    .ma-caps-head { text-align: center; margin-bottom: 64px; position: relative; z-index: 2; }
+    .ma-caps-head h2 {
+      font-size: clamp(36px, 3.6vw, 50px);
+      font-weight: 800; line-height: 1.08; letter-spacing: -1.5px;
+      margin: 12px 0 16px;
+    }
+    .ma-caps-head h2 em { font-style: normal; color: var(--accent); }
+    .ma-caps-head p {
+      font-size: 17px; line-height: 1.6; color: var(--sec);
+      max-width: 620px; margin: 0 auto;
+    }
+    .ma-caps-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;
+      position: relative; z-index: 2;
+    }
+    .ma-cap-card {
+      background: #fff; border: 1px solid var(--border);
+      border-radius: 16px; padding: 28px 24px;
+      transition: all 0.3s var(--ease);
+      position: relative; overflow: hidden;
+    }
+    .ma-cap-card::before {
+      content: ''; position: absolute; left: 0; top: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      transform: scaleX(0); transform-origin: left;
+      transition: transform 0.4s var(--ease);
+    }
+    .ma-cap-card:hover::before { transform: scaleX(1); }
+    .ma-cap-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 50px rgba(15,23,41,0.08);
+      border-color: rgba(123,91,255,0.2);
+    }
+    .ma-cap-icon {
+      width: 48px; height: 56px;
+      clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+      background: linear-gradient(135deg, var(--accent), var(--accent-d));
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 20px;
+      box-shadow: 0 8px 20px rgba(123,91,255,0.25);
+    }
+    .ma-cap-icon svg { width: 22px; height: 22px; color: #fff; }
+    .ma-cap-card h4 {
+      font-size: 17px; font-weight: 700; color: var(--ink);
+      margin-bottom: 10px; line-height: 1.3;
+    }
+    .ma-cap-card p { font-size: 13px; line-height: 1.55; color: var(--sec); }
+
+    /* ╔═══════════════════════════════════════════════════════════════════╗
+       ║  SECTION 6 — IN ACTION — Live customer journey                      ║
+       ╚═══════════════════════════════════════════════════════════════════╝ */
+    .ma-action {
+      padding: 140px 0;
+      background: linear-gradient(180deg, var(--navy) 0%, var(--purple-deep) 100%);
+      color: #fff;
+      position: relative; overflow: hidden;
+    }
+    .ma-action::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 30% 50%, rgba(123,91,255,0.30), transparent 50%),
+                  radial-gradient(ellipse at 80% 70%, rgba(177,150,255,0.18), transparent 55%);
+    }
+    .ma-action-inner {
+      position: relative; z-index: 2;
+      display: grid; grid-template-columns: 1fr 1.05fr; gap: 80px;
+      align-items: center;
+    }
+    .ma-action-h2 {
+      font-size: clamp(36px, 3.6vw, 50px);
+      font-weight: 800; line-height: 1.08; letter-spacing: -1.5px;
+      margin: 12px 0 24px;
+    }
+    .ma-action-h2 em {
+      font-style: normal;
+      background: linear-gradient(135deg, var(--accent-2), #DDC9FF);
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .ma-action-sub {
+      font-size: 16px; line-height: 1.6; color: rgba(255,255,255,0.72);
+      margin-bottom: 36px;
+    }
+    .ma-flow-steps { display: flex; flex-direction: column; gap: 16px; }
+    .ma-flow-step {
+      display: flex; gap: 18px;
+      padding: 18px 22px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px;
+      transition: all 0.25s var(--ease);
+    }
+    .ma-flow-step:hover {
+      background: rgba(255,255,255,0.08);
+      border-color: rgba(177,150,255,0.4);
+    }
+    .ma-flow-step-num {
+      width: 38px; height: 38px; border-radius: 10px; flex-shrink: 0;
+      background: linear-gradient(135deg, var(--accent), var(--accent-d));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; font-weight: 800; color: #fff;
+      box-shadow: 0 4px 12px rgba(123,91,255,0.4);
+    }
+    .ma-flow-step-text h5 {
+      font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 6px;
+    }
+    .ma-flow-step-text p {
+      font-size: 13px; line-height: 1.55; color: rgba(255,255,255,0.65);
+    }
+    .ma-flow-step-tag {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 3px 10px; border-radius: 12px;
+      background: rgba(177,150,255,0.18);
+      font-size: 10px; font-weight: 700; color: var(--accent-2);
+      letter-spacing: 0.05em; text-transform: uppercase;
+      margin-top: 6px;
+    }
+
+    /* Customer timeline visualization */
+    .ma-timeline-card {
+      position: relative;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 24px;
+      padding: 28px;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 30px 80px rgba(0,0,0,0.3);
+    }
+    .ma-timeline-head {
+      display: flex; align-items: center; justify-content: space-between;
+      padding-bottom: 16px; margin-bottom: 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .ma-timeline-title {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 12px; font-weight: 700; color: #fff;
+      letter-spacing: 0.04em; text-transform: uppercase;
+    }
+    .ma-timeline-title svg { width: 16px; height: 16px; color: var(--accent-2); }
+    .ma-timeline-progress {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 10px; font-weight: 700; color: var(--accent-2);
+      letter-spacing: 0.06em; text-transform: uppercase;
+    }
+    .ma-timeline-progress::before {
+      content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--accent-2);
+      box-shadow: 0 0 10px var(--accent-2);
+      animation: ma-pulse 2s ease-in-out infinite;
+    }
+
+    .ma-customer-card {
+      background: rgba(177,150,255,0.10);
+      border: 1px solid rgba(177,150,255,0.2);
+      border-radius: 14px;
+      padding: 14px;
+      margin-bottom: 20px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .ma-customer-avatar {
+      width: 42px; height: 42px; border-radius: 50%;
+      background: linear-gradient(135deg, #FFD9B8 0%, var(--accent-2) 100%);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800; color: var(--ink);
+      flex-shrink: 0;
+    }
+    .ma-customer-info { flex: 1; }
+    .ma-customer-name { font-size: 14px; font-weight: 700; color: #fff; line-height: 1.2; }
+    .ma-customer-segment {
+      font-size: 11px; color: var(--accent-2);
+      display: inline-flex; align-items: center; gap: 4px;
+      margin-top: 2px;
+    }
+    .ma-customer-stage {
+      padding: 4px 10px; border-radius: 14px;
+      background: rgba(34,197,94,0.16);
+      font-size: 10px; font-weight: 800; color: #6BFAA0;
+      letter-spacing: 0.06em; text-transform: uppercase;
+    }
+
+    .ma-timeline-events {
+      display: flex; flex-direction: column; gap: 0;
+      position: relative;
+    }
+    .ma-timeline-event {
+      display: grid; grid-template-columns: 60px 1fr auto; gap: 12px;
+      align-items: flex-start;
+      padding: 10px 0;
+      position: relative;
+    }
+    .ma-timeline-event::before {
+      content: ''; position: absolute;
+      left: 30px; top: 28px; bottom: -10px;
+      width: 1.5px; background: rgba(255,255,255,0.1);
+    }
+    .ma-timeline-event:last-child::before { display: none; }
+    .ma-timeline-event-time {
+      font-size: 10px; color: rgba(255,255,255,0.55);
+      font-weight: 700;
+      letter-spacing: 0.04em; text-transform: uppercase;
+      text-align: right;
+      padding-top: 2px;
+    }
+    .ma-timeline-event-dot {
+      position: absolute;
+      left: 24px;
+      width: 14px; height: 14px; border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 0 3px rgba(123,91,255,0.2), 0 0 12px rgba(123,91,255,0.4);
+      z-index: 2;
+    }
+    .ma-timeline-event-dot.cyan { background: var(--cyan); box-shadow: 0 0 0 3px rgba(44,164,255,0.2), 0 0 12px rgba(44,164,255,0.4); }
+    .ma-timeline-event-dot.green { background: var(--green); box-shadow: 0 0 0 3px rgba(34,197,94,0.2), 0 0 12px rgba(34,197,94,0.4); }
+    .ma-timeline-event-content {
+      grid-column: 2; grid-row: 1;
+      padding-left: 14px;
+    }
+    .ma-timeline-event-name {
+      font-size: 13px; font-weight: 700; color: #fff; line-height: 1.2;
+      margin-bottom: 3px;
+    }
+    .ma-timeline-event-desc {
+      font-size: 11px; color: rgba(255,255,255,0.55);
+      line-height: 1.4;
+    }
+    .ma-timeline-event-metric {
+      grid-column: 3; grid-row: 1;
+      padding-top: 2px;
+    }
+    .ma-timeline-event-metric span {
+      font-size: 11px; font-weight: 800;
+      color: #6BFAA0;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* ╔═══════════════════════════════════════════════════════════════════╗
+       ║  SECTION 7 — MODULAR FIT                                            ║
+       ╚═══════════════════════════════════════════════════════════════════╝ */
+    .ma-modular {
+      padding: 140px 0;
+      background: linear-gradient(180deg, var(--bg) 0%, #fff 100%);
+      position: relative; overflow: hidden;
+    }
+    .ma-modular::before {
+      content: ''; position: absolute; inset: 0;
+      background-image: radial-gradient(circle at 1px 1px, rgba(123,91,255,0.06) 1px, transparent 0);
+      background-size: 28px 28px;
+      mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%);
+      -webkit-mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%);
+    }
+    .ma-mod-head { text-align: center; margin-bottom: 50px; position: relative; z-index: 2; }
+    .ma-mod-head h2 {
+      font-size: clamp(36px, 3.6vw, 50px);
+      font-weight: 800; line-height: 1.08; letter-spacing: -1.5px;
+      margin: 12px 0 16px;
+    }
+    .ma-mod-head h2 em { font-style: normal; color: var(--accent); }
+    .ma-mod-head p {
+      font-size: 17px; line-height: 1.6; color: var(--sec);
+      max-width: 620px; margin: 0 auto;
+    }
+    .ma-mod-composer {
+      position: relative; z-index: 2;
+      max-width: 1080px; margin: 0 auto;
+      background: #fff; border: 1px solid var(--border);
+      border-radius: 24px; padding: 40px;
+      box-shadow: 0 30px 80px rgba(15,23,41,0.08);
+    }
+    .ma-mod-zone { margin-bottom: 36px; padding-bottom: 36px; border-bottom: 1px dashed var(--border); }
+    .ma-mod-zone:last-of-type { border-bottom: none; padding-bottom: 0; margin-bottom: 0; }
+    .ma-mod-zone-head {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 24px; gap: 16px;
+    }
+    .ma-mod-zone-title {
+      display: flex; align-items: center; gap: 12px;
+      font-size: 14px; font-weight: 700; color: var(--ink);
+      letter-spacing: 0.04em; text-transform: uppercase;
+    }
+    .ma-mod-zone-title::before {
+      content: ''; display: inline-block;
+      width: 18px; height: 1.5px; background: var(--accent); border-radius: 1.5px;
+    }
+    .ma-mod-zone-title.complement { color: var(--muted); }
+    .ma-mod-zone-title.complement::before { background: var(--muted); }
+    .ma-mod-counter {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 4px 12px; border-radius: 20px;
+      background: var(--accent-l); color: var(--accent-d);
+      font-size: 12px; font-weight: 700;
+    }
+    .ma-mod-counter.muted { background: var(--bg-alt); color: var(--sec); }
+    .ma-mod-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .ma-mod-card {
+      position: relative; border-radius: 14px;
+      padding: 20px 16px 16px;
+      transition: all 0.3s var(--ease);
+      display: flex; flex-direction: column;
+      min-height: 168px; overflow: hidden;
+    }
+    .ma-mod-card-icon {
+      width: 38px; height: 44px;
+      clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 12px;
+    }
+    .ma-mod-card-icon svg { width: 16px; height: 16px; }
+    .ma-mod-card-name { font-size: 13px; font-weight: 700; line-height: 1.25; margin-bottom: 4px; }
+    .ma-mod-card-desc { font-size: 11px; line-height: 1.4; flex: 1; margin-bottom: 12px; }
+    .ma-mod-card-action {
+      display: inline-flex; align-items: center; justify-content: center; gap: 5px;
+      padding: 6px 10px; border-radius: 8px;
+      font-size: 11px; font-weight: 700; letter-spacing: 0.02em;
+      align-self: flex-start;
+    }
+    .ma-mod-card.spotlight {
+      background: linear-gradient(140deg, var(--accent) 0%, var(--accent-d) 70%, var(--purple-deep) 130%);
+      color: #fff;
+      box-shadow: 0 18px 50px rgba(123,91,255,0.4);
+      border: 2px solid var(--accent);
+      grid-column: span 2;
+      min-height: 200px;
+      transform: scale(1.02);
+      position: relative;
+    }
+    .ma-mod-card.spotlight::after {
+      content: 'ESTÁS ACÁ';
+      position: absolute; top: 14px; right: 14px;
+      background: rgba(255,255,255,0.2); color: #fff;
+      padding: 4px 8px; border-radius: 6px;
+      font-size: 9px; font-weight: 800; letter-spacing: 0.12em;
+      backdrop-filter: blur(8px);
+    }
+    .ma-mod-card.spotlight .ma-mod-card-icon {
+      background: rgba(255,255,255,0.22);
+      border: 1px solid rgba(255,255,255,0.4);
+      width: 48px; height: 56px;
+    }
+    .ma-mod-card.spotlight .ma-mod-card-icon svg { width: 20px; height: 20px; color: #fff; }
+    .ma-mod-card.spotlight .ma-mod-card-name { font-size: 18px; }
+    .ma-mod-card.spotlight .ma-mod-card-desc { color: rgba(255,255,255,0.82); font-size: 13px; }
+    .ma-mod-card.active {
+      background: linear-gradient(140deg, var(--accent-l) 0%, #F8F5FF 100%);
+      border: 1px solid var(--accent);
+      color: var(--ink);
+    }
+    .ma-mod-card.active .ma-mod-card-icon {
+      background: linear-gradient(135deg, var(--accent), var(--accent-d));
+    }
+    .ma-mod-card.active .ma-mod-card-icon svg { color: #fff; }
+    .ma-mod-card.active .ma-mod-card-desc { color: var(--sec); }
+    .ma-mod-card.active .ma-mod-card-action {
+      background: #fff; color: var(--accent-d); border: 1px solid rgba(123,91,255,0.2);
+    }
+    .ma-mod-card.active .ma-mod-card-action::before { content: '✓'; font-size: 11px; font-weight: 800; }
+    .ma-mod-card.active:hover { transform: translateY(-3px); box-shadow: 0 12px 28px rgba(123,91,255,0.18); }
+    .ma-mod-card.available {
+      background: var(--bg);
+      color: var(--ink);
+      border: 1.5px dashed rgba(15,23,41,0.18);
+      cursor: pointer;
+    }
+    .ma-mod-card.available .ma-mod-card-icon {
+      background: linear-gradient(135deg, var(--accent-l), #F8F5FF);
+      border: 1px solid rgba(123,91,255,0.15);
+    }
+    .ma-mod-card.available .ma-mod-card-icon svg { color: var(--accent-d); }
+    .ma-mod-card.available .ma-mod-card-desc { color: var(--muted); }
+    .ma-mod-card.available .ma-mod-card-action {
+      background: #fff; color: var(--accent-d); border: 1px solid rgba(123,91,255,0.25);
+    }
+    .ma-mod-card.available:hover {
+      transform: translateY(-3px); border-color: var(--accent);
+      background: #fff; box-shadow: 0 12px 28px rgba(123,91,255,0.12);
+    }
+    .ma-mod-card.available:hover .ma-mod-card-action { background: var(--accent); color: #fff; }
+    .ma-mod-card.available .ma-mod-card-action::before { content: '+'; font-size: 14px; font-weight: 800; }
+    .ma-mod-hint {
+      display: flex; align-items: center; gap: 8px;
+      justify-content: center;
+      font-size: 12px; color: var(--muted);
+      margin-top: 28px; padding: 14px 20px;
+      background: var(--bg);
+      border-radius: 12px;
+      border: 1px dashed var(--border);
+    }
+    .ma-mod-hint svg { width: 16px; height: 16px; color: var(--accent); flex-shrink: 0; }
+
+    /* ╔═══════════════════════════════════════════════════════════════════╗
+       ║  SECTION 8 — CASE STUDY                                             ║
+       ╚═══════════════════════════════════════════════════════════════════╝ */
+    .ma-case { padding: 140px 0; background: #fff; position: relative; overflow: hidden; }
+    .ma-case-card {
+      max-width: 1100px; margin: 0 auto;
+      background: linear-gradient(135deg, #F5F3FF 0%, #EDE8FF 100%);
+      border-radius: 28px; padding: 60px;
+      position: relative; overflow: hidden;
+      box-shadow: 0 30px 80px rgba(123,91,255,0.18);
+    }
+    .ma-case-card::before {
+      content: ''; position: absolute; right: -100px; top: -100px;
+      width: 360px; height: 360px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(123,91,255,0.16), transparent 70%);
+    }
+    .ma-case-grid {
+      position: relative; z-index: 2;
+      display: grid; grid-template-columns: 1fr 1.3fr; gap: 60px;
+      align-items: center;
+    }
+    .ma-case-customer { text-align: center; }
+    .ma-case-logo {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 92px; height: 92px; border-radius: 22px;
+      background: linear-gradient(135deg, #047857 0%, #064E3B 100%);
+      color: #fff;
+      font-size: 28px; font-weight: 800;
+      letter-spacing: -1px;
+      margin-bottom: 18px;
+      box-shadow: 0 16px 36px rgba(4,120,87,0.25);
+    }
+    .ma-case-customer-name {
+      font-size: 18px; font-weight: 700; color: var(--ink); margin-bottom: 4px;
+    }
+    .ma-case-customer-role { font-size: 13px; color: var(--muted); margin-bottom: 24px; }
+    .ma-case-flag {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 14px; border-radius: 20px;
+      background: var(--accent-l);
+      font-size: 11px; font-weight: 700; color: var(--accent-d);
+      letter-spacing: 0.06em; text-transform: uppercase;
+    }
+    .ma-case-content { position: relative; }
+    .ma-case-quote-mark {
+      font-size: 80px; line-height: 0.8;
+      color: var(--accent); opacity: 0.25;
+      margin-bottom: -16px;
+      font-family: Georgia, serif;
+    }
+    .ma-case-quote {
+      font-size: clamp(22px, 2.2vw, 30px);
+      font-weight: 700; line-height: 1.35; color: var(--ink);
+      letter-spacing: -0.5px;
+      margin-bottom: 32px;
+    }
+    .ma-case-metrics {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+      padding-top: 28px;
+      border-top: 1px solid rgba(15,23,41,0.08);
+    }
+    .ma-case-metric-num {
+      font-size: 32px; font-weight: 800; line-height: 1;
+      letter-spacing: -1px; margin-bottom: 6px;
+      font-variant-numeric: tabular-nums;
+      background: linear-gradient(135deg, var(--accent), var(--accent-d));
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .ma-case-metric-desc { font-size: 12px; color: var(--sec); line-height: 1.45; }
+
+    /* ╔═══════════════════════════════════════════════════════════════════╗
+       ║  SECTION 9 — CTA BAND                                               ║
+       ╚═══════════════════════════════════════════════════════════════════╝ */
+    .cta-band {
+      position: relative;
+      padding: 120px 0;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-d) 60%, var(--purple-deep) 100%);
+      color: #fff; text-align: center;
+      overflow: hidden;
+    }
+    .cta-band::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 50% 0%, rgba(177,150,255,0.35), transparent 60%);
+    }
+    .cta-band .container { position: relative; z-index: 2; }
+    .cta-h2 {
+      font-size: clamp(40px, 4vw, 60px);
+      font-weight: 800; line-height: 1.08; letter-spacing: -1.5px;
+      margin-bottom: 18px;
+    }
+    .cta-sub {
+      font-size: 18px; line-height: 1.6; color: rgba(255,255,255,0.85);
+      max-width: 540px; margin: 0 auto 32px;
+    }
+    .cta-band .btn-white { color: var(--accent-d); }
+    .cta-fine { font-size: 13px; color: rgba(255,255,255,0.65); margin-top: 20px; }
+
+    /* ╔═══════════════════════════════════════════════════════════════════╗
+       ║  SECTION 10 — FOOTER                                                ║
+       ╚═══════════════════════════════════════════════════════════════════╝ */
+    footer {
+      background: var(--ink-deep); color: rgba(255,255,255,0.65);
+      padding: 80px 0 30px;
+    }
+    .footer-inner {
+      max-width: 1240px; margin: 0 auto; padding: 0 64px;
+      display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 64px;
+      margin-bottom: 60px;
+    }
+    .footer-logo { font-size: 22px; font-weight: 800; color: #fff; margin-bottom: 14px; }
+    .footer-logo span { color: var(--accent-2); }
+    .footer-tagline { font-size: 14px; line-height: 1.55; color: rgba(255,255,255,0.6); max-width: 240px; }
+    .footer-col-title {
+      font-size: 13px; font-weight: 700; color: #fff;
+      letter-spacing: 0.05em; text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    .footer-links { display: flex; flex-direction: column; gap: 10px; }
+    .footer-links a { font-size: 14px; color: rgba(255,255,255,0.6); transition: color 0.2s; }
+    .footer-links a:hover { color: var(--accent-2); }
+    .footer-helping {
+      text-align: center; padding: 40px 0 30px;
+      font-size: 14px; color: rgba(255,255,255,0.55);
+    }
+    .footer-helping em { font-style: normal; color: var(--pink); font-weight: 700; }
+    .footer-helping em::before { content: '♥ '; color: var(--pink); }
+    .footer-bottom {
+      max-width: 1240px; margin: 0 auto; padding: 24px 64px 0;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      display: flex; justify-content: space-between;
+      font-size: 13px; color: rgba(255,255,255,0.45);
+    }
+
+    @media (max-width: 980px) {
+      .ma-hero-inner { grid-template-columns: 1fr; gap: 60px; }
+      .ma-canvas-stage { height: 460px; }
+      .ma-stats-grid { grid-template-columns: repeat(2, 1fr); gap: 24px; }
+      .ma-problem-grid { grid-template-columns: 1fr; gap: 50px; }
+      .ma-caps-grid { grid-template-columns: repeat(2, 1fr); }
+      .ma-action-inner { grid-template-columns: 1fr; gap: 50px; }
+      .ma-mod-grid { grid-template-columns: repeat(3, 1fr); }
+      .ma-mod-card.spotlight { grid-column: span 3; }
+      .ma-case-grid { grid-template-columns: 1fr; gap: 32px; text-align: center; }
+      .ma-case-card { padding: 40px 32px; }
+      .footer-inner { grid-template-columns: 1fr 1fr; gap: 40px; }
+    }
+    @media (max-width: 600px) {
+      .container, .nav-inner, .footer-inner, .footer-bottom { padding-left: 24px; padding-right: 24px; }
+      .ma-stats-grid, .ma-caps-grid { grid-template-columns: 1fr; }
+      .ma-mod-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+      .ma-mod-card.spotlight { grid-column: span 2; }
+      .nav-links { display: none; }
+      .nav-crumb { display: none; }
+      .ma-hero { padding-top: 130px; padding-bottom: 60px; min-height: auto; }
+      .ma-stats, .ma-problem, .ma-caps, .ma-action, .ma-modular, .ma-case, .cta-band { padding: 80px 0; }
+      .ma-case-metrics { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="cursor-glow" id="cursorGlow"></div>
+
+<!-- ═══ 1. NAV ═══ -->
+<nav id="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">info<span>corp</span></a>
+    <ul class="nav-links">
+      <li><a href="plataforma.html" class="active">Productos <span class="nav-crumb">IC Marketing Automation</span></a></li>
+      <li><a href="soluciones-personas.html">Soluciones</a></li>
+      <li><a href="#">Clientes</a></li>
+      <li><a href="#">Recursos</a></li>
+    </ul>
+    <a href="#demo" class="nav-cta">Solicitar demo</a>
+  </div>
+</nav>
+
+<!-- ═══ 2. HERO ═══ -->
+<section class="ma-hero">
+  <div class="ma-hero-grid"></div>
+  <div class="ma-hero-inner">
+    <div>
+      <span class="ma-hero-label" id="heroLabel">IC Marketing Automation · MARKETING</span>
+      <h1 class="ma-hero-h1" id="heroH1">De 10 a 150 campañas por mes, <em>sin sumar gente</em></h1>
+      <p class="ma-hero-sub" id="heroSub">Journey builder visual, microsegmentación con IA, multi-canal nativo (email, push, SMS, WhatsApp, in-app) y analytics en tiempo real. Para equipos que necesitan escalar relevancia, no headcount.</p>
+      <div class="ma-hero-actions" id="heroActions">
+        <a href="#demo" class="btn btn-primary btn-arrow">Solicitá una demo</a>
+        <a href="#how" class="btn btn-ghost">Ver journey en acción</a>
+      </div>
+    </div>
+
+    <!-- Journey builder canvas -->
+    <div class="ma-canvas-stage" id="canvasStage">
+      <span class="ma-floating-tag tag-1">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        15× campañas/mes
+      </span>
+      <span class="ma-floating-tag tag-2">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        IA microsegm.
+      </span>
+      <span class="ma-floating-tag tag-3">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        +320% open rate
+      </span>
+
+      <div class="ma-canvas">
+        <div class="ma-canvas-head">
+          <div class="ma-canvas-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            Journey · Onboarding Premium
+          </div>
+          <div class="ma-canvas-live">EN VIVO</div>
+        </div>
+
+        <div class="ma-journey">
+          <svg class="ma-lines" viewBox="0 0 600 380" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M 90 50 Q 180 50 230 50"/>
+            <path d="M 350 60 Q 460 60 520 90"/>
+            <path d="M 90 200 Q 180 200 230 200"/>
+            <path d="M 360 200 Q 460 200 520 220"/>
+            <path d="M 360 200 Q 460 200 520 300"/>
+            <path d="M 280 240 Q 280 320 320 350"/>
+          </svg>
+
+          <div class="ma-node trigger">
+            <div class="ma-node-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            </div>
+            <div class="ma-node-content">
+              <div class="ma-node-label">Trigger</div>
+              <div class="ma-node-name">Primer login</div>
+            </div>
+          </div>
+
+          <div class="ma-node segment">
+            <div class="ma-node-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82"/></svg>
+            </div>
+            <div class="ma-node-content">
+              <div class="ma-node-label">Segmento IA</div>
+              <div class="ma-node-name">Joven · Sueldo alto</div>
+            </div>
+          </div>
+
+          <div class="ma-node email">
+            <div class="ma-node-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            </div>
+            <div class="ma-node-content">
+              <div class="ma-node-label">Email A</div>
+              <div class="ma-node-name">Bienvenida</div>
+            </div>
+            <div class="ma-node-metric up">42%</div>
+          </div>
+
+          <div class="ma-node wait">
+            <div class="ma-node-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </div>
+            <div class="ma-node-content">
+              <div class="ma-node-label">Wait</div>
+              <div class="ma-node-name">3 días</div>
+            </div>
+          </div>
+
+          <div class="ma-node ab-test">
+            <div class="ma-node-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 12l4-4 4 6 5-5"/></svg>
+            </div>
+            <div class="ma-node-content">
+              <div class="ma-node-label">A/B Test</div>
+              <div class="ma-node-name">Subject line</div>
+            </div>
+          </div>
+
+          <div class="ma-node push">
+            <div class="ma-node-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            </div>
+            <div class="ma-node-content">
+              <div class="ma-node-label">Push</div>
+              <div class="ma-node-name">Inversión</div>
+            </div>
+            <div class="ma-node-metric up">28%</div>
+          </div>
+
+          <div class="ma-node outcome">
+            <div class="ma-node-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div class="ma-node-content">
+              <div class="ma-node-label">Conversión</div>
+              <div class="ma-node-name">Plazo fijo activo</div>
+            </div>
+            <div class="ma-node-metric up">+18%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 3. STATS STRIP ═══ -->
+<section class="ma-stats">
+  <div class="container ma-stats-grid">
+    <div class="ma-stat">
+      <div class="ma-stat-num" data-target="15" data-suffix="×">0×</div>
+      <div class="ma-stat-desc">más campañas mensuales<br>con el mismo equipo</div>
+    </div>
+    <div class="ma-stat">
+      <div class="ma-stat-num" data-target="3.2" data-suffix="×">0×</div>
+      <div class="ma-stat-desc">open rate vs.<br>blast tradicional</div>
+    </div>
+    <div class="ma-stat">
+      <div class="ma-stat-num" data-target="42" data-prefix="-" data-suffix="%">-0%</div>
+      <div class="ma-stat-desc">de CAC<br>en adquisición</div>
+    </div>
+    <div class="ma-stat">
+      <div class="ma-stat-num" data-target="90" data-prefix="+">+0</div>
+      <div class="ma-stat-desc">segmentos vivos<br>al mismo tiempo</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 4. PROBLEM → SOLUTION ═══ -->
+<section class="ma-problem">
+  <div class="container ma-problem-grid">
+    <div>
+      <span class="label">EL RETO · LA SOLUCIÓN</span>
+      <h2 class="ma-problem-h2 split-lines">Multiplicá relevancia,<br>no <em>headcount</em></h2>
+
+      <div class="ma-problem-list">
+        <div class="ma-problem-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <div class="ma-problem-item-text"><strong>Email blast manual:</strong> el equipo de marketing arma un mail "para todos" cada lunes. 8% open rate, 0.4% conversión.</div>
+        </div>
+        <div class="ma-problem-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <div class="ma-problem-item-text"><strong>Microsegmentación imposible:</strong> hacer "joven · sueldo alto · usuario app" requiere queries SQL, equipo de data y 2 semanas. Para cada campaña.</div>
+        </div>
+        <div class="ma-problem-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <div class="ma-problem-item-text"><strong>Reportes post-mortem:</strong> el resultado de la campaña llega 3 días después. Cuando podrías corregir, ya pasó.</div>
+        </div>
+      </div>
+
+      <div class="ma-arrow-down">Lo que cambiamos</div>
+
+      <div class="ma-solution-list">
+        <div class="ma-solution-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+          <div class="ma-solution-item-text"><strong>Journey builder visual.</strong> Drag-and-drop, condiciones, esperas, A/B tests. Tu equipo arma un flujo nuevo en horas, no semanas.</div>
+        </div>
+        <div class="ma-solution-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+          <div class="ma-solution-item-text"><strong>Microsegmentación con IA.</strong> Definís el target en lenguaje natural; el modelo arma el segmento y lo mantiene vivo a medida que cambia el comportamiento.</div>
+        </div>
+        <div class="ma-solution-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+          <div class="ma-solution-item-text"><strong>Real-time analytics que sugiere.</strong> Si el A está ganando 3 a 1, el sistema sugiere pasar todo el tráfico al A. Vos decidís, no esperás al lunes.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Capacity comparison visual -->
+    <div class="ma-capacity">
+      <div class="ma-capacity-head">
+        <div class="ma-capacity-head-label">Capacidad del equipo</div>
+        <div class="ma-capacity-head-title">Mismo equipo, otra escala</div>
+      </div>
+      <div class="ma-capacity-comparison">
+        <div class="ma-cap-side before">
+          <div class="ma-cap-side-label">Antes</div>
+          <div class="ma-cap-side-num">10</div>
+          <div class="ma-cap-side-unit">campañas/mes</div>
+        </div>
+        <div class="ma-cap-multiplier">15×</div>
+        <div class="ma-cap-side after">
+          <div class="ma-cap-side-label">Con IC MA</div>
+          <div class="ma-cap-side-num">150</div>
+          <div class="ma-cap-side-unit">campañas/mes</div>
+        </div>
+      </div>
+      <div class="ma-capacity-foot">
+        <div>
+          <div class="ma-cap-foot-num">3.2×</div>
+          <div class="ma-cap-foot-lbl">Open rate</div>
+        </div>
+        <div>
+          <div class="ma-cap-foot-num">-42%</div>
+          <div class="ma-cap-foot-lbl">CAC</div>
+        </div>
+        <div>
+          <div class="ma-cap-foot-num">90+</div>
+          <div class="ma-cap-foot-lbl">Segmentos</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 5. CAPABILITIES ═══ -->
+<section class="ma-caps" id="how">
+  <div class="container ma-caps-head">
+    <span class="label">Qué hace</span>
+    <h2 class="split-lines">Cuatro capacidades que<br>convierten campañas <em>en hábitos</em></h2>
+    <p>Marketing Automation es la diferencia entre un equipo que apaga incendios y uno que diseña relaciones que duran. Esto es lo que cambia el juego.</p>
+  </div>
+  <div class="container ma-caps-grid">
+    <div class="ma-cap-card">
+      <div class="ma-cap-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      </div>
+      <h4>Journey builder visual</h4>
+      <p>Drag-and-drop con triggers, condiciones, esperas y A/B tests. Tu equipo arma un journey complejo en horas, lo prueba con un grupo chico y lo escala.</p>
+    </div>
+    <div class="ma-cap-card">
+      <div class="ma-cap-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4"/></svg>
+      </div>
+      <h4>Microsegmentación con IA</h4>
+      <p>Definís el target en lenguaje natural ("clientes que no usan la app pero entran a la web"). El modelo arma el segmento y lo mantiene vivo en tiempo real.</p>
+    </div>
+    <div class="ma-cap-card">
+      <div class="ma-cap-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      </div>
+      <h4>Multi-canal nativo</h4>
+      <p>Email, push, SMS, WhatsApp Business e in-app messaging desde un solo lugar. Mismo journey, distintos canales según preferencia del cliente.</p>
+    </div>
+    <div class="ma-cap-card">
+      <div class="ma-cap-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      </div>
+      <h4>Real-time analytics</h4>
+      <p>Dashboard que muestra qué pasa minuto a minuto. El sistema sugiere cuándo redirigir tráfico, parar un journey o duplicar inversión en lo que funciona.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 6. IN ACTION — Customer journey timeline ═══ -->
+<section class="ma-action">
+  <div class="container ma-action-inner">
+    <div>
+      <span class="label on-dark">CÓMO FUNCIONA</span>
+      <h2 class="ma-action-h2 split-lines">Un cliente, <em>un journey</em><br>que aprende a medida que avanza</h2>
+      <p class="ma-action-sub">Una clienta nueva entra al banco. El sistema detecta el evento, la segmenta con IA y entrega contenido personalizado en el canal que más usa. Esto es lo que pasa.</p>
+
+      <div class="ma-flow-steps">
+        <div class="ma-flow-step">
+          <div class="ma-flow-step-num">1</div>
+          <div class="ma-flow-step-text">
+            <h5>Trigger por evento</h5>
+            <p>El primer login dispara el journey. No hay tarea manual del equipo de marketing.</p>
+            <span class="ma-flow-step-tag">Smart Platform</span>
+          </div>
+        </div>
+        <div class="ma-flow-step">
+          <div class="ma-flow-step-num">2</div>
+          <div class="ma-flow-step-text">
+            <h5>Segmentación dinámica</h5>
+            <p>IA detecta perfil (joven, sueldo alto, usa app) y la asigna al journey "Onboarding Premium".</p>
+            <span class="ma-flow-step-tag">IA · Modelos predictivos</span>
+          </div>
+        </div>
+        <div class="ma-flow-step">
+          <div class="ma-flow-step-num">3</div>
+          <div class="ma-flow-step-text">
+            <h5>Contenido + canal correcto</h5>
+            <p>Email de bienvenida con tono cercano. Push a los 3 días promocionando plazo fijo, cuando ya conoce la app.</p>
+            <span class="ma-flow-step-tag">Multi-canal nativo</span>
+          </div>
+        </div>
+        <div class="ma-flow-step">
+          <div class="ma-flow-step-num">4</div>
+          <div class="ma-flow-step-text">
+            <h5>El sistema aprende y optimiza</h5>
+            <p>El A/B test detecta cuál subject convierte mejor. Para los nuevos clientes, redirige automáticamente al ganador.</p>
+            <span class="ma-flow-step-tag">Auto-optimization</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Live customer journey timeline -->
+    <div class="ma-timeline-card">
+      <div class="ma-timeline-head">
+        <div class="ma-timeline-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          Cliente · Journey activo
+        </div>
+        <div class="ma-timeline-progress">EN VIVO</div>
+      </div>
+
+      <div class="ma-customer-card">
+        <div class="ma-customer-avatar">F</div>
+        <div class="ma-customer-info">
+          <div class="ma-customer-name">Fernanda M.</div>
+          <div class="ma-customer-segment">⬡ Joven · Sueldo alto · Usa app</div>
+        </div>
+        <div class="ma-customer-stage">Step 3 / 4</div>
+      </div>
+
+      <div class="ma-timeline-events">
+        <div class="ma-timeline-event">
+          <div class="ma-timeline-event-time">10:42<br>L 22 jul</div>
+          <div class="ma-timeline-event-dot"></div>
+          <div class="ma-timeline-event-content">
+            <div class="ma-timeline-event-name">Primer login</div>
+            <div class="ma-timeline-event-desc">Trigger detectado. Journey iniciado.</div>
+          </div>
+          <div class="ma-timeline-event-metric"><span>+0.0s</span></div>
+        </div>
+        <div class="ma-timeline-event">
+          <div class="ma-timeline-event-time">10:43<br>L 22 jul</div>
+          <div class="ma-timeline-event-dot"></div>
+          <div class="ma-timeline-event-content">
+            <div class="ma-timeline-event-name">Segmento asignado</div>
+            <div class="ma-timeline-event-desc">IA clasifica: "Onboarding Premium".</div>
+          </div>
+          <div class="ma-timeline-event-metric"><span>+0.8s</span></div>
+        </div>
+        <div class="ma-timeline-event">
+          <div class="ma-timeline-event-time">11:12<br>L 22 jul</div>
+          <div class="ma-timeline-event-dot cyan"></div>
+          <div class="ma-timeline-event-content">
+            <div class="ma-timeline-event-name">Email A enviado</div>
+            <div class="ma-timeline-event-desc">"Hola Fernanda, te damos la bienvenida".</div>
+          </div>
+          <div class="ma-timeline-event-metric"><span>abierto</span></div>
+        </div>
+        <div class="ma-timeline-event">
+          <div class="ma-timeline-event-time">25 jul<br>09:30</div>
+          <div class="ma-timeline-event-dot cyan"></div>
+          <div class="ma-timeline-event-content">
+            <div class="ma-timeline-event-name">Push: Plazo Fijo</div>
+            <div class="ma-timeline-event-desc">Wait 3d cumplido. Mensaje entregado.</div>
+          </div>
+          <div class="ma-timeline-event-metric"><span>tap</span></div>
+        </div>
+        <div class="ma-timeline-event">
+          <div class="ma-timeline-event-time">25 jul<br>09:34</div>
+          <div class="ma-timeline-event-dot green"></div>
+          <div class="ma-timeline-event-content">
+            <div class="ma-timeline-event-name">Conversión</div>
+            <div class="ma-timeline-event-desc">Plazo fijo de $5.000 activado.</div>
+          </div>
+          <div class="ma-timeline-event-metric"><span>+$5K</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 7. MODULAR FIT ═══ -->
+<section class="ma-modular">
+  <div class="container ma-mod-head">
+    <span class="label">DÓNDE ENCAJA EN LA SUITE</span>
+    <h2 class="split-lines">Marketing es el músculo que<br><em>activa</em> al resto del Suite</h2>
+    <p>Marketing Automation toma los datos que generan Smart Platform y Analytics, los convierte en relevancia y los entrega por Mobile, Web o Social Banking.</p>
+  </div>
+
+  <div class="container">
+    <div class="ma-mod-composer">
+      <div class="ma-mod-zone">
+        <div class="ma-mod-zone-head">
+          <div class="ma-mod-zone-title">Esta plataforma</div>
+          <div class="ma-mod-counter">Estás explorando</div>
+        </div>
+        <div class="ma-mod-grid">
+          <div class="ma-mod-card spotlight">
+            <div class="ma-mod-card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            </div>
+            <div class="ma-mod-card-name">IC Marketing Automation</div>
+            <div class="ma-mod-card-desc">Journey builder visual con IA de microsegmentación y multi-canal nativo.</div>
+            <span class="ma-mod-card-action" style="opacity:0;">Activa</span>
+          </div>
+          <div class="ma-mod-card active" data-id="smart">
+            <div class="ma-mod-card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            </div>
+            <div class="ma-mod-card-name">IC Smart Platform</div>
+            <div class="ma-mod-card-desc">Eventos en tiempo real para triggers.</div>
+            <span class="ma-mod-card-action">Recomendada</span>
+          </div>
+          <div class="ma-mod-card active" data-id="analytics">
+            <div class="ma-mod-card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+            </div>
+            <div class="ma-mod-card-name">IC Analytics (GURU)</div>
+            <div class="ma-mod-card-desc">Insights que alimentan los segmentos.</div>
+            <span class="ma-mod-card-action">Recomendada</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="ma-mod-zone">
+        <div class="ma-mod-zone-head">
+          <div class="ma-mod-zone-title complement">Sumá según tu estrategia</div>
+          <div class="ma-mod-counter muted">8 plataformas disponibles</div>
+        </div>
+        <div class="ma-mod-grid">
+          <div class="ma-mod-card available">
+            <div class="ma-mod-card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            </div>
+            <div class="ma-mod-card-name">IC Social Banking</div>
+            <div class="ma-mod-card-desc">Campañas vía WhatsApp.</div>
+            <span class="ma-mod-card-action">Sumar</span>
+          </div>
+          <div class="ma-mod-card available">
+            <div class="ma-mod-card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/></svg>
+            </div>
+            <div class="ma-mod-card-name">IC Mobile Banking</div>
+            <div class="ma-mod-card-desc">Push contextual + in-app messaging.</div>
+            <span class="ma-mod-card-action">Sumar</span>
+          </div>
+          <div class="ma-mod-card available">
+            <div class="ma-mod-card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/></svg>
+            </div>
+            <div class="ma-mod-card-name">IC Web Banking</div>
+            <div class="ma-mod-card-desc">Personalización on-site por segmento.</div>
+            <span class="ma-mod-card-action">Sumar</span>
+          </div>
+          <div class="ma-mod-card available">
+            <div class="ma-mod-card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s-8-4.5-8-12V5l8-3 8 3v5c0 7.5-8 12-8 12z"/></svg>
+            </div>
+            <div class="ma-mod-card-name">IC Onboarding</div>
+            <div class="ma-mod-card-desc">Captación dentro del journey.</div>
+            <span class="ma-mod-card-action">Sumar</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="ma-mod-hint">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+        Marketing Automation potencia más cuanto más canales tenés activos. Empezá con Smart + Analytics, sumá Social y Mobile para multi-canal real.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 8. CASE STUDY ═══ -->
+<section class="ma-case">
+  <div class="container">
+    <div class="ma-case-card">
+      <div class="ma-case-grid">
+        <div class="ma-case-customer">
+          <div class="ma-case-logo">C</div>
+          <div class="ma-case-customer-name">Banco Comafi</div>
+          <div class="ma-case-customer-role">Head de Marketing Digital</div>
+          <span class="ma-case-flag">Caso real · Argentina</span>
+        </div>
+        <div class="ma-case-content">
+          <div class="ma-case-quote-mark">"</div>
+          <blockquote class="ma-case-quote">Pasamos de 10 a 150 campañas por mes con el mismo equipo. Más importante: las campañas ahora son relevantes. El open rate se triplicó y el costo por activación bajó casi a la mitad.</blockquote>
+          <div class="ma-case-metrics">
+            <div>
+              <div class="ma-case-metric-num" data-target="15" data-suffix="×">0×</div>
+              <div class="ma-case-metric-desc">más campañas<br>mensuales</div>
+            </div>
+            <div>
+              <div class="ma-case-metric-num" data-target="320" data-prefix="+" data-suffix="%">+0%</div>
+              <div class="ma-case-metric-desc">open rate<br>vs. blast</div>
+            </div>
+            <div>
+              <div class="ma-case-metric-num" data-target="42" data-prefix="-" data-suffix="%">-0%</div>
+              <div class="ma-case-metric-desc">CAC<br>en adquisición</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 9. CTA BAND ═══ -->
+<section class="cta-band" id="demo">
+  <div class="container">
+    <h2 class="cta-h2 split-lines">¿Hablamos de cómo crecer<br>tu marketing sin sumar gente?</h2>
+    <p class="cta-sub">Ayudamos a las personas a amar a su banco. Hablemos del tuyo.</p>
+    <a href="#" class="btn btn-white btn-arrow">¿Conversamos?</a>
+    <div class="cta-fine">Sin compromisos · Demo personalizada · 30 minutos</div>
+  </div>
+</section>
+
+<!-- ═══ 10. FOOTER ═══ -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-logo">info<span>corp</span></div>
+      <p class="footer-tagline">Desde Uruguay, hacia el mundo.</p>
+    </div>
+    <div>
+      <div class="footer-col-title">IC Banking Suite</div>
+      <ul class="footer-links">
+        <li><a href="plataforma-ic-smart-platform.html">IC Smart Platform</a></li>
+        <li><a href="plataforma-ic-mobile-banking.html">IC Mobile Banking</a></li>
+        <li><a href="plataforma-ic-web-banking.html">IC Web Banking</a></li>
+        <li><a href="plataforma-ic-social-banking.html">IC Social Banking (SARA)</a></li>
+        <li><a href="plataforma-ic-marketing-automation.html">IC Marketing Automation</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Compañía</div>
+      <ul class="footer-links">
+        <li><a href="#">Sobre nosotros</a></li>
+        <li><a href="#">Método B-Fly</a></li>
+        <li><a href="#">Casos de éxito</a></li>
+        <li><a href="#">Carreras</a></li>
+        <li><a href="#">Blog</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Recursos</div>
+      <ul class="footer-links">
+        <li><a href="#">Estudio Banca Digital 2025</a></li>
+        <li><a href="#">Privacidad</a></li>
+        <li><a href="#">Términos</a></li>
+        <li><a href="#">Seguridad</a></li>
+      </ul>
+    </div>
+  </div>
+  <p class="footer-helping">Helping people <em>love</em> their bank</p>
+  <div class="footer-bottom">
+    <span>© 2025 Infocorp Group</span>
+    <span>Lima, Perú · hola@infocorp.net</span>
+  </div>
+</footer>
+
+<script>
+gsap.registerPlugin(ScrollTrigger);
+
+const glow = document.getElementById('cursorGlow');
+let mx=0, my=0, gx=0, gy=0;
+window.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; }, {passive:true});
+(function lerp(){ gx+=(mx-gx)*0.08; gy+=(my-gy)*0.08; if(glow){ glow.style.left=gx+'px'; glow.style.top=gy+'px'; } requestAnimationFrame(lerp); })();
+
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 20), {passive:true});
+
+gsap.set('#heroLabel',   { y: 12, opacity: 0 });
+gsap.set('#heroSub',     { y: 16, opacity: 0 });
+gsap.set('#heroActions', { y: 16, opacity: 0 });
+gsap.set('#canvasStage', { scale: 0.85, opacity: 0 });
+
+const heroTL = gsap.timeline({ delay: 0.15 });
+heroTL.to('#heroLabel', { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }, 0.2);
+
+const heroSplit = new SplitType('#heroH1', { types: 'words,chars', tagName: 'span' });
+heroTL.fromTo(heroSplit.chars,
+  { y: 60, opacity: 0, rotationX: -40 },
+  { y: 0, opacity: 1, rotationX: 0, duration: 0.7, stagger: 0.012, ease: 'power3.out', transformOrigin: '50% 100%' },
+  0.4
+);
+heroTL.to('#heroSub',     { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' }, 0.9);
+heroTL.to('#heroActions', { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' }, 1.0);
+heroTL.to('#canvasStage', { opacity: 1, scale: 1, duration: 1.1, ease: 'power3.out' }, 0.6);
+
+document.querySelectorAll('.split-lines').forEach(el => {
+  const split = new SplitType(el, { types: 'lines', tagName: 'span' });
+  split.lines.forEach(line => {
+    line.style.overflow = 'hidden';
+    line.style.display = 'block';
+  });
+  gsap.fromTo(split.lines,
+    { y: '100%', opacity: 0 },
+    { y: '0%', opacity: 1, duration: 0.85, stagger: 0.12, ease: 'power3.out',
+      scrollTrigger: { trigger: el, start: 'top 82%', toggleActions: 'play none none none' } }
+  );
+});
+
+document.querySelectorAll('.ma-stat-num, .ma-case-metric-num').forEach(el => {
+  const target = parseFloat(el.dataset.target);
+  const prefix = el.dataset.prefix || '';
+  const suffix = el.dataset.suffix || '';
+  if (isNaN(target)) return;
+  el.textContent = prefix + '0' + suffix;
+  ScrollTrigger.create({
+    trigger: el, start: 'top 88%', once: true,
+    onEnter: () => {
+      gsap.fromTo({ v: 0 }, { v: target },
+        { duration: 1.4, ease: 'power2.out',
+          onUpdate: function(){
+            const v = this.targets()[0].v;
+            const isFloat = target % 1 !== 0;
+            el.textContent = prefix + (isFloat ? v.toFixed(1) : Math.round(v)) + suffix;
+          }
+        }
+      );
+    }
+  });
+});
+
+gsap.fromTo('.ma-stat', { x: -20, opacity: 0 },
+  { x: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: 'power3.out',
+    scrollTrigger: { trigger: '.ma-stats-grid', start: 'top 85%' } });
+gsap.fromTo('.ma-problem-item', { x: -30, opacity: 0 },
+  { x: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: 'power3.out',
+    scrollTrigger: { trigger: '.ma-problem-list', start: 'top 82%' } });
+gsap.fromTo('.ma-solution-item', { x: -30, opacity: 0 },
+  { x: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: 'power3.out',
+    scrollTrigger: { trigger: '.ma-solution-list', start: 'top 82%' } });
+gsap.fromTo('.ma-capacity', { x: 40, opacity: 0 },
+  { x: 0, opacity: 1, duration: 0.9, ease: 'power3.out',
+    scrollTrigger: { trigger: '.ma-capacity', start: 'top 82%' } });
+gsap.fromTo('.ma-cap-card', { y: 30, opacity: 0 },
+  { y: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: 'power3.out',
+    scrollTrigger: { trigger: '.ma-caps-grid', start: 'top 82%' } });
+gsap.fromTo('.ma-flow-step', { x: -30, opacity: 0 },
+  { x: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: 'power3.out',
+    scrollTrigger: { trigger: '.ma-flow-steps', start: 'top 80%' } });
+gsap.fromTo('.ma-timeline-card', { x: 40, opacity: 0 },
+  { x: 0, opacity: 1, duration: 0.9, ease: 'power3.out',
+    scrollTrigger: { trigger: '.ma-timeline-card', start: 'top 80%' } });
+gsap.fromTo('.ma-mod-composer', { y: 40, opacity: 0 },
+  { y: 0, opacity: 1, duration: 0.9, ease: 'power3.out',
+    scrollTrigger: { trigger: '.ma-mod-composer', start: 'top 82%' } });
+gsap.fromTo('.ma-mod-card', { scale: 0.9, opacity: 0 },
+  { scale: 1, opacity: 1, duration: 0.6, stagger: 0.06, ease: 'back.out(1.4)',
+    scrollTrigger: { trigger: '.ma-mod-composer', start: 'top 78%' } });
+gsap.fromTo('.ma-case-card', { y: 40, opacity: 0 },
+  { y: 0, opacity: 1, duration: 0.9, ease: 'power3.out',
+    scrollTrigger: { trigger: '.ma-case-card', start: 'top 82%' } });
+
+const ctaSplit = new SplitType('.cta-h2', { types: 'chars', tagName: 'span' });
+gsap.fromTo(ctaSplit.chars, { y: 40, opacity: 0 },
+  { y: 0, opacity: 1, duration: 0.6, stagger: 0.025, ease: 'power3.out',
+    scrollTrigger: { trigger: '.cta-band', start: 'top 75%' } });
+gsap.fromTo('.cta-sub, .cta-band .btn-white, .cta-fine', { y: 20, opacity: 0 },
+  { y: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: 'power3.out',
+    scrollTrigger: { trigger: '.cta-band', start: 'top 70%' } });
+
+document.querySelectorAll('.ma-mod-card.available, .ma-mod-card.active').forEach(card => {
+  if (card.classList.contains('spotlight')) return;
+  card.addEventListener('click', () => {
+    if (card.classList.contains('available')) {
+      card.classList.remove('available');
+      card.classList.add('active');
+      card.querySelector('.ma-mod-card-action').textContent = 'Sumada';
+    } else {
+      card.classList.remove('active');
+      card.classList.add('available');
+      card.querySelector('.ma-mod-card-action').textContent = 'Sumar';
+    }
+  });
+});
+</script>
+
+</body>
+</html>

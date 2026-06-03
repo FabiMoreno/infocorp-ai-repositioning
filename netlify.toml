@@ -55,3 +55,8 @@
   from = "/plataforma/ic-social-banking"
   to = "/plataforma-ic-social-banking.html"
   status = 200
+
+[[redirects]]
+  from = "/plataforma/ic-marketing-automation"
+  to = "/plataforma-ic-marketing-automation.html"
+  status = 200

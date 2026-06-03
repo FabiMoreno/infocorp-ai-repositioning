@@ -1,0 +1,36 @@
+# Netlify build configuration
+# Sitio estático — sin build step
+
+[build]
+  publish = "."
+
+# Headers de seguridad y cache
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "geolocation=(), microphone=(), camera=()"
+
+# Cache largo para assets estáticos
+[[headers]]
+  for = "*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+# Redirect helpful para rutas amigables (opcional)
+[[redirects]]
+  from = "/plataforma/ic-smart-platform"
+  to = "/plataforma-ic-smart-platform.html"
+  status = 200
+
+[[redirects]]
+  from = "/soluciones/personas"
+  to = "/soluciones-personas.html"
+  status = 200
+
+[[redirects]]
+  from = "/plataforma"
+  to = "/plataforma.html"
+  status = 200

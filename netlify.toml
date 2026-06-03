@@ -40,3 +40,8 @@
   from = "/home-test"
   to = "/home-test.html"
   status = 200
+
+[[redirects]]
+  from = "/plataforma/ic-mobile-banking"
+  to = "/plataforma-ic-mobile-banking.html"
+  status = 200

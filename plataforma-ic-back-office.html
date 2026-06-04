@@ -1,0 +1,1487 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IC Back Office — Infocorp</title>
+  <meta name="description" content="Operación silenciosa, control total. Console unificada de operaciones, workflows AI-assisted, observability en tiempo real y audit trail nativo. La back-office que escala sin sumar gente." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/split-type@0.3.4/umd/index.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #F8FAFC; --bg-alt: #F1F5F9; --white: #FFFFFF;
+      --ink: #0F1729; --ink-deep: #0A1226; --sec: #334155;
+      --muted: #64748B; --border: #E2E8F0; --surface: #EBEEF5;
+      --accent: #16A34A; --accent-d: #15803D; --accent-l: #DCFCE7;
+      --accent-2: #4ADE80; --accent-2-l: #BBF7D0; --green-deep: #064E3B;
+      --brand: #0063F2; --brand-d: #004fd4; --brand-l: #DBEAFE;
+      --cyan: #2CA4FF; --navy: #051030; --navy-2: #0A1A48; --navy-3: #0E2461;
+      --purple: #7B5BFF; --amber: #F59E0B; --pink: #FF6BB5; --red: #EF4444;
+      --font: 'Plus Jakarta Sans', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --ease: cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font); background: var(--bg); color: var(--ink); overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
+    img, svg { display: block; max-width: 100%; }
+    .label { font-size: 11px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent-d); }
+    .label.on-dark { color: var(--accent-2); }
+    .container { max-width: 1240px; margin: 0 auto; padding: 0 64px; }
+    .cursor-glow { position: fixed; width: 480px; height: 480px; border-radius: 50%; pointer-events: none; z-index: 1; background: radial-gradient(circle, rgba(22,163,74,0.10) 0%, transparent 60%); transform: translate(-50%, -50%); mix-blend-mode: multiply; }
+
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; height: 68px; background: rgba(255,255,255,0.85); backdrop-filter: blur(20px) saturate(180%); border-bottom: 1px solid transparent; transition: border-color 0.3s, box-shadow 0.3s; transform: translateY(-100%); animation: nav-in 0.6s 0.05s var(--ease) forwards; }
+    nav.scrolled { border-color: var(--border); box-shadow: 0 1px 24px rgba(15,23,41,0.07); }
+    @keyframes nav-in { to { transform: translateY(0); } }
+    .nav-inner { max-width: 1240px; margin: 0 auto; padding: 0 64px; height: 100%; display: flex; align-items: center; gap: 40px; }
+    .nav-logo { font-size: 18px; font-weight: 700; color: var(--ink); letter-spacing: -0.3px; flex-shrink: 0; }
+    .nav-logo span { color: var(--brand); }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a { font-size: 14px; color: var(--sec); transition: color 0.2s; position: relative; }
+    .nav-links a:hover { color: var(--ink); }
+    .nav-links a.active { color: var(--accent-d); font-weight: 600; }
+    .nav-links a.active::after { content: ''; position: absolute; left: 0; right: 0; bottom: -22px; height: 2px; background: var(--accent-d); border-radius: 2px; }
+    .nav-crumb { font-size: 11px; color: var(--muted); margin-left: 4px; letter-spacing: 0.06em; text-transform: uppercase; }
+    .nav-crumb::before { content: '/ '; color: var(--border); }
+    .nav-cta { margin-left: auto; padding: 9px 22px; background: var(--accent-d); color: #fff; font-size: 13px; font-weight: 600; border-radius: 6px; transition: background 0.2s, transform 0.15s, box-shadow 0.2s; box-shadow: 0 2px 12px rgba(21,128,61,0.25); position: relative; overflow: hidden; }
+    .nav-cta::after { content: ''; position: absolute; inset: 0; background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.25) 50%, transparent 60%); transform: translateX(-100%); transition: transform 0.5s; }
+    .nav-cta:hover::after { transform: translateX(100%); }
+    .nav-cta:hover { background: var(--green-deep); transform: translateY(-1px); box-shadow: 0 4px 20px rgba(21,128,61,0.35); }
+
+    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; border-radius: 8px; font-weight: 600; font-size: 14px; transition: all 0.2s; cursor: pointer; border: none; font-family: var(--font); }
+    .btn-primary { background: var(--accent-d); color: #fff; box-shadow: 0 2px 12px rgba(21,128,61,0.25); }
+    .btn-primary:hover { background: var(--green-deep); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(21,128,61,0.35); }
+    .btn-ghost { background: transparent; color: var(--accent-d); border: 1px solid rgba(21,128,61,0.3); }
+    .btn-ghost:hover { background: var(--accent-l); border-color: var(--accent-d); }
+    .btn-white { background: #fff; color: var(--accent-d); box-shadow: 0 4px 20px rgba(0,0,0,0.15); }
+    .btn-white:hover { transform: translateY(-1px); box-shadow: 0 8px 30px rgba(0,0,0,0.25); }
+    .btn-arrow::after { content: '→'; margin-left: 4px; transition: transform 0.2s; }
+    .btn-arrow:hover::after { transform: translateX(4px); }
+
+    /* HERO */
+    .bo-hero { position: relative; min-height: 100vh; background: linear-gradient(135deg, var(--navy) 0%, #052E1A 60%, var(--green-deep) 100%); color: #fff; overflow: hidden; padding: 168px 0 100px; display: flex; align-items: center; }
+    .bo-hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 80% 40%, rgba(22,163,74,0.30), transparent 50%), radial-gradient(ellipse at 20% 90%, rgba(74,222,128,0.18), transparent 55%); }
+    .bo-hero-grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px); background-size: 60px 60px; mask-image: radial-gradient(ellipse at center, #000 35%, transparent 75%); -webkit-mask-image: radial-gradient(ellipse at center, #000 35%, transparent 75%); }
+    .bo-hero-inner { position: relative; z-index: 3; max-width: 1240px; margin: 0 auto; padding: 0 64px; display: grid; grid-template-columns: 1fr 1.1fr; gap: 60px; align-items: center; width: 100%; }
+    .bo-hero-label { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 20px; background: rgba(74,222,128,0.14); border: 1px solid rgba(74,222,128,0.3); font-size: 11px; font-weight: 600; letter-spacing: 0.18em; color: var(--accent-2); text-transform: uppercase; margin-bottom: 28px; }
+    .bo-hero-label::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--accent-2); box-shadow: 0 0 8px var(--accent-2); animation: bo-pulse 2s ease-in-out infinite; }
+    @keyframes bo-pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(74,222,128,0.5); } 50% { box-shadow: 0 0 0 6px rgba(74,222,128,0); } }
+    .bo-hero-h1 { font-size: clamp(48px, 5.4vw, 78px); font-weight: 800; line-height: 1.04; letter-spacing: -2.2px; margin-bottom: 24px; color: #fff; }
+    .bo-hero-h1 em, .bo-hero-h1 em .char, .bo-hero-h1 em .word { font-style: normal; font-weight: 800; background: linear-gradient(135deg, var(--accent-2) 0%, #A7F3D0 100%); -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent; }
+    .bo-hero-sub { font-size: 18px; line-height: 1.55; color: rgba(255,255,255,0.72); max-width: 540px; margin-bottom: 36px; }
+    .bo-hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+    .bo-hero-actions .btn-primary { background: #fff; color: var(--accent-d); box-shadow: 0 4px 20px rgba(0,0,0,0.18); }
+    .bo-hero-actions .btn-primary:hover { background: #F0FDF4; }
+    .bo-hero-actions .btn-ghost { color: #fff; border-color: rgba(255,255,255,0.25); }
+    .bo-hero-actions .btn-ghost:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.5); }
+
+    /* Operations Console mockup */
+    .bo-console {
+      position: relative;
+      background: #0B0F1A;
+      border-radius: 14px;
+      overflow: hidden;
+      transform: perspective(1600px) rotateY(-4deg) rotateX(2deg);
+      animation: bo-console-float 8s ease-in-out infinite;
+      box-shadow: 0 60px 120px rgba(22,163,74,0.30), 0 30px 60px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.05);
+    }
+    @keyframes bo-console-float {
+      0%,100% { transform: perspective(1600px) rotateY(-4deg) rotateX(2deg) translateY(0); }
+      50% { transform: perspective(1600px) rotateY(-3deg) rotateX(2deg) translateY(-8px); }
+    }
+    .bo-console-topbar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 16px;
+      background: #131826;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .bo-console-brand { display: flex; align-items: center; gap: 8px; }
+    .bo-console-brand-mark {
+      width: 22px; height: 22px;
+      border-radius: 6px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-d));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 800; color: #fff;
+    }
+    .bo-console-brand-text {
+      font-size: 11px; font-weight: 700; color: #fff;
+      letter-spacing: 0.04em;
+    }
+    .bo-console-topbar-right {
+      display: flex; align-items: center; gap: 10px;
+      font-family: var(--font-mono); font-size: 10px;
+      color: rgba(255,255,255,0.45);
+    }
+    .bo-console-live {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 9px; font-weight: 700; color: var(--accent-2);
+      letter-spacing: 0.06em; text-transform: uppercase;
+    }
+    .bo-console-live::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--accent-2); box-shadow: 0 0 8px var(--accent-2); animation: bo-pulse 2s ease-in-out infinite; }
+    .bo-console-clock {
+      padding: 3px 8px;
+      border-radius: 4px;
+      background: rgba(255,255,255,0.05);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .bo-console-body {
+      display: grid; grid-template-columns: 100px 1.4fr 1fr;
+      min-height: 420px;
+    }
+
+    /* Sidebar */
+    .bo-console-side {
+      background: #0F1525;
+      padding: 14px 8px;
+      border-right: 1px solid rgba(255,255,255,0.05);
+      display: flex; flex-direction: column; gap: 6px;
+    }
+    .bo-console-side-section {
+      font-size: 8px; font-weight: 700; letter-spacing: 0.1em;
+      color: rgba(255,255,255,0.35);
+      text-transform: uppercase;
+      padding: 8px 8px 4px;
+    }
+    .bo-console-side-item {
+      display: flex; align-items: center; gap: 7px;
+      padding: 6px 8px;
+      border-radius: 6px;
+      font-size: 10px; font-weight: 600;
+      color: rgba(255,255,255,0.55);
+      transition: background 0.2s, color 0.2s;
+      cursor: pointer;
+    }
+    .bo-console-side-item:hover { background: rgba(255,255,255,0.04); color: #fff; }
+    .bo-console-side-item.active {
+      background: rgba(74,222,128,0.14);
+      color: var(--accent-2);
+    }
+    .bo-console-side-item svg { width: 11px; height: 11px; flex-shrink: 0; }
+    .bo-console-side-badge {
+      margin-left: auto;
+      padding: 1px 5px; border-radius: 8px;
+      font-size: 8px; font-weight: 800;
+      background: rgba(255,255,255,0.06);
+      color: rgba(255,255,255,0.7);
+      font-variant-numeric: tabular-nums;
+    }
+    .bo-console-side-badge.hot { background: rgba(239,68,68,0.20); color: #FCA5A5; }
+    .bo-console-side-badge.warn { background: rgba(245,158,11,0.20); color: #FBBF24; }
+    .bo-console-side-badge.go { background: rgba(74,222,128,0.20); color: var(--accent-2); }
+
+    /* Main: ticket detail */
+    .bo-console-main {
+      padding: 16px 18px;
+      background: #0B0F1A;
+      border-right: 1px solid rgba(255,255,255,0.05);
+      overflow: hidden;
+    }
+    .bo-console-main-head {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 14px;
+    }
+    .bo-console-ticket-id {
+      font-family: var(--font-mono);
+      font-size: 11px; color: var(--accent-2);
+      background: rgba(74,222,128,0.10);
+      padding: 4px 8px; border-radius: 4px;
+    }
+    .bo-console-ticket-pri {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 4px 8px; border-radius: 4px;
+      font-size: 9px; font-weight: 800;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      background: rgba(239,68,68,0.18);
+      color: #FCA5A5;
+    }
+    .bo-console-ticket-pri::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #FCA5A5; }
+    .bo-console-ticket-title {
+      font-size: 14px; font-weight: 700; color: #fff;
+      line-height: 1.3; margin-bottom: 14px;
+    }
+    .bo-console-customer {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px;
+      background: rgba(255,255,255,0.03);
+      border-radius: 8px;
+      margin-bottom: 12px;
+    }
+    .bo-console-customer-avatar {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: linear-gradient(135deg, #FFD9B8, var(--accent-2));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 800; color: var(--ink);
+    }
+    .bo-console-customer-info { flex: 1; }
+    .bo-console-customer-name { font-size: 12px; font-weight: 700; color: #fff; }
+    .bo-console-customer-meta { font-size: 9px; color: rgba(255,255,255,0.5); margin-top: 1px; }
+    .bo-console-customer-tag {
+      font-size: 8px; padding: 2px 6px; border-radius: 4px;
+      background: rgba(74,222,128,0.16); color: var(--accent-2);
+      font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase;
+    }
+
+    .bo-console-tx {
+      background: rgba(255,255,255,0.03);
+      border-radius: 8px;
+      padding: 10px;
+      margin-bottom: 12px;
+    }
+    .bo-console-tx-row {
+      display: flex; justify-content: space-between;
+      font-size: 10px; padding: 4px 0;
+    }
+    .bo-console-tx-row + .bo-console-tx-row { border-top: 1px solid rgba(255,255,255,0.04); }
+    .bo-console-tx-lbl { color: rgba(255,255,255,0.5); }
+    .bo-console-tx-val { color: #fff; font-weight: 600; font-family: var(--font-mono); }
+    .bo-console-tx-val.amount { color: #FCA5A5; font-weight: 800; }
+    .bo-console-tx-val.amount.refund { color: var(--accent-2); }
+
+    /* AI Suggestion */
+    .bo-console-ai {
+      background: linear-gradient(135deg, rgba(74,222,128,0.12), rgba(22,163,74,0.04));
+      border: 1px solid rgba(74,222,128,0.20);
+      border-radius: 10px;
+      padding: 12px;
+    }
+    .bo-console-ai-head {
+      display: flex; align-items: center; gap: 6px;
+      margin-bottom: 8px;
+    }
+    .bo-console-ai-mark {
+      width: 18px; height: 21px;
+      clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+      background: linear-gradient(135deg, var(--accent-2), var(--accent-d));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 9px; font-weight: 800; color: #fff;
+    }
+    .bo-console-ai-title {
+      font-size: 10px; font-weight: 800; color: var(--accent-2);
+      letter-spacing: 0.06em; text-transform: uppercase;
+    }
+    .bo-console-ai-conf {
+      margin-left: auto;
+      font-size: 9px; font-weight: 800; color: var(--accent-2);
+      font-variant-numeric: tabular-nums;
+    }
+    .bo-console-ai-text {
+      font-size: 10px; line-height: 1.5;
+      color: rgba(255,255,255,0.85);
+      margin-bottom: 10px;
+    }
+    .bo-console-ai-text b { color: #fff; font-weight: 700; }
+    .bo-console-ai-actions {
+      display: flex; gap: 6px;
+    }
+    .bo-console-ai-btn {
+      padding: 5px 10px; border-radius: 6px;
+      font-size: 10px; font-weight: 700;
+    }
+    .bo-console-ai-btn.primary {
+      background: linear-gradient(135deg, var(--accent), var(--accent-d));
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(22,163,74,0.30);
+    }
+    .bo-console-ai-btn.ghost {
+      background: rgba(255,255,255,0.04);
+      color: rgba(255,255,255,0.7);
+    }
+
+    /* KPI Sidebar */
+    .bo-console-kpi {
+      padding: 16px 14px;
+      background: #0F1525;
+      display: flex; flex-direction: column; gap: 14px;
+    }
+    .bo-console-kpi-head {
+      font-size: 9px; font-weight: 800; color: rgba(255,255,255,0.45);
+      letter-spacing: 0.1em; text-transform: uppercase;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .bo-kpi-card {
+      background: rgba(255,255,255,0.03);
+      border-radius: 8px;
+      padding: 10px;
+    }
+    .bo-kpi-card-row {
+      display: flex; justify-content: space-between; align-items: baseline;
+      margin-bottom: 6px;
+    }
+    .bo-kpi-card-lbl {
+      font-size: 9px; color: rgba(255,255,255,0.55);
+      letter-spacing: 0.04em; text-transform: uppercase;
+    }
+    .bo-kpi-card-delta {
+      font-size: 9px; font-weight: 700;
+      color: var(--accent-2);
+    }
+    .bo-kpi-card-delta.down { color: #FCA5A5; }
+    .bo-kpi-card-num {
+      font-size: 22px; font-weight: 800; color: #fff;
+      letter-spacing: -0.6px; line-height: 1;
+      font-variant-numeric: tabular-nums;
+    }
+    .bo-kpi-card-num.green { background: linear-gradient(135deg, var(--accent-2), var(--accent)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+    .bo-kpi-card-spark {
+      height: 18px;
+      margin-top: 8px;
+    }
+    .bo-kpi-card-spark svg { width: 100%; height: 18px; }
+
+    .bo-kpi-mini {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+    }
+    .bo-kpi-mini-card {
+      background: rgba(255,255,255,0.03);
+      border-radius: 6px;
+      padding: 8px 10px;
+    }
+    .bo-kpi-mini-num {
+      font-size: 16px; font-weight: 800; color: #fff;
+      letter-spacing: -0.4px; font-variant-numeric: tabular-nums;
+    }
+    .bo-kpi-mini-num.warn { color: #FBBF24; }
+    .bo-kpi-mini-num.go { color: var(--accent-2); }
+    .bo-kpi-mini-lbl {
+      font-size: 8px; color: rgba(255,255,255,0.5);
+      letter-spacing: 0.04em; text-transform: uppercase;
+      margin-top: 2px;
+    }
+
+    /* Floating tags */
+    .bo-floating-tag { position: absolute; padding: 9px 14px; border-radius: 12px; background: #fff; box-shadow: 0 12px 32px rgba(0,0,0,0.18); display: inline-flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 700; color: var(--ink); z-index: 6; animation: bo-tag-float 6s ease-in-out infinite; }
+    .bo-floating-tag svg { width: 14px; height: 14px; color: var(--accent-d); }
+    .bo-floating-tag.tag-1 { top: -16px; right: 12%; }
+    .bo-floating-tag.tag-2 { top: 32%; left: -36px; animation-delay: -2s; background: linear-gradient(135deg, var(--accent), var(--accent-d)); color: #fff; }
+    .bo-floating-tag.tag-2 svg { color: #fff; }
+    .bo-floating-tag.tag-3 { bottom: -18px; left: 12%; animation-delay: -4s; }
+    @keyframes bo-tag-float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+
+    /* STATS */
+    .bo-stats { background: var(--bg); padding: 80px 0; position: relative; }
+    .bo-stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; align-items: center; }
+    .bo-stat { position: relative; padding: 20px 24px; border-left: 3px solid var(--accent-l); transition: border-color 0.3s var(--ease); }
+    .bo-stat:hover { border-left-color: var(--accent); }
+    .bo-stat-num { font-size: 44px; font-weight: 800; color: var(--ink); line-height: 1; letter-spacing: -1.6px; font-variant-numeric: tabular-nums; margin-bottom: 8px; background: linear-gradient(135deg, var(--accent) 0%, var(--accent-d) 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+    .bo-stat-desc { font-size: 13px; line-height: 1.5; color: var(--sec); }
+
+    /* PROBLEM */
+    .bo-problem { padding: 140px 0; background: #fff; position: relative; overflow: hidden; }
+    .bo-problem-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+    .bo-problem-h2 { font-size: clamp(36px, 3.6vw, 50px); font-weight: 800; line-height: 1.08; letter-spacing: -1.5px; margin: 12px 0 20px; }
+    .bo-problem-h2 em { font-style: normal; color: var(--accent-d); }
+    .bo-problem-list { display: flex; flex-direction: column; gap: 14px; }
+    .bo-problem-item { display: flex; gap: 14px; align-items: flex-start; padding: 16px 18px; background: #FEF2F2; border-left: 3px solid #FCA5A5; border-radius: 8px; }
+    .bo-problem-item svg { width: 18px; height: 18px; color: #DC2626; flex-shrink: 0; margin-top: 1px; }
+    .bo-problem-item-text { font-size: 14px; line-height: 1.5; color: #7F1D1D; }
+    .bo-problem-item-text strong { color: #991B1B; font-weight: 700; }
+    .bo-arrow-down { display: flex; align-items: center; justify-content: center; gap: 14px; margin: 24px 0; color: var(--accent-d); font-weight: 700; font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; }
+    .bo-arrow-down::before, .bo-arrow-down::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, transparent, var(--accent-l), transparent); }
+    .bo-solution-list { display: flex; flex-direction: column; gap: 14px; }
+    .bo-solution-item { display: flex; gap: 14px; align-items: flex-start; padding: 16px 18px; background: #ECFDF5; border-left: 3px solid #6EE7B7; border-radius: 8px; }
+    .bo-solution-item svg { width: 18px; height: 18px; color: #059669; flex-shrink: 0; margin-top: 1px; }
+    .bo-solution-item-text { font-size: 14px; line-height: 1.5; color: #064E3B; }
+    .bo-solution-item-text strong { color: #047857; font-weight: 700; }
+
+    /* SLA comparison */
+    .bo-sla { position: relative; aspect-ratio: 1/1; border-radius: 24px; background: linear-gradient(135deg, #F0FDF4 0%, #DCFCE7 100%); padding: 32px; overflow: hidden; }
+    .bo-sla::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle at 1px 1px, rgba(22,163,74,0.10) 1px, transparent 0); background-size: 24px 24px; }
+    .bo-sla-head { position: relative; text-align: center; margin-bottom: 28px; }
+    .bo-sla-head-label { font-size: 10px; font-weight: 800; color: var(--accent-d); letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 6px; }
+    .bo-sla-head-title { font-size: 15px; font-weight: 700; color: var(--ink); letter-spacing: -0.2px; }
+    .bo-sla-cards {
+      position: relative;
+      display: flex; flex-direction: column; gap: 16px;
+    }
+    .bo-sla-card {
+      background: #fff;
+      border-radius: 14px;
+      padding: 16px 18px;
+      box-shadow: 0 6px 18px rgba(15,23,41,0.06);
+      display: grid; grid-template-columns: 1fr auto;
+      gap: 14px; align-items: center;
+    }
+    .bo-sla-card.us {
+      background: linear-gradient(135deg, var(--accent), var(--accent-d));
+      color: #fff;
+      box-shadow: 0 14px 32px rgba(22,163,74,0.30);
+    }
+    .bo-sla-card-label {
+      font-size: 11px; font-weight: 800;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      color: var(--sec);
+      margin-bottom: 6px;
+    }
+    .bo-sla-card.us .bo-sla-card-label { color: rgba(255,255,255,0.78); }
+    .bo-sla-card-desc {
+      font-size: 11px; color: var(--muted); line-height: 1.45;
+    }
+    .bo-sla-card.us .bo-sla-card-desc { color: rgba(255,255,255,0.85); }
+    .bo-sla-card-num {
+      font-size: 26px; font-weight: 800;
+      letter-spacing: -0.6px;
+      font-variant-numeric: tabular-nums;
+      text-align: right;
+    }
+    .bo-sla-card-num small {
+      font-size: 12px; font-weight: 700; opacity: 0.8;
+    }
+    .bo-sla-card.them .bo-sla-card-num { color: var(--muted); }
+    .bo-sla-foot {
+      position: relative;
+      margin-top: 22px; padding-top: 16px;
+      border-top: 1px solid rgba(15,23,41,0.08);
+      text-align: center;
+    }
+    .bo-sla-foot-num {
+      font-size: 28px; font-weight: 800; color: var(--accent-d);
+      font-variant-numeric: tabular-nums; letter-spacing: -0.7px; line-height: 1;
+    }
+    .bo-sla-foot-lbl {
+      font-size: 11px; color: var(--muted);
+      letter-spacing: 0.06em; text-transform: uppercase; margin-top: 6px;
+    }
+
+    /* CAPS */
+    .bo-caps { padding: 140px 0; background: var(--bg); position: relative; overflow: hidden; }
+    .bo-caps::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle at 1px 1px, rgba(15,23,41,0.05) 1px, transparent 0); background-size: 32px 32px; mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%); -webkit-mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%); }
+    .bo-caps-head { text-align: center; margin-bottom: 64px; position: relative; z-index: 2; }
+    .bo-caps-head h2 { font-size: clamp(36px, 3.6vw, 50px); font-weight: 800; line-height: 1.08; letter-spacing: -1.5px; margin: 12px 0 16px; }
+    .bo-caps-head h2 em { font-style: normal; color: var(--accent-d); }
+    .bo-caps-head p { font-size: 17px; line-height: 1.6; color: var(--sec); max-width: 620px; margin: 0 auto; }
+    .bo-caps-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; position: relative; z-index: 2; }
+    .bo-cap-card { background: #fff; border: 1px solid var(--border); border-radius: 16px; padding: 28px 24px; transition: all 0.3s var(--ease); position: relative; overflow: hidden; }
+    .bo-cap-card::before { content: ''; position: absolute; left: 0; top: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--accent), var(--accent-2)); transform: scaleX(0); transform-origin: left; transition: transform 0.4s var(--ease); }
+    .bo-cap-card:hover::before { transform: scaleX(1); }
+    .bo-cap-card:hover { transform: translateY(-4px); box-shadow: 0 20px 50px rgba(15,23,41,0.08); border-color: rgba(22,163,74,0.2); }
+    .bo-cap-icon { width: 48px; height: 56px; clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%); background: linear-gradient(135deg, var(--accent), var(--accent-d)); display: flex; align-items: center; justify-content: center; margin-bottom: 20px; box-shadow: 0 8px 20px rgba(22,163,74,0.30); }
+    .bo-cap-icon svg { width: 22px; height: 22px; color: #fff; }
+    .bo-cap-card h4 { font-size: 17px; font-weight: 700; color: var(--ink); margin-bottom: 10px; line-height: 1.3; }
+    .bo-cap-card p { font-size: 13px; line-height: 1.55; color: var(--sec); }
+
+    /* IN ACTION */
+    .bo-action { padding: 140px 0; background: linear-gradient(180deg, var(--navy) 0%, #052E1A 100%); color: #fff; position: relative; overflow: hidden; }
+    .bo-action::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 30% 50%, rgba(22,163,74,0.25), transparent 50%), radial-gradient(ellipse at 80% 70%, rgba(74,222,128,0.16), transparent 55%); }
+    .bo-action-inner { position: relative; z-index: 2; display: grid; grid-template-columns: 1fr 1.05fr; gap: 80px; align-items: center; }
+    .bo-action-h2 { font-size: clamp(36px, 3.6vw, 50px); font-weight: 800; line-height: 1.08; letter-spacing: -1.5px; margin: 12px 0 24px; }
+    .bo-action-h2 em { font-style: normal; background: linear-gradient(135deg, var(--accent-2), #A7F3D0); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+    .bo-action-sub { font-size: 16px; line-height: 1.6; color: rgba(255,255,255,0.72); margin-bottom: 36px; }
+    .bo-flow-steps { display: flex; flex-direction: column; gap: 16px; }
+    .bo-flow-step { display: flex; gap: 18px; padding: 18px 22px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; transition: all 0.25s var(--ease); }
+    .bo-flow-step:hover { background: rgba(255,255,255,0.08); border-color: rgba(74,222,128,0.4); }
+    .bo-flow-step-num { width: 38px; height: 38px; border-radius: 10px; flex-shrink: 0; background: linear-gradient(135deg, var(--accent), var(--accent-d)); display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 800; color: #fff; box-shadow: 0 4px 12px rgba(22,163,74,0.4); }
+    .bo-flow-step-text h5 { font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+    .bo-flow-step-text p { font-size: 13px; line-height: 1.55; color: rgba(255,255,255,0.65); }
+    .bo-flow-step-time { font-size: 11px; font-weight: 700; color: var(--accent-2); letter-spacing: 0.06em; text-transform: uppercase; margin-top: 4px; }
+
+    /* Activity log panel */
+    .bo-log {
+      position: relative;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 24px;
+      padding: 24px;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 30px 80px rgba(0,0,0,0.3);
+    }
+    .bo-log-head {
+      display: flex; align-items: center; justify-content: space-between;
+      padding-bottom: 16px; margin-bottom: 18px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .bo-log-title {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 12px; font-weight: 700; color: #fff;
+      letter-spacing: 0.04em; text-transform: uppercase;
+    }
+    .bo-log-title svg { width: 16px; height: 16px; color: var(--accent-2); }
+    .bo-log-status {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 10px; font-weight: 700; color: var(--accent-2);
+      letter-spacing: 0.06em; text-transform: uppercase;
+    }
+    .bo-log-status::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--accent-2); box-shadow: 0 0 10px var(--accent-2); animation: bo-pulse 2s ease-in-out infinite; }
+
+    .bo-log-case {
+      background: rgba(74,222,128,0.10);
+      border: 1px solid rgba(74,222,128,0.20);
+      border-radius: 12px;
+      padding: 12px 14px;
+      margin-bottom: 18px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .bo-log-case-id {
+      font-family: var(--font-mono); font-size: 11px;
+      padding: 4px 8px; border-radius: 4px;
+      background: rgba(74,222,128,0.18); color: var(--accent-2);
+    }
+    .bo-log-case-info { flex: 1; }
+    .bo-log-case-title { font-size: 13px; font-weight: 700; color: #fff; }
+    .bo-log-case-meta { font-size: 11px; color: rgba(255,255,255,0.55); margin-top: 1px; }
+    .bo-log-case-status {
+      padding: 4px 10px; border-radius: 12px;
+      background: rgba(74,222,128,0.18); color: var(--accent-2);
+      font-size: 10px; font-weight: 800;
+      letter-spacing: 0.06em; text-transform: uppercase;
+    }
+
+    .bo-log-events {
+      display: flex; flex-direction: column; gap: 0;
+      position: relative;
+    }
+    .bo-log-event {
+      display: grid; grid-template-columns: 60px 22px 1fr auto;
+      gap: 12px; align-items: flex-start;
+      padding: 10px 0;
+      position: relative;
+    }
+    .bo-log-event-time {
+      font-family: var(--font-mono); font-size: 9px;
+      color: rgba(255,255,255,0.55);
+      padding-top: 4px; text-align: right;
+    }
+    .bo-log-event-dot {
+      position: relative;
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      background: var(--ink-deep);
+      border: 2px solid var(--accent-2);
+      margin-top: 4px;
+    }
+    .bo-log-event-dot.cyan { border-color: var(--cyan); }
+    .bo-log-event-dot.amber { border-color: var(--amber); }
+    .bo-log-event-dot.green { background: var(--accent-2); border-color: var(--accent-d); box-shadow: 0 0 0 3px rgba(74,222,128,0.2); }
+    .bo-log-event::before {
+      content: '';
+      position: absolute;
+      left: 70px;
+      top: 26px; bottom: -10px;
+      width: 1.5px;
+      background: rgba(255,255,255,0.08);
+    }
+    .bo-log-event:last-child::before { display: none; }
+    .bo-log-event-content { padding-top: 1px; }
+    .bo-log-event-name { font-size: 12px; font-weight: 700; color: #fff; line-height: 1.3; margin-bottom: 2px; }
+    .bo-log-event-desc { font-size: 10px; color: rgba(255,255,255,0.55); line-height: 1.4; }
+    .bo-log-event-actor {
+      font-size: 9px; padding: 2px 6px; border-radius: 4px;
+      background: rgba(255,255,255,0.06);
+      color: rgba(255,255,255,0.65);
+      font-family: var(--font-mono);
+    }
+
+    .bo-log-foot {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px;
+      margin-top: 18px; padding-top: 16px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      text-align: center;
+    }
+    .bo-log-foot-num {
+      font-size: 22px; font-weight: 800;
+      background: linear-gradient(135deg, #fff, var(--accent-2));
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-variant-numeric: tabular-nums; letter-spacing: -0.5px;
+    }
+    .bo-log-foot-lbl {
+      font-size: 10px; color: rgba(255,255,255,0.55);
+      letter-spacing: 0.06em; text-transform: uppercase; margin-top: 4px;
+    }
+
+    /* MODULAR */
+    .bo-modular { padding: 140px 0; background: linear-gradient(180deg, var(--bg) 0%, #fff 100%); position: relative; overflow: hidden; }
+    .bo-modular::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle at 1px 1px, rgba(22,163,74,0.06) 1px, transparent 0); background-size: 28px 28px; mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%); -webkit-mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%); }
+    .bo-mod-head { text-align: center; margin-bottom: 50px; position: relative; z-index: 2; }
+    .bo-mod-head h2 { font-size: clamp(36px, 3.6vw, 50px); font-weight: 800; line-height: 1.08; letter-spacing: -1.5px; margin: 12px 0 16px; }
+    .bo-mod-head h2 em { font-style: normal; color: var(--accent-d); }
+    .bo-mod-head p { font-size: 17px; line-height: 1.6; color: var(--sec); max-width: 620px; margin: 0 auto; }
+    .bo-mod-composer { position: relative; z-index: 2; max-width: 1080px; margin: 0 auto; background: #fff; border: 1px solid var(--border); border-radius: 24px; padding: 40px; box-shadow: 0 30px 80px rgba(15,23,41,0.08); }
+    .bo-mod-zone { margin-bottom: 36px; padding-bottom: 36px; border-bottom: 1px dashed var(--border); }
+    .bo-mod-zone:last-of-type { border-bottom: none; padding-bottom: 0; margin-bottom: 0; }
+    .bo-mod-zone-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; gap: 16px; }
+    .bo-mod-zone-title { display: flex; align-items: center; gap: 12px; font-size: 14px; font-weight: 700; color: var(--ink); letter-spacing: 0.04em; text-transform: uppercase; }
+    .bo-mod-zone-title::before { content: ''; display: inline-block; width: 18px; height: 1.5px; background: var(--accent-d); border-radius: 1.5px; }
+    .bo-mod-zone-title.complement { color: var(--muted); }
+    .bo-mod-zone-title.complement::before { background: var(--muted); }
+    .bo-mod-counter { display: inline-flex; align-items: center; gap: 8px; padding: 4px 12px; border-radius: 20px; background: var(--accent-l); color: var(--accent-d); font-size: 12px; font-weight: 700; }
+    .bo-mod-counter.muted { background: var(--bg-alt); color: var(--sec); }
+    .bo-mod-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .bo-mod-card { position: relative; border-radius: 14px; padding: 20px 16px 16px; transition: all 0.3s var(--ease); display: flex; flex-direction: column; min-height: 168px; overflow: hidden; }
+    .bo-mod-card-icon { width: 38px; height: 44px; clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%); display: flex; align-items: center; justify-content: center; margin-bottom: 12px; }
+    .bo-mod-card-icon svg { width: 16px; height: 16px; }
+    .bo-mod-card-name { font-size: 13px; font-weight: 700; line-height: 1.25; margin-bottom: 4px; }
+    .bo-mod-card-desc { font-size: 11px; line-height: 1.4; flex: 1; margin-bottom: 12px; }
+    .bo-mod-card-action { display: inline-flex; align-items: center; justify-content: center; gap: 5px; padding: 6px 10px; border-radius: 8px; font-size: 11px; font-weight: 700; letter-spacing: 0.02em; align-self: flex-start; }
+    .bo-mod-card.spotlight { background: linear-gradient(140deg, var(--accent) 0%, var(--accent-d) 70%, var(--green-deep) 130%); color: #fff; box-shadow: 0 18px 50px rgba(22,163,74,0.4); border: 2px solid var(--accent); grid-column: span 2; min-height: 200px; transform: scale(1.02); position: relative; }
+    .bo-mod-card.spotlight::after { content: 'ESTÁS ACÁ'; position: absolute; top: 14px; right: 14px; background: rgba(255,255,255,0.2); color: #fff; padding: 4px 8px; border-radius: 6px; font-size: 9px; font-weight: 800; letter-spacing: 0.12em; backdrop-filter: blur(8px); }
+    .bo-mod-card.spotlight .bo-mod-card-icon { background: rgba(255,255,255,0.22); border: 1px solid rgba(255,255,255,0.4); width: 48px; height: 56px; }
+    .bo-mod-card.spotlight .bo-mod-card-icon svg { width: 20px; height: 20px; color: #fff; }
+    .bo-mod-card.spotlight .bo-mod-card-name { font-size: 18px; }
+    .bo-mod-card.spotlight .bo-mod-card-desc { color: rgba(255,255,255,0.85); font-size: 13px; }
+    .bo-mod-card.active { background: linear-gradient(140deg, var(--accent-l) 0%, #F0FDF4 100%); border: 1px solid var(--accent); color: var(--ink); }
+    .bo-mod-card.active .bo-mod-card-icon { background: linear-gradient(135deg, var(--accent), var(--accent-d)); }
+    .bo-mod-card.active .bo-mod-card-icon svg { color: #fff; }
+    .bo-mod-card.active .bo-mod-card-desc { color: var(--sec); }
+    .bo-mod-card.active .bo-mod-card-action { background: #fff; color: var(--accent-d); border: 1px solid rgba(22,163,74,0.2); }
+    .bo-mod-card.active .bo-mod-card-action::before { content: '✓'; font-size: 11px; font-weight: 800; }
+    .bo-mod-card.active:hover { transform: translateY(-3px); box-shadow: 0 12px 28px rgba(22,163,74,0.18); }
+    .bo-mod-card.available { background: var(--bg); color: var(--ink); border: 1.5px dashed rgba(15,23,41,0.18); cursor: pointer; }
+    .bo-mod-card.available .bo-mod-card-icon { background: linear-gradient(135deg, var(--accent-l), #F0FDF4); border: 1px solid rgba(22,163,74,0.15); }
+    .bo-mod-card.available .bo-mod-card-icon svg { color: var(--accent-d); }
+    .bo-mod-card.available .bo-mod-card-desc { color: var(--muted); }
+    .bo-mod-card.available .bo-mod-card-action { background: #fff; color: var(--accent-d); border: 1px solid rgba(22,163,74,0.25); }
+    .bo-mod-card.available:hover { transform: translateY(-3px); border-color: var(--accent); background: #fff; box-shadow: 0 12px 28px rgba(22,163,74,0.12); }
+    .bo-mod-card.available:hover .bo-mod-card-action { background: var(--accent); color: #fff; }
+    .bo-mod-card.available .bo-mod-card-action::before { content: '+'; font-size: 14px; font-weight: 800; }
+    .bo-mod-hint { display: flex; align-items: center; gap: 8px; justify-content: center; font-size: 12px; color: var(--muted); margin-top: 28px; padding: 14px 20px; background: var(--bg); border-radius: 12px; border: 1px dashed var(--border); }
+    .bo-mod-hint svg { width: 16px; height: 16px; color: var(--accent-d); flex-shrink: 0; }
+
+    /* CASE */
+    .bo-case { padding: 140px 0; background: #fff; position: relative; overflow: hidden; }
+    .bo-case-card { max-width: 1100px; margin: 0 auto; background: linear-gradient(135deg, #F0FDF4 0%, #DCFCE7 100%); border-radius: 28px; padding: 60px; position: relative; overflow: hidden; box-shadow: 0 30px 80px rgba(22,163,74,0.18); }
+    .bo-case-card::before { content: ''; position: absolute; right: -100px; top: -100px; width: 360px; height: 360px; border-radius: 50%; background: radial-gradient(circle, rgba(22,163,74,0.16), transparent 70%); }
+    .bo-case-grid { position: relative; z-index: 2; display: grid; grid-template-columns: 1fr 1.3fr; gap: 60px; align-items: center; }
+    .bo-case-customer { text-align: center; }
+    .bo-case-logo { display: inline-flex; align-items: center; justify-content: center; width: 92px; height: 92px; border-radius: 22px; background: linear-gradient(135deg, #0E3D9C 0%, #0A2356 100%); color: #fff; font-size: 28px; font-weight: 800; letter-spacing: -1px; margin-bottom: 18px; box-shadow: 0 16px 36px rgba(14,61,156,0.25); }
+    .bo-case-customer-name { font-size: 18px; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
+    .bo-case-customer-role { font-size: 13px; color: var(--muted); margin-bottom: 24px; }
+    .bo-case-flag { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 20px; background: var(--accent-l); font-size: 11px; font-weight: 700; color: var(--accent-d); letter-spacing: 0.06em; text-transform: uppercase; }
+    .bo-case-content { position: relative; }
+    .bo-case-quote-mark { font-size: 80px; line-height: 0.8; color: var(--accent-d); opacity: 0.25; margin-bottom: -16px; font-family: Georgia, serif; }
+    .bo-case-quote { font-size: clamp(22px, 2.2vw, 30px); font-weight: 700; line-height: 1.35; color: var(--ink); letter-spacing: -0.5px; margin-bottom: 32px; }
+    .bo-case-metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; padding-top: 28px; border-top: 1px solid rgba(15,23,41,0.08); }
+    .bo-case-metric-num { font-size: 32px; font-weight: 800; line-height: 1; letter-spacing: -1px; margin-bottom: 6px; font-variant-numeric: tabular-nums; background: linear-gradient(135deg, var(--accent), var(--accent-d)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+    .bo-case-metric-desc { font-size: 12px; color: var(--sec); line-height: 1.45; }
+
+    /* CTA */
+    .cta-band { position: relative; padding: 120px 0; background: linear-gradient(135deg, var(--accent) 0%, var(--accent-d) 60%, var(--green-deep) 100%); color: #fff; text-align: center; overflow: hidden; }
+    .cta-band::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 0%, rgba(74,222,128,0.35), transparent 60%); }
+    .cta-band .container { position: relative; z-index: 2; }
+    .cta-h2 { font-size: clamp(40px, 4vw, 60px); font-weight: 800; line-height: 1.08; letter-spacing: -1.5px; margin-bottom: 18px; }
+    .cta-sub { font-size: 18px; line-height: 1.6; color: rgba(255,255,255,0.85); max-width: 540px; margin: 0 auto 32px; }
+    .cta-band .btn-white { color: var(--accent-d); }
+    .cta-fine { font-size: 13px; color: rgba(255,255,255,0.65); margin-top: 20px; }
+
+    /* FOOTER */
+    footer { background: var(--ink-deep); color: rgba(255,255,255,0.65); padding: 80px 0 30px; }
+    .footer-inner { max-width: 1240px; margin: 0 auto; padding: 0 64px; display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 64px; margin-bottom: 60px; }
+    .footer-logo { font-size: 22px; font-weight: 800; color: #fff; margin-bottom: 14px; }
+    .footer-logo span { color: var(--accent-2); }
+    .footer-tagline { font-size: 14px; line-height: 1.55; color: rgba(255,255,255,0.6); max-width: 240px; }
+    .footer-col-title { font-size: 13px; font-weight: 700; color: #fff; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 16px; }
+    .footer-links { display: flex; flex-direction: column; gap: 10px; }
+    .footer-links a { font-size: 14px; color: rgba(255,255,255,0.6); transition: color 0.2s; }
+    .footer-links a:hover { color: var(--accent-2); }
+    .footer-helping { text-align: center; padding: 40px 0 30px; font-size: 14px; color: rgba(255,255,255,0.55); }
+    .footer-helping em { font-style: normal; color: var(--pink); font-weight: 700; }
+    .footer-helping em::before { content: '♥ '; color: var(--pink); }
+    .footer-bottom { max-width: 1240px; margin: 0 auto; padding: 24px 64px 0; border-top: 1px solid rgba(255,255,255,0.08); display: flex; justify-content: space-between; font-size: 13px; color: rgba(255,255,255,0.45); }
+
+    @media (max-width: 980px) {
+      .bo-hero-inner { grid-template-columns: 1fr; gap: 60px; }
+      .bo-console-body { grid-template-columns: 1fr; }
+      .bo-console-side { display: none; }
+      .bo-console-kpi { display: none; }
+      .bo-stats-grid { grid-template-columns: repeat(2, 1fr); gap: 24px; }
+      .bo-problem-grid { grid-template-columns: 1fr; gap: 50px; }
+      .bo-caps-grid { grid-template-columns: repeat(2, 1fr); }
+      .bo-action-inner { grid-template-columns: 1fr; gap: 50px; }
+      .bo-mod-grid { grid-template-columns: repeat(3, 1fr); }
+      .bo-mod-card.spotlight { grid-column: span 3; }
+      .bo-case-grid { grid-template-columns: 1fr; gap: 32px; text-align: center; }
+      .bo-case-card { padding: 40px 32px; }
+      .footer-inner { grid-template-columns: 1fr 1fr; gap: 40px; }
+    }
+    @media (max-width: 600px) {
+      .container, .nav-inner, .footer-inner, .footer-bottom { padding-left: 24px; padding-right: 24px; }
+      .bo-stats-grid, .bo-caps-grid { grid-template-columns: 1fr; }
+      .bo-mod-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+      .bo-mod-card.spotlight { grid-column: span 2; }
+      .nav-links { display: none; } .nav-crumb { display: none; }
+      .bo-hero { padding-top: 130px; padding-bottom: 60px; min-height: auto; }
+      .bo-stats, .bo-problem, .bo-caps, .bo-action, .bo-modular, .bo-case, .cta-band { padding: 80px 0; }
+      .bo-case-metrics { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="cursor-glow" id="cursorGlow"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">info<span>corp</span></a>
+    <ul class="nav-links">
+      <li><a href="plataforma.html" class="active">Productos <span class="nav-crumb">IC Back Office</span></a></li>
+      <li><a href="soluciones-personas.html">Soluciones</a></li>
+      <li><a href="#">Clientes</a></li>
+      <li><a href="#">Recursos</a></li>
+    </ul>
+    <a href="#demo" class="nav-cta">Solicitar demo</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="bo-hero">
+  <div class="bo-hero-grid"></div>
+  <div class="bo-hero-inner">
+    <div>
+      <span class="bo-hero-label" id="heroLabel">IC Back Office · OPERATIONS</span>
+      <h1 class="bo-hero-h1" id="heroH1">Operación silenciosa,<br><em>control total</em></h1>
+      <p class="bo-hero-sub" id="heroSub">Console unificada de operaciones bancarias. Workflows AI-assisted, observability en tiempo real, audit trail nativo y un solo lugar para que tu equipo de back-office maneje disputas, reconciliaciones y excepciones sin Excel.</p>
+      <div class="bo-hero-actions" id="heroActions">
+        <a href="#demo" class="btn btn-primary btn-arrow">Solicitá una demo</a>
+        <a href="#how" class="btn btn-ghost">Ver el console en acción</a>
+      </div>
+    </div>
+
+    <div id="consoleStage" style="position: relative;">
+      <span class="bo-floating-tag tag-1">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s-8-4.5-8-12V5l8-3 8 3v5c0 7.5-8 12-8 12z"/><polyline points="9 12 11 14 15 10"/></svg>
+        Audit 100%
+      </span>
+      <span class="bo-floating-tag tag-2">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Disputa &lt; 2hrs
+      </span>
+      <span class="bo-floating-tag tag-3">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        +6× productividad
+      </span>
+
+      <div class="bo-console">
+        <div class="bo-console-topbar">
+          <div class="bo-console-brand">
+            <div class="bo-console-brand-mark">BO</div>
+            <div class="bo-console-brand-text">Operations Console · MiBanco</div>
+          </div>
+          <div class="bo-console-topbar-right">
+            <span class="bo-console-live">LIVE</span>
+            <span class="bo-console-clock">10:42:18</span>
+          </div>
+        </div>
+
+        <div class="bo-console-body">
+          <!-- Sidebar Queue -->
+          <div class="bo-console-side">
+            <div class="bo-console-side-section">Cola</div>
+            <div class="bo-console-side-item active">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+              Disputas
+              <span class="bo-console-side-badge hot">28</span>
+            </div>
+            <div class="bo-console-side-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+              Reconciliación
+              <span class="bo-console-side-badge warn">12</span>
+            </div>
+            <div class="bo-console-side-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s-8-4.5-8-12V5l8-3 8 3v5c0 7.5-8 12-8 12z"/></svg>
+              Fraude
+              <span class="bo-console-side-badge hot">7</span>
+            </div>
+            <div class="bo-console-side-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/></svg>
+              Batch
+              <span class="bo-console-side-badge go">OK</span>
+            </div>
+            <div class="bo-console-side-section">Tools</div>
+            <div class="bo-console-side-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+              Audit log
+            </div>
+            <div class="bo-console-side-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+              Reportes
+            </div>
+          </div>
+
+          <!-- Main: Active Ticket -->
+          <div class="bo-console-main">
+            <div class="bo-console-main-head">
+              <div class="bo-console-ticket-id">#DSP-87412</div>
+              <div class="bo-console-ticket-pri">CRÍTICA</div>
+            </div>
+            <div class="bo-console-ticket-title">Cargo no reconocido · Tarjeta •••• 9851</div>
+
+            <div class="bo-console-customer">
+              <div class="bo-console-customer-avatar">F</div>
+              <div class="bo-console-customer-info">
+                <div class="bo-console-customer-name">Fernanda M.</div>
+                <div class="bo-console-customer-meta">DNI 34.812.901 · cliente desde 2019</div>
+              </div>
+              <div class="bo-console-customer-tag">VIP</div>
+            </div>
+
+            <div class="bo-console-tx">
+              <div class="bo-console-tx-row">
+                <span class="bo-console-tx-lbl">Comercio</span>
+                <span class="bo-console-tx-val">UnknownShop42</span>
+              </div>
+              <div class="bo-console-tx-row">
+                <span class="bo-console-tx-lbl">Monto</span>
+                <span class="bo-console-tx-val amount">- USD 412.50</span>
+              </div>
+              <div class="bo-console-tx-row">
+                <span class="bo-console-tx-lbl">Fecha</span>
+                <span class="bo-console-tx-val">22 / 07 · 03:14</span>
+              </div>
+              <div class="bo-console-tx-row">
+                <span class="bo-console-tx-lbl">Origen</span>
+                <span class="bo-console-tx-val">Lat. 51.5 · Londres</span>
+              </div>
+            </div>
+
+            <div class="bo-console-ai">
+              <div class="bo-console-ai-head">
+                <div class="bo-console-ai-mark">G</div>
+                <div class="bo-console-ai-title">GURU sugiere</div>
+                <div class="bo-console-ai-conf">94% conf.</div>
+              </div>
+              <div class="bo-console-ai-text">
+                <b>Patrón de fraude detectado:</b> ubicación inusual (Londres, cliente nunca viajó), comercio sin historial reconocible, monto +50% sobre promedio. <b>Recomiendo refund + bloqueo de tarjeta + emisión de nueva.</b>
+              </div>
+              <div class="bo-console-ai-actions">
+                <div class="bo-console-ai-btn primary">Aprobar refund</div>
+                <div class="bo-console-ai-btn ghost">Revisar manual</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- KPI Sidebar -->
+          <div class="bo-console-kpi">
+            <div class="bo-console-kpi-head">Live KPIs · hoy</div>
+
+            <div class="bo-kpi-card">
+              <div class="bo-kpi-card-row">
+                <span class="bo-kpi-card-lbl">SLA Disputas</span>
+                <span class="bo-kpi-card-delta">+3%</span>
+              </div>
+              <div class="bo-kpi-card-num green">84%</div>
+              <div class="bo-kpi-card-spark">
+                <svg viewBox="0 0 100 20" preserveAspectRatio="none">
+                  <path d="M 0 14 L 14 12 L 28 10 L 42 11 L 56 7 L 70 8 L 84 4 L 100 3" fill="none" stroke="url(#sparkGrad)" stroke-width="1.8" stroke-linecap="round"/>
+                </svg>
+              </div>
+            </div>
+
+            <div class="bo-kpi-mini">
+              <div class="bo-kpi-mini-card">
+                <div class="bo-kpi-mini-num">312</div>
+                <div class="bo-kpi-mini-lbl">Tickets hoy</div>
+              </div>
+              <div class="bo-kpi-mini-card">
+                <div class="bo-kpi-mini-num go">98%</div>
+                <div class="bo-kpi-mini-lbl">Auto-resueltos</div>
+              </div>
+              <div class="bo-kpi-mini-card">
+                <div class="bo-kpi-mini-num">1h 42</div>
+                <div class="bo-kpi-mini-lbl">Avg time</div>
+              </div>
+              <div class="bo-kpi-mini-card">
+                <div class="bo-kpi-mini-num warn">7</div>
+                <div class="bo-kpi-mini-lbl">SLA at risk</div>
+              </div>
+            </div>
+
+            <div class="bo-kpi-card">
+              <div class="bo-kpi-card-row">
+                <span class="bo-kpi-card-lbl">Productividad</span>
+                <span class="bo-kpi-card-delta">+6.2×</span>
+              </div>
+              <div class="bo-kpi-card-num">142</div>
+              <div class="bo-kpi-card-spark">
+                <svg viewBox="0 0 100 20" preserveAspectRatio="none">
+                  <path d="M 0 18 L 14 15 L 28 13 L 42 11 L 56 8 L 70 6 L 84 5 L 100 4" fill="none" stroke="url(#sparkGrad)" stroke-width="1.8" stroke-linecap="round"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <svg width="0" height="0" style="position:absolute">
+          <defs>
+            <linearGradient id="sparkGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#16A34A"/>
+              <stop offset="100%" stop-color="#4ADE80"/>
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="bo-stats">
+  <div class="container bo-stats-grid">
+    <div class="bo-stat">
+      <div class="bo-stat-num" data-target="84" data-suffix="%">0%</div>
+      <div class="bo-stat-desc">disputas resueltas<br>en menos de 2 horas</div>
+    </div>
+    <div class="bo-stat">
+      <div class="bo-stat-num" data-target="6" data-prefix="+" data-suffix="×">+0×</div>
+      <div class="bo-stat-desc">productividad por<br>agente operativo</div>
+    </div>
+    <div class="bo-stat">
+      <div class="bo-stat-num" data-target="72" data-prefix="-" data-suffix="%">-0%</div>
+      <div class="bo-stat-desc">reconciliaciones<br>manuales eliminadas</div>
+    </div>
+    <div class="bo-stat">
+      <div class="bo-stat-num" data-target="99.99" data-suffix="%">0%</div>
+      <div class="bo-stat-desc">audit trail completo<br>para auditoría externa</div>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section class="bo-problem">
+  <div class="container bo-problem-grid">
+    <div>
+      <span class="label">EL RETO · LA SOLUCIÓN</span>
+      <h2 class="bo-problem-h2 split-lines">El back-office no puede<br>vivir en <em>Excel + email</em></h2>
+
+      <div class="bo-problem-list">
+        <div class="bo-problem-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <div class="bo-problem-item-text"><strong>Disputas que duran días:</strong> cliente reclama un cargo, el ticket pasa por tres áreas, vuelve al agente original, llega un mail al gerente. Día 5.</div>
+        </div>
+        <div class="bo-problem-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <div class="bo-problem-item-text"><strong>Sin visibility real-time:</strong> el head de operaciones se entera de un pico de fraude por el reporte del lunes. Para entonces, ya perdió la batalla.</div>
+        </div>
+        <div class="bo-problem-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <div class="bo-problem-item-text"><strong>Auditoría = nightmare:</strong> reconstruir quién hizo qué y cuándo requiere tres sprints. El equipo de Riesgos vive pidiendo capturas.</div>
+        </div>
+      </div>
+
+      <div class="bo-arrow-down">Lo que cambiamos</div>
+
+      <div class="bo-solution-list">
+        <div class="bo-solution-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+          <div class="bo-solution-item-text"><strong>Console unificado.</strong> Disputas, reconciliaciones, batch, fraude — todo en un solo lugar con queue priorizada. El agente no pierde el contexto.</div>
+        </div>
+        <div class="bo-solution-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+          <div class="bo-solution-item-text"><strong>Workflows AI-assisted.</strong> GURU detecta el patrón, sugiere la resolución y prepara el refund. El agente aprueba con un click. La excepción se vuelve la regla.</div>
+        </div>
+        <div class="bo-solution-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+          <div class="bo-solution-item-text"><strong>Audit by design.</strong> Cada click, cada cambio, cada aprobación queda registrada. Auditoría externa pide el log, no las capturas.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLA Comparison -->
+    <div class="bo-sla">
+      <div class="bo-sla-head">
+        <div class="bo-sla-head-label">SLA · Resolución de disputas</div>
+        <div class="bo-sla-head-title">Tiempo de ticket → resolución</div>
+      </div>
+      <div class="bo-sla-cards">
+        <div class="bo-sla-card them">
+          <div>
+            <div class="bo-sla-card-label">Back-office tradicional</div>
+            <div class="bo-sla-card-desc">Excel + mails + 3 áreas</div>
+          </div>
+          <div class="bo-sla-card-num">5,2 <small>días</small></div>
+        </div>
+        <div class="bo-sla-card us">
+          <div>
+            <div class="bo-sla-card-label">IC Back Office</div>
+            <div class="bo-sla-card-desc">Console + AI + refund automático</div>
+          </div>
+          <div class="bo-sla-card-num">14 <small>min</small></div>
+        </div>
+      </div>
+      <div class="bo-sla-foot">
+        <div class="bo-sla-foot-num">540×</div>
+        <div class="bo-sla-foot-lbl">más rápido</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CAPS -->
+<section class="bo-caps" id="how">
+  <div class="container bo-caps-head">
+    <span class="label">Qué hace</span>
+    <h2 class="split-lines">Cuatro capacidades para una<br>operación <em>que escala sin headcount</em></h2>
+    <p>El back-office sigue creciendo si crece el negocio. La pregunta es si crece linealmente con la gente o si la tecnología hace la diferencia. Esto es lo que cambia.</p>
+  </div>
+  <div class="container bo-caps-grid">
+    <div class="bo-cap-card">
+      <div class="bo-cap-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      </div>
+      <h4>Console unificado</h4>
+      <p>Disputas, fraude, reconciliaciones, batch monitoring, gestión de excepciones — todo en un solo workspace. El agente nunca pierde el contexto entre apps.</p>
+    </div>
+    <div class="bo-cap-card">
+      <div class="bo-cap-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33"/></svg>
+      </div>
+      <h4>Workflows AI-assisted</h4>
+      <p>GURU detecta el patrón, sugiere acción y prepara el refund o ajuste. El agente aprueba con un click. El 70% de los tickets se resuelven sin intervención manual.</p>
+    </div>
+    <div class="bo-cap-card">
+      <div class="bo-cap-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      </div>
+      <h4>Observability real-time</h4>
+      <p>KPIs operativos en vivo: SLA, throughput, agent productivity, alertas por umbral. El head de operaciones ve los picos antes que los stakeholders.</p>
+    </div>
+    <div class="bo-cap-card">
+      <div class="bo-cap-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s-8-4.5-8-12V5l8-3 8 3v5c0 7.5-8 12-8 12z"/><polyline points="9 12 11 14 15 10"/></svg>
+      </div>
+      <h4>Audit by design</h4>
+      <p>Cada acción queda registrada con timestamp, actor, motivo y resultado. Reportes regulatorios listos en un click, sin reconstruir desde mails.</p>
+    </div>
+  </div>
+</section>
+
+<!-- IN ACTION -->
+<section class="bo-action">
+  <div class="container bo-action-inner">
+    <div>
+      <span class="label on-dark">CÓMO FUNCIONA</span>
+      <h2 class="bo-action-h2 split-lines">Una disputa de fraude<br><em>resuelta en 14 minutos</em></h2>
+      <p class="bo-action-sub">Fernanda reporta un cargo no reconocido por WhatsApp. Esto es lo que pasa entre su mensaje y el refund acreditado en su cuenta.</p>
+
+      <div class="bo-flow-steps">
+        <div class="bo-flow-step">
+          <div class="bo-flow-step-num">1</div>
+          <div class="bo-flow-step-text">
+            <div class="bo-flow-step-time">+0:00</div>
+            <h5>SARA recibe + crea ticket</h5>
+            <p>Cliente reclama por WhatsApp. SARA categoriza como "disputa" y abre #DSP-87412 en el console.</p>
+          </div>
+        </div>
+        <div class="bo-flow-step">
+          <div class="bo-flow-step-num">2</div>
+          <div class="bo-flow-step-text">
+            <div class="bo-flow-step-time">+0:18</div>
+            <h5>GURU analiza patrón</h5>
+            <p>Cruza ubicación, historial, comercio. Detecta fraude con 94% confianza. Sugiere refund + bloqueo + nueva tarjeta.</p>
+          </div>
+        </div>
+        <div class="bo-flow-step">
+          <div class="bo-flow-step-num">3</div>
+          <div class="bo-flow-step-text">
+            <div class="bo-flow-step-time">+7:30</div>
+            <h5>Agente aprueba en 1 click</h5>
+            <p>Revisa la sugerencia, aprueba. Smart Platform ejecuta refund, bloqueo y emisión de nueva.</p>
+          </div>
+        </div>
+        <div class="bo-flow-step">
+          <div class="bo-flow-step-num">4</div>
+          <div class="bo-flow-step-text">
+            <div class="bo-flow-step-time">+14:02</div>
+            <h5>Cliente notificada + audit log</h5>
+            <p>SARA le avisa por WhatsApp. Audit trail completo registrado. Caso cerrado. Cliente más fan que antes.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Activity log -->
+    <div class="bo-log">
+      <div class="bo-log-head">
+        <div class="bo-log-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+          Caso · Live trace
+        </div>
+        <div class="bo-log-status">EN VIVO</div>
+      </div>
+
+      <div class="bo-log-case">
+        <div class="bo-log-case-id">#DSP-87412</div>
+        <div class="bo-log-case-info">
+          <div class="bo-log-case-title">Cargo no reconocido</div>
+          <div class="bo-log-case-meta">Fernanda M. · Tarjeta •••• 9851</div>
+        </div>
+        <div class="bo-log-case-status">Resuelto</div>
+      </div>
+
+      <div class="bo-log-events">
+        <div class="bo-log-event">
+          <div class="bo-log-event-time">10:42<br>+0:00</div>
+          <div class="bo-log-event-dot cyan"></div>
+          <div class="bo-log-event-content">
+            <div class="bo-log-event-name">Disputa creada vía SARA</div>
+            <div class="bo-log-event-desc">Cliente reportó cargo desconocido en WhatsApp.</div>
+          </div>
+          <div class="bo-log-event-actor">SARA</div>
+        </div>
+        <div class="bo-log-event">
+          <div class="bo-log-event-time">10:42<br>+0:18</div>
+          <div class="bo-log-event-dot"></div>
+          <div class="bo-log-event-content">
+            <div class="bo-log-event-name">GURU sugiere refund</div>
+            <div class="bo-log-event-desc">Patrón de fraude detectado. Confianza 94%.</div>
+          </div>
+          <div class="bo-log-event-actor">GURU</div>
+        </div>
+        <div class="bo-log-event">
+          <div class="bo-log-event-time">10:49<br>+7:30</div>
+          <div class="bo-log-event-dot"></div>
+          <div class="bo-log-event-content">
+            <div class="bo-log-event-name">Agente aprueba acción</div>
+            <div class="bo-log-event-desc">Refund + bloqueo + emisión nueva tarjeta.</div>
+          </div>
+          <div class="bo-log-event-actor">agent_412</div>
+        </div>
+        <div class="bo-log-event">
+          <div class="bo-log-event-time">10:50<br>+7:48</div>
+          <div class="bo-log-event-dot amber"></div>
+          <div class="bo-log-event-content">
+            <div class="bo-log-event-name">Smart Platform ejecuta</div>
+            <div class="bo-log-event-desc">Refund $412.50 + bloqueo + cards.create.</div>
+          </div>
+          <div class="bo-log-event-actor">smart_core</div>
+        </div>
+        <div class="bo-log-event">
+          <div class="bo-log-event-time">10:56<br>+14:02</div>
+          <div class="bo-log-event-dot green"></div>
+          <div class="bo-log-event-content">
+            <div class="bo-log-event-name">Cliente notificada + cierre</div>
+            <div class="bo-log-event-desc">SARA confirmó por WhatsApp. Audit guardado.</div>
+          </div>
+          <div class="bo-log-event-actor">SARA</div>
+        </div>
+      </div>
+
+      <div class="bo-log-foot">
+        <div>
+          <div class="bo-log-foot-num">14min</div>
+          <div class="bo-log-foot-lbl">End to end</div>
+        </div>
+        <div>
+          <div class="bo-log-foot-num">5</div>
+          <div class="bo-log-foot-lbl">Sistemas</div>
+        </div>
+        <div>
+          <div class="bo-log-foot-num">100%</div>
+          <div class="bo-log-foot-lbl">Auditable</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MODULAR -->
+<section class="bo-modular">
+  <div class="container bo-mod-head">
+    <span class="label">DÓNDE ENCAJA EN LA SUITE</span>
+    <h2 class="split-lines">Back Office es <em>donde</em><br>todo el resto del Suite aterriza</h2>
+    <p>Los canales generan tickets. GURU sugiere. Smart Platform ejecuta. Back Office es donde el equipo de operaciones aprueba, controla y audita. Es el cierre del círculo.</p>
+  </div>
+
+  <div class="container">
+    <div class="bo-mod-composer">
+      <div class="bo-mod-zone">
+        <div class="bo-mod-zone-head">
+          <div class="bo-mod-zone-title">Esta plataforma</div>
+          <div class="bo-mod-counter">Estás explorando</div>
+        </div>
+        <div class="bo-mod-grid">
+          <div class="bo-mod-card spotlight">
+            <div class="bo-mod-card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            </div>
+            <div class="bo-mod-card-name">IC Back Office</div>
+            <div class="bo-mod-card-desc">Console unificado con AI-assisted workflows, observability live y audit trail nativo.</div>
+            <span class="bo-mod-card-action" style="opacity:0;">Activa</span>
+          </div>
+          <div class="bo-mod-card active" data-id="smart">
+            <div class="bo-mod-card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            </div>
+            <div class="bo-mod-card-name">IC Smart Platform</div>
+            <div class="bo-mod-card-desc">Ejecuta acciones que el agente aprueba.</div>
+            <span class="bo-mod-card-action">Recomendada</span>
+          </div>
+          <div class="bo-mod-card active" data-id="analytics">
+            <div class="bo-mod-card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+            </div>
+            <div class="bo-mod-card-name">IC Analytics (GURU)</div>
+            <div class="bo-mod-card-desc">Sugiere resolución de tickets.</div>
+            <span class="bo-mod-card-action">Recomendada</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="bo-mod-zone">
+        <div class="bo-mod-zone-head">
+          <div class="bo-mod-zone-title complement">Sumá según tu estrategia</div>
+          <div class="bo-mod-counter muted">8 plataformas disponibles</div>
+        </div>
+        <div class="bo-mod-grid">
+          <div class="bo-mod-card available">
+            <div class="bo-mod-card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            </div>
+            <div class="bo-mod-card-name">IC Social Banking</div>
+            <div class="bo-mod-card-desc">SARA crea tickets desde WhatsApp.</div>
+            <span class="bo-mod-card-action">Sumar</span>
+          </div>
+          <div class="bo-mod-card available">
+            <div class="bo-mod-card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/></svg>
+            </div>
+            <div class="bo-mod-card-name">IC Mobile Banking</div>
+            <div class="bo-mod-card-desc">Reportes desde la app.</div>
+            <span class="bo-mod-card-action">Sumar</span>
+          </div>
+          <div class="bo-mod-card available">
+            <div class="bo-mod-card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/></svg>
+            </div>
+            <div class="bo-mod-card-name">IC Web Banking</div>
+            <div class="bo-mod-card-desc">Reportes desde web.</div>
+            <span class="bo-mod-card-action">Sumar</span>
+          </div>
+          <div class="bo-mod-card available">
+            <div class="bo-mod-card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s-8-4.5-8-12V5l8-3 8 3v5c0 7.5-8 12-8 12z"/></svg>
+            </div>
+            <div class="bo-mod-card-name">IC Onboarding</div>
+            <div class="bo-mod-card-desc">Excepciones de KYC.</div>
+            <span class="bo-mod-card-action">Sumar</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="bo-mod-hint">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+        Back Office se conecta a todo. Cuanto más canales tenés activos, más palanca hace el console: un solo lugar para todo lo que requiere intervención humana.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CASE -->
+<section class="bo-case">
+  <div class="container">
+    <div class="bo-case-card">
+      <div class="bo-case-grid">
+        <div class="bo-case-customer">
+          <div class="bo-case-logo">I</div>
+          <div class="bo-case-customer-name">Banco Itaú LATAM</div>
+          <div class="bo-case-customer-role">COO · Banca Digital</div>
+          <span class="bo-case-flag">Caso real · Brasil</span>
+        </div>
+        <div class="bo-case-content">
+          <div class="bo-case-quote-mark">"</div>
+          <blockquote class="bo-case-quote">El back-office dejó de ser un cuello de botella. Pasamos de SLA de disputas de 5 días a menos de 2 horas. Y lo más importante: cuando el regulador pidió logs, los entregamos en minutos, no en sprints.</blockquote>
+          <div class="bo-case-metrics">
+            <div>
+              <div class="bo-case-metric-num" data-target="84" data-suffix="%">0%</div>
+              <div class="bo-case-metric-desc">disputas resueltas<br>&lt; 2 horas</div>
+            </div>
+            <div>
+              <div class="bo-case-metric-num" data-target="6" data-prefix="+" data-suffix="×">+0×</div>
+              <div class="bo-case-metric-desc">productividad<br>por agente</div>
+            </div>
+            <div>
+              <div class="bo-case-metric-num" data-target="100" data-suffix="%">0%</div>
+              <div class="bo-case-metric-desc">audit completo<br>en producción</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-band" id="demo">
+  <div class="container">
+    <h2 class="cta-h2 split-lines">¿Hablamos del back-office<br>de tu banco?</h2>
+    <p class="cta-sub">Ayudamos a las personas a amar a su banco. Hablemos del tuyo.</p>
+    <a href="#" class="btn btn-white btn-arrow">¿Conversamos?</a>
+    <div class="cta-fine">Sin compromisos · Demo personalizada · 30 minutos</div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-logo">info<span>corp</span></div>
+      <p class="footer-tagline">Desde Uruguay, hacia el mundo.</p>
+    </div>
+    <div>
+      <div class="footer-col-title">IC Banking Suite</div>
+      <ul class="footer-links">
+        <li><a href="plataforma-ic-smart-platform.html">IC Smart Platform</a></li>
+        <li><a href="plataforma-ic-mobile-banking.html">IC Mobile Banking</a></li>
+        <li><a href="plataforma-ic-web-banking.html">IC Web Banking</a></li>
+        <li><a href="plataforma-ic-social-banking.html">IC Social Banking (SARA)</a></li>
+        <li><a href="plataforma-ic-marketing-automation.html">IC Marketing Automation</a></li>
+        <li><a href="plataforma-ic-analytics.html">IC Analytics (GURU)</a></li>
+        <li><a href="plataforma-ic-onboarding.html">IC Onboarding</a></li>
+        <li><a href="plataforma-ic-open-finance.html">IC Open Finance</a></li>
+        <li><a href="plataforma-ic-public-portal.html">IC Public Portal</a></li>
+        <li><a href="plataforma-ic-personal-finance.html">IC Personal Finance</a></li>
+        <li><a href="plataforma-ic-back-office.html">IC Back Office</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Compañía</div>
+      <ul class="footer-links">
+        <li><a href="#">Sobre nosotros</a></li>
+        <li><a href="#">Método B-Fly</a></li>
+        <li><a href="#">Casos de éxito</a></li>
+        <li><a href="#">Carreras</a></li>
+        <li><a href="#">Blog</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Recursos</div>
+      <ul class="footer-links">
+        <li><a href="#">Estudio Banca Digital 2025</a></li>
+        <li><a href="#">Privacidad</a></li>
+        <li><a href="#">Términos</a></li>
+        <li><a href="#">Seguridad</a></li>
+      </ul>
+    </div>
+  </div>
+  <p class="footer-helping">Helping people <em>love</em> their bank</p>
+  <div class="footer-bottom">
+    <span>© 2025 Infocorp Group</span>
+    <span>Lima, Perú · hola@infocorp.net</span>
+  </div>
+</footer>
+
+<script>
+gsap.registerPlugin(ScrollTrigger);
+
+const glow = document.getElementById('cursorGlow');
+let mx=0, my=0, gx=0, gy=0;
+window.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; }, {passive:true});
+(function lerp(){ gx+=(mx-gx)*0.08; gy+=(my-gy)*0.08; if(glow){ glow.style.left=gx+'px'; glow.style.top=gy+'px'; } requestAnimationFrame(lerp); })();
+
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 20), {passive:true});
+
+gsap.set('#heroLabel',     { y: 12, opacity: 0 });
+gsap.set('#heroSub',       { y: 16, opacity: 0 });
+gsap.set('#heroActions',   { y: 16, opacity: 0 });
+gsap.set('#consoleStage',  { scale: 0.85, opacity: 0 });
+
+const heroTL = gsap.timeline({ delay: 0.15 });
+heroTL.to('#heroLabel', { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }, 0.2);
+
+const heroSplit = new SplitType('#heroH1', { types: 'words,chars', tagName: 'span' });
+heroTL.fromTo(heroSplit.chars,
+  { y: 60, opacity: 0, rotationX: -40 },
+  { y: 0, opacity: 1, rotationX: 0, duration: 0.7, stagger: 0.012, ease: 'power3.out', transformOrigin: '50% 100%' },
+  0.4
+);
+heroTL.to('#heroSub',      { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' }, 0.9);
+heroTL.to('#heroActions',  { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' }, 1.0);
+heroTL.to('#consoleStage', { opacity: 1, scale: 1, duration: 1.1, ease: 'power3.out' }, 0.6);
+
+document.querySelectorAll('.split-lines').forEach(el => {
+  const split = new SplitType(el, { types: 'lines', tagName: 'span' });
+  split.lines.forEach(line => {
+    line.style.overflow = 'hidden';
+    line.style.display = 'block';
+  });
+  gsap.fromTo(split.lines, { y: '100%', opacity: 0 },
+    { y: '0%', opacity: 1, duration: 0.85, stagger: 0.12, ease: 'power3.out',
+      scrollTrigger: { trigger: el, start: 'top 82%', toggleActions: 'play none none none' } });
+});
+
+document.querySelectorAll('.bo-stat-num, .bo-case-metric-num').forEach(el => {
+  const target = parseFloat(el.dataset.target);
+  const prefix = el.dataset.prefix || '';
+  const suffix = el.dataset.suffix || '';
+  if (isNaN(target)) return;
+  el.textContent = prefix + '0' + suffix;
+  ScrollTrigger.create({
+    trigger: el, start: 'top 88%', once: true,
+    onEnter: () => {
+      gsap.fromTo({ v: 0 }, { v: target },
+        { duration: 1.4, ease: 'power2.out',
+          onUpdate: function(){
+            const v = this.targets()[0].v;
+            const isFloat = target % 1 !== 0;
+            el.textContent = prefix + (isFloat ? v.toFixed(2) : Math.round(v)) + suffix;
+          }
+        });
+    }
+  });
+});
+
+gsap.fromTo('.bo-stat', { x: -20, opacity: 0 },
+  { x: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: 'power3.out',
+    scrollTrigger: { trigger: '.bo-stats-grid', start: 'top 85%' } });
+gsap.fromTo('.bo-problem-item', { x: -30, opacity: 0 },
+  { x: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: 'power3.out',
+    scrollTrigger: { trigger: '.bo-problem-list', start: 'top 82%' } });
+gsap.fromTo('.bo-solution-item', { x: -30, opacity: 0 },
+  { x: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: 'power3.out',
+    scrollTrigger: { trigger: '.bo-solution-list', start: 'top 82%' } });
+gsap.fromTo('.bo-sla', { x: 40, opacity: 0 },
+  { x: 0, opacity: 1, duration: 0.9, ease: 'power3.out',
+    scrollTrigger: { trigger: '.bo-sla', start: 'top 82%' } });
+gsap.fromTo('.bo-cap-card', { y: 30, opacity: 0 },
+  { y: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: 'power3.out',
+    scrollTrigger: { trigger: '.bo-caps-grid', start: 'top 82%' } });
+gsap.fromTo('.bo-flow-step', { x: -30, opacity: 0 },
+  { x: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: 'power3.out',
+    scrollTrigger: { trigger: '.bo-flow-steps', start: 'top 80%' } });
+gsap.fromTo('.bo-log', { x: 40, opacity: 0 },
+  { x: 0, opacity: 1, duration: 0.9, ease: 'power3.out',
+    scrollTrigger: { trigger: '.bo-log', start: 'top 80%' } });
+gsap.fromTo('.bo-mod-composer', { y: 40, opacity: 0 },
+  { y: 0, opacity: 1, duration: 0.9, ease: 'power3.out',
+    scrollTrigger: { trigger: '.bo-mod-composer', start: 'top 82%' } });
+gsap.fromTo('.bo-mod-card', { scale: 0.9, opacity: 0 },
+  { scale: 1, opacity: 1, duration: 0.6, stagger: 0.06, ease: 'back.out(1.4)',
+    scrollTrigger: { trigger: '.bo-mod-composer', start: 'top 78%' } });
+gsap.fromTo('.bo-case-card', { y: 40, opacity: 0 },
+  { y: 0, opacity: 1, duration: 0.9, ease: 'power3.out',
+    scrollTrigger: { trigger: '.bo-case-card', start: 'top 82%' } });
+
+const ctaSplit = new SplitType('.cta-h2', { types: 'chars', tagName: 'span' });
+gsap.fromTo(ctaSplit.chars, { y: 40, opacity: 0 },
+  { y: 0, opacity: 1, duration: 0.6, stagger: 0.025, ease: 'power3.out',
+    scrollTrigger: { trigger: '.cta-band', start: 'top 75%' } });
+gsap.fromTo('.cta-sub, .cta-band .btn-white, .cta-fine', { y: 20, opacity: 0 },
+  { y: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: 'power3.out',
+    scrollTrigger: { trigger: '.cta-band', start: 'top 70%' } });
+
+document.querySelectorAll('.bo-mod-card.available, .bo-mod-card.active').forEach(card => {
+  if (card.classList.contains('spotlight')) return;
+  card.addEventListener('click', () => {
+    if (card.classList.contains('available')) {
+      card.classList.remove('available');
+      card.classList.add('active');
+      card.querySelector('.bo-mod-card-action').textContent = 'Sumada';
+    } else {
+      card.classList.remove('active');
+      card.classList.add('available');
+      card.querySelector('.bo-mod-card-action').textContent = 'Sumar';
+    }
+  });
+});
+</script>
+
+</body>
+</html>

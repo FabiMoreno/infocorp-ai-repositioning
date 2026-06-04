@@ -95,3 +95,8 @@
   from = "/plataforma/ic-back-office"
   to = "/plataforma-ic-back-office.html"
   status = 200
+
+[[redirects]]
+  from = "/soluciones/pymes"
+  to = "/soluciones-pymes.html"
+  status = 200

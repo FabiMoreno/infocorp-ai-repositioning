@@ -1,0 +1,1503 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Banca Pymes — Infocorp</title>
+  <meta name="description" content="El banco que entiende cómo trabaja una Pyme. Multi-firma jerárquica, nóminas automatizadas, créditos digitales y un mix de plataformas armado a medida del segmento." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,700&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/split-type@0.3.4/umd/index.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #F8FAFC; --bg-alt: #F1F5F9; --white: #FFFFFF;
+      --ink: #0F1729; --ink-deep: #0A1226; --sec: #334155;
+      --muted: #64748B; --border: #E2E8F0; --surface: #EBEEF5;
+
+      /* SOLUCIONES — brand blue */
+      --accent: #0063F2;
+      --accent-d: #004fd4;
+      --accent-l: #DBEAFE;
+      --accent-2: #2CA4FF;
+      --accent-2-l: #BAE0FF;
+      --accent-deep: #0E2461;
+
+      --brand: #0063F2; --brand-d: #004fd4; --brand-l: #DBEAFE;
+      --cyan: #2CA4FF; --cyan-l: #BAE0FF;
+      --navy: #051030; --navy-2: #0A1A48; --navy-3: #0E2461;
+      --purple: #7B5BFF; --amber: #F59E0B;
+      --green: #16A34A; --green-2: #4ADE80;
+      --pink: #FF6BB5; --red: #EF4444;
+
+      --font: 'Plus Jakarta Sans', sans-serif;
+      --ease: cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font); background: var(--bg); color: var(--ink); overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
+    img, svg { display: block; max-width: 100%; }
+    .label { font-size: 11px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); }
+    .label.on-dark { color: var(--accent-2); }
+    .container { max-width: 1240px; margin: 0 auto; padding: 0 64px; }
+    .cursor-glow { position: fixed; width: 480px; height: 480px; border-radius: 50%; pointer-events: none; z-index: 1; background: radial-gradient(circle, rgba(0,99,242,0.10) 0%, transparent 60%); transform: translate(-50%, -50%); mix-blend-mode: multiply; }
+
+    /* NAV */
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; height: 68px; background: rgba(255,255,255,0.85); backdrop-filter: blur(20px) saturate(180%); border-bottom: 1px solid transparent; transition: border-color 0.3s, box-shadow 0.3s; transform: translateY(-100%); animation: nav-in 0.6s 0.05s var(--ease) forwards; }
+    nav.scrolled { border-color: var(--border); box-shadow: 0 1px 24px rgba(15,23,41,0.07); }
+    @keyframes nav-in { to { transform: translateY(0); } }
+    .nav-inner { max-width: 1240px; margin: 0 auto; padding: 0 64px; height: 100%; display: flex; align-items: center; gap: 40px; }
+    .nav-logo { font-size: 18px; font-weight: 700; color: var(--ink); letter-spacing: -0.3px; flex-shrink: 0; }
+    .nav-logo span { color: var(--brand); }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a { font-size: 14px; color: var(--sec); transition: color 0.2s; position: relative; }
+    .nav-links a:hover { color: var(--ink); }
+    .nav-links a.active { color: var(--accent); font-weight: 600; }
+    .nav-links a.active::after { content: ''; position: absolute; left: 0; right: 0; bottom: -22px; height: 2px; background: var(--accent); border-radius: 2px; }
+    .nav-crumb { font-size: 11px; color: var(--muted); margin-left: 4px; letter-spacing: 0.06em; text-transform: uppercase; }
+    .nav-crumb::before { content: '/ '; color: var(--border); }
+    .nav-cta { margin-left: auto; padding: 9px 22px; background: var(--accent); color: #fff; font-size: 13px; font-weight: 600; border-radius: 6px; transition: background 0.2s, transform 0.15s, box-shadow 0.2s; box-shadow: 0 2px 12px rgba(0,99,242,0.25); position: relative; overflow: hidden; }
+    .nav-cta::after { content: ''; position: absolute; inset: 0; background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.25) 50%, transparent 60%); transform: translateX(-100%); transition: transform 0.5s; }
+    .nav-cta:hover::after { transform: translateX(100%); }
+    .nav-cta:hover { background: var(--accent-d); transform: translateY(-1px); box-shadow: 0 4px 20px rgba(0,99,242,0.35); }
+
+    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; border-radius: 8px; font-weight: 600; font-size: 14px; transition: all 0.2s; cursor: pointer; border: none; font-family: var(--font); }
+    .btn-primary { background: var(--accent); color: #fff; box-shadow: 0 2px 12px rgba(0,99,242,0.25); }
+    .btn-primary:hover { background: var(--accent-d); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(0,99,242,0.35); }
+    .btn-ghost { background: transparent; color: var(--accent); border: 1px solid rgba(0,99,242,0.3); }
+    .btn-ghost:hover { background: var(--accent-l); border-color: var(--accent); }
+    .btn-white { background: #fff; color: var(--accent); box-shadow: 0 4px 20px rgba(0,0,0,0.15); }
+    .btn-white:hover { transform: translateY(-1px); box-shadow: 0 8px 30px rgba(0,0,0,0.25); }
+    .btn-arrow::after { content: '→'; margin-left: 4px; transition: transform 0.2s; }
+    .btn-arrow:hover::after { transform: translateX(4px); }
+
+    /* ╔═══════════════════════════════════════════════════════════════════╗
+       ║  HERO — Pyme operating: dueño en mobile + contador en web         ║
+       ╚═══════════════════════════════════════════════════════════════════╝ */
+    .py-hero { position: relative; min-height: 100vh; background: linear-gradient(135deg, var(--navy) 0%, var(--navy-2) 60%, var(--navy-3) 100%); color: #fff; overflow: hidden; padding: 168px 0 100px; display: flex; align-items: center; }
+    .py-hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 80% 40%, rgba(0,99,242,0.30), transparent 50%), radial-gradient(ellipse at 20% 90%, rgba(44,164,255,0.18), transparent 55%); }
+    .py-hero-grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px); background-size: 60px 60px; mask-image: radial-gradient(ellipse at center, #000 35%, transparent 75%); -webkit-mask-image: radial-gradient(ellipse at center, #000 35%, transparent 75%); }
+    .py-hero-inner { position: relative; z-index: 3; max-width: 1240px; margin: 0 auto; padding: 0 64px; display: grid; grid-template-columns: 1fr 1.1fr; gap: 60px; align-items: center; width: 100%; }
+    .py-hero-label { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 20px; background: rgba(44,164,255,0.14); border: 1px solid rgba(44,164,255,0.3); font-size: 11px; font-weight: 600; letter-spacing: 0.18em; color: var(--accent-2); text-transform: uppercase; margin-bottom: 28px; }
+    .py-hero-label::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--accent-2); box-shadow: 0 0 8px var(--accent-2); animation: py-pulse 2s ease-in-out infinite; }
+    @keyframes py-pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(44,164,255,0.5); } 50% { box-shadow: 0 0 0 6px rgba(44,164,255,0); } }
+    .py-hero-h1 { font-size: clamp(48px, 5.4vw, 78px); font-weight: 800; line-height: 1.04; letter-spacing: -2.2px; margin-bottom: 24px; color: #fff; }
+    .py-hero-h1 em, .py-hero-h1 em .char, .py-hero-h1 em .word { font-style: normal; font-weight: 800; background: linear-gradient(135deg, var(--accent-2) 0%, #7AD5FF 100%); -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent; }
+    .py-hero-sub { font-size: 18px; line-height: 1.55; color: rgba(255,255,255,0.72); max-width: 540px; margin-bottom: 36px; }
+    .py-hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+    .py-hero-actions .btn-primary { background: #fff; color: var(--accent); box-shadow: 0 4px 20px rgba(0,0,0,0.18); }
+    .py-hero-actions .btn-primary:hover { background: #F1F5FF; }
+    .py-hero-actions .btn-ghost { color: #fff; border-color: rgba(255,255,255,0.25); }
+    .py-hero-actions .btn-ghost:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.5); }
+
+    /* Hero visual: Workspace mockup + mobile floating */
+    .py-workspace-stage { position: relative; perspective: 1600px; }
+    .py-workspace {
+      position: relative;
+      background: #fff;
+      border-radius: 14px;
+      overflow: hidden;
+      transform: perspective(1600px) rotateY(-6deg) rotateX(3deg);
+      box-shadow: 0 50px 100px rgba(0,99,242,0.30), 0 30px 60px rgba(0,0,0,0.35);
+      animation: py-ws-float 8s ease-in-out infinite;
+    }
+    @keyframes py-ws-float {
+      0%,100% { transform: perspective(1600px) rotateY(-6deg) rotateX(3deg) translateY(0); }
+      50% { transform: perspective(1600px) rotateY(-4deg) rotateX(2deg) translateY(-6px); }
+    }
+    .py-ws-bar { display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: #F3F4F6; border-bottom: 1px solid #E5E7EB; }
+    .py-ws-dots { display: flex; gap: 5px; }
+    .py-ws-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .py-ws-dot.r { background: #FF5F57; } .py-ws-dot.y { background: #FEBC2E; } .py-ws-dot.g { background: #28C840; }
+    .py-ws-url { flex: 1; background: #fff; border-radius: 6px; padding: 5px 10px; font-size: 10px; color: var(--muted); border: 1px solid var(--border); font-family: monospace; }
+    .py-ws-tag { background: var(--accent-l); color: var(--accent-d); padding: 3px 7px; border-radius: 4px; font-size: 9px; font-weight: 800; letter-spacing: 0.05em; }
+
+    .py-ws-body { display: grid; grid-template-columns: 110px 1fr; min-height: 380px; }
+    .py-ws-side { background: var(--navy-3); padding: 14px 10px; }
+    .py-ws-side-brand {
+      display: flex; align-items: center; gap: 6px;
+      padding: 4px 6px;
+      margin-bottom: 14px;
+    }
+    .py-ws-side-mark { width: 20px; height: 20px; border-radius: 5px; background: linear-gradient(135deg, var(--accent-2), var(--accent)); }
+    .py-ws-side-brand-text { font-size: 10px; font-weight: 800; color: #fff; letter-spacing: 0.04em; }
+    .py-ws-side-section { font-size: 8px; font-weight: 700; letter-spacing: 0.1em; color: rgba(255,255,255,0.4); text-transform: uppercase; padding: 8px 6px 4px; }
+    .py-ws-side-item { display: flex; align-items: center; gap: 6px; padding: 6px; border-radius: 4px; font-size: 10px; color: rgba(255,255,255,0.65); margin-bottom: 2px; }
+    .py-ws-side-item svg { width: 11px; height: 11px; flex-shrink: 0; }
+    .py-ws-side-item.active { background: rgba(44,164,255,0.18); color: var(--accent-2); }
+
+    .py-ws-main { padding: 16px 18px; background: #F8FAFC; }
+    .py-ws-main-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .py-ws-main-title { font-size: 13px; font-weight: 800; color: var(--ink); }
+    .py-ws-main-sub { font-size: 10px; color: var(--muted); margin-top: 2px; }
+    .py-ws-main-btn { background: linear-gradient(135deg, var(--accent), var(--accent-d)); color: #fff; padding: 5px 12px; border-radius: 6px; font-size: 10px; font-weight: 700; }
+
+    /* Payroll list */
+    .py-ws-list-title { font-size: 9px; font-weight: 800; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; padding: 8px 0 6px; }
+    .py-ws-list { background: #fff; border-radius: 10px; padding: 10px; border: 1px solid var(--border); }
+    .py-ws-row { display: grid; grid-template-columns: 1fr auto auto; gap: 10px; padding: 6px 0; align-items: center; font-size: 10px; }
+    .py-ws-row + .py-ws-row { border-top: 1px solid var(--border); }
+    .py-ws-row-name { font-weight: 600; color: var(--ink); }
+    .py-ws-row-amount { font-weight: 800; color: var(--ink); font-variant-numeric: tabular-nums; }
+    .py-ws-row-state { font-size: 8px; padding: 2px 6px; border-radius: 3px; font-weight: 800; letter-spacing: 0.04em; }
+    .py-ws-row-state.ok { background: #ECFDF5; color: #047857; }
+    .py-ws-row-state.warn { background: #FEF3C7; color: #92400E; }
+    .py-ws-row-state.pen { background: #DBEAFE; color: #0E3D9C; }
+
+    .py-ws-signers {
+      background: linear-gradient(135deg, rgba(0,99,242,0.06), rgba(44,164,255,0.02));
+      border: 1px solid rgba(0,99,242,0.16);
+      border-radius: 10px;
+      padding: 10px 12px;
+      margin-top: 10px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .py-ws-signers-text { flex: 1; font-size: 10px; color: var(--ink); line-height: 1.4; }
+    .py-ws-signers-text b { color: var(--accent-d); font-weight: 800; }
+    .py-ws-signers-avatars { display: flex; }
+    .py-ws-signer-av {
+      width: 20px; height: 20px; border-radius: 50%;
+      border: 1.5px solid #fff;
+      margin-left: -6px;
+      font-size: 9px; font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+      color: #fff;
+    }
+    .py-ws-signer-av:first-child { margin-left: 0; }
+    .py-ws-signer-av.a { background: linear-gradient(135deg, var(--accent-2), var(--accent)); }
+    .py-ws-signer-av.b { background: linear-gradient(135deg, #FFD9B8, #F59E0B); }
+    .py-ws-signer-av.c { background: rgba(255,255,255,0.2); color: rgba(255,255,255,0.8); border-color: var(--border); color: var(--muted); }
+
+    /* Mobile floating */
+    .py-phone-overlay {
+      position: absolute;
+      bottom: -30px;
+      right: -20px;
+      width: 160px;
+      transform: rotateY(8deg) rotateX(-2deg) rotateZ(4deg);
+      animation: py-phone-float 7s ease-in-out infinite;
+      z-index: 5;
+    }
+    @keyframes py-phone-float {
+      0%,100% { transform: rotateY(8deg) rotateX(-2deg) rotateZ(4deg) translateY(0); }
+      50% { transform: rotateY(6deg) rotateX(-1deg) rotateZ(3deg) translateY(-8px); }
+    }
+    .py-phone-body {
+      background: linear-gradient(180deg, #0A1A48 0%, #051030 100%);
+      border-radius: 22px;
+      padding: 8px;
+      box-shadow: 0 24px 50px rgba(0,99,242,0.35), 0 12px 24px rgba(0,0,0,0.4);
+    }
+    .py-phone-screen {
+      border-radius: 16px;
+      background: linear-gradient(180deg, #fff 0%, #F8FAFC 100%);
+      padding: 22px 10px 10px;
+      aspect-ratio: 9/16;
+      display: flex; flex-direction: column; gap: 6px;
+    }
+    .py-phone-h {
+      font-size: 10px; font-weight: 800; color: var(--ink);
+    }
+    .py-phone-h span { display: block; font-size: 8px; font-weight: 600; color: var(--muted); margin-top: 1px; }
+    .py-phone-card {
+      background: linear-gradient(135deg, var(--accent), var(--accent-d));
+      color: #fff;
+      border-radius: 8px;
+      padding: 8px 10px;
+      margin-top: 4px;
+    }
+    .py-phone-card-tt { font-size: 8px; opacity: 0.85; }
+    .py-phone-card-num { font-size: 14px; font-weight: 800; letter-spacing: -0.3px; }
+    .py-phone-btn {
+      background: linear-gradient(135deg, var(--accent-2), var(--accent));
+      color: #fff;
+      padding: 8px;
+      border-radius: 8px;
+      text-align: center;
+      font-size: 9px; font-weight: 800;
+      margin-top: auto;
+    }
+
+    /* Floating tags */
+    .py-floating-tag { position: absolute; padding: 8px 12px; border-radius: 12px; background: #fff; box-shadow: 0 12px 32px rgba(0,0,0,0.18); display: inline-flex; align-items: center; gap: 6px; font-size: 10px; font-weight: 700; color: var(--ink); z-index: 6; animation: py-tag-float 6s ease-in-out infinite; }
+    .py-floating-tag svg { width: 12px; height: 12px; color: var(--accent); }
+    .py-floating-tag.tag-1 { top: -16px; left: 14%; }
+    .py-floating-tag.tag-2 { top: 22%; right: -36px; animation-delay: -2s; background: linear-gradient(135deg, var(--accent), var(--accent-d)); color: #fff; }
+    .py-floating-tag.tag-2 svg { color: #fff; }
+    @keyframes py-tag-float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+
+    /* ╔═══════════════════════════════════════════════════════════════════╗
+       ║  STATS                                                              ║
+       ╚═══════════════════════════════════════════════════════════════════╝ */
+    .py-stats { background: var(--bg); padding: 80px 0; position: relative; }
+    .py-stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; align-items: center; }
+    .py-stat { position: relative; padding: 20px 24px; border-left: 3px solid var(--accent-l); transition: border-color 0.3s var(--ease); }
+    .py-stat:hover { border-left-color: var(--accent); }
+    .py-stat-num { font-size: 44px; font-weight: 800; color: var(--ink); line-height: 1; letter-spacing: -1.6px; font-variant-numeric: tabular-nums; margin-bottom: 8px; background: linear-gradient(135deg, var(--accent) 0%, var(--accent-d) 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+    .py-stat-desc { font-size: 13px; line-height: 1.5; color: var(--sec); }
+
+    /* ╔═══════════════════════════════════════════════════════════════════╗
+       ║  PROBLEM → SOLUTION                                                 ║
+       ╚═══════════════════════════════════════════════════════════════════╝ */
+    .py-problem { padding: 140px 0; background: #fff; position: relative; overflow: hidden; }
+    .py-problem-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+    .py-problem-h2 { font-size: clamp(36px, 3.6vw, 50px); font-weight: 800; line-height: 1.08; letter-spacing: -1.5px; margin: 12px 0 20px; }
+    .py-problem-h2 em { font-style: normal; color: var(--accent); }
+    .py-problem-list { display: flex; flex-direction: column; gap: 14px; }
+    .py-problem-item { display: flex; gap: 14px; align-items: flex-start; padding: 16px 18px; background: #FEF2F2; border-left: 3px solid #FCA5A5; border-radius: 8px; }
+    .py-problem-item svg { width: 18px; height: 18px; color: #DC2626; flex-shrink: 0; margin-top: 1px; }
+    .py-problem-item-text { font-size: 14px; line-height: 1.5; color: #7F1D1D; }
+    .py-problem-item-text strong { color: #991B1B; font-weight: 700; }
+    .py-arrow-down { display: flex; align-items: center; justify-content: center; gap: 14px; margin: 24px 0; color: var(--accent); font-weight: 700; font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; }
+    .py-arrow-down::before, .py-arrow-down::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, transparent, var(--accent-l), transparent); }
+    .py-solution-list { display: flex; flex-direction: column; gap: 14px; }
+    .py-solution-item { display: flex; gap: 14px; align-items: flex-start; padding: 16px 18px; background: #ECFDF5; border-left: 3px solid #6EE7B7; border-radius: 8px; }
+    .py-solution-item svg { width: 18px; height: 18px; color: #059669; flex-shrink: 0; margin-top: 1px; }
+    .py-solution-item-text { font-size: 14px; line-height: 1.5; color: #064E3B; }
+    .py-solution-item-text strong { color: #047857; font-weight: 700; }
+
+    /* Pyme persona card cluster */
+    .py-personas {
+      position: relative; aspect-ratio: 1/1; border-radius: 24px;
+      background: linear-gradient(135deg, #EEF4FF 0%, #DBEAFE 100%);
+      padding: 32px; overflow: hidden;
+    }
+    .py-personas::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle at 1px 1px, rgba(0,99,242,0.10) 1px, transparent 0); background-size: 24px 24px; }
+    .py-personas-head { position: relative; text-align: center; margin-bottom: 24px; }
+    .py-personas-head-label { font-size: 10px; font-weight: 800; color: var(--accent-d); letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 6px; }
+    .py-personas-head-title { font-size: 15px; font-weight: 700; color: var(--ink); letter-spacing: -0.2px; }
+    .py-personas-grid {
+      position: relative;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
+    }
+    .py-persona-card {
+      background: #fff;
+      border-radius: 14px;
+      padding: 14px;
+      box-shadow: 0 6px 16px rgba(15,23,41,0.06);
+      position: relative;
+    }
+    .py-persona-card-row { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+    .py-persona-av { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800; color: #fff; flex-shrink: 0; }
+    .py-persona-av.dueno { background: linear-gradient(135deg, var(--accent), var(--accent-d)); }
+    .py-persona-av.conta { background: linear-gradient(135deg, var(--amber), #B45309); }
+    .py-persona-av.emp { background: linear-gradient(135deg, var(--accent-2), var(--accent)); }
+    .py-persona-av.cliente { background: linear-gradient(135deg, var(--purple), #5B3AE0); }
+    .py-persona-info { flex: 1; }
+    .py-persona-name { font-size: 12px; font-weight: 800; color: var(--ink); line-height: 1.2; }
+    .py-persona-role { font-size: 10px; color: var(--muted); margin-top: 1px; }
+    .py-persona-task {
+      font-size: 10px; color: var(--sec); line-height: 1.4;
+      padding: 6px 8px;
+      background: var(--bg);
+      border-radius: 6px;
+    }
+    .py-persona-task b { color: var(--accent-d); font-weight: 700; }
+    .py-persona-platform {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 8px; font-weight: 800;
+      color: var(--accent-d);
+      letter-spacing: 0.04em;
+      margin-top: 6px;
+    }
+    .py-persona-platform::before { content: '⬢'; }
+    .py-personas-foot {
+      position: relative;
+      text-align: center; padding-top: 18px; margin-top: 18px;
+      border-top: 1px solid rgba(15,23,41,0.08);
+      font-size: 11px; color: var(--sec);
+    }
+    .py-personas-foot b { color: var(--ink); font-weight: 800; }
+
+    /* ╔═══════════════════════════════════════════════════════════════════╗
+       ║  🌟 MIX COMPOSER — protagonist                                      ║
+       ╚═══════════════════════════════════════════════════════════════════╝ */
+    .py-mix { padding: 140px 0; background: linear-gradient(180deg, var(--bg) 0%, #fff 100%); position: relative; overflow: hidden; }
+    .py-mix::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle at 1px 1px, rgba(0,99,242,0.06) 1px, transparent 0); background-size: 28px 28px; mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%); -webkit-mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%); }
+    .py-mix-head { text-align: center; margin-bottom: 50px; position: relative; z-index: 2; max-width: 720px; margin-left: auto; margin-right: auto; padding: 0 24px; }
+    .py-mix-head h2 { font-size: clamp(36px, 3.6vw, 50px); font-weight: 800; line-height: 1.08; letter-spacing: -1.5px; margin: 12px 0 16px; }
+    .py-mix-head h2 em { font-style: normal; color: var(--accent); }
+    .py-mix-head p { font-size: 17px; line-height: 1.6; color: var(--sec); margin-bottom: 28px; }
+    .py-mix-pill {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 5px 14px 5px 5px;
+      border-radius: 20px;
+      background: rgba(0,99,242,0.08);
+      border: 1px solid rgba(0,99,242,0.18);
+      font-size: 12px; font-weight: 600; color: var(--accent-d);
+    }
+    .py-mix-pill-icon {
+      width: 22px; height: 22px; border-radius: 50%;
+      background: var(--accent); color: #fff;
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 800;
+    }
+
+    .py-mix-composer {
+      position: relative; z-index: 2;
+      max-width: 1180px; margin: 0 auto;
+      padding: 0 24px;
+    }
+    .py-mix-board {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      padding: 44px;
+      box-shadow: 0 30px 80px rgba(15,23,41,0.08);
+      position: relative;
+    }
+
+    /* Zone heads */
+    .py-mix-zone {
+      margin-bottom: 38px;
+      padding-bottom: 38px;
+      border-bottom: 1px dashed var(--border);
+    }
+    .py-mix-zone:last-child { border-bottom: none; padding-bottom: 0; margin-bottom: 0; }
+    .py-mix-zone-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 22px; gap: 16px; flex-wrap: wrap; }
+    .py-mix-zone-label {
+      display: inline-flex; align-items: center; gap: 10px;
+      font-size: 13px; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase;
+      color: var(--ink);
+    }
+    .py-mix-zone-tag {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 4px 10px; border-radius: 14px;
+      font-size: 10px; font-weight: 800; letter-spacing: 0.06em;
+    }
+    .py-mix-zone-tag.core { background: rgba(0,99,242,0.12); color: var(--accent-d); }
+    .py-mix-zone-tag.addon { background: rgba(44,164,255,0.14); color: var(--accent); }
+    .py-mix-zone-tag.optional { background: var(--bg-alt); color: var(--muted); }
+    .py-mix-zone-desc {
+      font-size: 13px; color: var(--muted);
+      max-width: 480px; line-height: 1.5;
+    }
+    .py-mix-zone-counter {
+      margin-left: auto;
+      font-size: 12px; font-weight: 700;
+      color: var(--sec);
+    }
+    .py-mix-zone-counter b { color: var(--accent-d); font-variant-numeric: tabular-nums; }
+
+    /* Mix Grid */
+    .py-mix-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px;
+      position: relative;
+    }
+
+    /* Card base */
+    .py-mix-card {
+      position: relative;
+      border-radius: 16px;
+      padding: 20px 16px 16px;
+      transition: all 0.35s var(--ease);
+      display: flex; flex-direction: column;
+      min-height: 200px;
+      cursor: pointer;
+      user-select: none;
+    }
+    .py-mix-card-tag {
+      display: inline-flex; align-items: center; gap: 4px;
+      position: absolute; top: 12px; right: 12px;
+      padding: 3px 8px; border-radius: 12px;
+      font-size: 9px; font-weight: 800; letter-spacing: 0.05em;
+    }
+    .py-mix-card-icon {
+      width: 40px; height: 46px;
+      clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 12px;
+    }
+    .py-mix-card-icon svg { width: 18px; height: 18px; }
+    .py-mix-card-name { font-size: 14px; font-weight: 800; line-height: 1.25; margin-bottom: 4px; }
+    .py-mix-card-aporte {
+      font-size: 11px; line-height: 1.4; flex: 1; margin-bottom: 12px;
+    }
+    .py-mix-card-action {
+      display: inline-flex; align-items: center; justify-content: center; gap: 5px;
+      padding: 6px 10px; border-radius: 8px;
+      font-size: 11px; font-weight: 800; letter-spacing: 0.02em;
+      align-self: flex-start;
+    }
+
+    /* CORE state (locked) */
+    .py-mix-card.core {
+      background: linear-gradient(140deg, var(--accent) 0%, var(--accent-d) 100%);
+      color: #fff;
+      box-shadow: 0 16px 36px rgba(0,99,242,0.30);
+      border: 2px solid var(--accent);
+      cursor: not-allowed;
+    }
+    .py-mix-card.core::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.12), transparent 60%);
+      pointer-events: none; border-radius: inherit;
+    }
+    .py-mix-card.core .py-mix-card-tag { background: rgba(255,255,255,0.22); color: #fff; }
+    .py-mix-card.core .py-mix-card-tag::before { content: '🔒 '; }
+    .py-mix-card.core .py-mix-card-icon { background: rgba(255,255,255,0.22); border: 1px solid rgba(255,255,255,0.4); }
+    .py-mix-card.core .py-mix-card-icon svg { color: #fff; }
+    .py-mix-card.core .py-mix-card-aporte { color: rgba(255,255,255,0.85); }
+    .py-mix-card.core .py-mix-card-action { background: rgba(255,255,255,0.16); color: #fff; }
+    .py-mix-card.core .py-mix-card-action::before { content: '✓ Base'; }
+
+    /* ADD-ON ACTIVE state */
+    .py-mix-card.addon {
+      background: linear-gradient(140deg, var(--accent-l) 0%, #EEF4FF 100%);
+      border: 1px solid var(--accent);
+      color: var(--ink);
+    }
+    .py-mix-card.addon .py-mix-card-tag { background: rgba(0,99,242,0.18); color: var(--accent-d); }
+    .py-mix-card.addon .py-mix-card-tag::before { content: '★ '; }
+    .py-mix-card.addon .py-mix-card-icon { background: linear-gradient(135deg, var(--accent), var(--accent-d)); }
+    .py-mix-card.addon .py-mix-card-icon svg { color: #fff; }
+    .py-mix-card.addon .py-mix-card-aporte { color: var(--sec); }
+    .py-mix-card.addon .py-mix-card-action { background: #fff; color: var(--accent-d); border: 1px solid rgba(0,99,242,0.2); }
+    .py-mix-card.addon .py-mix-card-action::before { content: '× Quitar'; }
+    .py-mix-card.addon:hover { transform: translateY(-3px); box-shadow: 0 14px 28px rgba(0,99,242,0.18); }
+
+    /* AVAILABLE state */
+    .py-mix-card.available {
+      background: var(--bg);
+      color: var(--ink);
+      border: 1.5px dashed rgba(15,23,41,0.18);
+    }
+    .py-mix-card.available .py-mix-card-tag { background: var(--bg-alt); color: var(--muted); }
+    .py-mix-card.available .py-mix-card-tag::before { content: '+ '; }
+    .py-mix-card.available .py-mix-card-icon { background: linear-gradient(135deg, var(--accent-l), #F1F5FF); border: 1px solid rgba(0,99,242,0.12); }
+    .py-mix-card.available .py-mix-card-icon svg { color: var(--accent-d); }
+    .py-mix-card.available .py-mix-card-aporte { color: var(--muted); }
+    .py-mix-card.available .py-mix-card-action { background: #fff; color: var(--accent-d); border: 1px solid rgba(0,99,242,0.22); }
+    .py-mix-card.available .py-mix-card-action::before { content: '+ Sumar'; }
+    .py-mix-card.available:hover { transform: translateY(-3px); border-color: var(--accent); background: #fff; box-shadow: 0 14px 28px rgba(0,99,242,0.12); }
+    .py-mix-card.available:hover .py-mix-card-action { background: var(--accent); color: #fff; }
+
+    /* Visual connectors between active cards (CSS line via pseudo) */
+    .py-mix-zone.core-zone .py-mix-grid::before,
+    .py-mix-zone.addon-zone .py-mix-grid::before {
+      content: ''; position: absolute;
+      left: 8%; right: 8%; top: 50%;
+      height: 1.5px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      opacity: 0.25; z-index: -1;
+      transform: translateY(-1px);
+    }
+
+    /* Mix score bar */
+    .py-mix-score {
+      background: linear-gradient(135deg, #F1F5FF, #DBEAFE);
+      border: 1px solid rgba(0,99,242,0.16);
+      border-radius: 16px;
+      padding: 16px 20px;
+      margin-top: 24px;
+      display: flex; align-items: center; gap: 16px;
+    }
+    .py-mix-score-icon {
+      width: 40px; height: 40px; border-radius: 12px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-d));
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 12px rgba(0,99,242,0.25);
+      flex-shrink: 0;
+    }
+    .py-mix-score-icon svg { width: 18px; height: 18px; color: #fff; }
+    .py-mix-score-text { flex: 1; }
+    .py-mix-score-title { font-size: 13px; font-weight: 800; color: var(--ink); }
+    .py-mix-score-desc { font-size: 12px; color: var(--sec); margin-top: 2px; }
+    .py-mix-score-btn { padding: 10px 18px; border-radius: 8px; background: var(--accent); color: #fff; font-size: 12px; font-weight: 700; }
+
+    /* ╔═══════════════════════════════════════════════════════════════════╗
+       ║  OUTCOMES                                                           ║
+       ╚═══════════════════════════════════════════════════════════════════╝ */
+    .py-outcomes { padding: 140px 0; background: var(--bg); position: relative; overflow: hidden; }
+    .py-outcomes::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle at 1px 1px, rgba(15,23,41,0.05) 1px, transparent 0); background-size: 32px 32px; mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%); -webkit-mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%); }
+    .py-outcomes-head { text-align: center; margin-bottom: 64px; position: relative; z-index: 2; }
+    .py-outcomes-head h2 { font-size: clamp(36px, 3.6vw, 50px); font-weight: 800; line-height: 1.08; letter-spacing: -1.5px; margin: 12px 0 16px; }
+    .py-outcomes-head h2 em { font-style: normal; color: var(--accent); }
+    .py-outcomes-head p { font-size: 17px; line-height: 1.6; color: var(--sec); max-width: 620px; margin: 0 auto; }
+    .py-outcomes-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; position: relative; z-index: 2; max-width: 1080px; margin: 0 auto; }
+    .py-outcome {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 32px;
+      display: grid; grid-template-columns: auto 1fr; gap: 24px;
+      align-items: flex-start;
+      transition: all 0.3s var(--ease);
+    }
+    .py-outcome:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 50px rgba(15,23,41,0.08);
+      border-color: rgba(0,99,242,0.2);
+    }
+    .py-outcome-icon {
+      width: 60px; height: 70px;
+      clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+      background: linear-gradient(135deg, var(--accent), var(--accent-d));
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 10px 24px rgba(0,99,242,0.25);
+      flex-shrink: 0;
+    }
+    .py-outcome-icon svg { width: 28px; height: 28px; color: #fff; }
+    .py-outcome-text h4 { font-size: 19px; font-weight: 800; color: var(--ink); line-height: 1.3; margin-bottom: 10px; }
+    .py-outcome-text p { font-size: 14px; line-height: 1.6; color: var(--sec); margin-bottom: 16px; }
+    .py-outcome-stack {
+      display: flex; flex-wrap: wrap; gap: 6px;
+    }
+    .py-outcome-stack span {
+      padding: 4px 10px; border-radius: 12px;
+      background: var(--accent-l);
+      font-size: 10px; font-weight: 700; color: var(--accent-d);
+      letter-spacing: 0.04em;
+    }
+
+    /* ╔═══════════════════════════════════════════════════════════════════╗
+       ║  UN DÍA CON ESTA SOLUCIÓN                                          ║
+       ╚═══════════════════════════════════════════════════════════════════╝ */
+    .py-day { padding: 140px 0; background: linear-gradient(180deg, var(--navy) 0%, var(--navy-2) 100%); color: #fff; position: relative; overflow: hidden; }
+    .py-day::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 30% 50%, rgba(0,99,242,0.25), transparent 50%), radial-gradient(ellipse at 80% 70%, rgba(44,164,255,0.18), transparent 55%); }
+    .py-day-head { text-align: center; margin-bottom: 60px; position: relative; z-index: 2; }
+    .py-day-head h2 { font-size: clamp(36px, 3.6vw, 50px); font-weight: 800; line-height: 1.08; letter-spacing: -1.5px; margin: 12px 0 16px; }
+    .py-day-head h2 em { font-style: normal; background: linear-gradient(135deg, var(--accent-2), #7AD5FF); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+    .py-day-head p { font-size: 16px; line-height: 1.6; color: rgba(255,255,255,0.72); max-width: 620px; margin: 0 auto; }
+
+    .py-timeline {
+      position: relative; z-index: 2;
+      max-width: 1080px; margin: 0 auto;
+      display: flex; flex-direction: column; gap: 24px;
+    }
+    .py-tl-event {
+      display: grid; grid-template-columns: 90px 1fr;
+      gap: 28px;
+      align-items: flex-start;
+      position: relative;
+    }
+    .py-tl-event::before {
+      content: '';
+      position: absolute;
+      left: 99px; top: 36px;
+      bottom: -24px;
+      width: 1.5px;
+      background: rgba(255,255,255,0.08);
+    }
+    .py-tl-event:last-child::before { display: none; }
+    .py-tl-time {
+      font-size: 12px; font-weight: 800;
+      color: var(--accent-2);
+      letter-spacing: 0.06em; text-transform: uppercase;
+      text-align: right;
+      padding-top: 12px;
+    }
+    .py-tl-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px;
+      padding: 18px 22px;
+      transition: all 0.25s var(--ease);
+    }
+    .py-tl-card:hover { background: rgba(255,255,255,0.07); border-color: rgba(44,164,255,0.4); }
+    .py-tl-row {
+      display: flex; align-items: center; gap: 14px;
+      margin-bottom: 8px;
+    }
+    .py-tl-av {
+      width: 38px; height: 38px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 15px; font-weight: 800; color: #fff;
+      flex-shrink: 0;
+    }
+    .py-tl-av.dueno { background: linear-gradient(135deg, var(--accent), var(--accent-d)); }
+    .py-tl-av.conta { background: linear-gradient(135deg, var(--amber), #B45309); }
+    .py-tl-av.emp { background: linear-gradient(135deg, var(--accent-2), var(--accent)); }
+    .py-tl-av.cliente { background: linear-gradient(135deg, var(--purple), #5B3AE0); }
+    .py-tl-meta { flex: 1; }
+    .py-tl-name { font-size: 14px; font-weight: 800; color: #fff; line-height: 1.2; }
+    .py-tl-role { font-size: 11px; color: rgba(255,255,255,0.55); margin-top: 1px; }
+    .py-tl-plat {
+      padding: 4px 10px; border-radius: 12px;
+      background: rgba(44,164,255,0.16);
+      font-size: 10px; font-weight: 800;
+      color: var(--accent-2);
+      letter-spacing: 0.04em;
+    }
+    .py-tl-plat::before { content: '⬢ '; }
+    .py-tl-action {
+      font-size: 14px; line-height: 1.55; color: rgba(255,255,255,0.85);
+    }
+    .py-tl-action b { color: #fff; font-weight: 700; }
+    .py-tl-action em { font-style: normal; color: var(--accent-2); }
+
+    /* ╔═══════════════════════════════════════════════════════════════════╗
+       ║  CASE STUDY                                                         ║
+       ╚═══════════════════════════════════════════════════════════════════╝ */
+    .py-case { padding: 140px 0; background: #fff; position: relative; overflow: hidden; }
+    .py-case-card { max-width: 1100px; margin: 0 auto; background: linear-gradient(135deg, #F1F5FF 0%, #DBEAFE 100%); border-radius: 28px; padding: 60px; position: relative; overflow: hidden; box-shadow: 0 30px 80px rgba(0,99,242,0.18); }
+    .py-case-card::before { content: ''; position: absolute; right: -100px; top: -100px; width: 360px; height: 360px; border-radius: 50%; background: radial-gradient(circle, rgba(0,99,242,0.16), transparent 70%); }
+    .py-case-grid { position: relative; z-index: 2; display: grid; grid-template-columns: 1fr 1.3fr; gap: 60px; align-items: center; }
+    .py-case-customer { text-align: center; }
+    .py-case-logo { display: inline-flex; align-items: center; justify-content: center; width: 92px; height: 92px; border-radius: 22px; background: linear-gradient(135deg, #DC2626 0%, #991B1B 100%); color: #fff; font-size: 28px; font-weight: 800; letter-spacing: -1px; margin-bottom: 18px; box-shadow: 0 16px 36px rgba(220,38,38,0.25); }
+    .py-case-customer-name { font-size: 18px; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
+    .py-case-customer-role { font-size: 13px; color: var(--muted); margin-bottom: 24px; }
+    .py-case-flag { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 20px; background: var(--accent-l); font-size: 11px; font-weight: 700; color: var(--accent-d); letter-spacing: 0.06em; text-transform: uppercase; }
+    .py-case-content { position: relative; }
+    .py-case-quote-mark { font-size: 80px; line-height: 0.8; color: var(--accent); opacity: 0.25; margin-bottom: -16px; font-family: Georgia, serif; }
+    .py-case-quote { font-size: clamp(22px, 2.2vw, 30px); font-weight: 700; line-height: 1.35; color: var(--ink); letter-spacing: -0.5px; margin-bottom: 32px; }
+    .py-case-metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; padding-top: 28px; border-top: 1px solid rgba(15,23,41,0.08); }
+    .py-case-metric-num { font-size: 32px; font-weight: 800; line-height: 1; letter-spacing: -1px; margin-bottom: 6px; font-variant-numeric: tabular-nums; background: linear-gradient(135deg, var(--accent), var(--accent-d)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+    .py-case-metric-desc { font-size: 12px; color: var(--sec); line-height: 1.45; }
+
+    /* CTA */
+    .cta-band { position: relative; padding: 120px 0; background: linear-gradient(135deg, var(--accent) 0%, var(--accent-d) 60%, var(--navy-3) 100%); color: #fff; text-align: center; overflow: hidden; }
+    .cta-band::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 0%, rgba(44,164,255,0.35), transparent 60%); }
+    .cta-band .container { position: relative; z-index: 2; }
+    .cta-h2 { font-size: clamp(40px, 4vw, 60px); font-weight: 800; line-height: 1.08; letter-spacing: -1.5px; margin-bottom: 18px; }
+    .cta-sub { font-size: 18px; line-height: 1.6; color: rgba(255,255,255,0.85); max-width: 540px; margin: 0 auto 32px; }
+    .cta-band .btn-white { color: var(--accent); }
+    .cta-fine { font-size: 13px; color: rgba(255,255,255,0.65); margin-top: 20px; }
+
+    /* FOOTER */
+    footer { background: var(--ink-deep); color: rgba(255,255,255,0.65); padding: 80px 0 30px; }
+    .footer-inner { max-width: 1240px; margin: 0 auto; padding: 0 64px; display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 64px; margin-bottom: 60px; }
+    .footer-logo { font-size: 22px; font-weight: 800; color: #fff; margin-bottom: 14px; }
+    .footer-logo span { color: var(--accent-2); }
+    .footer-tagline { font-size: 14px; line-height: 1.55; color: rgba(255,255,255,0.6); max-width: 240px; }
+    .footer-col-title { font-size: 13px; font-weight: 700; color: #fff; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 16px; }
+    .footer-links { display: flex; flex-direction: column; gap: 10px; }
+    .footer-links a { font-size: 14px; color: rgba(255,255,255,0.6); transition: color 0.2s; }
+    .footer-links a:hover { color: var(--accent-2); }
+    .footer-helping { text-align: center; padding: 40px 0 30px; font-size: 14px; color: rgba(255,255,255,0.55); }
+    .footer-helping em { font-style: normal; color: var(--pink); font-weight: 700; }
+    .footer-helping em::before { content: '♥ '; color: var(--pink); }
+    .footer-bottom { max-width: 1240px; margin: 0 auto; padding: 24px 64px 0; border-top: 1px solid rgba(255,255,255,0.08); display: flex; justify-content: space-between; font-size: 13px; color: rgba(255,255,255,0.45); }
+
+    @media (max-width: 980px) {
+      .py-hero-inner { grid-template-columns: 1fr; gap: 60px; }
+      .py-phone-overlay { display: none; }
+      .py-stats-grid { grid-template-columns: repeat(2, 1fr); gap: 24px; }
+      .py-problem-grid { grid-template-columns: 1fr; gap: 50px; }
+      .py-mix-grid { grid-template-columns: repeat(3, 1fr); }
+      .py-mix-board { padding: 28px; }
+      .py-outcomes-grid { grid-template-columns: 1fr; }
+      .py-tl-event { grid-template-columns: 70px 1fr; gap: 16px; }
+      .py-tl-event::before { left: 79px; }
+      .py-case-grid { grid-template-columns: 1fr; gap: 32px; text-align: center; }
+      .py-case-card { padding: 40px 32px; }
+      .footer-inner { grid-template-columns: 1fr 1fr; gap: 40px; }
+    }
+    @media (max-width: 600px) {
+      .container, .nav-inner, .footer-inner, .footer-bottom { padding-left: 24px; padding-right: 24px; }
+      .py-stats-grid { grid-template-columns: 1fr; }
+      .py-mix-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+      .nav-links { display: none; } .nav-crumb { display: none; }
+      .py-hero { padding-top: 130px; padding-bottom: 60px; min-height: auto; }
+      .py-stats, .py-problem, .py-mix, .py-outcomes, .py-day, .py-case, .cta-band { padding: 80px 0; }
+      .py-case-metrics { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="cursor-glow" id="cursorGlow"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">info<span>corp</span></a>
+    <ul class="nav-links">
+      <li><a href="plataforma.html">Productos</a></li>
+      <li><a href="soluciones-personas.html" class="active">Soluciones <span class="nav-crumb">Banca Pymes</span></a></li>
+      <li><a href="#">Clientes</a></li>
+      <li><a href="#">Recursos</a></li>
+    </ul>
+    <a href="#demo" class="nav-cta">Solicitar demo</a>
+  </div>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<section class="py-hero">
+  <div class="py-hero-grid"></div>
+  <div class="py-hero-inner">
+    <div>
+      <span class="py-hero-label" id="heroLabel">Banca · PYMES</span>
+      <h1 class="py-hero-h1" id="heroH1">El banco que entiende<br>cómo <em>trabaja una Pyme</em></h1>
+      <p class="py-hero-sub" id="heroSub">Multi-firma jerárquica, nóminas automatizadas, créditos digitales y un mix de plataformas armado a medida del segmento. El dueño aprueba desde el celu, el contador opera desde web, los empleados cobran a tiempo.</p>
+      <div class="py-hero-actions" id="heroActions">
+        <a href="#demo" class="btn btn-primary btn-arrow">Pedinos una demo</a>
+        <a href="#mix" class="btn btn-ghost">Ver el mix de plataformas</a>
+      </div>
+    </div>
+
+    <div id="heroVisual" style="position: relative;">
+      <span class="py-floating-tag tag-1">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+        Multi-firma OK
+      </span>
+      <span class="py-floating-tag tag-2">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        +52% retention
+      </span>
+
+      <div class="py-workspace-stage">
+        <div class="py-workspace">
+          <div class="py-ws-bar">
+            <div class="py-ws-dots"><div class="py-ws-dot r"></div><div class="py-ws-dot y"></div><div class="py-ws-dot g"></div></div>
+            <div class="py-ws-url">mibanco.com / pymes / dashboard</div>
+            <div class="py-ws-tag">PYMES</div>
+          </div>
+          <div class="py-ws-body">
+            <div class="py-ws-side">
+              <div class="py-ws-side-brand">
+                <div class="py-ws-side-mark"></div>
+                <div class="py-ws-side-brand-text">MIBANCO</div>
+              </div>
+              <div class="py-ws-side-section">Operación</div>
+              <div class="py-ws-side-item active">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="7" r="4"/><path d="M17 11v6a4 4 0 0 1-4 4H5a4 4 0 0 1-4-4v-2"/></svg>
+                Nóminas
+              </div>
+              <div class="py-ws-side-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                Transferencias
+              </div>
+              <div class="py-ws-side-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/></svg>
+                Pagos
+              </div>
+              <div class="py-ws-side-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                Créditos
+              </div>
+              <div class="py-ws-side-section">Admin</div>
+              <div class="py-ws-side-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+                Usuarios
+              </div>
+            </div>
+            <div class="py-ws-main">
+              <div class="py-ws-main-head">
+                <div>
+                  <div class="py-ws-main-title">Nómina · Mayo 2025</div>
+                  <div class="py-ws-main-sub">14 empleados · Total $ 48,250</div>
+                </div>
+                <div class="py-ws-main-btn">Enviar a firma</div>
+              </div>
+
+              <div class="py-ws-list-title">Beneficiarios</div>
+              <div class="py-ws-list">
+                <div class="py-ws-row">
+                  <div class="py-ws-row-name">Juan Pérez · Ventas</div>
+                  <div class="py-ws-row-amount">$ 4,200</div>
+                  <div class="py-ws-row-state ok">OK</div>
+                </div>
+                <div class="py-ws-row">
+                  <div class="py-ws-row-name">María González · Admin</div>
+                  <div class="py-ws-row-amount">$ 5,100</div>
+                  <div class="py-ws-row-state ok">OK</div>
+                </div>
+                <div class="py-ws-row">
+                  <div class="py-ws-row-name">Carlos Ramírez · Operaciones</div>
+                  <div class="py-ws-row-amount">$ 3,800</div>
+                  <div class="py-ws-row-state warn">CBU</div>
+                </div>
+                <div class="py-ws-row">
+                  <div class="py-ws-row-name">Sofía Méndez · RRHH</div>
+                  <div class="py-ws-row-amount">$ 4,500</div>
+                  <div class="py-ws-row-state pen">+10</div>
+                </div>
+              </div>
+
+              <div class="py-ws-signers">
+                <div class="py-ws-signers-text">
+                  Requiere <b>2 firmas</b> · Dueño + Contador
+                </div>
+                <div class="py-ws-signers-avatars">
+                  <div class="py-ws-signer-av a">M</div>
+                  <div class="py-ws-signer-av b">C</div>
+                  <div class="py-ws-signer-av c">+1</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mobile floating: dueño aprobando -->
+        <div class="py-phone-overlay">
+          <div class="py-phone-body">
+            <div class="py-phone-screen">
+              <div class="py-phone-h">
+                Aprobación pendiente
+                <span>Nómina mayo · $ 48,250</span>
+              </div>
+              <div class="py-phone-card">
+                <div class="py-phone-card-tt">14 beneficiarios</div>
+                <div class="py-phone-card-num">$ 48,250</div>
+              </div>
+              <div class="py-phone-btn">✓ Aprobar con Face ID</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ STATS ═══ -->
+<section class="py-stats">
+  <div class="container py-stats-grid">
+    <div class="py-stat">
+      <div class="py-stat-num" data-target="52" data-prefix="+" data-suffix="%">+0%</div>
+      <div class="py-stat-desc">retention de Pymes<br>cliente vs banco tradicional</div>
+    </div>
+    <div class="py-stat">
+      <div class="py-stat-num" data-target="6" data-suffix="×">0×</div>
+      <div class="py-stat-desc">transacciones B2B<br>por mes y cliente</div>
+    </div>
+    <div class="py-stat">
+      <div class="py-stat-num" data-target="80" data-suffix="%">0%</div>
+      <div class="py-stat-desc">pagos por nómina<br>automatizados sin intervención</div>
+    </div>
+    <div class="py-stat">
+      <div class="py-stat-num" data-target="38" data-prefix="-" data-suffix="%">-0%</div>
+      <div class="py-stat-desc">costos operativos por<br>Pyme atendida</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PROBLEM → SOLUTION ═══ -->
+<section class="py-problem">
+  <div class="container py-problem-grid">
+    <div>
+      <span class="label">EL RETO · LA SOLUCIÓN</span>
+      <h2 class="py-problem-h2 split-lines">Una Pyme no es <em>una persona</em>,<br>no es una corporación</h2>
+
+      <div class="py-problem-list">
+        <div class="py-problem-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <div class="py-problem-item-text"><strong>Multi-firma que no funciona en mobile:</strong> el dueño viaja, el contador autoriza desde la oficina, los pagos quedan colgados días esperando coordinación.</div>
+        </div>
+        <div class="py-problem-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <div class="py-problem-item-text"><strong>Nómina manual mes a mes:</strong> Excel con CBU's, mails para confirmar, errores que cuestan reputación. La Pyme termina pagando con tarjetas personales.</div>
+        </div>
+        <div class="py-problem-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <div class="py-problem-item-text"><strong>Cash flow opaco:</strong> el dueño no sabe cuánta plata tiene la empresa hasta que el contador manda el reporte. Y el reporte llega tarde.</div>
+        </div>
+        <div class="py-problem-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <div class="py-problem-item-text"><strong>Crédito que tarda 3 semanas:</strong> la oportunidad ya pasó. Cuando llegan los fondos, la Pyme ya pidió el préstamo a un competidor o se quedó sin negocio.</div>
+        </div>
+      </div>
+
+      <div class="py-arrow-down">Lo que cambiamos</div>
+
+      <div class="py-solution-list">
+        <div class="py-solution-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+          <div class="py-solution-item-text"><strong>Autogestión jerárquica de permisos.</strong> El dueño define quién firma qué, hasta qué monto. El contador opera, el dueño aprueba desde el celu con biometría.</div>
+        </div>
+        <div class="py-solution-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+          <div class="py-solution-item-text"><strong>Nómina batch + agenda.</strong> Importás la planilla una vez, validás CBUs automáticamente, programás. El sistema paga sin que vuelvas a pensarlo.</div>
+        </div>
+        <div class="py-solution-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+          <div class="py-solution-item-text"><strong>Cash flow en tiempo real.</strong> Dashboard con todos los movimientos pendientes, próximas obligaciones, capacidad real. Sin esperar al lunes para saber dónde estás parado.</div>
+        </div>
+        <div class="py-solution-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+          <div class="py-solution-item-text"><strong>Crédito digital con scoring automático.</strong> El motor ya conoce la operación de la Pyme. Oferta pre-aprobada con un click, desembolso en horas.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pyme personas/roles visual -->
+    <div class="py-personas">
+      <div class="py-personas-head">
+        <div class="py-personas-head-label">Pyme = múltiples personas</div>
+        <div class="py-personas-head-title">4 roles, un solo banco</div>
+      </div>
+      <div class="py-personas-grid">
+        <div class="py-persona-card">
+          <div class="py-persona-card-row">
+            <div class="py-persona-av dueno">M</div>
+            <div class="py-persona-info">
+              <div class="py-persona-name">Martín</div>
+              <div class="py-persona-role">Dueño</div>
+            </div>
+          </div>
+          <div class="py-persona-task">Aprueba pagos desde el celu, <b>con Face ID</b>. Decide en 30 seg.</div>
+          <div class="py-persona-platform">Mobile Banking</div>
+        </div>
+        <div class="py-persona-card">
+          <div class="py-persona-card-row">
+            <div class="py-persona-av conta">C</div>
+            <div class="py-persona-info">
+              <div class="py-persona-name">Cecilia</div>
+              <div class="py-persona-role">Contadora</div>
+            </div>
+          </div>
+          <div class="py-persona-task">Carga nóminas, valida CBUs, programa pagos <b>desde web</b>.</div>
+          <div class="py-persona-platform">Web Banking</div>
+        </div>
+        <div class="py-persona-card">
+          <div class="py-persona-card-row">
+            <div class="py-persona-av emp">J</div>
+            <div class="py-persona-info">
+              <div class="py-persona-name">Juan</div>
+              <div class="py-persona-role">Empleado</div>
+            </div>
+          </div>
+          <div class="py-persona-task">Recibe sueldo a tiempo. Consulta saldo <b>en WhatsApp</b>.</div>
+          <div class="py-persona-platform">Social · SARA</div>
+        </div>
+        <div class="py-persona-card">
+          <div class="py-persona-card-row">
+            <div class="py-persona-av cliente">P</div>
+            <div class="py-persona-info">
+              <div class="py-persona-name">Patricia</div>
+              <div class="py-persona-role">Cliente B2B</div>
+            </div>
+          </div>
+          <div class="py-persona-task">Paga la factura <b>desde su cuenta</b> al ver el QR generado.</div>
+          <div class="py-persona-platform">Web Pública</div>
+        </div>
+      </div>
+      <div class="py-personas-foot">
+        <b>Cada rol</b> usa la plataforma que más le conviene. <b>Tu banco</b>, una sola experiencia coherente.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 🌟 MIX COMPOSER (protagonist) ═══ -->
+<section class="py-mix" id="mix">
+  <div class="py-mix-head">
+    <span class="label">EL MIX RECOMENDADO PARA PYMES</span>
+    <h2 class="split-lines">Banca Pymes <em>se arma</em><br>con estas plataformas</h2>
+    <p>Tres plataformas core que definen la solución, más cuatro recomendadas que el segmento agradece. Quitalas, sumá otras, personalizá tu mix para el banco que querés ser.</p>
+    <div class="py-mix-pill">
+      <span class="py-mix-pill-icon">✓</span>
+      Modular · Sin lock-in · Activación gradual
+    </div>
+  </div>
+
+  <div class="py-mix-composer">
+    <div class="py-mix-board">
+
+      <!-- CORE ZONE -->
+      <div class="py-mix-zone core-zone">
+        <div class="py-mix-zone-head">
+          <div>
+            <div class="py-mix-zone-label">
+              CORE de Banca Pymes
+              <span class="py-mix-zone-tag core">🔒 Base</span>
+            </div>
+            <div class="py-mix-zone-desc">Las plataformas que definen la solución. Banca Pymes sin estas, no es Banca Pymes.</div>
+          </div>
+          <div class="py-mix-zone-counter"><b id="coreCount">3</b> de 3 activas</div>
+        </div>
+        <div class="py-mix-grid" id="coreGrid">
+          <!-- Cards inyectadas por JS -->
+        </div>
+      </div>
+
+      <!-- ADD-ON ZONE -->
+      <div class="py-mix-zone addon-zone">
+        <div class="py-mix-zone-head">
+          <div>
+            <div class="py-mix-zone-label">
+              Add-ons recomendados
+              <span class="py-mix-zone-tag addon">★ Mix Pymes</span>
+            </div>
+            <div class="py-mix-zone-desc">El mix curado que recomendamos para Pymes. Podés quitar las que no apliquen a tu estrategia.</div>
+          </div>
+          <div class="py-mix-zone-counter"><b id="addonCount">4</b> activas</div>
+        </div>
+        <div class="py-mix-grid" id="addonGrid">
+          <!-- Cards inyectadas por JS -->
+        </div>
+      </div>
+
+      <!-- AVAILABLE ZONE -->
+      <div class="py-mix-zone">
+        <div class="py-mix-zone-head">
+          <div>
+            <div class="py-mix-zone-label">
+              Sumá según tu estrategia
+              <span class="py-mix-zone-tag optional">+ Disponibles</span>
+            </div>
+            <div class="py-mix-zone-desc">Plataformas opcionales para personalizar tu solución de Banca Pymes.</div>
+          </div>
+          <div class="py-mix-zone-counter"><b id="optionalCount">4</b> disponibles</div>
+        </div>
+        <div class="py-mix-grid" id="optionalGrid">
+          <!-- Cards inyectadas por JS -->
+        </div>
+      </div>
+
+      <!-- Mix score / CTA -->
+      <div class="py-mix-score">
+        <div class="py-mix-score-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="py-mix-score-text">
+          <div class="py-mix-score-title">Mix actual: <span id="mixSummary">7 plataformas — optimizado para Pymes con multi-firma + nómina batch</span></div>
+          <div class="py-mix-score-desc">Tocá las cards para personalizar. Al final, charlamos sobre el mix que mejor encaja en tu banco.</div>
+        </div>
+        <a href="#demo" class="py-mix-score-btn">Hablemos del mix →</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══ OUTCOMES PARA LA PYME ═══ -->
+<section class="py-outcomes">
+  <div class="container py-outcomes-head">
+    <span class="label">Qué obtiene tu cliente Pyme</span>
+    <h2 class="split-lines">Cuatro <em>resultados de negocio</em>,<br>no cuatro features</h2>
+    <p>Lo que la Pyme y su entorno sienten todos los días cuando el banco le habla en su idioma.</p>
+  </div>
+  <div class="container py-outcomes-grid">
+    <div class="py-outcome">
+      <div class="py-outcome-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      </div>
+      <div class="py-outcome-text">
+        <h4>El dueño aprueba pagos desde el celu</h4>
+        <p>Sin volver a la oficina, sin esperar el lunes. Multi-firma, biometría, control total desde donde esté.</p>
+        <div class="py-outcome-stack">
+          <span>IC Mobile</span><span>IC Smart Platform</span>
+        </div>
+      </div>
+    </div>
+    <div class="py-outcome">
+      <div class="py-outcome-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      </div>
+      <div class="py-outcome-text">
+        <h4>Pagos por nómina sin manual</h4>
+        <p>Importás la planilla, programás, te olvidás. El motor valida, agenda y ejecuta. Cero Excel, cero CBUs perdidos.</p>
+        <div class="py-outcome-stack">
+          <span>IC Web Banking</span><span>IC Back Office</span>
+        </div>
+      </div>
+    </div>
+    <div class="py-outcome">
+      <div class="py-outcome-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      </div>
+      <div class="py-outcome-text">
+        <h4>Cash flow en tiempo real</h4>
+        <p>Saldo, obligaciones, próximos pagos y crédito disponible: todo en un solo dashboard. Decisiones sin esperar el reporte.</p>
+        <div class="py-outcome-stack">
+          <span>IC Analytics</span><span>IC Web</span>
+        </div>
+      </div>
+    </div>
+    <div class="py-outcome">
+      <div class="py-outcome-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+      </div>
+      <div class="py-outcome-text">
+        <h4>Crédito digital, scoring automático</h4>
+        <p>El banco ya conoce la operación de la Pyme. Oferta pre-aprobada, desembolso en horas, sin papeles.</p>
+        <div class="py-outcome-stack">
+          <span>IC Onboarding</span><span>IC Analytics</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ UN DÍA CON BANCA PYMES ═══ -->
+<section class="py-day">
+  <div class="container py-day-head">
+    <span class="label on-dark">UN DÍA CON BANCA PYMES</span>
+    <h2 class="split-lines">Mismo día, mismo banco,<br><em>cuatro experiencias coherentes</em></h2>
+    <p>Cecilia abre el día con la nómina. Martín aprueba desde la cancha. Juan cobra a tiempo. Patricia paga al toque. Esto es un martes típico cuando la solución de Banca Pymes funciona.</p>
+  </div>
+
+  <div class="container">
+    <div class="py-timeline">
+      <div class="py-tl-event">
+        <div class="py-tl-time">08:14</div>
+        <div class="py-tl-card">
+          <div class="py-tl-row">
+            <div class="py-tl-av conta">C</div>
+            <div class="py-tl-meta">
+              <div class="py-tl-name">Cecilia · Contadora</div>
+              <div class="py-tl-role">Carga nómina · Mayo</div>
+            </div>
+            <div class="py-tl-plat">IC Web Banking</div>
+          </div>
+          <div class="py-tl-action">
+            Desde la oficina, importa la planilla con <b>14 empleados</b>. El sistema valida CBUs automáticamente, marca uno que cambió (<em>Carlos</em>) y le pide actualizarlo. Programa el pago para el 31.
+          </div>
+        </div>
+      </div>
+
+      <div class="py-tl-event">
+        <div class="py-tl-time">10:42</div>
+        <div class="py-tl-card">
+          <div class="py-tl-row">
+            <div class="py-tl-av dueno">M</div>
+            <div class="py-tl-meta">
+              <div class="py-tl-name">Martín · Dueño</div>
+              <div class="py-tl-role">Aprueba pago de nómina</div>
+            </div>
+            <div class="py-tl-plat">IC Mobile</div>
+          </div>
+          <div class="py-tl-action">
+            En un taller, recibe push: <em>"Nómina lista para tu firma"</em>. Ve el detalle, confirma con <b>Face ID</b>. Vuelve a su reunión sin perder 30 segundos.
+          </div>
+        </div>
+      </div>
+
+      <div class="py-tl-event">
+        <div class="py-tl-time">11:18</div>
+        <div class="py-tl-card">
+          <div class="py-tl-row">
+            <div class="py-tl-av dueno">M</div>
+            <div class="py-tl-meta">
+              <div class="py-tl-name">Martín · Dueño</div>
+              <div class="py-tl-role">Mira cash flow</div>
+            </div>
+            <div class="py-tl-plat">IC Analytics</div>
+          </div>
+          <div class="py-tl-action">
+            Antes de cerrar el día decide invertir en stock. Ve el cash flow proyectado: hay <b>$ 38K disponibles</b> después de la nómina. <em>GURU le sugiere</em> una línea de crédito pre-aprobada por si quiere expandir.
+          </div>
+        </div>
+      </div>
+
+      <div class="py-tl-event">
+        <div class="py-tl-time">31 · 09:00</div>
+        <div class="py-tl-card">
+          <div class="py-tl-row">
+            <div class="py-tl-av emp">J</div>
+            <div class="py-tl-meta">
+              <div class="py-tl-name">Juan · Empleado</div>
+              <div class="py-tl-role">Cobra sueldo a tiempo</div>
+            </div>
+            <div class="py-tl-plat">IC Social · SARA</div>
+          </div>
+          <div class="py-tl-action">
+            Recibe el sueldo en su cuenta. Como no tiene la app del banco, consulta por <b>WhatsApp</b> a SARA: <em>"¿Ya me depositaron?"</em>. SARA confirma: <em>"Sí, $4.200 acreditados hoy 9:00."</em>
+          </div>
+        </div>
+      </div>
+
+      <div class="py-tl-event">
+        <div class="py-tl-time">15:32</div>
+        <div class="py-tl-card">
+          <div class="py-tl-row">
+            <div class="py-tl-av cliente">P</div>
+            <div class="py-tl-meta">
+              <div class="py-tl-name">Patricia · Cliente B2B</div>
+              <div class="py-tl-role">Paga factura por QR</div>
+            </div>
+            <div class="py-tl-plat">Smart Platform</div>
+          </div>
+          <div class="py-tl-action">
+            Recibe la factura digital con un <b>QR de pago</b>. Lo escanea desde su app, paga al instante. La conciliación en la Pyme de Martín ocurre automática.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CASE STUDY ═══ -->
+<section class="py-case">
+  <div class="container">
+    <div class="py-case-card">
+      <div class="py-case-grid">
+        <div class="py-case-customer">
+          <div class="py-case-logo">M</div>
+          <div class="py-case-customer-name">Banco Macro Pymes</div>
+          <div class="py-case-customer-role">Head de Banca Empresas</div>
+          <span class="py-case-flag">Caso real · Argentina</span>
+        </div>
+        <div class="py-case-content">
+          <div class="py-case-quote-mark">"</div>
+          <blockquote class="py-case-quote">Lo más fuerte no es la retention. Es que las Pymes nos recomiendan. El contador que opera con nosotros nos lleva a otra Pyme. Pasamos de captación cara a captación orgánica.</blockquote>
+          <div class="py-case-metrics">
+            <div>
+              <div class="py-case-metric-num" data-target="52" data-prefix="+" data-suffix="%">+0%</div>
+              <div class="py-case-metric-desc">retention de Pymes<br>vs banca tradicional</div>
+            </div>
+            <div>
+              <div class="py-case-metric-num" data-target="80" data-suffix="%">0%</div>
+              <div class="py-case-metric-desc">nóminas procesadas<br>sin intervención manual</div>
+            </div>
+            <div>
+              <div class="py-case-metric-num" data-target="38" data-prefix="-" data-suffix="%">-0%</div>
+              <div class="py-case-metric-desc">costo operativo<br>por Pyme atendida</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CTA ═══ -->
+<section class="cta-band" id="demo">
+  <div class="container">
+    <h2 class="cta-h2 split-lines">¿Hablamos del banco<br>para Pymes que <em>querés ser</em>?</h2>
+    <p class="cta-sub">Ayudamos a las personas a amar a su banco. Hablemos del tuyo.</p>
+    <a href="#" class="btn btn-white btn-arrow">¿Conversamos?</a>
+    <div class="cta-fine">Sin compromisos · Demo personalizada · 30 minutos</div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-logo">info<span>corp</span></div>
+      <p class="footer-tagline">Desde Uruguay, hacia el mundo.</p>
+    </div>
+    <div>
+      <div class="footer-col-title">Soluciones</div>
+      <ul class="footer-links">
+        <li><a href="soluciones-personas.html">Banca Personas</a></li>
+        <li><a href="soluciones-pymes.html">Banca Pymes</a></li>
+        <li><a href="#">Banca Corporativa</a></li>
+        <li><a href="#">Banca All Business</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Compañía</div>
+      <ul class="footer-links">
+        <li><a href="#">Sobre nosotros</a></li>
+        <li><a href="#">Método B-Fly</a></li>
+        <li><a href="#">Casos de éxito</a></li>
+        <li><a href="#">Carreras</a></li>
+        <li><a href="#">Blog</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Recursos</div>
+      <ul class="footer-links">
+        <li><a href="#">Estudio Banca Digital 2025</a></li>
+        <li><a href="#">Privacidad</a></li>
+        <li><a href="#">Términos</a></li>
+        <li><a href="#">Seguridad</a></li>
+      </ul>
+    </div>
+  </div>
+  <p class="footer-helping">Helping people <em>love</em> their bank</p>
+  <div class="footer-bottom">
+    <span>© 2025 Infocorp Group</span>
+    <span>Lima, Perú · hola@infocorp.net</span>
+  </div>
+</footer>
+
+<script>
+gsap.registerPlugin(ScrollTrigger);
+
+const glow = document.getElementById('cursorGlow');
+let mx=0, my=0, gx=0, gy=0;
+window.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; }, {passive:true});
+(function lerp(){ gx+=(mx-gx)*0.08; gy+=(my-gy)*0.08; if(glow){ glow.style.left=gx+'px'; glow.style.top=gy+'px'; } requestAnimationFrame(lerp); })();
+
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 20), {passive:true});
+
+// Hero entrance
+gsap.set('#heroLabel',   { y: 12, opacity: 0 });
+gsap.set('#heroSub',     { y: 16, opacity: 0 });
+gsap.set('#heroActions', { y: 16, opacity: 0 });
+gsap.set('#heroVisual',  { scale: 0.85, opacity: 0 });
+
+const heroTL = gsap.timeline({ delay: 0.15 });
+heroTL.to('#heroLabel', { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }, 0.2);
+
+const heroSplit = new SplitType('#heroH1', { types: 'words,chars', tagName: 'span' });
+heroTL.fromTo(heroSplit.chars,
+  { y: 60, opacity: 0, rotationX: -40 },
+  { y: 0, opacity: 1, rotationX: 0, duration: 0.7, stagger: 0.012, ease: 'power3.out', transformOrigin: '50% 100%' },
+  0.4
+);
+heroTL.to('#heroSub',     { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' }, 0.9);
+heroTL.to('#heroActions', { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' }, 1.0);
+heroTL.to('#heroVisual',  { opacity: 1, scale: 1, duration: 1.1, ease: 'power3.out' }, 0.6);
+
+document.querySelectorAll('.split-lines').forEach(el => {
+  const split = new SplitType(el, { types: 'lines', tagName: 'span' });
+  split.lines.forEach(line => {
+    line.style.overflow = 'hidden';
+    line.style.display = 'block';
+  });
+  gsap.fromTo(split.lines, { y: '100%', opacity: 0 },
+    { y: '0%', opacity: 1, duration: 0.85, stagger: 0.12, ease: 'power3.out',
+      scrollTrigger: { trigger: el, start: 'top 82%', toggleActions: 'play none none none' } });
+});
+
+// Counters
+document.querySelectorAll('.py-stat-num, .py-case-metric-num').forEach(el => {
+  const target = parseFloat(el.dataset.target);
+  const prefix = el.dataset.prefix || '';
+  const suffix = el.dataset.suffix || '';
+  if (isNaN(target)) return;
+  el.textContent = prefix + '0' + suffix;
+  ScrollTrigger.create({
+    trigger: el, start: 'top 88%', once: true,
+    onEnter: () => {
+      gsap.fromTo({ v: 0 }, { v: target },
+        { duration: 1.4, ease: 'power2.out',
+          onUpdate: function(){
+            const v = this.targets()[0].v;
+            const isFloat = target % 1 !== 0;
+            el.textContent = prefix + (isFloat ? v.toFixed(1) : Math.round(v)) + suffix;
+          }
+        });
+    }
+  });
+});
+
+gsap.fromTo('.py-stat', { x: -20, opacity: 0 },
+  { x: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: 'power3.out',
+    scrollTrigger: { trigger: '.py-stats-grid', start: 'top 85%' } });
+gsap.fromTo('.py-problem-item', { x: -30, opacity: 0 },
+  { x: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: 'power3.out',
+    scrollTrigger: { trigger: '.py-problem-list', start: 'top 82%' } });
+gsap.fromTo('.py-solution-item', { x: -30, opacity: 0 },
+  { x: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: 'power3.out',
+    scrollTrigger: { trigger: '.py-solution-list', start: 'top 82%' } });
+gsap.fromTo('.py-personas', { x: 40, opacity: 0 },
+  { x: 0, opacity: 1, duration: 0.9, ease: 'power3.out',
+    scrollTrigger: { trigger: '.py-personas', start: 'top 82%' } });
+
+gsap.fromTo('.py-mix-board', { y: 40, opacity: 0 },
+  { y: 0, opacity: 1, duration: 0.9, ease: 'power3.out',
+    scrollTrigger: { trigger: '.py-mix-board', start: 'top 82%' } });
+
+gsap.fromTo('.py-outcome', { y: 30, opacity: 0 },
+  { y: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: 'power3.out',
+    scrollTrigger: { trigger: '.py-outcomes-grid', start: 'top 82%' } });
+
+gsap.fromTo('.py-tl-event', { x: -30, opacity: 0 },
+  { x: 0, opacity: 1, duration: 0.7, stagger: 0.12, ease: 'power3.out',
+    scrollTrigger: { trigger: '.py-timeline', start: 'top 80%' } });
+
+gsap.fromTo('.py-case-card', { y: 40, opacity: 0 },
+  { y: 0, opacity: 1, duration: 0.9, ease: 'power3.out',
+    scrollTrigger: { trigger: '.py-case-card', start: 'top 82%' } });
+
+const ctaSplit = new SplitType('.cta-h2', { types: 'chars', tagName: 'span' });
+gsap.fromTo(ctaSplit.chars, { y: 40, opacity: 0 },
+  { y: 0, opacity: 1, duration: 0.6, stagger: 0.025, ease: 'power3.out',
+    scrollTrigger: { trigger: '.cta-band', start: 'top 75%' } });
+gsap.fromTo('.cta-sub, .cta-band .btn-white, .cta-fine', { y: 20, opacity: 0 },
+  { y: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: 'power3.out',
+    scrollTrigger: { trigger: '.cta-band', start: 'top 70%' } });
+
+// ╔════════════════════════════════════════════════════════════════════╗
+// ║  MIX COMPOSER — Banca Pymes                                          ║
+// ╚════════════════════════════════════════════════════════════════════╝
+const PYME_PLATFORMS = [
+  // CORE (locked) — definen Banca Pymes
+  { id: 'smart',  name: 'IC Smart Platform', tier: 'core',  aporte: 'Orquesta cuentas múltiples y permisos jerárquicos. La base de la operación.', icon: 'grid' },
+  { id: 'web',    name: 'IC Web Banking',    tier: 'core',  aporte: 'Workspace completo para el contador: tesorería, multifirma, batch.', icon: 'web' },
+  { id: 'mobile', name: 'IC Mobile Banking', tier: 'core',  aporte: 'App del dueño: aprueba pagos y firma con biometría desde donde esté.', icon: 'mobile' },
+
+  // ADD-ON ACTIVE (recommended, removable)
+  { id: 'marketing', name: 'IC Marketing Automation', tier: 'addon', aporte: 'Campañas segmentadas por tipo de Pyme. Comunicación que se siente personal.', icon: 'megaphone' },
+  { id: 'onboard',   name: 'IC Onboarding',           tier: 'addon', aporte: 'Alta corporativa con biometría del representante. De prospecto a cliente en horas.', icon: 'shield' },
+  { id: 'back',      name: 'IC Back Office',          tier: 'addon', aporte: 'Resuelve excepciones de nómina, conciliaciones y batch payments con IA.', icon: 'gear' },
+  { id: 'analytics', name: 'IC Analytics (GURU)',     tier: 'addon', aporte: 'Insights por Pyme: tipo, sector, comportamiento. GURU sugiere ofertas relevantes.', icon: 'chart' },
+
+  // OPTIONAL
+  { id: 'social', name: 'IC Social Banking',      tier: 'optional', aporte: 'SARA atiende consultas de empleados por WhatsApp. Descomprime call center.', icon: 'chat' },
+  { id: 'pfm',    name: 'IC Personal Finance',    tier: 'optional', aporte: 'PFM para que el dueño separe finanzas personales de la Pyme.', icon: 'wallet' },
+  { id: 'open',   name: 'IC Open Finance',        tier: 'optional', aporte: 'APIs para integrar el banco con el software contable de la Pyme.', icon: 'plug' },
+  { id: 'portal', name: 'IC Public Portal',       tier: 'optional', aporte: 'Sitio Pymes con simuladores de crédito y tasas en vivo. Captación digital.', icon: 'globe' },
+];
+
+const ICONS = {
+  grid: '<rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>',
+  web: '<circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>',
+  mobile: '<rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/>',
+  megaphone: '<path d="M3 11l18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/>',
+  shield: '<path d="M12 22s-8-4.5-8-12V5l8-3 8 3v5c0 7.5-8 12-8 12z"/><polyline points="9 12 11 14 15 10"/>',
+  gear: '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33"/>',
+  chart: '<line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>',
+  chat: '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
+  wallet: '<path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h4v-8z"/>',
+  plug: '<path d="M22 12h-4M6 12H2M12 22v-4M12 6V2"/><circle cx="12" cy="12" r="4"/>',
+  globe: '<circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>',
+};
+
+const tagText = { core: 'CORE', addon: 'PYMES', optional: 'OPCIONAL' };
+
+function mixCard(p) {
+  return `<div class="py-mix-card ${p.tier}" data-id="${p.id}" tabindex="0" role="button">
+    <span class="py-mix-card-tag">${tagText[p.tier]}</span>
+    <div class="py-mix-card-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ICONS[p.icon]}</svg>
+    </div>
+    <div class="py-mix-card-name">${p.name}</div>
+    <div class="py-mix-card-aporte">${p.aporte}</div>
+    <span class="py-mix-card-action"></span>
+  </div>`;
+}
+
+function renderMix() {
+  const coreGrid     = document.getElementById('coreGrid');
+  const addonGrid    = document.getElementById('addonGrid');
+  const optionalGrid = document.getElementById('optionalGrid');
+
+  const core     = PYME_PLATFORMS.filter(p => p.tier === 'core');
+  const addons   = PYME_PLATFORMS.filter(p => p.tier === 'addon');
+  const optional = PYME_PLATFORMS.filter(p => p.tier === 'optional');
+
+  coreGrid.innerHTML     = core.map(mixCard).join('');
+  addonGrid.innerHTML    = addons.map(mixCard).join('');
+  optionalGrid.innerHTML = optional.map(mixCard).join('');
+
+  document.getElementById('coreCount').textContent = core.length;
+  document.getElementById('addonCount').textContent = addons.length;
+  document.getElementById('optionalCount').textContent = optional.length;
+
+  const activeTotal = core.length + addons.length;
+  document.getElementById('mixSummary').textContent =
+    `${activeTotal} plataformas — ${addons.length > 3 ? 'cobertura completa Pymes con multi-firma + nómina batch + insights' : 'mix minimalista para empezar'}`;
+
+  bindMixCards();
+}
+
+function toggleAddon(id) {
+  const p = PYME_PLATFORMS.find(x => x.id === id);
+  if (!p) return;
+  if (p.tier === 'core') return; // locked
+  if (p.tier === 'addon') {
+    p.tier = 'optional';
+  } else if (p.tier === 'optional') {
+    p.tier = 'addon';
+  }
+  renderMix();
+}
+
+function bindMixCards() {
+  document.querySelectorAll('.py-mix-card').forEach(card => {
+    if (card.classList.contains('core')) return;
+    const id = card.dataset.id;
+    card.addEventListener('click', () => toggleAddon(id));
+    card.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleAddon(id); }
+    });
+  });
+}
+
+renderMix();
+</script>
+
+</body>
+</html>

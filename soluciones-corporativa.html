@@ -1,0 +1,1206 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Banca Corporativa — Infocorp</title>
+  <meta name="description" content="El banco que la tesorería de tu cliente corporativo se merece. Multimoneda, factoring, batch payments y un mix de plataformas para escalar sin fricción." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/split-type@0.3.4/umd/index.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #F8FAFC; --bg-alt: #F1F5F9; --white: #FFFFFF;
+      --ink: #0F1729; --ink-deep: #0A1226; --sec: #334155;
+      --muted: #64748B; --border: #E2E8F0; --surface: #EBEEF5;
+      --accent: #0063F2; --accent-d: #004fd4; --accent-l: #DBEAFE;
+      --accent-2: #2CA4FF; --accent-2-l: #BAE0FF; --accent-deep: #0E2461;
+      --brand: #0063F2; --brand-d: #004fd4; --brand-l: #DBEAFE;
+      --cyan: #2CA4FF; --cyan-l: #BAE0FF;
+      --navy: #051030; --navy-2: #0A1A48; --navy-3: #0E2461;
+      --purple: #7B5BFF; --amber: #F59E0B;
+      --green: #16A34A; --green-2: #4ADE80;
+      --pink: #FF6BB5; --red: #EF4444;
+      --font: 'Plus Jakarta Sans', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --ease: cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font); background: var(--bg); color: var(--ink); overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
+    img, svg { display: block; max-width: 100%; }
+    .label { font-size: 11px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); }
+    .label.on-dark { color: var(--accent-2); }
+    .container { max-width: 1240px; margin: 0 auto; padding: 0 64px; }
+    .cursor-glow { position: fixed; width: 480px; height: 480px; border-radius: 50%; pointer-events: none; z-index: 1; background: radial-gradient(circle, rgba(0,99,242,0.10) 0%, transparent 60%); transform: translate(-50%, -50%); mix-blend-mode: multiply; }
+
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; height: 68px; background: rgba(255,255,255,0.85); backdrop-filter: blur(20px) saturate(180%); border-bottom: 1px solid transparent; transition: border-color 0.3s, box-shadow 0.3s; transform: translateY(-100%); animation: nav-in 0.6s 0.05s var(--ease) forwards; }
+    nav.scrolled { border-color: var(--border); box-shadow: 0 1px 24px rgba(15,23,41,0.07); }
+    @keyframes nav-in { to { transform: translateY(0); } }
+    .nav-inner { max-width: 1240px; margin: 0 auto; padding: 0 64px; height: 100%; display: flex; align-items: center; gap: 40px; }
+    .nav-logo { font-size: 18px; font-weight: 700; color: var(--ink); letter-spacing: -0.3px; flex-shrink: 0; }
+    .nav-logo span { color: var(--brand); }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a { font-size: 14px; color: var(--sec); transition: color 0.2s; position: relative; }
+    .nav-links a:hover { color: var(--ink); }
+    .nav-links a.active { color: var(--accent); font-weight: 600; }
+    .nav-links a.active::after { content: ''; position: absolute; left: 0; right: 0; bottom: -22px; height: 2px; background: var(--accent); border-radius: 2px; }
+    .nav-crumb { font-size: 11px; color: var(--muted); margin-left: 4px; letter-spacing: 0.06em; text-transform: uppercase; }
+    .nav-crumb::before { content: '/ '; color: var(--border); }
+    .nav-cta { margin-left: auto; padding: 9px 22px; background: var(--accent); color: #fff; font-size: 13px; font-weight: 600; border-radius: 6px; transition: background 0.2s, transform 0.15s, box-shadow 0.2s; box-shadow: 0 2px 12px rgba(0,99,242,0.25); position: relative; overflow: hidden; }
+    .nav-cta::after { content: ''; position: absolute; inset: 0; background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.25) 50%, transparent 60%); transform: translateX(-100%); transition: transform 0.5s; }
+    .nav-cta:hover::after { transform: translateX(100%); }
+    .nav-cta:hover { background: var(--accent-d); transform: translateY(-1px); box-shadow: 0 4px 20px rgba(0,99,242,0.35); }
+
+    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; border-radius: 8px; font-weight: 600; font-size: 14px; transition: all 0.2s; cursor: pointer; border: none; font-family: var(--font); }
+    .btn-primary { background: var(--accent); color: #fff; box-shadow: 0 2px 12px rgba(0,99,242,0.25); }
+    .btn-primary:hover { background: var(--accent-d); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(0,99,242,0.35); }
+    .btn-ghost { background: transparent; color: var(--accent); border: 1px solid rgba(0,99,242,0.3); }
+    .btn-ghost:hover { background: var(--accent-l); border-color: var(--accent); }
+    .btn-white { background: #fff; color: var(--accent); box-shadow: 0 4px 20px rgba(0,0,0,0.15); }
+    .btn-white:hover { transform: translateY(-1px); box-shadow: 0 8px 30px rgba(0,0,0,0.25); }
+    .btn-arrow::after { content: '→'; margin-left: 4px; transition: transform 0.2s; }
+    .btn-arrow:hover::after { transform: translateX(4px); }
+
+    /* ╔═══════════════════════════════════════════════════════════════════╗
+       ║  HERO — Tesorería corporate dashboard                              ║
+       ╚═══════════════════════════════════════════════════════════════════╝ */
+    .co-hero { position: relative; min-height: 100vh; background: linear-gradient(135deg, var(--navy) 0%, var(--navy-2) 60%, var(--navy-3) 100%); color: #fff; overflow: hidden; padding: 168px 0 100px; display: flex; align-items: center; }
+    .co-hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 80% 40%, rgba(0,99,242,0.30), transparent 50%), radial-gradient(ellipse at 20% 90%, rgba(44,164,255,0.18), transparent 55%); }
+    .co-hero-grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px); background-size: 60px 60px; mask-image: radial-gradient(ellipse at center, #000 35%, transparent 75%); -webkit-mask-image: radial-gradient(ellipse at center, #000 35%, transparent 75%); }
+    .co-hero-inner { position: relative; z-index: 3; max-width: 1240px; margin: 0 auto; padding: 0 64px; display: grid; grid-template-columns: 1fr 1.1fr; gap: 60px; align-items: center; width: 100%; }
+    .co-hero-label { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 20px; background: rgba(44,164,255,0.14); border: 1px solid rgba(44,164,255,0.3); font-size: 11px; font-weight: 600; letter-spacing: 0.18em; color: var(--accent-2); text-transform: uppercase; margin-bottom: 28px; }
+    .co-hero-label::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--accent-2); box-shadow: 0 0 8px var(--accent-2); animation: co-pulse 2s ease-in-out infinite; }
+    @keyframes co-pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(44,164,255,0.5); } 50% { box-shadow: 0 0 0 6px rgba(44,164,255,0); } }
+    .co-hero-h1 { font-size: clamp(48px, 5.4vw, 78px); font-weight: 800; line-height: 1.04; letter-spacing: -2.2px; margin-bottom: 24px; color: #fff; }
+    .co-hero-h1 em, .co-hero-h1 em .char, .co-hero-h1 em .word { font-style: normal; font-weight: 800; background: linear-gradient(135deg, var(--accent-2) 0%, #7AD5FF 100%); -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent; }
+    .co-hero-sub { font-size: 18px; line-height: 1.55; color: rgba(255,255,255,0.72); max-width: 540px; margin-bottom: 36px; }
+    .co-hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+    .co-hero-actions .btn-primary { background: #fff; color: var(--accent); box-shadow: 0 4px 20px rgba(0,0,0,0.18); }
+    .co-hero-actions .btn-primary:hover { background: #F1F5FF; }
+    .co-hero-actions .btn-ghost { color: #fff; border-color: rgba(255,255,255,0.25); }
+    .co-hero-actions .btn-ghost:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.5); }
+
+    /* Treasury dashboard mockup */
+    .co-dash {
+      position: relative;
+      background: #0B0F1A;
+      border-radius: 14px;
+      overflow: hidden;
+      transform: perspective(1600px) rotateY(-5deg) rotateX(2deg);
+      animation: co-dash-float 8s ease-in-out infinite;
+      box-shadow: 0 60px 120px rgba(0,99,242,0.30), 0 30px 60px rgba(0,0,0,0.4);
+    }
+    @keyframes co-dash-float {
+      0%,100% { transform: perspective(1600px) rotateY(-5deg) rotateX(2deg) translateY(0); }
+      50% { transform: perspective(1600px) rotateY(-4deg) rotateX(2deg) translateY(-8px); }
+    }
+    .co-dash-bar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 10px 14px;
+      background: #131826;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .co-dash-brand { display: flex; align-items: center; gap: 8px; }
+    .co-dash-brand-mark {
+      width: 22px; height: 22px; border-radius: 5px;
+      background: linear-gradient(135deg, var(--accent-2), var(--accent));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 800; color: #fff;
+    }
+    .co-dash-brand-text { font-size: 11px; font-weight: 700; color: #fff; letter-spacing: 0.04em; }
+    .co-dash-live { display: inline-flex; align-items: center; gap: 6px; font-size: 9px; font-weight: 700; color: var(--accent-2); letter-spacing: 0.06em; text-transform: uppercase; }
+    .co-dash-live::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--accent-2); box-shadow: 0 0 8px var(--accent-2); animation: co-pulse 2s ease-in-out infinite; }
+
+    .co-dash-body { padding: 16px 18px; display: flex; flex-direction: column; gap: 12px; }
+
+    /* Treasury KPIs row */
+    .co-kpi-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .co-kpi {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 10px;
+      padding: 10px;
+    }
+    .co-kpi-lbl { font-size: 9px; color: rgba(255,255,255,0.55); letter-spacing: 0.06em; text-transform: uppercase; }
+    .co-kpi-num {
+      font-size: 18px; font-weight: 800; color: #fff;
+      letter-spacing: -0.4px; margin-top: 3px;
+      font-variant-numeric: tabular-nums;
+    }
+    .co-kpi-num.green { color: var(--green-2); }
+    .co-kpi-num.amber { color: #FBBF24; }
+    .co-kpi-delta { font-size: 9px; color: var(--green-2); margin-top: 2px; font-variant-numeric: tabular-nums; }
+    .co-kpi-delta.down { color: #FCA5A5; }
+
+    /* Multi-currency block */
+    .co-fx {
+      background: linear-gradient(135deg, rgba(0,99,242,0.10), rgba(44,164,255,0.02));
+      border: 1px solid rgba(44,164,255,0.18);
+      border-radius: 10px;
+      padding: 12px;
+    }
+    .co-fx-head {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .co-fx-title { font-size: 10px; font-weight: 800; color: #fff; letter-spacing: 0.06em; text-transform: uppercase; }
+    .co-fx-meta { font-family: var(--font-mono); font-size: 9px; color: var(--accent-2); }
+    .co-fx-rows { display: flex; flex-direction: column; gap: 6px; }
+    .co-fx-row { display: grid; grid-template-columns: 28px 1fr auto auto; gap: 8px; align-items: center; font-size: 11px; }
+    .co-fx-flag {
+      width: 22px; height: 22px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 800; color: #fff;
+    }
+    .co-fx-flag.usd { background: linear-gradient(135deg, #1E40AF, #0E3D9C); }
+    .co-fx-flag.eur { background: linear-gradient(135deg, #5B3AE0, #4825B0); }
+    .co-fx-flag.brl { background: linear-gradient(135deg, var(--green), #064E3B); }
+    .co-fx-cur { color: rgba(255,255,255,0.85); font-weight: 700; }
+    .co-fx-amt { font-family: var(--font-mono); color: #fff; font-weight: 700; font-variant-numeric: tabular-nums; }
+    .co-fx-equiv { font-size: 9px; color: rgba(255,255,255,0.5); font-variant-numeric: tabular-nums; }
+
+    /* Pending batch */
+    .co-batch {
+      background: rgba(245,158,11,0.10);
+      border: 1px solid rgba(245,158,11,0.22);
+      border-radius: 10px;
+      padding: 10px 12px;
+      display: grid; grid-template-columns: 36px 1fr auto;
+      gap: 12px; align-items: center;
+    }
+    .co-batch-icon {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: linear-gradient(135deg, #F59E0B, #B45309);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .co-batch-icon svg { width: 16px; height: 16px; color: #fff; }
+    .co-batch-text { line-height: 1.3; }
+    .co-batch-title { font-size: 12px; font-weight: 800; color: #fff; }
+    .co-batch-meta { font-size: 10px; color: rgba(255,255,255,0.55); margin-top: 1px; }
+    .co-batch-btn {
+      background: linear-gradient(135deg, var(--accent), var(--accent-d));
+      color: #fff; padding: 6px 12px; border-radius: 6px;
+      font-size: 10px; font-weight: 800;
+    }
+
+    /* Floating tags */
+    .co-floating-tag { position: absolute; padding: 8px 12px; border-radius: 12px; background: #fff; box-shadow: 0 12px 32px rgba(0,0,0,0.18); display: inline-flex; align-items: center; gap: 6px; font-size: 10px; font-weight: 700; color: var(--ink); z-index: 6; animation: co-tag-float 6s ease-in-out infinite; }
+    .co-floating-tag svg { width: 12px; height: 12px; color: var(--accent); }
+    .co-floating-tag.tag-1 { top: -16px; left: 14%; }
+    .co-floating-tag.tag-2 { top: 28%; right: -36px; animation-delay: -2s; background: linear-gradient(135deg, var(--accent), var(--accent-d)); color: #fff; }
+    .co-floating-tag.tag-2 svg { color: #fff; }
+    .co-floating-tag.tag-3 { bottom: -16px; right: 14%; animation-delay: -4s; }
+    @keyframes co-tag-float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+
+    /* STATS */
+    .co-stats { background: var(--bg); padding: 80px 0; position: relative; }
+    .co-stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; align-items: center; }
+    .co-stat { position: relative; padding: 20px 24px; border-left: 3px solid var(--accent-l); transition: border-color 0.3s var(--ease); }
+    .co-stat:hover { border-left-color: var(--accent); }
+    .co-stat-num { font-size: 44px; font-weight: 800; color: var(--ink); line-height: 1; letter-spacing: -1.6px; font-variant-numeric: tabular-nums; margin-bottom: 8px; background: linear-gradient(135deg, var(--accent) 0%, var(--accent-d) 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+    .co-stat-desc { font-size: 13px; line-height: 1.5; color: var(--sec); }
+
+    /* PROBLEM */
+    .co-problem { padding: 140px 0; background: #fff; position: relative; overflow: hidden; }
+    .co-problem-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+    .co-problem-h2 { font-size: clamp(36px, 3.6vw, 50px); font-weight: 800; line-height: 1.08; letter-spacing: -1.5px; margin: 12px 0 20px; }
+    .co-problem-h2 em { font-style: normal; color: var(--accent); }
+    .co-problem-list { display: flex; flex-direction: column; gap: 14px; }
+    .co-problem-item { display: flex; gap: 14px; align-items: flex-start; padding: 16px 18px; background: #FEF2F2; border-left: 3px solid #FCA5A5; border-radius: 8px; }
+    .co-problem-item svg { width: 18px; height: 18px; color: #DC2626; flex-shrink: 0; margin-top: 1px; }
+    .co-problem-item-text { font-size: 14px; line-height: 1.5; color: #7F1D1D; }
+    .co-problem-item-text strong { color: #991B1B; font-weight: 700; }
+    .co-arrow-down { display: flex; align-items: center; justify-content: center; gap: 14px; margin: 24px 0; color: var(--accent); font-weight: 700; font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; }
+    .co-arrow-down::before, .co-arrow-down::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, transparent, var(--accent-l), transparent); }
+    .co-solution-list { display: flex; flex-direction: column; gap: 14px; }
+    .co-solution-item { display: flex; gap: 14px; align-items: flex-start; padding: 16px 18px; background: #ECFDF5; border-left: 3px solid #6EE7B7; border-radius: 8px; }
+    .co-solution-item svg { width: 18px; height: 18px; color: #059669; flex-shrink: 0; margin-top: 1px; }
+    .co-solution-item-text { font-size: 14px; line-height: 1.5; color: #064E3B; }
+    .co-solution-item-text strong { color: #047857; font-weight: 700; }
+
+    /* Hierarchy visual */
+    .co-hier {
+      position: relative; aspect-ratio: 1/1; border-radius: 24px;
+      background: linear-gradient(135deg, #F1F5FF 0%, #DBEAFE 100%);
+      padding: 32px; overflow: hidden;
+    }
+    .co-hier::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle at 1px 1px, rgba(0,99,242,0.10) 1px, transparent 0); background-size: 24px 24px; }
+    .co-hier-head { position: relative; text-align: center; margin-bottom: 28px; }
+    .co-hier-head-label { font-size: 10px; font-weight: 800; color: var(--accent-d); letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 6px; }
+    .co-hier-head-title { font-size: 15px; font-weight: 700; color: var(--ink); }
+    .co-hier-tree {
+      position: relative;
+      display: flex; flex-direction: column; align-items: center;
+      gap: 24px;
+    }
+    .co-hier-node {
+      background: #fff;
+      border-radius: 12px;
+      padding: 10px 14px;
+      box-shadow: 0 6px 16px rgba(15,23,41,0.08);
+      display: flex; align-items: center; gap: 10px;
+      position: relative;
+    }
+    .co-hier-node.master {
+      background: linear-gradient(135deg, var(--accent), var(--accent-d));
+      color: #fff;
+      box-shadow: 0 14px 28px rgba(0,99,242,0.25);
+    }
+    .co-hier-icon {
+      width: 28px; height: 28px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; font-size: 12px; font-weight: 800;
+    }
+    .co-hier-icon.m { background: rgba(255,255,255,0.22); color: #fff; }
+    .co-hier-icon.s { background: var(--accent-l); color: var(--accent-d); }
+    .co-hier-node-text { line-height: 1.2; }
+    .co-hier-node-name { font-size: 12px; font-weight: 800; }
+    .co-hier-node-role { font-size: 9px; opacity: 0.78; margin-top: 1px; }
+    .co-hier-node-limit { margin-left: auto; font-family: var(--font-mono); font-size: 10px; font-weight: 800; }
+    .co-hier-children {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; width: 100%;
+      position: relative;
+    }
+    .co-hier-children::before {
+      content: ''; position: absolute;
+      left: 16.66%; right: 16.66%; top: -14px;
+      height: 1.5px; background: var(--accent); opacity: 0.3;
+    }
+    .co-hier-children .co-hier-node::before {
+      content: ''; position: absolute;
+      left: 50%; top: -14px; width: 1.5px; height: 12px;
+      background: var(--accent); opacity: 0.3;
+    }
+    .co-hier-foot {
+      position: relative;
+      margin-top: 22px; padding-top: 16px;
+      border-top: 1px solid rgba(15,23,41,0.08);
+      text-align: center;
+      font-size: 12px; color: var(--sec);
+    }
+    .co-hier-foot b { color: var(--ink); font-weight: 800; }
+
+    /* MIX COMPOSER (reuse Personas styles via shared structure) */
+    .co-mix { padding: 140px 0; background: linear-gradient(180deg, var(--bg) 0%, #fff 100%); position: relative; overflow: hidden; }
+    .co-mix::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle at 1px 1px, rgba(0,99,242,0.06) 1px, transparent 0); background-size: 28px 28px; mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%); -webkit-mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%); }
+    .co-mix-head { text-align: center; margin-bottom: 50px; position: relative; z-index: 2; max-width: 720px; margin-left: auto; margin-right: auto; padding: 0 24px; }
+    .co-mix-head h2 { font-size: clamp(36px, 3.6vw, 50px); font-weight: 800; line-height: 1.08; letter-spacing: -1.5px; margin: 12px 0 16px; }
+    .co-mix-head h2 em { font-style: normal; color: var(--accent); }
+    .co-mix-head p { font-size: 17px; line-height: 1.6; color: var(--sec); margin-bottom: 28px; }
+    .co-mix-pill { display: inline-flex; align-items: center; gap: 8px; padding: 5px 14px 5px 5px; border-radius: 20px; background: rgba(0,99,242,0.08); border: 1px solid rgba(0,99,242,0.18); font-size: 12px; font-weight: 600; color: var(--accent-d); }
+    .co-mix-pill-icon { width: 22px; height: 22px; border-radius: 50%; background: var(--accent); color: #fff; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; }
+
+    .co-mix-composer { position: relative; z-index: 2; max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+    .co-mix-board { background: #fff; border: 1px solid var(--border); border-radius: 28px; padding: 44px; box-shadow: 0 30px 80px rgba(15,23,41,0.08); position: relative; }
+    .co-mix-zone { margin-bottom: 38px; padding-bottom: 38px; border-bottom: 1px dashed var(--border); }
+    .co-mix-zone:last-child { border-bottom: none; padding-bottom: 0; margin-bottom: 0; }
+    .co-mix-zone-head { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 22px; gap: 16px; flex-wrap: wrap; }
+    .co-mix-zone-head > div:first-child { flex: 1; min-width: 200px; }
+    .co-mix-zone-label { display: inline-flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink); }
+    .co-mix-zone-tag { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 14px; font-size: 10px; font-weight: 800; letter-spacing: 0.06em; }
+    .co-mix-zone-tag.core { background: rgba(0,99,242,0.12); color: var(--accent-d); }
+    .co-mix-zone-tag.addon { background: rgba(44,164,255,0.14); color: var(--accent); }
+    .co-mix-zone-tag.optional { background: var(--bg-alt); color: var(--muted); }
+    .co-mix-zone-desc { font-size: 13px; color: var(--muted); max-width: 480px; line-height: 1.5; margin-top: 4px; }
+    .co-mix-zone-counter { font-size: 12px; font-weight: 700; color: var(--sec); }
+    .co-mix-zone-counter b { color: var(--accent-d); font-variant-numeric: tabular-nums; }
+    .co-mix-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; position: relative; }
+    .co-mix-card { position: relative; border-radius: 16px; padding: 20px 16px 16px; transition: all 0.35s var(--ease); display: flex; flex-direction: column; min-height: 200px; cursor: pointer; user-select: none; }
+    .co-mix-card-tag { display: inline-flex; align-items: center; gap: 4px; position: absolute; top: 12px; right: 12px; padding: 3px 8px; border-radius: 12px; font-size: 9px; font-weight: 800; letter-spacing: 0.05em; }
+    .co-mix-card-icon { width: 40px; height: 46px; clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%); display: flex; align-items: center; justify-content: center; margin-bottom: 12px; }
+    .co-mix-card-icon svg { width: 18px; height: 18px; }
+    .co-mix-card-name { font-size: 14px; font-weight: 800; line-height: 1.25; margin-bottom: 4px; }
+    .co-mix-card-aporte { font-size: 11px; line-height: 1.4; flex: 1; margin-bottom: 12px; }
+    .co-mix-card-action { display: inline-flex; align-items: center; justify-content: center; gap: 5px; padding: 6px 10px; border-radius: 8px; font-size: 11px; font-weight: 800; letter-spacing: 0.02em; align-self: flex-start; }
+
+    .co-mix-card.core { background: linear-gradient(140deg, var(--accent) 0%, var(--accent-d) 100%); color: #fff; box-shadow: 0 16px 36px rgba(0,99,242,0.30); border: 2px solid var(--accent); cursor: not-allowed; }
+    .co-mix-card.core::after { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(255,255,255,0.12), transparent 60%); pointer-events: none; border-radius: inherit; }
+    .co-mix-card.core .co-mix-card-tag { background: rgba(255,255,255,0.22); color: #fff; }
+    .co-mix-card.core .co-mix-card-tag::before { content: '🔒 '; }
+    .co-mix-card.core .co-mix-card-icon { background: rgba(255,255,255,0.22); border: 1px solid rgba(255,255,255,0.4); }
+    .co-mix-card.core .co-mix-card-icon svg { color: #fff; }
+    .co-mix-card.core .co-mix-card-aporte { color: rgba(255,255,255,0.85); }
+    .co-mix-card.core .co-mix-card-action { background: rgba(255,255,255,0.16); color: #fff; }
+    .co-mix-card.core .co-mix-card-action::before { content: '✓ Base'; }
+
+    .co-mix-card.addon { background: linear-gradient(140deg, var(--accent-l) 0%, #EEF4FF 100%); border: 1px solid var(--accent); color: var(--ink); }
+    .co-mix-card.addon .co-mix-card-tag { background: rgba(0,99,242,0.18); color: var(--accent-d); }
+    .co-mix-card.addon .co-mix-card-tag::before { content: '★ '; }
+    .co-mix-card.addon .co-mix-card-icon { background: linear-gradient(135deg, var(--accent), var(--accent-d)); }
+    .co-mix-card.addon .co-mix-card-icon svg { color: #fff; }
+    .co-mix-card.addon .co-mix-card-aporte { color: var(--sec); }
+    .co-mix-card.addon .co-mix-card-action { background: #fff; color: var(--accent-d); border: 1px solid rgba(0,99,242,0.2); }
+    .co-mix-card.addon .co-mix-card-action::before { content: '× Quitar'; }
+    .co-mix-card.addon:hover { transform: translateY(-3px); box-shadow: 0 14px 28px rgba(0,99,242,0.18); }
+
+    .co-mix-card.optional { background: var(--bg); color: var(--ink); border: 1.5px dashed rgba(15,23,41,0.18); }
+    .co-mix-card.optional .co-mix-card-tag { background: var(--bg-alt); color: var(--muted); }
+    .co-mix-card.optional .co-mix-card-tag::before { content: '+ '; }
+    .co-mix-card.optional .co-mix-card-icon { background: linear-gradient(135deg, var(--accent-l), #F1F5FF); border: 1px solid rgba(0,99,242,0.12); }
+    .co-mix-card.optional .co-mix-card-icon svg { color: var(--accent-d); }
+    .co-mix-card.optional .co-mix-card-aporte { color: var(--muted); }
+    .co-mix-card.optional .co-mix-card-action { background: #fff; color: var(--accent-d); border: 1px solid rgba(0,99,242,0.22); }
+    .co-mix-card.optional .co-mix-card-action::before { content: '+ Sumar'; }
+    .co-mix-card.optional:hover { transform: translateY(-3px); border-color: var(--accent); background: #fff; box-shadow: 0 14px 28px rgba(0,99,242,0.12); }
+    .co-mix-card.optional:hover .co-mix-card-action { background: var(--accent); color: #fff; }
+
+    .co-mix-score { background: linear-gradient(135deg, #F1F5FF, #DBEAFE); border: 1px solid rgba(0,99,242,0.16); border-radius: 16px; padding: 16px 20px; margin-top: 24px; display: flex; align-items: center; gap: 16px; }
+    .co-mix-score-icon { width: 40px; height: 40px; border-radius: 12px; background: linear-gradient(135deg, var(--accent), var(--accent-d)); display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,99,242,0.25); flex-shrink: 0; }
+    .co-mix-score-icon svg { width: 18px; height: 18px; color: #fff; }
+    .co-mix-score-text { flex: 1; }
+    .co-mix-score-title { font-size: 13px; font-weight: 800; color: var(--ink); }
+    .co-mix-score-desc { font-size: 12px; color: var(--sec); margin-top: 2px; }
+    .co-mix-score-btn { padding: 10px 18px; border-radius: 8px; background: var(--accent); color: #fff; font-size: 12px; font-weight: 700; }
+
+    /* OUTCOMES */
+    .co-outcomes { padding: 140px 0; background: var(--bg); position: relative; overflow: hidden; }
+    .co-outcomes::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle at 1px 1px, rgba(15,23,41,0.05) 1px, transparent 0); background-size: 32px 32px; mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%); -webkit-mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%); }
+    .co-outcomes-head { text-align: center; margin-bottom: 64px; position: relative; z-index: 2; }
+    .co-outcomes-head h2 { font-size: clamp(36px, 3.6vw, 50px); font-weight: 800; line-height: 1.08; letter-spacing: -1.5px; margin: 12px 0 16px; }
+    .co-outcomes-head h2 em { font-style: normal; color: var(--accent); }
+    .co-outcomes-head p { font-size: 17px; line-height: 1.6; color: var(--sec); max-width: 620px; margin: 0 auto; }
+    .co-outcomes-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; position: relative; z-index: 2; max-width: 1080px; margin: 0 auto; }
+    .co-outcome { background: #fff; border: 1px solid var(--border); border-radius: 18px; padding: 32px; display: grid; grid-template-columns: auto 1fr; gap: 24px; align-items: flex-start; transition: all 0.3s var(--ease); }
+    .co-outcome:hover { transform: translateY(-4px); box-shadow: 0 20px 50px rgba(15,23,41,0.08); border-color: rgba(0,99,242,0.2); }
+    .co-outcome-icon { width: 60px; height: 70px; clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%); background: linear-gradient(135deg, var(--accent), var(--accent-d)); display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 24px rgba(0,99,242,0.25); flex-shrink: 0; }
+    .co-outcome-icon svg { width: 28px; height: 28px; color: #fff; }
+    .co-outcome-text h4 { font-size: 19px; font-weight: 800; color: var(--ink); line-height: 1.3; margin-bottom: 10px; }
+    .co-outcome-text p { font-size: 14px; line-height: 1.6; color: var(--sec); margin-bottom: 16px; }
+    .co-outcome-stack { display: flex; flex-wrap: wrap; gap: 6px; }
+    .co-outcome-stack span { padding: 4px 10px; border-radius: 12px; background: var(--accent-l); font-size: 10px; font-weight: 700; color: var(--accent-d); letter-spacing: 0.04em; }
+
+    /* DAY IN LIFE */
+    .co-day { padding: 140px 0; background: linear-gradient(180deg, var(--navy) 0%, var(--navy-2) 100%); color: #fff; position: relative; overflow: hidden; }
+    .co-day::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 30% 50%, rgba(0,99,242,0.25), transparent 50%), radial-gradient(ellipse at 80% 70%, rgba(44,164,255,0.18), transparent 55%); }
+    .co-day-head { text-align: center; margin-bottom: 60px; position: relative; z-index: 2; }
+    .co-day-head h2 { font-size: clamp(36px, 3.6vw, 50px); font-weight: 800; line-height: 1.08; letter-spacing: -1.5px; margin: 12px 0 16px; }
+    .co-day-head h2 em { font-style: normal; background: linear-gradient(135deg, var(--accent-2), #7AD5FF); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+    .co-day-head p { font-size: 16px; line-height: 1.6; color: rgba(255,255,255,0.72); max-width: 620px; margin: 0 auto; }
+    .co-timeline { position: relative; z-index: 2; max-width: 1080px; margin: 0 auto; display: flex; flex-direction: column; gap: 24px; }
+    .co-tl-event { display: grid; grid-template-columns: 90px 1fr; gap: 28px; align-items: flex-start; position: relative; }
+    .co-tl-event::before { content: ''; position: absolute; left: 99px; top: 36px; bottom: -24px; width: 1.5px; background: rgba(255,255,255,0.08); }
+    .co-tl-event:last-child::before { display: none; }
+    .co-tl-time { font-size: 12px; font-weight: 800; color: var(--accent-2); letter-spacing: 0.06em; text-transform: uppercase; text-align: right; padding-top: 12px; }
+    .co-tl-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 18px 22px; transition: all 0.25s var(--ease); }
+    .co-tl-card:hover { background: rgba(255,255,255,0.07); border-color: rgba(44,164,255,0.4); }
+    .co-tl-row { display: flex; align-items: center; gap: 14px; margin-bottom: 8px; }
+    .co-tl-av { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 800; color: #fff; flex-shrink: 0; }
+    .co-tl-av.cfo { background: linear-gradient(135deg, var(--accent), var(--accent-d)); }
+    .co-tl-av.tres { background: linear-gradient(135deg, var(--purple), #5B3AE0); }
+    .co-tl-av.adm { background: linear-gradient(135deg, var(--amber), #B45309); }
+    .co-tl-av.ven { background: linear-gradient(135deg, var(--green), #064E3B); }
+    .co-tl-meta { flex: 1; }
+    .co-tl-name { font-size: 14px; font-weight: 800; color: #fff; line-height: 1.2; }
+    .co-tl-role { font-size: 11px; color: rgba(255,255,255,0.55); margin-top: 1px; }
+    .co-tl-plat { padding: 4px 10px; border-radius: 12px; background: rgba(44,164,255,0.16); font-size: 10px; font-weight: 800; color: var(--accent-2); letter-spacing: 0.04em; }
+    .co-tl-plat::before { content: '⬢ '; }
+    .co-tl-action { font-size: 14px; line-height: 1.55; color: rgba(255,255,255,0.85); }
+    .co-tl-action b { color: #fff; font-weight: 700; }
+    .co-tl-action em { font-style: normal; color: var(--accent-2); }
+
+    /* CASE */
+    .co-case { padding: 140px 0; background: #fff; position: relative; overflow: hidden; }
+    .co-case-card { max-width: 1100px; margin: 0 auto; background: linear-gradient(135deg, #F1F5FF 0%, #DBEAFE 100%); border-radius: 28px; padding: 60px; position: relative; overflow: hidden; box-shadow: 0 30px 80px rgba(0,99,242,0.18); }
+    .co-case-card::before { content: ''; position: absolute; right: -100px; top: -100px; width: 360px; height: 360px; border-radius: 50%; background: radial-gradient(circle, rgba(0,99,242,0.16), transparent 70%); }
+    .co-case-grid { position: relative; z-index: 2; display: grid; grid-template-columns: 1fr 1.3fr; gap: 60px; align-items: center; }
+    .co-case-customer { text-align: center; }
+    .co-case-logo { display: inline-flex; align-items: center; justify-content: center; width: 92px; height: 92px; border-radius: 22px; background: linear-gradient(135deg, #1E40AF 0%, #0E3D9C 100%); color: #fff; font-size: 28px; font-weight: 800; letter-spacing: -1px; margin-bottom: 18px; box-shadow: 0 16px 36px rgba(30,64,175,0.25); }
+    .co-case-customer-name { font-size: 18px; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
+    .co-case-customer-role { font-size: 13px; color: var(--muted); margin-bottom: 24px; }
+    .co-case-flag { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 20px; background: var(--accent-l); font-size: 11px; font-weight: 700; color: var(--accent-d); letter-spacing: 0.06em; text-transform: uppercase; }
+    .co-case-content { position: relative; }
+    .co-case-quote-mark { font-size: 80px; line-height: 0.8; color: var(--accent); opacity: 0.25; margin-bottom: -16px; font-family: Georgia, serif; }
+    .co-case-quote { font-size: clamp(22px, 2.2vw, 30px); font-weight: 700; line-height: 1.35; color: var(--ink); letter-spacing: -0.5px; margin-bottom: 32px; }
+    .co-case-metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; padding-top: 28px; border-top: 1px solid rgba(15,23,41,0.08); }
+    .co-case-metric-num { font-size: 32px; font-weight: 800; line-height: 1; letter-spacing: -1px; margin-bottom: 6px; font-variant-numeric: tabular-nums; background: linear-gradient(135deg, var(--accent), var(--accent-d)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+    .co-case-metric-desc { font-size: 12px; color: var(--sec); line-height: 1.45; }
+
+    /* CTA */
+    .cta-band { position: relative; padding: 120px 0; background: linear-gradient(135deg, var(--accent) 0%, var(--accent-d) 60%, var(--navy-3) 100%); color: #fff; text-align: center; overflow: hidden; }
+    .cta-band::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 0%, rgba(44,164,255,0.35), transparent 60%); }
+    .cta-band .container { position: relative; z-index: 2; }
+    .cta-h2 { font-size: clamp(40px, 4vw, 60px); font-weight: 800; line-height: 1.08; letter-spacing: -1.5px; margin-bottom: 18px; }
+    .cta-sub { font-size: 18px; line-height: 1.6; color: rgba(255,255,255,0.85); max-width: 540px; margin: 0 auto 32px; }
+    .cta-band .btn-white { color: var(--accent); }
+    .cta-fine { font-size: 13px; color: rgba(255,255,255,0.65); margin-top: 20px; }
+
+    /* FOOTER */
+    footer { background: var(--ink-deep); color: rgba(255,255,255,0.65); padding: 80px 0 30px; }
+    .footer-inner { max-width: 1240px; margin: 0 auto; padding: 0 64px; display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 64px; margin-bottom: 60px; }
+    .footer-logo { font-size: 22px; font-weight: 800; color: #fff; margin-bottom: 14px; }
+    .footer-logo span { color: var(--accent-2); }
+    .footer-tagline { font-size: 14px; line-height: 1.55; color: rgba(255,255,255,0.6); max-width: 240px; }
+    .footer-col-title { font-size: 13px; font-weight: 700; color: #fff; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 16px; }
+    .footer-links { display: flex; flex-direction: column; gap: 10px; }
+    .footer-links a { font-size: 14px; color: rgba(255,255,255,0.6); transition: color 0.2s; }
+    .footer-links a:hover { color: var(--accent-2); }
+    .footer-helping { text-align: center; padding: 40px 0 30px; font-size: 14px; color: rgba(255,255,255,0.55); }
+    .footer-helping em { font-style: normal; color: var(--pink); font-weight: 700; }
+    .footer-helping em::before { content: '♥ '; color: var(--pink); }
+    .footer-bottom { max-width: 1240px; margin: 0 auto; padding: 24px 64px 0; border-top: 1px solid rgba(255,255,255,0.08); display: flex; justify-content: space-between; font-size: 13px; color: rgba(255,255,255,0.45); }
+
+    @media (max-width: 980px) {
+      .co-hero-inner { grid-template-columns: 1fr; gap: 60px; }
+      .co-stats-grid { grid-template-columns: repeat(2, 1fr); gap: 24px; }
+      .co-problem-grid { grid-template-columns: 1fr; gap: 50px; }
+      .co-mix-grid { grid-template-columns: repeat(3, 1fr); }
+      .co-mix-board { padding: 28px; }
+      .co-outcomes-grid { grid-template-columns: 1fr; }
+      .co-tl-event { grid-template-columns: 70px 1fr; gap: 16px; }
+      .co-tl-event::before { left: 79px; }
+      .co-case-grid { grid-template-columns: 1fr; gap: 32px; text-align: center; }
+      .co-case-card { padding: 40px 32px; }
+      .footer-inner { grid-template-columns: 1fr 1fr; gap: 40px; }
+    }
+    @media (max-width: 600px) {
+      .container, .nav-inner, .footer-inner, .footer-bottom { padding-left: 24px; padding-right: 24px; }
+      .co-stats-grid { grid-template-columns: 1fr; }
+      .co-mix-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+      .nav-links { display: none; } .nav-crumb { display: none; }
+      .co-hero { padding-top: 130px; padding-bottom: 60px; min-height: auto; }
+      .co-stats, .co-problem, .co-mix, .co-outcomes, .co-day, .co-case, .cta-band { padding: 80px 0; }
+      .co-case-metrics { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="cursor-glow" id="cursorGlow"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">info<span>corp</span></a>
+    <ul class="nav-links">
+      <li><a href="plataforma.html">Productos</a></li>
+      <li><a href="soluciones-personas.html" class="active">Soluciones <span class="nav-crumb">Banca Corporativa</span></a></li>
+      <li><a href="#">Clientes</a></li>
+      <li><a href="#">Recursos</a></li>
+    </ul>
+    <a href="#demo" class="nav-cta">Solicitar demo</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="co-hero">
+  <div class="co-hero-grid"></div>
+  <div class="co-hero-inner">
+    <div>
+      <span class="co-hero-label" id="heroLabel">Banca · CORPORATIVA</span>
+      <h1 class="co-hero-h1" id="heroH1">El banco que la <em>tesorería</em><br>de tu cliente corporativo se merece</h1>
+      <p class="co-hero-sub" id="heroSub">Multimoneda nativo, factoring + confirming, batch payments con multi-firma jerárquica, observability en tiempo real. El CFO ve el cash global en un solo dashboard, el tesorero ejecuta en segundos.</p>
+      <div class="co-hero-actions" id="heroActions">
+        <a href="#demo" class="btn btn-primary btn-arrow">Pedinos una demo</a>
+        <a href="#mix" class="btn btn-ghost">Ver el mix de plataformas</a>
+      </div>
+    </div>
+
+    <div id="heroVisual" style="position: relative;">
+      <span class="co-floating-tag tag-1">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+        Multi-moneda
+      </span>
+      <span class="co-floating-tag tag-2">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        Tesorería live
+      </span>
+      <span class="co-floating-tag tag-3">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s-8-4.5-8-12V5l8-3 8 3v5c0 7.5-8 12-8 12z"/><polyline points="9 12 11 14 15 10"/></svg>
+        Audit total
+      </span>
+
+      <div class="co-dash">
+        <div class="co-dash-bar">
+          <div class="co-dash-brand">
+            <div class="co-dash-brand-mark">CT</div>
+            <div class="co-dash-brand-text">Corporate Treasury · Acme Group</div>
+          </div>
+          <div class="co-dash-live">LIVE</div>
+        </div>
+        <div class="co-dash-body">
+          <!-- KPI Row -->
+          <div class="co-kpi-row">
+            <div class="co-kpi">
+              <div class="co-kpi-lbl">Cash total</div>
+              <div class="co-kpi-num green">$ 24.8M</div>
+              <div class="co-kpi-delta">+3.2% mtd</div>
+            </div>
+            <div class="co-kpi">
+              <div class="co-kpi-lbl">Pendiente firma</div>
+              <div class="co-kpi-num amber">$ 1.2M</div>
+              <div class="co-kpi-delta">6 batches</div>
+            </div>
+            <div class="co-kpi">
+              <div class="co-kpi-lbl">Factoring activo</div>
+              <div class="co-kpi-num">$ 4.6M</div>
+              <div class="co-kpi-delta">82 facturas</div>
+            </div>
+          </div>
+
+          <!-- Multi-currency block -->
+          <div class="co-fx">
+            <div class="co-fx-head">
+              <div class="co-fx-title">Posición multi-moneda</div>
+              <div class="co-fx-meta">FX live · BCRA</div>
+            </div>
+            <div class="co-fx-rows">
+              <div class="co-fx-row">
+                <div class="co-fx-flag usd">$</div>
+                <div class="co-fx-cur">USD · Operativa</div>
+                <div class="co-fx-amt">$ 12,450,000</div>
+                <div class="co-fx-equiv">— USD 12.45M</div>
+              </div>
+              <div class="co-fx-row">
+                <div class="co-fx-flag eur">€</div>
+                <div class="co-fx-cur">EUR · Inversiones</div>
+                <div class="co-fx-amt">€ 4,820,000</div>
+                <div class="co-fx-equiv">≈ USD 5.32M</div>
+              </div>
+              <div class="co-fx-row">
+                <div class="co-fx-flag brl">R</div>
+                <div class="co-fx-cur">BRL · Subsidiaria</div>
+                <div class="co-fx-amt">R$ 38,200,000</div>
+                <div class="co-fx-equiv">≈ USD 7.06M</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pending batch with action -->
+          <div class="co-batch">
+            <div class="co-batch-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            </div>
+            <div class="co-batch-text">
+              <div class="co-batch-title">Nómina Acme HQ · 482 empleados</div>
+              <div class="co-batch-meta">$ 1.2M USD · requiere CFO + 2 directores</div>
+            </div>
+            <div class="co-batch-btn">Aprobar →</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="co-stats">
+  <div class="container co-stats-grid">
+    <div class="co-stat">
+      <div class="co-stat-num" data-target="68" data-prefix="-" data-suffix="%">-0%</div>
+      <div class="co-stat-desc">tiempo de cierre<br>en consolidación de cash</div>
+    </div>
+    <div class="co-stat">
+      <div class="co-stat-num" data-target="12" data-prefix="+">+0</div>
+      <div class="co-stat-desc">monedas con conciliación<br>automática nativa</div>
+    </div>
+    <div class="co-stat">
+      <div class="co-stat-num" data-target="3.2" data-suffix="×">0×</div>
+      <div class="co-stat-desc">facturas factoreadas<br>vs proceso manual</div>
+    </div>
+    <div class="co-stat">
+      <div class="co-stat-num" data-target="99.99" data-suffix="%">0%</div>
+      <div class="co-stat-desc">audit trail completo<br>para SOX / IFRS</div>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM → SOLUTION -->
+<section class="co-problem">
+  <div class="container co-problem-grid">
+    <div>
+      <span class="label">EL RETO · LA SOLUCIÓN</span>
+      <h2 class="co-problem-h2 split-lines">Una corporación<br>vive en <em>otra escala</em></h2>
+
+      <div class="co-problem-list">
+        <div class="co-problem-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <div class="co-problem-item-text"><strong>Multi-moneda con bancos distintos:</strong> el CFO pide la posición de la semana y vienen 7 archivos de 7 bancos. Conciliar toma 3 días, y para entonces ya cambiaron las tasas.</div>
+        </div>
+        <div class="co-problem-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <div class="co-problem-item-text"><strong>Batch de nómina sin jerarquía:</strong> 482 empleados, pago en USD, EUR y BRL, requiere 4 firmas configurables. La planilla espera porque el CFO viaja.</div>
+        </div>
+        <div class="co-problem-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <div class="co-problem-item-text"><strong>Factoring que va y vuelve por mail:</strong> el cliente quiere descuento sobre 200 facturas. Cada una con su due date. El admin hace Excel + scan + mail al gerente. Días perdidos.</div>
+        </div>
+        <div class="co-problem-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <div class="co-problem-item-text"><strong>Audit que requiere meses:</strong> auditoría externa pide trace de cada aprobación de 12 meses. El equipo de Cumplimiento reconstruye desde mails. Estrés y errores.</div>
+        </div>
+      </div>
+
+      <div class="co-arrow-down">Lo que cambiamos</div>
+
+      <div class="co-solution-list">
+        <div class="co-solution-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+          <div class="co-solution-item-text"><strong>Multimoneda nativo con FX live.</strong> Posición consolidada en USD, equivalentes en cualquier moneda, conciliación automática diaria. El CFO ve el cash global en un dashboard.</div>
+        </div>
+        <div class="co-solution-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+          <div class="co-solution-item-text"><strong>Batch jerárquico con multi-firma móvil.</strong> El CFO firma desde el celu con biometría. Los directores aprueban desde donde estén. La nómina sale a tiempo, siempre.</div>
+        </div>
+        <div class="co-solution-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+          <div class="co-solution-item-text"><strong>Factoring digital con scoring automático.</strong> Subís las 200 facturas, GURU calcula tasa, vos aprobás. Liquidez instantánea sin pelearte con el banco.</div>
+        </div>
+        <div class="co-solution-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+          <div class="co-solution-item-text"><strong>Audit by design.</strong> Cada aprobación, cada firma, cada movimiento queda registrado con timestamp y actor. Auditoría externa lista en un click.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hierarchy visual -->
+    <div class="co-hier">
+      <div class="co-hier-head">
+        <div class="co-hier-head-label">Multi-firma jerárquica</div>
+        <div class="co-hier-head-title">El CFO, su equipo, sus límites</div>
+      </div>
+      <div class="co-hier-tree">
+        <div class="co-hier-node master">
+          <div class="co-hier-icon m">M</div>
+          <div class="co-hier-node-text">
+            <div class="co-hier-node-name">Marcela · CFO</div>
+            <div class="co-hier-node-role">Aprobación sin límite</div>
+          </div>
+          <div class="co-hier-node-limit">∞</div>
+        </div>
+        <div class="co-hier-children">
+          <div class="co-hier-node">
+            <div class="co-hier-icon s">T</div>
+            <div class="co-hier-node-text">
+              <div class="co-hier-node-name">Tesorero</div>
+              <div class="co-hier-node-role">Hasta USD 500K</div>
+            </div>
+          </div>
+          <div class="co-hier-node">
+            <div class="co-hier-icon s">A</div>
+            <div class="co-hier-node-text">
+              <div class="co-hier-node-name">Admin Pagos</div>
+              <div class="co-hier-node-role">Hasta USD 50K</div>
+            </div>
+          </div>
+          <div class="co-hier-node">
+            <div class="co-hier-icon s">R</div>
+            <div class="co-hier-node-text">
+              <div class="co-hier-node-name">RRHH</div>
+              <div class="co-hier-node-role">Nóminas only</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="co-hier-foot">
+        <b>Roles, límites y secuencias</b> configurables sin tocar IT. El banco entiende cómo está organizada la empresa.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 🌟 MIX COMPOSER -->
+<section class="co-mix" id="mix">
+  <div class="co-mix-head">
+    <span class="label">EL MIX RECOMENDADO PARA CORPORATIVA</span>
+    <h2 class="split-lines">Banca Corporativa <em>se arma</em><br>con estas plataformas</h2>
+    <p>Tres plataformas core que definen la solución, más cuatro recomendadas para tesorería, factoring y observability. Quitalas, sumá otras, personalizá tu mix.</p>
+    <div class="co-mix-pill">
+      <span class="co-mix-pill-icon">✓</span>
+      Modular · Multi-entidad · Activación gradual
+    </div>
+  </div>
+
+  <div class="co-mix-composer">
+    <div class="co-mix-board">
+
+      <div class="co-mix-zone">
+        <div class="co-mix-zone-head">
+          <div>
+            <div class="co-mix-zone-label">
+              CORE de Banca Corporativa
+              <span class="co-mix-zone-tag core">🔒 Base</span>
+            </div>
+            <div class="co-mix-zone-desc">Sin estas plataformas, no hay tesorería digital ni multi-firma jerárquica.</div>
+          </div>
+          <div class="co-mix-zone-counter"><b id="coreCount">3</b> de 3 activas</div>
+        </div>
+        <div class="co-mix-grid" id="coreGrid"></div>
+      </div>
+
+      <div class="co-mix-zone">
+        <div class="co-mix-zone-head">
+          <div>
+            <div class="co-mix-zone-label">
+              Add-ons recomendados
+              <span class="co-mix-zone-tag addon">★ Mix Corporativa</span>
+            </div>
+            <div class="co-mix-zone-desc">Lo que la tesorería y el CFO de tu cliente corporativo agradecen tener disponible.</div>
+          </div>
+          <div class="co-mix-zone-counter"><b id="addonCount">4</b> activas</div>
+        </div>
+        <div class="co-mix-grid" id="addonGrid"></div>
+      </div>
+
+      <div class="co-mix-zone">
+        <div class="co-mix-zone-head">
+          <div>
+            <div class="co-mix-zone-label">
+              Sumá según tu estrategia
+              <span class="co-mix-zone-tag optional">+ Disponibles</span>
+            </div>
+            <div class="co-mix-zone-desc">Plataformas opcionales para personalizar tu Banca Corporativa.</div>
+          </div>
+          <div class="co-mix-zone-counter"><b id="optionalCount">4</b> disponibles</div>
+        </div>
+        <div class="co-mix-grid" id="optionalGrid"></div>
+      </div>
+
+      <div class="co-mix-score">
+        <div class="co-mix-score-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="co-mix-score-text">
+          <div class="co-mix-score-title">Mix actual: <span id="mixSummary">7 plataformas — tesorería end-to-end con audit + factoring digital</span></div>
+          <div class="co-mix-score-desc">Tocá las cards para personalizar. Al final, charlamos sobre el mix que mejor encaja en tu banco.</div>
+        </div>
+        <a href="#demo" class="co-mix-score-btn">Hablemos del mix →</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- OUTCOMES -->
+<section class="co-outcomes">
+  <div class="container co-outcomes-head">
+    <span class="label">Qué obtiene tu cliente corporativo</span>
+    <h2 class="split-lines">Cuatro <em>resultados</em>,<br>no cuatro features</h2>
+    <p>El CFO, la tesorería y los equipos de admin sienten la diferencia cuando el banco habla en lenguaje corporativo.</p>
+  </div>
+  <div class="container co-outcomes-grid">
+    <div class="co-outcome">
+      <div class="co-outcome-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      </div>
+      <div class="co-outcome-text">
+        <h4>Cash global en un dashboard</h4>
+        <p>Multimoneda, multi-entidad, multi-banco. El CFO ve la foto en USD equivalente y dril-down por país, división y producto.</p>
+        <div class="co-outcome-stack">
+          <span>IC Web Banking</span><span>IC Analytics</span><span>IC Open Finance</span>
+        </div>
+      </div>
+    </div>
+    <div class="co-outcome">
+      <div class="co-outcome-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      </div>
+      <div class="co-outcome-text">
+        <h4>Batch payments con multi-firma móvil</h4>
+        <p>Nómina de 500 empleados con 3 firmas. El CFO firma desde el avión. No hay pagos demorados por viaje o reunión.</p>
+        <div class="co-outcome-stack">
+          <span>IC Mobile</span><span>IC Web</span><span>IC Smart Platform</span>
+        </div>
+      </div>
+    </div>
+    <div class="co-outcome">
+      <div class="co-outcome-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+      </div>
+      <div class="co-outcome-text">
+        <h4>Factoring + confirming digital</h4>
+        <p>Subís 200 facturas, el motor calcula tasa por cliente y due date. Tu cliente acepta, vos liquidás. Sin Excel, sin scans, sin mails.</p>
+        <div class="co-outcome-stack">
+          <span>IC Analytics</span><span>IC Back Office</span><span>IC Smart Platform</span>
+        </div>
+      </div>
+    </div>
+    <div class="co-outcome">
+      <div class="co-outcome-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s-8-4.5-8-12V5l8-3 8 3v5c0 7.5-8 12-8 12z"/><polyline points="9 12 11 14 15 10"/></svg>
+      </div>
+      <div class="co-outcome-text">
+        <h4>Audit trail SOX / IFRS-ready</h4>
+        <p>Cada aprobación queda registrada con timestamp, actor, motivo. Auditoría externa pide los logs, no las capturas. El equipo de Compliance puede irse el viernes.</p>
+        <div class="co-outcome-stack">
+          <span>IC Back Office</span><span>IC Analytics</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- UN DÍA CON BANCA CORPORATIVA -->
+<section class="co-day">
+  <div class="container co-day-head">
+    <span class="label on-dark">UN DÍA CON BANCA CORPORATIVA</span>
+    <h2 class="split-lines">Mismo día, mismo banco,<br><em>varios países y monedas</em></h2>
+    <p>Marcela es CFO de Acme Group, opera en 4 países. Esto es un martes típico: tesorería, factoring, nómina y auditoría — sin Excel ni mails entre medio.</p>
+  </div>
+
+  <div class="container">
+    <div class="co-timeline">
+      <div class="co-tl-event">
+        <div class="co-tl-time">07:42</div>
+        <div class="co-tl-card">
+          <div class="co-tl-row">
+            <div class="co-tl-av cfo">M</div>
+            <div class="co-tl-meta">
+              <div class="co-tl-name">Marcela · CFO</div>
+              <div class="co-tl-role">Revisa cash global desde el desayuno</div>
+            </div>
+            <div class="co-tl-plat">IC Web Banking</div>
+          </div>
+          <div class="co-tl-action">
+            Abre el dashboard de tesorería: <b>$24.8M en cash total</b>. Ve la posición en USD/EUR/BRL consolidada. Detecta que la subsidiaria BR tiene exceso de pesos brasileros: <em>GURU sugiere</em> hedge para la próxima semana.
+          </div>
+        </div>
+      </div>
+
+      <div class="co-tl-event">
+        <div class="co-tl-time">09:30</div>
+        <div class="co-tl-card">
+          <div class="co-tl-row">
+            <div class="co-tl-av tres">D</div>
+            <div class="co-tl-meta">
+              <div class="co-tl-name">Diego · Tesorero</div>
+              <div class="co-tl-role">Procesa factoring</div>
+            </div>
+            <div class="co-tl-plat">IC Smart Platform</div>
+          </div>
+          <div class="co-tl-action">
+            Sube <b>200 facturas a factorear</b>. El motor calcula tasa por cliente. Diego aprueba en bulk (está dentro de su límite). <em>Liquidez al cliente en 30 minutos.</em>
+          </div>
+        </div>
+      </div>
+
+      <div class="co-tl-event">
+        <div class="co-tl-time">11:18</div>
+        <div class="co-tl-card">
+          <div class="co-tl-row">
+            <div class="co-tl-av adm">R</div>
+            <div class="co-tl-meta">
+              <div class="co-tl-name">Roxana · Admin Pagos</div>
+              <div class="co-tl-role">Programa nómina mensual</div>
+            </div>
+            <div class="co-tl-plat">IC Web Banking</div>
+          </div>
+          <div class="co-tl-action">
+            Carga la nómina de <b>482 empleados</b> en USD, EUR y BRL. Sistema valida CBUs y monedas automáticamente. Envía a firma: requiere CFO + 1 director.
+          </div>
+        </div>
+      </div>
+
+      <div class="co-tl-event">
+        <div class="co-tl-time">14:02</div>
+        <div class="co-tl-card">
+          <div class="co-tl-row">
+            <div class="co-tl-av cfo">M</div>
+            <div class="co-tl-meta">
+              <div class="co-tl-name">Marcela · CFO</div>
+              <div class="co-tl-role">Aprueba en un vuelo</div>
+            </div>
+            <div class="co-tl-plat">IC Mobile</div>
+          </div>
+          <div class="co-tl-action">
+            Recibe push con el detalle. Mientras el avión está en la pista, <b>aprueba con Face ID</b>. La nómina sale a las 14:03. <em>Los 482 empleados cobran a tiempo, en su moneda.</em>
+          </div>
+        </div>
+      </div>
+
+      <div class="co-tl-event">
+        <div class="co-tl-time">17:30</div>
+        <div class="co-tl-card">
+          <div class="co-tl-row">
+            <div class="co-tl-av ven">V</div>
+            <div class="co-tl-meta">
+              <div class="co-tl-name">Verónica · Auditoría</div>
+              <div class="co-tl-role">Cierra el trace del trimestre</div>
+            </div>
+            <div class="co-tl-plat">IC Back Office</div>
+          </div>
+          <div class="co-tl-action">
+            Auditoría externa pide el trace de <b>todas las aprobaciones del trimestre</b>. Verónica exporta el log con un click: timestamps, actores, motivos. <em>0 horas reconstruyendo desde mails.</em>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CASE -->
+<section class="co-case">
+  <div class="container">
+    <div class="co-case-card">
+      <div class="co-case-grid">
+        <div class="co-case-customer">
+          <div class="co-case-logo">B</div>
+          <div class="co-case-customer-name">Banco Industrial Plc</div>
+          <div class="co-case-customer-role">Head de Banca Empresas Plus</div>
+          <span class="co-case-flag">Caso real · México</span>
+        </div>
+        <div class="co-case-content">
+          <div class="co-case-quote-mark">"</div>
+          <blockquote class="co-case-quote">Los CFOs nos llaman para felicitarnos. Eso, en banca corporativa, no había pasado. La tesorería les cierra en horas, no en días, y la auditoría externa terminó en una semana.</blockquote>
+          <div class="co-case-metrics">
+            <div>
+              <div class="co-case-metric-num" data-target="68" data-prefix="-" data-suffix="%">-0%</div>
+              <div class="co-case-metric-desc">tiempo de cierre<br>de tesorería</div>
+            </div>
+            <div>
+              <div class="co-case-metric-num" data-target="3.2" data-suffix="×">0×</div>
+              <div class="co-case-metric-desc">facturas factoreadas<br>por trimestre</div>
+            </div>
+            <div>
+              <div class="co-case-metric-num" data-target="100" data-suffix="%">0%</div>
+              <div class="co-case-metric-desc">audit SOX-ready<br>en producción</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-band" id="demo">
+  <div class="container">
+    <h2 class="cta-h2 split-lines">¿Hablamos de cómo<br>tu banco <em>atrae corporativos</em>?</h2>
+    <p class="cta-sub">Ayudamos a las personas a amar a su banco. Hablemos del tuyo.</p>
+    <a href="#" class="btn btn-white btn-arrow">¿Conversamos?</a>
+    <div class="cta-fine">Sin compromisos · Demo personalizada · 30 minutos</div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-logo">info<span>corp</span></div>
+      <p class="footer-tagline">Desde Uruguay, hacia el mundo.</p>
+    </div>
+    <div>
+      <div class="footer-col-title">Soluciones</div>
+      <ul class="footer-links">
+        <li><a href="soluciones-personas.html">Banca Personas</a></li>
+        <li><a href="soluciones-pymes.html">Banca Pymes</a></li>
+        <li><a href="soluciones-corporativa.html">Banca Corporativa</a></li>
+        <li><a href="#">Banca All Business</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Compañía</div>
+      <ul class="footer-links">
+        <li><a href="#">Sobre nosotros</a></li>
+        <li><a href="#">Método B-Fly</a></li>
+        <li><a href="#">Casos de éxito</a></li>
+        <li><a href="#">Carreras</a></li>
+        <li><a href="#">Blog</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Recursos</div>
+      <ul class="footer-links">
+        <li><a href="#">Estudio Banca Digital 2025</a></li>
+        <li><a href="#">Privacidad</a></li>
+        <li><a href="#">Términos</a></li>
+        <li><a href="#">Seguridad</a></li>
+      </ul>
+    </div>
+  </div>
+  <p class="footer-helping">Helping people <em>love</em> their bank</p>
+  <div class="footer-bottom">
+    <span>© 2025 Infocorp Group</span>
+    <span>Lima, Perú · hola@infocorp.net</span>
+  </div>
+</footer>
+
+<script>
+gsap.registerPlugin(ScrollTrigger);
+
+const glow = document.getElementById('cursorGlow');
+let mx=0, my=0, gx=0, gy=0;
+window.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; }, {passive:true});
+(function lerp(){ gx+=(mx-gx)*0.08; gy+=(my-gy)*0.08; if(glow){ glow.style.left=gx+'px'; glow.style.top=gy+'px'; } requestAnimationFrame(lerp); })();
+
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 20), {passive:true});
+
+gsap.set('#heroLabel',   { y: 12, opacity: 0 });
+gsap.set('#heroSub',     { y: 16, opacity: 0 });
+gsap.set('#heroActions', { y: 16, opacity: 0 });
+gsap.set('#heroVisual',  { scale: 0.85, opacity: 0 });
+
+const heroTL = gsap.timeline({ delay: 0.15 });
+heroTL.to('#heroLabel', { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }, 0.2);
+
+const heroSplit = new SplitType('#heroH1', { types: 'words,chars', tagName: 'span' });
+heroTL.fromTo(heroSplit.chars,
+  { y: 60, opacity: 0, rotationX: -40 },
+  { y: 0, opacity: 1, rotationX: 0, duration: 0.7, stagger: 0.012, ease: 'power3.out', transformOrigin: '50% 100%' },
+  0.4
+);
+heroTL.to('#heroSub',     { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' }, 0.9);
+heroTL.to('#heroActions', { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' }, 1.0);
+heroTL.to('#heroVisual',  { opacity: 1, scale: 1, duration: 1.1, ease: 'power3.out' }, 0.6);
+
+document.querySelectorAll('.split-lines').forEach(el => {
+  const split = new SplitType(el, { types: 'lines', tagName: 'span' });
+  split.lines.forEach(line => {
+    line.style.overflow = 'hidden';
+    line.style.display = 'block';
+  });
+  gsap.fromTo(split.lines, { y: '100%', opacity: 0 },
+    { y: '0%', opacity: 1, duration: 0.85, stagger: 0.12, ease: 'power3.out',
+      scrollTrigger: { trigger: el, start: 'top 82%', toggleActions: 'play none none none' } });
+});
+
+document.querySelectorAll('.co-stat-num, .co-case-metric-num').forEach(el => {
+  const target = parseFloat(el.dataset.target);
+  const prefix = el.dataset.prefix || '';
+  const suffix = el.dataset.suffix || '';
+  if (isNaN(target)) return;
+  el.textContent = prefix + '0' + suffix;
+  ScrollTrigger.create({
+    trigger: el, start: 'top 88%', once: true,
+    onEnter: () => {
+      gsap.fromTo({ v: 0 }, { v: target },
+        { duration: 1.4, ease: 'power2.out',
+          onUpdate: function(){
+            const v = this.targets()[0].v;
+            const isFloat = target % 1 !== 0;
+            el.textContent = prefix + (isFloat ? v.toFixed(2) : Math.round(v)) + suffix;
+          }
+        });
+    }
+  });
+});
+
+gsap.fromTo('.co-stat', { x: -20, opacity: 0 },
+  { x: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: 'power3.out',
+    scrollTrigger: { trigger: '.co-stats-grid', start: 'top 85%' } });
+gsap.fromTo('.co-problem-item', { x: -30, opacity: 0 },
+  { x: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: 'power3.out',
+    scrollTrigger: { trigger: '.co-problem-list', start: 'top 82%' } });
+gsap.fromTo('.co-solution-item', { x: -30, opacity: 0 },
+  { x: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: 'power3.out',
+    scrollTrigger: { trigger: '.co-solution-list', start: 'top 82%' } });
+gsap.fromTo('.co-hier', { x: 40, opacity: 0 },
+  { x: 0, opacity: 1, duration: 0.9, ease: 'power3.out',
+    scrollTrigger: { trigger: '.co-hier', start: 'top 82%' } });
+gsap.fromTo('.co-mix-board', { y: 40, opacity: 0 },
+  { y: 0, opacity: 1, duration: 0.9, ease: 'power3.out',
+    scrollTrigger: { trigger: '.co-mix-board', start: 'top 82%' } });
+gsap.fromTo('.co-outcome', { y: 30, opacity: 0 },
+  { y: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: 'power3.out',
+    scrollTrigger: { trigger: '.co-outcomes-grid', start: 'top 82%' } });
+gsap.fromTo('.co-tl-event', { x: -30, opacity: 0 },
+  { x: 0, opacity: 1, duration: 0.7, stagger: 0.12, ease: 'power3.out',
+    scrollTrigger: { trigger: '.co-timeline', start: 'top 80%' } });
+gsap.fromTo('.co-case-card', { y: 40, opacity: 0 },
+  { y: 0, opacity: 1, duration: 0.9, ease: 'power3.out',
+    scrollTrigger: { trigger: '.co-case-card', start: 'top 82%' } });
+
+const ctaSplit = new SplitType('.cta-h2', { types: 'chars', tagName: 'span' });
+gsap.fromTo(ctaSplit.chars, { y: 40, opacity: 0 },
+  { y: 0, opacity: 1, duration: 0.6, stagger: 0.025, ease: 'power3.out',
+    scrollTrigger: { trigger: '.cta-band', start: 'top 75%' } });
+gsap.fromTo('.cta-sub, .cta-band .btn-white, .cta-fine', { y: 20, opacity: 0 },
+  { y: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: 'power3.out',
+    scrollTrigger: { trigger: '.cta-band', start: 'top 70%' } });
+
+// MIX COMPOSER — Banca Corporativa
+const CORP_PLATFORMS = [
+  // CORE
+  { id: 'smart',  name: 'IC Smart Platform', tier: 'core', aporte: 'Multi-entidad, multi-país, multi-moneda. La columna vertebral de la tesorería corporativa.', icon: 'grid' },
+  { id: 'web',    name: 'IC Web Banking',    tier: 'core', aporte: 'Workspace para tesorería: cash global, batch payments y conciliación multi-banco.', icon: 'web' },
+  { id: 'mobile', name: 'IC Mobile Banking', tier: 'core', aporte: 'App del CFO y directores: aprobaciones críticas con biometría desde donde estén.', icon: 'mobile' },
+  // ADD-ON
+  { id: 'back',      name: 'IC Back Office',          tier: 'addon', aporte: 'Excepciones, conciliaciones multi-banco y audit trail SOX-ready out of the box.', icon: 'gear' },
+  { id: 'analytics', name: 'IC Analytics (GURU)',     tier: 'addon', aporte: 'GURU calcula scoring de factoring, sugiere hedges multimoneda y arma reportes para auditoría.', icon: 'chart' },
+  { id: 'open',      name: 'IC Open Finance',         tier: 'addon', aporte: 'APIs para integrar con ERPs (SAP, Oracle), tesorerías de subsidiarias y fintechs de FX.', icon: 'plug' },
+  { id: 'marketing', name: 'IC Marketing Automation', tier: 'addon', aporte: 'Cross-sell inteligente: el banco sabe cuándo ofrecer leasing, factoring o coberturas FX.', icon: 'megaphone' },
+  // OPTIONAL
+  { id: 'onboarding', name: 'IC Onboarding', tier: 'optional', aporte: 'Alta corporativa con KYC empresarial y firma digital de directores. De prospecto a cliente sin papel.', icon: 'shield' },
+  { id: 'social',     name: 'IC Social Banking', tier: 'optional', aporte: 'SARA para empleados de la corporación: consultas y trámites por WhatsApp.', icon: 'chat' },
+  { id: 'pfm',        name: 'IC Personal Finance', tier: 'optional', aporte: 'PFM para los empleados: bienestar financiero embebido en el plan de beneficios.', icon: 'wallet' },
+  { id: 'portal',     name: 'IC Public Portal', tier: 'optional', aporte: 'Sitio Empresas con simuladores de leasing y FX en vivo. Captación de prospects corporativos.', icon: 'globe' },
+];
+
+const ICONS = {
+  grid: '<rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>',
+  web: '<circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>',
+  mobile: '<rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/>',
+  gear: '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33"/>',
+  chart: '<line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>',
+  plug: '<path d="M22 12h-4M6 12H2M12 22v-4M12 6V2"/><circle cx="12" cy="12" r="4"/>',
+  megaphone: '<path d="M3 11l18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/>',
+  shield: '<path d="M12 22s-8-4.5-8-12V5l8-3 8 3v5c0 7.5-8 12-8 12z"/><polyline points="9 12 11 14 15 10"/>',
+  chat: '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
+  wallet: '<path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h4v-8z"/>',
+  globe: '<circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>',
+};
+
+const tagText = { core: 'CORE', addon: 'CORPORATIVA', optional: 'OPCIONAL' };
+
+function mixCard(p) {
+  return `<div class="co-mix-card ${p.tier}" data-id="${p.id}" tabindex="0" role="button">
+    <span class="co-mix-card-tag">${tagText[p.tier]}</span>
+    <div class="co-mix-card-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ICONS[p.icon]}</svg>
+    </div>
+    <div class="co-mix-card-name">${p.name}</div>
+    <div class="co-mix-card-aporte">${p.aporte}</div>
+    <span class="co-mix-card-action"></span>
+  </div>`;
+}
+
+function renderMix() {
+  const coreGrid     = document.getElementById('coreGrid');
+  const addonGrid    = document.getElementById('addonGrid');
+  const optionalGrid = document.getElementById('optionalGrid');
+  const core     = CORP_PLATFORMS.filter(p => p.tier === 'core');
+  const addons   = CORP_PLATFORMS.filter(p => p.tier === 'addon');
+  const optional = CORP_PLATFORMS.filter(p => p.tier === 'optional');
+  coreGrid.innerHTML     = core.map(mixCard).join('');
+  addonGrid.innerHTML    = addons.map(mixCard).join('');
+  optionalGrid.innerHTML = optional.map(mixCard).join('');
+  document.getElementById('coreCount').textContent = core.length;
+  document.getElementById('addonCount').textContent = addons.length;
+  document.getElementById('optionalCount').textContent = optional.length;
+  const activeTotal = core.length + addons.length;
+  document.getElementById('mixSummary').textContent =
+    `${activeTotal} plataformas — ${addons.length > 3 ? 'tesorería end-to-end con audit + factoring digital + multimoneda' : 'mix base'}`;
+  bindMixCards();
+}
+
+function toggleAddon(id) {
+  const p = CORP_PLATFORMS.find(x => x.id === id);
+  if (!p) return;
+  if (p.tier === 'core') return;
+  if (p.tier === 'addon') p.tier = 'optional';
+  else if (p.tier === 'optional') p.tier = 'addon';
+  renderMix();
+}
+
+function bindMixCards() {
+  document.querySelectorAll('.co-mix-card').forEach(card => {
+    if (card.classList.contains('core')) return;
+    const id = card.dataset.id;
+    card.addEventListener('click', () => toggleAddon(id));
+    card.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleAddon(id); }
+    });
+  });
+}
+
+renderMix();
+</script>
+
+</body>
+</html>

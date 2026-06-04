@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Banca All Business — Infocorp</title>
+  <meta name="description" content="Una sola plataforma para atender todo el espectro empresa: desde el monotributista hasta la multinacional. Multi-segmento, multi-país, multi-moneda." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/split-type@0.3.4/umd/index.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #F8FAFC; --bg-alt: #F1F5F9; --white: #FFFFFF;
+      --ink: #0F1729; --ink-deep: #0A1226; --sec: #334155;
+      --muted: #64748B; --border: #E2E8F0; --surface: #EBEEF5;
+      --accent: #0063F2; --accent-d: #004fd4; --accent-l: #DBEAFE;
+      --accent-2: #2CA4FF; --accent-2-l: #BAE0FF; --accent-deep: #0E2461;
+      --brand: #0063F2; --brand-d: #004fd4; --brand-l: #DBEAFE;
+      --cyan: #2CA4FF; --cyan-l: #BAE0FF;
+      --navy: #051030; --navy-2: #0A1A48; --navy-3: #0E2461;
+      --purple: #7B5BFF; --amber: #F59E0B;
+      --green: #16A34A; --green-2: #4ADE80;
+      --pink: #FF6BB5; --red: #EF4444;
+      --font: 'Plus Jakarta Sans', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --ease: cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font); background: var(--bg); color: var(--ink); overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
+    img, svg { display: block; max-width: 100%; }
+    .label { font-size: 11px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); }
+    .label.on-dark { color: var(--accent-2); }
+    .container { max-width: 1240px; margin: 0 auto; padding: 0 64px; }
+    .cursor-glow { position: fixed; width: 480px; height: 480px; border-radius: 50%; pointer-events: none; z-index: 1; background: radial-gradient(circle, rgba(0,99,242,0.10) 0%, transparent 60%); transform: translate(-50%, -50%); mix-blend-mode: multiply; }
+
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; height: 68px; background: rgba(255,255,255,0.85); backdrop-filter: blur(20px) saturate(180%); border-bottom: 1px solid transparent; transition: border-color 0.3s, box-shadow 0.3s; transform: translateY(-100%); animation: nav-in 0.6s 0.05s var(--ease) forwards; }
+    nav.scrolled { border-color: var(--border); box-shadow: 0 1px 24px rgba(15,23,41,0.07); }
+    @keyframes nav-in { to { transform: translateY(0); } }
+    .nav-inner { max-width: 1240px; margin: 0 auto; padding: 0 64px; height: 100%; display: flex; align-items: center; gap: 40px; }
+    .nav-logo { font-size: 18px; font-weight: 700; color: var(--ink); letter-spacing: -0.3px; flex-shrink: 0; }
+    .nav-logo span { color: var(--brand); }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a { font-size: 14px; color: var(--sec); transition: color 0.2s; position: relative; }
+    .nav-links a:hover { color: var(--ink); }
+    .nav-links a.active { color: var(--accent); font-weight: 600; }
+    .nav-links a.active::after { content: ''; position: absolute; left: 0; right: 0; bottom: -22px; height: 2px; background: var(--accent); border-radius: 2px; }
+    .nav-crumb { font-size: 11px; color: var(--muted); margin-left: 4px; letter-spacing: 0.06em; text-transform: uppercase; }
+    .nav-crumb::before { content: '/ '; color: var(--border); }
+    .nav-cta { margin-left: auto; padding: 9px 22px; background: var(--accent); color: #fff; font-size: 13px; font-weight: 600; border-radius: 6px; transition: background 0.2s, transform 0.15s, box-shadow 0.2s; box-shadow: 0 2px 12px rgba(0,99,242,0.25); position: relative; overflow: hidden; }
+    .nav-cta::after { content: ''; position: absolute; inset: 0; background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.25) 50%, transparent 60%); transform: translateX(-100%); transition: transform 0.5s; }
+    .nav-cta:hover::after { transform: translateX(100%); }
+    .nav-cta:hover { background: var(--accent-d); transform: translateY(-1px); box-shadow: 0 4px 20px rgba(0,99,242,0.35); }
+
+    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; border-radius: 8px; font-weight: 600; font-size: 14px; transition: all 0.2s; cursor: pointer; border: none; font-family: var(--font); }
+    .btn-primary { background: var(--accent); color: #fff; box-shadow: 0 2px 12px rgba(0,99,242,0.25); }
+    .btn-primary:hover { background: var(--accent-d); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(0,99,242,0.35); }
+    .btn-ghost { background: transparent; color: var(--accent); border: 1px solid rgba(0,99,242,0.3); }
+    .btn-ghost:hover { background: var(--accent-l); border-color: var(--accent); }
+    .btn-white { background: #fff; color: var(--accent); box-shadow: 0 4px 20px rgba(0,0,0,0.15); }
+    .btn-white:hover { transform: translateY(-1px); box-shadow: 0 8px 30px rgba(0,0,0,0.25); }
+    .btn-arrow::after { content: '→'; margin-left: 4px; transition: transform 0.2s; }
+    .btn-arrow:hover::after { transform: translateX(4px); }
+
+    /* HERO — Multi-segmento orchestrator */
+    .ab-hero { position: relative; min-height: 100vh; background: linear-gradient(135deg, var(--navy) 0%, var(--navy-2) 60%, var(--navy-3) 100%); color: #fff; overflow: hidden; padding: 168px 0 100px; display: flex; align-items: center; }
+    .ab-hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 80% 30%, rgba(0,99,242,0.32), transparent 50%), radial-gradient(ellipse at 15% 85%, rgba(123,91,255,0.18), transparent 55%); }
+    .ab-hero-grid-bg { position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px); background-size: 60px 60px; mask-image: radial-gradient(ellipse at center, #000 35%, transparent 75%); -webkit-mask-image: radial-gradient(ellipse at center, #000 35%, transparent 75%); }
+    .ab-hero-inner { position: relative; z-index: 3; max-width: 1240px; margin: 0 auto; padding: 0 64px; display: grid; grid-template-columns: 1fr 1.1fr; gap: 60px; align-items: center; width: 100%; }
+    .ab-hero-label { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 20px; background: rgba(123,91,255,0.18); border: 1px solid rgba(123,91,255,0.35); font-size: 11px; font-weight: 600; letter-spacing: 0.18em; color: #C5B0FF; text-transform: uppercase; margin-bottom: 28px; }
+    .ab-hero-label::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #C5B0FF; box-shadow: 0 0 8px #C5B0FF; animation: ab-pulse 2s ease-in-out infinite; }
+    @keyframes ab-pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(197,176,255,0.5); } 50% { box-shadow: 0 0 0 6px rgba(197,176,255,0); } }
+    .ab-hero-h1 { font-size: clamp(48px, 5.4vw, 78px); font-weight: 800; line-height: 1.04; letter-spacing: -2.2px; margin-bottom: 24px; color: #fff; }
+    .ab-hero-h1 em, .ab-hero-h1 em .char, .ab-hero-h1 em .word { font-style: normal; font-weight: 800; background: linear-gradient(135deg, #C5B0FF 0%, var(--accent-2) 50%, #7AD5FF 100%); -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent; }
+    .ab-hero-sub { font-size: 18px; line-height: 1.55; color: rgba(255,255,255,0.72); max-width: 540px; margin-bottom: 36px; }
+    .ab-hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+    .ab-hero-actions .btn-primary { background: #fff; color: var(--accent); box-shadow: 0 4px 20px rgba(0,0,0,0.18); }
+    .ab-hero-actions .btn-primary:hover { background: #F1F5FF; }
+    .ab-hero-actions .btn-ghost { color: #fff; border-color: rgba(255,255,255,0.25); }
+    .ab-hero-actions .btn-ghost:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.5); }
+
+    /* SEGMENT SWITCHER (hero right) */
+    .ab-orch {
+      position: relative;
+      background: #0B0F1A;
+      border-radius: 16px;
+      overflow: hidden;
+      transform: perspective(1600px) rotateY(-5deg) rotateX(2deg);
+      animation: ab-float 8s ease-in-out infinite;
+      box-shadow: 0 60px 120px rgba(0,99,242,0.30), 0 30px 60px rgba(0,0,0,0.4);
+    }
+    @keyframes ab-float {
+      0%,100% { transform: perspective(1600px) rotateY(-5deg) rotateX(2deg) translateY(0); }
+      50% { transform: perspective(1600px) rotateY(-4deg) rotateX(2deg) translateY(-8px); }
+    }
+    .ab-orch-bar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 10px 14px;
+      background: #131826;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .ab-orch-brand { display: flex; align-items: center; gap: 8px; }
+    .ab-orch-brand-mark { width: 22px; height: 22px; border-radius: 5px; background: linear-gradient(135deg, var(--purple), var(--accent)); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; color: #fff; }
+    .ab-orch-brand-text { font-size: 11px; font-weight: 700; color: #fff; letter-spacing: 0.04em; }
+    .ab-orch-live { display: inline-flex; align-items: center; gap: 6px; font-size: 9px; font-weight: 700; color: var(--accent-2); letter-spacing: 0.06em; text-transform: uppercase; }
+    .ab-orch-live::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--accent-2); box-shadow: 0 0 8px var(--accent-2); animation: ab-pulse 2s ease-in-out infinite; }
+
+    .ab-orch-body { padding: 16px 18px; display: flex; flex-direction: column; gap: 12px; }
+
+    /* Segment tabs */
+    .ab-seg-tabs {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px;
+      padding: 5px;
+      background: rgba(255,255,255,0.04);
+      border-radius: 10px;
+    }
+    .ab-seg-tab {
+      padding: 8px 10px;
+      border-radius: 7px;
+      font-size: 11px; font-weight: 700;
+      color: rgba(255,255,255,0.6);
+      text-align: center;
+      transition: all 0.3s var(--ease);
+      cursor: default;
+    }
+    .ab-seg-tab.active {
+      background: linear-gradient(135deg, var(--accent), var(--accent-d));
+      color: #fff;
+      box-shadow: 0 4px 10px rgba(0,99,242,0.4);
+    }
+
+    /* Active segment customer */
+    .ab-seg-customer {
+      display: grid; grid-template-columns: 44px 1fr auto;
+      gap: 12px; align-items: center;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 10px;
+      padding: 12px;
+    }
+    .ab-seg-av {
+      width: 44px; height: 44px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 17px; font-weight: 800; color: #fff;
+      background: linear-gradient(135deg, var(--green), #047857);
+    }
+    .ab-seg-info { line-height: 1.25; }
+    .ab-seg-name { font-size: 13px; font-weight: 800; color: #fff; }
+    .ab-seg-meta { font-size: 10px; color: rgba(255,255,255,0.55); margin-top: 1px; }
+    .ab-seg-balance { font-family: var(--font-mono); font-size: 14px; font-weight: 800; color: var(--green-2); font-variant-numeric: tabular-nums; }
+
+    /* Quick actions row — segment-aware */
+    .ab-actions-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+    .ab-action-chip {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 9px;
+      padding: 10px 6px;
+      display: flex; flex-direction: column; align-items: center;
+      gap: 4px;
+    }
+    .ab-action-chip svg { width: 16px; height: 16px; color: var(--accent-2); }
+    .ab-action-chip-lbl { font-size: 9px; color: rgba(255,255,255,0.72); font-weight: 700; text-align: center; line-height: 1.1; }
+
+    /* GURU prompt for cross-sell */
+    .ab-guru {
+      background: linear-gradient(135deg, rgba(123,91,255,0.16), rgba(0,99,242,0.06));
+      border: 1px solid rgba(123,91,255,0.3);
+      border-radius: 12px;
+      padding: 12px 14px;
+      display: grid; grid-template-columns: 30px 1fr;
+      gap: 10px; align-items: center;
+    }
+    .ab-guru-icon {
+      width: 30px; height: 30px; border-radius: 50%;
+      background: linear-gradient(135deg, #C5B0FF, var(--purple));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 800; color: #fff;
+    }
+    .ab-guru-text { font-size: 11px; line-height: 1.4; color: rgba(255,255,255,0.85); }
+    .ab-guru-text b { color: #fff; }
+    .ab-guru-text span { color: #C5B0FF; font-weight: 700; }
+
+    /* Floating tags */
+    .ab-floating-tag { position: absolute; padding: 8px 12px; border-radius: 12px; background: #fff; box-shadow: 0 12px 32px rgba(0,0,0,0.18); display: inline-flex; align-items: center; gap: 6px; font-size: 10px; font-weight: 700; color: var(--ink); z-index: 6; animation: ab-tag-float 6s ease-in-out infinite; }
+    .ab-floating-tag svg { width: 12px; height: 12px; color: var(--accent); }
+    .ab-floating-tag.tag-1 { top: -16px; left: 12%; }
+    .ab-floating-tag.tag-2 { top: 38%; right: -42px; animation-delay: -2s; background: linear-gradient(135deg, var(--purple), #5B3AE0); color: #fff; }
+    .ab-floating-tag.tag-2 svg { color: #fff; }
+    .ab-floating-tag.tag-3 { bottom: -16px; right: 12%; animation-delay: -4s; }
+    @keyframes ab-tag-float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+
+    /* STATS */
+    .ab-stats { background: var(--bg); padding: 80px 0; position: relative; }
+    .ab-stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; align-items: center; }
+    .ab-stat { position: relative; padding: 20px 24px; border-left: 3px solid var(--accent-l); transition: border-color 0.3s var(--ease); }
+    .ab-stat:hover { border-left-color: var(--accent); }
+    .ab-stat-num { font-size: 44px; font-weight: 800; color: var(--ink); line-height: 1; letter-spacing: -1.6px; font-variant-numeric: tabular-nums; margin-bottom: 8px; background: linear-gradient(135deg, var(--accent) 0%, var(--accent-d) 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+    .ab-stat-desc { font-size: 13px; line-height: 1.5; color: var(--sec); }
+
+    /* PROBLEM (spectrum visual) */
+    .ab-problem { padding: 140px 0; background: #fff; position: relative; overflow: hidden; }
+    .ab-problem-head { text-align: center; max-width: 720px; margin: 0 auto 60px; }
+    .ab-problem-head h2 { font-size: clamp(36px, 3.6vw, 50px); font-weight: 800; line-height: 1.08; letter-spacing: -1.5px; margin: 12px 0 16px; }
+    .ab-problem-head h2 em { font-style: normal; color: var(--accent); }
+    .ab-problem-head p { font-size: 17px; line-height: 1.6; color: var(--sec); }
+
+    .ab-spectrum {
+      position: relative;
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      max-width: 1100px; margin: 0 auto;
+    }
+    .ab-spectrum::before {
+      content: '';
+      position: absolute;
+      top: 50%; left: 12px; right: 12px;
+      height: 2px;
+      background: linear-gradient(90deg, var(--green) 0%, var(--accent) 50%, var(--purple) 100%);
+      transform: translateY(-1px);
+      opacity: 0.25;
+      z-index: 0;
+    }
+    .ab-segment {
+      position: relative;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 24px 20px;
+      text-align: center;
+      transition: all 0.3s var(--ease);
+      z-index: 1;
+    }
+    .ab-segment:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 50px rgba(15,23,41,0.10);
+      border-color: var(--accent);
+    }
+    .ab-segment-icon {
+      width: 56px; height: 56px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 14px;
+      box-shadow: 0 10px 24px rgba(0,99,242,0.25);
+    }
+    .ab-segment-icon svg { width: 24px; height: 24px; color: #fff; }
+    .ab-segment-icon.s1 { background: linear-gradient(135deg, #FFAB4D, var(--amber)); }
+    .ab-segment-icon.s2 { background: linear-gradient(135deg, var(--green-2), var(--green)); }
+    .ab-segment-icon.s3 { background: linear-gradient(135deg, var(--accent-2), var(--accent)); }
+    .ab-segment-icon.s4 { background: linear-gradient(135deg, #C5B0FF, var(--purple)); }
+    .ab-segment-label { font-size: 11px; font-weight: 800; color: var(--muted); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 4px; }
+    .ab-segment-name { font-size: 16px; font-weight: 800; color: var(--ink); margin-bottom: 10px; line-height: 1.2; }
+    .ab-segment-desc { font-size: 12px; color: var(--sec); line-height: 1.5; margin-bottom: 14px; }
+    .ab-segment-stack { display: flex; flex-wrap: wrap; gap: 4px; justify-content: center; }
+    .ab-segment-stack span { padding: 3px 8px; border-radius: 10px; background: var(--accent-l); font-size: 9px; font-weight: 700; color: var(--accent-d); letter-spacing: 0.04em; }
+
+    .ab-spectrum-note {
+      text-align: center; max-width: 760px;
+      margin: 50px auto 0;
+      padding: 20px 28px;
+      background: linear-gradient(135deg, #F1F5FF, #DBEAFE);
+      border: 1px solid rgba(0,99,242,0.16);
+      border-radius: 16px;
+      font-size: 15px; line-height: 1.55; color: var(--ink);
+    }
+    .ab-spectrum-note b { color: var(--accent-d); font-weight: 800; }
+
+    /* MIX COMPOSER */
+    .ab-mix { padding: 140px 0; background: linear-gradient(180deg, var(--bg) 0%, #fff 100%); position: relative; overflow: hidden; }
+    .ab-mix::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle at 1px 1px, rgba(0,99,242,0.06) 1px, transparent 0); background-size: 28px 28px; mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%); -webkit-mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%); }
+    .ab-mix-head { text-align: center; margin-bottom: 50px; position: relative; z-index: 2; max-width: 760px; margin-left: auto; margin-right: auto; padding: 0 24px; }
+    .ab-mix-head h2 { font-size: clamp(36px, 3.6vw, 50px); font-weight: 800; line-height: 1.08; letter-spacing: -1.5px; margin: 12px 0 16px; }
+    .ab-mix-head h2 em { font-style: normal; color: var(--accent); }
+    .ab-mix-head p { font-size: 17px; line-height: 1.6; color: var(--sec); margin-bottom: 28px; }
+    .ab-mix-pill { display: inline-flex; align-items: center; gap: 8px; padding: 5px 14px 5px 5px; border-radius: 20px; background: rgba(0,99,242,0.08); border: 1px solid rgba(0,99,242,0.18); font-size: 12px; font-weight: 600; color: var(--accent-d); }
+    .ab-mix-pill-icon { width: 22px; height: 22px; border-radius: 50%; background: var(--accent); color: #fff; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; }
+
+    .ab-mix-composer { position: relative; z-index: 2; max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+    .ab-mix-board { background: #fff; border: 1px solid var(--border); border-radius: 28px; padding: 44px; box-shadow: 0 30px 80px rgba(15,23,41,0.08); position: relative; }
+    .ab-mix-zone { margin-bottom: 38px; padding-bottom: 38px; border-bottom: 1px dashed var(--border); }
+    .ab-mix-zone:last-child { border-bottom: none; padding-bottom: 0; margin-bottom: 0; }
+    .ab-mix-zone-head { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 22px; gap: 16px; flex-wrap: wrap; }
+    .ab-mix-zone-head > div:first-child { flex: 1; min-width: 200px; }
+    .ab-mix-zone-label { display: inline-flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink); }
+    .ab-mix-zone-tag { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 14px; font-size: 10px; font-weight: 800; letter-spacing: 0.06em; }
+    .ab-mix-zone-tag.core { background: rgba(0,99,242,0.12); color: var(--accent-d); }
+    .ab-mix-zone-tag.addon { background: rgba(44,164,255,0.14); color: var(--accent); }
+    .ab-mix-zone-tag.optional { background: var(--bg-alt); color: var(--muted); }
+    .ab-mix-zone-desc { font-size: 13px; color: var(--muted); max-width: 480px; line-height: 1.5; margin-top: 4px; }
+    .ab-mix-zone-counter { font-size: 12px; font-weight: 700; color: var(--sec); }
+    .ab-mix-zone-counter b { color: var(--accent-d); font-variant-numeric: tabular-nums; }
+    .ab-mix-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; position: relative; }
+    .ab-mix-card { position: relative; border-radius: 16px; padding: 20px 16px 16px; transition: all 0.35s var(--ease); display: flex; flex-direction: column; min-height: 210px; cursor: pointer; user-select: none; }
+    .ab-mix-card-tag { display: inline-flex; align-items: center; gap: 4px; position: absolute; top: 12px; right: 12px; padding: 3px 8px; border-radius: 12px; font-size: 9px; font-weight: 800; letter-spacing: 0.05em; }
+    .ab-mix-card-icon { width: 40px; height: 46px; clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%); display: flex; align-items: center; justify-content: center; margin-bottom: 12px; }
+    .ab-mix-card-icon svg { width: 18px; height: 18px; }
+    .ab-mix-card-name { font-size: 14px; font-weight: 800; line-height: 1.25; margin-bottom: 4px; }
+    .ab-mix-card-aporte { font-size: 11px; line-height: 1.4; flex: 1; margin-bottom: 12px; }
+    .ab-mix-card-action { display: inline-flex; align-items: center; justify-content: center; gap: 5px; padding: 6px 10px; border-radius: 8px; font-size: 11px; font-weight: 800; letter-spacing: 0.02em; align-self: flex-start; }
+
+    .ab-mix-card.core { background: linear-gradient(140deg, var(--accent) 0%, var(--accent-d) 100%); color: #fff; box-shadow: 0 16px 36px rgba(0,99,242,0.30); border: 2px solid var(--accent); cursor: not-allowed; }
+    .ab-mix-card.core::after { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(255,255,255,0.12), transparent 60%); pointer-events: none; border-radius: inherit; }
+    .ab-mix-card.core .ab-mix-card-tag { background: rgba(255,255,255,0.22); color: #fff; }
+    .ab-mix-card.core .ab-mix-card-tag::before { content: '🔒 '; }
+    .ab-mix-card.core .ab-mix-card-icon { background: rgba(255,255,255,0.22); border: 1px solid rgba(255,255,255,0.4); }
+    .ab-mix-card.core .ab-mix-card-icon svg { color: #fff; }
+    .ab-mix-card.core .ab-mix-card-aporte { color: rgba(255,255,255,0.85); }
+    .ab-mix-card.core .ab-mix-card-action { background: rgba(255,255,255,0.16); color: #fff; }
+    .ab-mix-card.core .ab-mix-card-action::before { content: '✓ Base'; }
+
+    .ab-mix-card.addon { background: linear-gradient(140deg, var(--accent-l) 0%, #EEF4FF 100%); border: 1px solid var(--accent); color: var(--ink); }
+    .ab-mix-card.addon .ab-mix-card-tag { background: rgba(0,99,242,0.18); color: var(--accent-d); }
+    .ab-mix-card.addon .ab-mix-card-tag::before { content: '★ '; }
+    .ab-mix-card.addon .ab-mix-card-icon { background: linear-gradient(135deg, var(--accent), var(--accent-d)); }
+    .ab-mix-card.addon .ab-mix-card-icon svg { color: #fff; }
+    .ab-mix-card.addon .ab-mix-card-aporte { color: var(--sec); }
+    .ab-mix-card.addon .ab-mix-card-action { background: #fff; color: var(--accent-d); border: 1px solid rgba(0,99,242,0.2); }
+    .ab-mix-card.addon .ab-mix-card-action::before { content: '× Quitar'; }
+    .ab-mix-card.addon:hover { transform: translateY(-3px); box-shadow: 0 14px 28px rgba(0,99,242,0.18); }
+
+    .ab-mix-card.optional { background: var(--bg); color: var(--ink); border: 1.5px dashed rgba(15,23,41,0.18); }
+    .ab-mix-card.optional .ab-mix-card-tag { background: var(--bg-alt); color: var(--muted); }
+    .ab-mix-card.optional .ab-mix-card-tag::before { content: '+ '; }
+    .ab-mix-card.optional .ab-mix-card-icon { background: linear-gradient(135deg, var(--accent-l), #F1F5FF); border: 1px solid rgba(0,99,242,0.12); }
+    .ab-mix-card.optional .ab-mix-card-icon svg { color: var(--accent-d); }
+    .ab-mix-card.optional .ab-mix-card-aporte { color: var(--muted); }
+    .ab-mix-card.optional .ab-mix-card-action { background: #fff; color: var(--accent-d); border: 1px solid rgba(0,99,242,0.22); }
+    .ab-mix-card.optional .ab-mix-card-action::before { content: '+ Sumar'; }
+    .ab-mix-card.optional:hover { transform: translateY(-3px); border-color: var(--accent); background: #fff; box-shadow: 0 14px 28px rgba(0,99,242,0.12); }
+    .ab-mix-card.optional:hover .ab-mix-card-action { background: var(--accent); color: #fff; }
+
+    .ab-mix-score { background: linear-gradient(135deg, #F1F5FF, #DBEAFE); border: 1px solid rgba(0,99,242,0.16); border-radius: 16px; padding: 16px 20px; margin-top: 24px; display: flex; align-items: center; gap: 16px; }
+    .ab-mix-score-icon { width: 40px; height: 40px; border-radius: 12px; background: linear-gradient(135deg, var(--accent), var(--accent-d)); display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,99,242,0.25); flex-shrink: 0; }
+    .ab-mix-score-icon svg { width: 18px; height: 18px; color: #fff; }
+    .ab-mix-score-text { flex: 1; }
+    .ab-mix-score-title { font-size: 13px; font-weight: 800; color: var(--ink); }
+    .ab-mix-score-desc { font-size: 12px; color: var(--sec); margin-top: 2px; }
+    .ab-mix-score-btn { padding: 10px 18px; border-radius: 8px; background: var(--accent); color: #fff; font-size: 12px; font-weight: 700; }
+
+    /* OUTCOMES */
+    .ab-outcomes { padding: 140px 0; background: var(--bg); position: relative; overflow: hidden; }
+    .ab-outcomes::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle at 1px 1px, rgba(15,23,41,0.05) 1px, transparent 0); background-size: 32px 32px; mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%); -webkit-mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%); }
+    .ab-outcomes-head { text-align: center; margin-bottom: 64px; position: relative; z-index: 2; }
+    .ab-outcomes-head h2 { font-size: clamp(36px, 3.6vw, 50px); font-weight: 800; line-height: 1.08; letter-spacing: -1.5px; margin: 12px 0 16px; }
+    .ab-outcomes-head h2 em { font-style: normal; color: var(--accent); }
+    .ab-outcomes-head p { font-size: 17px; line-height: 1.6; color: var(--sec); max-width: 620px; margin: 0 auto; }
+    .ab-outcomes-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; position: relative; z-index: 2; max-width: 1080px; margin: 0 auto; }
+    .ab-outcome { background: #fff; border: 1px solid var(--border); border-radius: 18px; padding: 32px; display: grid; grid-template-columns: auto 1fr; gap: 24px; align-items: flex-start; transition: all 0.3s var(--ease); }
+    .ab-outcome:hover { transform: translateY(-4px); box-shadow: 0 20px 50px rgba(15,23,41,0.08); border-color: rgba(0,99,242,0.2); }
+    .ab-outcome-icon { width: 60px; height: 70px; clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%); background: linear-gradient(135deg, var(--accent), var(--accent-d)); display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 24px rgba(0,99,242,0.25); flex-shrink: 0; }
+    .ab-outcome-icon svg { width: 28px; height: 28px; color: #fff; }
+    .ab-outcome-text h4 { font-size: 19px; font-weight: 800; color: var(--ink); line-height: 1.3; margin-bottom: 10px; }
+    .ab-outcome-text p { font-size: 14px; line-height: 1.6; color: var(--sec); margin-bottom: 16px; }
+    .ab-outcome-stack { display: flex; flex-wrap: wrap; gap: 6px; }
+    .ab-outcome-stack span { padding: 4px 10px; border-radius: 12px; background: var(--accent-l); font-size: 10px; font-weight: 700; color: var(--accent-d); letter-spacing: 0.04em; }
+
+    /* ARCH SECTION — one stack four faces */
+    .ab-arch { padding: 140px 0; background: linear-gradient(180deg, var(--navy) 0%, var(--navy-2) 100%); color: #fff; position: relative; overflow: hidden; }
+    .ab-arch::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 30% 50%, rgba(123,91,255,0.20), transparent 50%), radial-gradient(ellipse at 80% 70%, rgba(0,99,242,0.22), transparent 55%); }
+    .ab-arch-head { text-align: center; margin-bottom: 60px; position: relative; z-index: 2; }
+    .ab-arch-head h2 { font-size: clamp(36px, 3.6vw, 50px); font-weight: 800; line-height: 1.08; letter-spacing: -1.5px; margin: 12px 0 16px; }
+    .ab-arch-head h2 em { font-style: normal; background: linear-gradient(135deg, #C5B0FF, var(--accent-2)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+    .ab-arch-head p { font-size: 16px; line-height: 1.6; color: rgba(255,255,255,0.72); max-width: 620px; margin: 0 auto; }
+    .ab-arch-diagram {
+      max-width: 980px; margin: 0 auto;
+      position: relative; z-index: 2;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 22px;
+      padding: 40px;
+    }
+    .ab-arch-row { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+    .ab-arch-row-lbl { font-size: 11px; font-weight: 800; letter-spacing: 0.16em; color: rgba(255,255,255,0.55); text-transform: uppercase; width: 100px; flex-shrink: 0; }
+    .ab-arch-faces { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; flex: 1; }
+    .ab-arch-face {
+      padding: 10px 12px;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.85);
+      text-align: center;
+    }
+    .ab-arch-face.s1 { border-color: rgba(245,158,11,0.4); background: rgba(245,158,11,0.08); }
+    .ab-arch-face.s2 { border-color: rgba(22,163,74,0.4); background: rgba(22,163,74,0.08); }
+    .ab-arch-face.s3 { border-color: rgba(0,99,242,0.4); background: rgba(0,99,242,0.08); }
+    .ab-arch-face.s4 { border-color: rgba(123,91,255,0.4); background: rgba(123,91,255,0.08); }
+    .ab-arch-core {
+      margin-top: 22px;
+      padding: 20px 24px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-d) 60%, var(--purple) 100%);
+      box-shadow: 0 14px 36px rgba(0,99,242,0.35);
+      display: flex; align-items: center; gap: 16px;
+    }
+    .ab-arch-core-icon {
+      width: 44px; height: 44px; border-radius: 12px;
+      background: rgba(255,255,255,0.22);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .ab-arch-core-icon svg { width: 22px; height: 22px; color: #fff; }
+    .ab-arch-core-text { flex: 1; }
+    .ab-arch-core-title { font-size: 15px; font-weight: 800; color: #fff; }
+    .ab-arch-core-desc { font-size: 12px; color: rgba(255,255,255,0.85); margin-top: 3px; line-height: 1.5; }
+
+    /* CASE */
+    .ab-case { padding: 140px 0; background: #fff; position: relative; overflow: hidden; }
+    .ab-case-card { max-width: 1100px; margin: 0 auto; background: linear-gradient(135deg, #F1F5FF 0%, #DBEAFE 100%); border-radius: 28px; padding: 60px; position: relative; overflow: hidden; box-shadow: 0 30px 80px rgba(0,99,242,0.18); }
+    .ab-case-card::before { content: ''; position: absolute; right: -100px; top: -100px; width: 360px; height: 360px; border-radius: 50%; background: radial-gradient(circle, rgba(123,91,255,0.20), transparent 70%); }
+    .ab-case-grid { position: relative; z-index: 2; display: grid; grid-template-columns: 1fr 1.3fr; gap: 60px; align-items: center; }
+    .ab-case-customer { text-align: center; }
+    .ab-case-logo { display: inline-flex; align-items: center; justify-content: center; width: 92px; height: 92px; border-radius: 22px; background: linear-gradient(135deg, var(--purple) 0%, var(--accent-d) 100%); color: #fff; font-size: 28px; font-weight: 800; letter-spacing: -1px; margin-bottom: 18px; box-shadow: 0 16px 36px rgba(123,91,255,0.30); }
+    .ab-case-customer-name { font-size: 18px; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
+    .ab-case-customer-role { font-size: 13px; color: var(--muted); margin-bottom: 24px; }
+    .ab-case-flag { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 20px; background: var(--accent-l); font-size: 11px; font-weight: 700; color: var(--accent-d); letter-spacing: 0.06em; text-transform: uppercase; }
+    .ab-case-content { position: relative; }
+    .ab-case-quote-mark { font-size: 80px; line-height: 0.8; color: var(--accent); opacity: 0.25; margin-bottom: -16px; font-family: Georgia, serif; }
+    .ab-case-quote { font-size: clamp(22px, 2.2vw, 30px); font-weight: 700; line-height: 1.35; color: var(--ink); letter-spacing: -0.5px; margin-bottom: 32px; }
+    .ab-case-metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; padding-top: 28px; border-top: 1px solid rgba(15,23,41,0.08); }
+    .ab-case-metric-num { font-size: 32px; font-weight: 800; line-height: 1; letter-spacing: -1px; margin-bottom: 6px; font-variant-numeric: tabular-nums; background: linear-gradient(135deg, var(--accent), var(--accent-d)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+    .ab-case-metric-desc { font-size: 12px; color: var(--sec); line-height: 1.45; }
+
+    /* CTA */
+    .cta-band { position: relative; padding: 120px 0; background: linear-gradient(135deg, var(--accent) 0%, var(--accent-d) 50%, var(--purple) 100%); color: #fff; text-align: center; overflow: hidden; }
+    .cta-band::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 0%, rgba(255,255,255,0.20), transparent 60%); }
+    .cta-band .container { position: relative; z-index: 2; }
+    .cta-h2 { font-size: clamp(40px, 4vw, 60px); font-weight: 800; line-height: 1.08; letter-spacing: -1.5px; margin-bottom: 18px; }
+    .cta-sub { font-size: 18px; line-height: 1.6; color: rgba(255,255,255,0.85); max-width: 540px; margin: 0 auto 32px; }
+    .cta-band .btn-white { color: var(--accent); }
+    .cta-fine { font-size: 13px; color: rgba(255,255,255,0.65); margin-top: 20px; }
+
+    /* FOOTER */
+    footer { background: var(--ink-deep); color: rgba(255,255,255,0.65); padding: 80px 0 30px; }
+    .footer-inner { max-width: 1240px; margin: 0 auto; padding: 0 64px; display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 64px; margin-bottom: 60px; }
+    .footer-logo { font-size: 22px; font-weight: 800; color: #fff; margin-bottom: 14px; }
+    .footer-logo span { color: var(--accent-2); }
+    .footer-tagline { font-size: 14px; line-height: 1.55; color: rgba(255,255,255,0.6); max-width: 240px; }
+    .footer-col-title { font-size: 13px; font-weight: 700; color: #fff; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 16px; }
+    .footer-links { display: flex; flex-direction: column; gap: 10px; }
+    .footer-links a { font-size: 14px; color: rgba(255,255,255,0.6); transition: color 0.2s; }
+    .footer-links a:hover { color: var(--accent-2); }
+    .footer-helping { text-align: center; padding: 40px 0 30px; font-size: 14px; color: rgba(255,255,255,0.55); }
+    .footer-helping em { font-style: normal; color: var(--pink); font-weight: 700; }
+    .footer-helping em::before { content: '♥ '; color: var(--pink); }
+    .footer-bottom { max-width: 1240px; margin: 0 auto; padding: 24px 64px 0; border-top: 1px solid rgba(255,255,255,0.08); display: flex; justify-content: space-between; font-size: 13px; color: rgba(255,255,255,0.45); }
+
+    @media (max-width: 980px) {
+      .ab-hero-inner { grid-template-columns: 1fr; gap: 60px; }
+      .ab-stats-grid { grid-template-columns: repeat(2, 1fr); gap: 24px; }
+      .ab-spectrum { grid-template-columns: repeat(2, 1fr); }
+      .ab-spectrum::before { display: none; }
+      .ab-mix-grid { grid-template-columns: repeat(3, 1fr); }
+      .ab-mix-board { padding: 28px; }
+      .ab-outcomes-grid { grid-template-columns: 1fr; }
+      .ab-arch-row { flex-direction: column; align-items: flex-start; gap: 8px; }
+      .ab-arch-row-lbl { width: auto; }
+      .ab-arch-faces { width: 100%; grid-template-columns: repeat(2, 1fr); }
+      .ab-case-grid { grid-template-columns: 1fr; gap: 32px; text-align: center; }
+      .ab-case-card { padding: 40px 32px; }
+      .footer-inner { grid-template-columns: 1fr 1fr; gap: 40px; }
+    }
+    @media (max-width: 600px) {
+      .container, .nav-inner, .footer-inner, .footer-bottom { padding-left: 24px; padding-right: 24px; }
+      .ab-stats-grid { grid-template-columns: 1fr; }
+      .ab-spectrum { grid-template-columns: 1fr; }
+      .ab-mix-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+      .ab-arch-faces { grid-template-columns: 1fr; }
+      .nav-links { display: none; } .nav-crumb { display: none; }
+      .ab-hero { padding-top: 130px; padding-bottom: 60px; min-height: auto; }
+      .ab-stats, .ab-problem, .ab-mix, .ab-outcomes, .ab-arch, .ab-case, .cta-band { padding: 80px 0; }
+      .ab-case-metrics { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="cursor-glow" id="cursorGlow"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">info<span>corp</span></a>
+    <ul class="nav-links">
+      <li><a href="plataforma.html">Productos</a></li>
+      <li><a href="soluciones-personas.html" class="active">Soluciones <span class="nav-crumb">All Business</span></a></li>
+      <li><a href="#">Clientes</a></li>
+      <li><a href="#">Recursos</a></li>
+    </ul>
+    <a href="#demo" class="nav-cta">Solicitar demo</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="ab-hero">
+  <div class="ab-hero-grid-bg"></div>
+  <div class="ab-hero-inner">
+    <div>
+      <span class="ab-hero-label" id="heroLabel">Banca · ALL BUSINESS</span>
+      <h1 class="ab-hero-h1" id="heroH1">Del monotributista a la <em>multinacional</em>,<br>una sola plataforma</h1>
+      <p class="ab-hero-sub" id="heroSub">Atendé todo el espectro empresa con la misma core, los mismos canales, el mismo modelo de datos. El emprendedor crece y nunca tiene que cambiar de banco. El corporativo siente que el banco se acomoda a él, no al revés.</p>
+      <div class="ab-hero-actions" id="heroActions">
+        <a href="#demo" class="btn btn-primary btn-arrow">Pedinos una demo</a>
+        <a href="#mix" class="btn btn-ghost">Ver el mix completo</a>
+      </div>
+    </div>
+
+    <div id="heroVisual" style="position: relative;">
+      <span class="ab-floating-tag tag-1">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+        Multi-segmento
+      </span>
+      <span class="ab-floating-tag tag-2">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        GURU IA
+      </span>
+      <span class="ab-floating-tag tag-3">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Time-to-market 30%
+      </span>
+
+      <div class="ab-orch">
+        <div class="ab-orch-bar">
+          <div class="ab-orch-brand">
+            <div class="ab-orch-brand-mark">AB</div>
+            <div class="ab-orch-brand-text">All Business Orchestrator</div>
+          </div>
+          <div class="ab-orch-live">SYNC</div>
+        </div>
+        <div class="ab-orch-body">
+          <!-- Segment tabs -->
+          <div class="ab-seg-tabs">
+            <div class="ab-seg-tab">Mono / Indep.</div>
+            <div class="ab-seg-tab active">Pyme</div>
+            <div class="ab-seg-tab">Corporativa</div>
+          </div>
+
+          <!-- Active customer -->
+          <div class="ab-seg-customer">
+            <div class="ab-seg-av">L</div>
+            <div class="ab-seg-info">
+              <div class="ab-seg-name">Lucía · Panadería Rosita SRL</div>
+              <div class="ab-seg-meta">Pyme · 18 empleados · Punto de venta</div>
+            </div>
+            <div class="ab-seg-balance">$ 285.4K</div>
+          </div>
+
+          <!-- Quick actions (segment-aware) -->
+          <div class="ab-actions-row">
+            <div class="ab-action-chip">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+              <div class="ab-action-chip-lbl">Cobro QR</div>
+            </div>
+            <div class="ab-action-chip">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              <div class="ab-action-chip-lbl">Nómina</div>
+            </div>
+            <div class="ab-action-chip">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+              <div class="ab-action-chip-lbl">Factoring</div>
+            </div>
+            <div class="ab-action-chip">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/></svg>
+              <div class="ab-action-chip-lbl">FX</div>
+            </div>
+          </div>
+
+          <!-- GURU AI prompt -->
+          <div class="ab-guru">
+            <div class="ab-guru-icon">G</div>
+            <div class="ab-guru-text">
+              <span>GURU</span> detectó que <b>Lucía facturó 32% más</b> este trimestre y maneja excedente en cuenta. Sugiere ofrecer <b>plazo fijo a 90 días</b> + tarjeta crédito empresa. <b>Próximo touchpoint:</b> WhatsApp.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="ab-stats">
+  <div class="container ab-stats-grid">
+    <div class="ab-stat">
+      <div class="ab-stat-num" data-target="1" data-suffix=" core">0 core</div>
+      <div class="ab-stat-desc">una plataforma<br>para todo el espectro empresa</div>
+    </div>
+    <div class="ab-stat">
+      <div class="ab-stat-num" data-target="30" data-prefix="-" data-suffix="%">-0%</div>
+      <div class="ab-stat-desc">time-to-market<br>vs core fragmentado</div>
+    </div>
+    <div class="ab-stat">
+      <div class="ab-stat-num" data-target="4" data-suffix="x">0x</div>
+      <div class="ab-stat-desc">cross-sell vs<br>oferta no segmentada</div>
+    </div>
+    <div class="ab-stat">
+      <div class="ab-stat-num" data-target="92" data-suffix="%">0%</div>
+      <div class="ab-stat-desc">de pymes y corporates<br>retenidas al crecer</div>
+    </div>
+  </div>
+</section>
+
+<!-- THE SPECTRUM -->
+<section class="ab-problem">
+  <div class="container">
+    <div class="ab-problem-head">
+      <span class="label">EL ESPECTRO QUE NO PODÉS PARTIR EN PEDAZOS</span>
+      <h2 class="split-lines">Cuatro <em>perfiles</em>, un solo banco</h2>
+      <p>El mismo cliente puede ser una persona física, después un emprendedor, después una pyme y después una corporación. El banco no debería pedirle que migre cada vez.</p>
+    </div>
+
+    <div class="ab-spectrum">
+      <div class="ab-segment">
+        <div class="ab-segment-icon s1">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </div>
+        <div class="ab-segment-label">Tier 1</div>
+        <div class="ab-segment-name">Monotributista &<br>Trabajador Indep.</div>
+        <div class="ab-segment-desc">Diseñadora freelance, kioskero, médico independiente. Quiere cobrar fácil, facturar y separar gastos.</div>
+        <div class="ab-segment-stack">
+          <span>Mobile</span><span>Smart</span><span>Social</span>
+        </div>
+      </div>
+      <div class="ab-segment">
+        <div class="ab-segment-icon s2">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        </div>
+        <div class="ab-segment-label">Tier 2</div>
+        <div class="ab-segment-name">Pyme</div>
+        <div class="ab-segment-desc">Panadería, software house, distribuidora. 10–100 empleados. Necesita cobrar, pagar nómina y entender su cash.</div>
+        <div class="ab-segment-stack">
+          <span>Web</span><span>Mobile</span><span>Smart</span>
+        </div>
+      </div>
+      <div class="ab-segment">
+        <div class="ab-segment-icon s3">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+        </div>
+        <div class="ab-segment-label">Tier 3</div>
+        <div class="ab-segment-name">Corporativa</div>
+        <div class="ab-segment-desc">Multi-país, multimoneda, tesorería con CFO. Batch payments con multi-firma jerárquica, factoring y audit SOX.</div>
+        <div class="ab-segment-stack">
+          <span>Web</span><span>Back Office</span><span>Analytics</span>
+        </div>
+      </div>
+      <div class="ab-segment">
+        <div class="ab-segment-icon s4">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        </div>
+        <div class="ab-segment-label">Tier 4</div>
+        <div class="ab-segment-name">Empresas<br>Globales</div>
+        <div class="ab-segment-desc">Grupos, holdings, BU internacionales. ERPs conectados, FX hedging, observability global. Open Finance API-first.</div>
+        <div class="ab-segment-stack">
+          <span>Open Finance</span><span>Analytics</span><span>Smart</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="ab-spectrum-note">
+      <b>El insight:</b> el mismo cliente atraviesa varios tiers a lo largo de su vida empresarial. Si el banco le obliga a cambiar de producto, app o canal en cada salto, lo pierde a la competencia. <b>All Business</b> mantiene la misma core con experiencias adaptadas — el cliente crece sin migrar.
+    </div>
+  </div>
+</section>
+
+<!-- 🌟 MIX COMPOSER -->
+<section class="ab-mix" id="mix">
+  <div class="ab-mix-head">
+    <span class="label">EL MIX RECOMENDADO PARA ALL BUSINESS</span>
+    <h2 class="split-lines">All Business <em>se arma</em><br>con todo el stack</h2>
+    <p>Cuatro plataformas core y todo el resto activado por defecto: es la solución más completa, porque atiende todo el espectro empresa.</p>
+    <div class="ab-mix-pill">
+      <span class="ab-mix-pill-icon">✓</span>
+      Multi-segmento · Multi-país · Una core, infinitas caras
+    </div>
+  </div>
+
+  <div class="ab-mix-composer">
+    <div class="ab-mix-board">
+
+      <div class="ab-mix-zone">
+        <div class="ab-mix-zone-head">
+          <div>
+            <div class="ab-mix-zone-label">
+              CORE de All Business
+              <span class="ab-mix-zone-tag core">🔒 Base</span>
+            </div>
+            <div class="ab-mix-zone-desc">Cuatro plataformas que ningún segmento empresa puede vivir sin ellas.</div>
+          </div>
+          <div class="ab-mix-zone-counter"><b id="coreCount">4</b> de 4 activas</div>
+        </div>
+        <div class="ab-mix-grid" id="coreGrid"></div>
+      </div>
+
+      <div class="ab-mix-zone">
+        <div class="ab-mix-zone-head">
+          <div>
+            <div class="ab-mix-zone-label">
+              Add-ons recomendados
+              <span class="ab-mix-zone-tag addon">★ Mix All Business</span>
+            </div>
+            <div class="ab-mix-zone-desc">Si vas a atender todo el espectro empresa, estas plataformas no son opcionales — son la diferencia entre "banco que cobra" y "banco que crece con vos".</div>
+          </div>
+          <div class="ab-mix-zone-counter"><b id="addonCount">5</b> activas</div>
+        </div>
+        <div class="ab-mix-grid" id="addonGrid"></div>
+      </div>
+
+      <div class="ab-mix-zone">
+        <div class="ab-mix-zone-head">
+          <div>
+            <div class="ab-mix-zone-label">
+              Disponibles según tu estrategia
+              <span class="ab-mix-zone-tag optional">+ Plus</span>
+            </div>
+            <div class="ab-mix-zone-desc">Las dos plataformas restantes — sumalas si tu propuesta empresa se apoya en bienestar financiero del colaborador o portales sectoriales.</div>
+          </div>
+          <div class="ab-mix-zone-counter"><b id="optionalCount">2</b> disponibles</div>
+        </div>
+        <div class="ab-mix-grid" id="optionalGrid"></div>
+      </div>
+
+      <div class="ab-mix-score">
+        <div class="ab-mix-score-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="ab-mix-score-text">
+          <div class="ab-mix-score-title">Mix actual: <span id="mixSummary">9 plataformas — banca empresa end-to-end multi-segmento</span></div>
+          <div class="ab-mix-score-desc">Tocá las cards para personalizar. All Business es el mix más completo: una core, todas las caras de tu negocio.</div>
+        </div>
+        <a href="#demo" class="ab-mix-score-btn">Hablemos del mix →</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- OUTCOMES -->
+<section class="ab-outcomes">
+  <div class="container ab-outcomes-head">
+    <span class="label">Qué obtiene tu banco con All Business</span>
+    <h2 class="split-lines">Cuatro <em>palancas</em><br>para todo el segmento empresa</h2>
+    <p>Una sola plataforma para vender, operar y crecer en cualquier sub-segmento. El banco multiplica revenue por cliente sin multiplicar core.</p>
+  </div>
+  <div class="container ab-outcomes-grid">
+    <div class="ab-outcome">
+      <div class="ab-outcome-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      </div>
+      <div class="ab-outcome-text">
+        <h4>Una sola core, todas las caras</h4>
+        <p>Mismo modelo de datos para monotributo, pyme y corporate. El cliente crece, el banco no pierde fricción de migración: 92% retention en el upgrade entre tiers.</p>
+        <div class="ab-outcome-stack">
+          <span>IC Smart Platform</span><span>IC Back Office</span>
+        </div>
+      </div>
+    </div>
+    <div class="ab-outcome">
+      <div class="ab-outcome-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      </div>
+      <div class="ab-outcome-text">
+        <h4>Cross-sell inteligente por tier</h4>
+        <p>GURU sabe en qué momento el monotributo necesita factoring, la pyme leasing, el corporate FX hedge. Marketing Automation orquesta la oferta al canal preferido del cliente.</p>
+        <div class="ab-outcome-stack">
+          <span>IC Analytics (GURU)</span><span>IC Marketing</span>
+        </div>
+      </div>
+    </div>
+    <div class="ab-outcome">
+      <div class="ab-outcome-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      </div>
+      <div class="ab-outcome-text">
+        <h4>Onboarding tier-aware en minutos</h4>
+        <p>El motor detecta si quien se registra es persona física, monotributo, SRL o corporación y arma el KYC correcto. De prospect a cliente activo en 8 minutos promedio.</p>
+        <div class="ab-outcome-stack">
+          <span>IC Onboarding</span><span>IC Smart Platform</span>
+        </div>
+      </div>
+    </div>
+    <div class="ab-outcome">
+      <div class="ab-outcome-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      </div>
+      <div class="ab-outcome-text">
+        <h4>Time-to-market 30% más rápido</h4>
+        <p>Sumar un nuevo producto (leasing pyme, cash management corporate, cuenta freelancer) no requiere proyecto de TI: configurás en Back Office y publicás a los canales relevantes.</p>
+        <div class="ab-outcome-stack">
+          <span>IC Back Office</span><span>IC Open Finance</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ARCHITECTURE: one stack, four faces -->
+<section class="ab-arch">
+  <div class="container ab-arch-head">
+    <span class="label on-dark">UNA CORE, CUATRO CARAS</span>
+    <h2 class="split-lines">Misma plataforma,<br><em>experiencias por tier</em></h2>
+    <p>La columna de plataformas Infocorp orquestada para mostrar exactamente lo que cada segmento necesita: mismo motor, distintas caras.</p>
+  </div>
+
+  <div class="container">
+    <div class="ab-arch-diagram">
+      <div class="ab-arch-row">
+        <div class="ab-arch-row-lbl">Canal Mobile</div>
+        <div class="ab-arch-faces">
+          <div class="ab-arch-face s1">Cobro QR · billetera</div>
+          <div class="ab-arch-face s2">Aprobaciones del dueño</div>
+          <div class="ab-arch-face s3">Multi-firma CFO</div>
+          <div class="ab-arch-face s4">Mobile Treasury Global</div>
+        </div>
+      </div>
+      <div class="ab-arch-row">
+        <div class="ab-arch-row-lbl">Canal Web</div>
+        <div class="ab-arch-faces">
+          <div class="ab-arch-face s1">Workspace simple</div>
+          <div class="ab-arch-face s2">Workspace pyme</div>
+          <div class="ab-arch-face s3">Treasury workspace</div>
+          <div class="ab-arch-face s4">Global Treasury Cockpit</div>
+        </div>
+      </div>
+      <div class="ab-arch-row">
+        <div class="ab-arch-row-lbl">Asistente IA</div>
+        <div class="ab-arch-faces">
+          <div class="ab-arch-face s1">SARA freelance</div>
+          <div class="ab-arch-face s2">SARA pyme</div>
+          <div class="ab-arch-face s3">GURU corporate</div>
+          <div class="ab-arch-face s4">GURU global</div>
+        </div>
+      </div>
+      <div class="ab-arch-row">
+        <div class="ab-arch-row-lbl">Cross-sell</div>
+        <div class="ab-arch-faces">
+          <div class="ab-arch-face s1">Cuenta + tarjeta</div>
+          <div class="ab-arch-face s2">Leasing · factoring</div>
+          <div class="ab-arch-face s3">FX · confirming</div>
+          <div class="ab-arch-face s4">Coberturas · IB</div>
+        </div>
+      </div>
+
+      <div class="ab-arch-core">
+        <div class="ab-arch-core-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        </div>
+        <div class="ab-arch-core-text">
+          <div class="ab-arch-core-title">IC Smart Platform · El cerebro multi-tier</div>
+          <div class="ab-arch-core-desc">Mismo motor de productos, mismo modelo de cliente. La diferencia entre cara y cara la hace la configuración, no el código.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CASE -->
+<section class="ab-case">
+  <div class="container">
+    <div class="ab-case-card">
+      <div class="ab-case-grid">
+        <div class="ab-case-customer">
+          <div class="ab-case-logo">G</div>
+          <div class="ab-case-customer-name">Grupo Financiero Norte</div>
+          <div class="ab-case-customer-role">VP de Banca Empresas y Corporate</div>
+          <span class="ab-case-flag">Caso real · Colombia</span>
+        </div>
+        <div class="ab-case-content">
+          <div class="ab-case-quote-mark">"</div>
+          <blockquote class="ab-case-quote">Antes teníamos cuatro cores: una para personas, una para pymes y dos para corporate. Hoy tenemos una sola plataforma con cuatro caras. Lanzamos productos en semanas, no en proyectos de un año.</blockquote>
+          <div class="ab-case-metrics">
+            <div>
+              <div class="ab-case-metric-num" data-target="30" data-prefix="-" data-suffix="%">-0%</div>
+              <div class="ab-case-metric-desc">time-to-market<br>vs core fragmentado</div>
+            </div>
+            <div>
+              <div class="ab-case-metric-num" data-target="4" data-suffix="×">0×</div>
+              <div class="ab-case-metric-desc">cross-sell por<br>cliente empresa</div>
+            </div>
+            <div>
+              <div class="ab-case-metric-num" data-target="92" data-suffix="%">0%</div>
+              <div class="ab-case-metric-desc">retención al<br>upgradear de tier</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-band" id="demo">
+  <div class="container">
+    <h2 class="cta-h2 split-lines">¿Hablamos de cómo<br>tu banco <em>cubre todo el espectro</em>?</h2>
+    <p class="cta-sub">Ayudamos a las personas a amar a su banco. Hablemos del tuyo.</p>
+    <a href="#" class="btn btn-white btn-arrow">¿Conversamos?</a>
+    <div class="cta-fine">Sin compromisos · Demo personalizada · 30 minutos</div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-logo">info<span>corp</span></div>
+      <p class="footer-tagline">Desde Uruguay, hacia el mundo.</p>
+    </div>
+    <div>
+      <div class="footer-col-title">Soluciones</div>
+      <ul class="footer-links">
+        <li><a href="soluciones-personas.html">Banca Personas</a></li>
+        <li><a href="soluciones-pymes.html">Banca Pymes</a></li>
+        <li><a href="soluciones-corporativa.html">Banca Corporativa</a></li>
+        <li><a href="soluciones-all-business.html">Banca All Business</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Compañía</div>
+      <ul class="footer-links">
+        <li><a href="#">Sobre nosotros</a></li>
+        <li><a href="#">Método B-Fly</a></li>
+        <li><a href="#">Casos de éxito</a></li>
+        <li><a href="#">Carreras</a></li>
+        <li><a href="#">Blog</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Recursos</div>
+      <ul class="footer-links">
+        <li><a href="#">Estudio Banca Digital 2025</a></li>
+        <li><a href="#">Privacidad</a></li>
+        <li><a href="#">Términos</a></li>
+        <li><a href="#">Seguridad</a></li>
+      </ul>
+    </div>
+  </div>
+  <p class="footer-helping">Helping people <em>love</em> their bank</p>
+  <div class="footer-bottom">
+    <span>© 2025 Infocorp Group</span>
+    <span>Lima, Perú · hola@infocorp.net</span>
+  </div>
+</footer>
+
+<script>
+gsap.registerPlugin(ScrollTrigger);
+
+const glow = document.getElementById('cursorGlow');
+let mx=0, my=0, gx=0, gy=0;
+window.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; }, {passive:true});
+(function lerp(){ gx+=(mx-gx)*0.08; gy+=(my-gy)*0.08; if(glow){ glow.style.left=gx+'px'; glow.style.top=gy+'px'; } requestAnimationFrame(lerp); })();
+
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 20), {passive:true});
+
+gsap.set('#heroLabel',   { y: 12, opacity: 0 });
+gsap.set('#heroSub',     { y: 16, opacity: 0 });
+gsap.set('#heroActions', { y: 16, opacity: 0 });
+gsap.set('#heroVisual',  { scale: 0.85, opacity: 0 });
+
+const heroTL = gsap.timeline({ delay: 0.15 });
+heroTL.to('#heroLabel', { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }, 0.2);
+
+const heroSplit = new SplitType('#heroH1', { types: 'words,chars', tagName: 'span' });
+heroTL.fromTo(heroSplit.chars,
+  { y: 60, opacity: 0, rotationX: -40 },
+  { y: 0, opacity: 1, rotationX: 0, duration: 0.7, stagger: 0.012, ease: 'power3.out', transformOrigin: '50% 100%' },
+  0.4
+);
+heroTL.to('#heroSub',     { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' }, 0.9);
+heroTL.to('#heroActions', { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' }, 1.0);
+heroTL.to('#heroVisual',  { opacity: 1, scale: 1, duration: 1.1, ease: 'power3.out' }, 0.6);
+
+document.querySelectorAll('.split-lines').forEach(el => {
+  const split = new SplitType(el, { types: 'lines', tagName: 'span' });
+  split.lines.forEach(line => {
+    line.style.overflow = 'hidden';
+    line.style.display = 'block';
+  });
+  gsap.fromTo(split.lines, { y: '100%', opacity: 0 },
+    { y: '0%', opacity: 1, duration: 0.85, stagger: 0.12, ease: 'power3.out',
+      scrollTrigger: { trigger: el, start: 'top 82%', toggleActions: 'play none none none' } });
+});
+
+document.querySelectorAll('.ab-stat-num, .ab-case-metric-num').forEach(el => {
+  const target = parseFloat(el.dataset.target);
+  const prefix = el.dataset.prefix || '';
+  const suffix = el.dataset.suffix || '';
+  if (isNaN(target)) return;
+  el.textContent = prefix + '0' + suffix;
+  ScrollTrigger.create({
+    trigger: el, start: 'top 88%', once: true,
+    onEnter: () => {
+      gsap.fromTo({ v: 0 }, { v: target },
+        { duration: 1.4, ease: 'power2.out',
+          onUpdate: function(){
+            const v = this.targets()[0].v;
+            const isFloat = target % 1 !== 0;
+            el.textContent = prefix + (isFloat ? v.toFixed(2) : Math.round(v)) + suffix;
+          }
+        });
+    }
+  });
+});
+
+gsap.fromTo('.ab-stat', { x: -20, opacity: 0 },
+  { x: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: 'power3.out',
+    scrollTrigger: { trigger: '.ab-stats-grid', start: 'top 85%' } });
+gsap.fromTo('.ab-segment', { y: 30, opacity: 0 },
+  { y: 0, opacity: 1, duration: 0.7, stagger: 0.12, ease: 'power3.out',
+    scrollTrigger: { trigger: '.ab-spectrum', start: 'top 82%' } });
+gsap.fromTo('.ab-mix-board', { y: 40, opacity: 0 },
+  { y: 0, opacity: 1, duration: 0.9, ease: 'power3.out',
+    scrollTrigger: { trigger: '.ab-mix-board', start: 'top 82%' } });
+gsap.fromTo('.ab-outcome', { y: 30, opacity: 0 },
+  { y: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: 'power3.out',
+    scrollTrigger: { trigger: '.ab-outcomes-grid', start: 'top 82%' } });
+gsap.fromTo('.ab-arch-row', { x: -30, opacity: 0 },
+  { x: 0, opacity: 1, duration: 0.7, stagger: 0.12, ease: 'power3.out',
+    scrollTrigger: { trigger: '.ab-arch-diagram', start: 'top 80%' } });
+gsap.fromTo('.ab-arch-core', { y: 20, opacity: 0 },
+  { y: 0, opacity: 1, duration: 0.7, ease: 'power3.out',
+    scrollTrigger: { trigger: '.ab-arch-core', start: 'top 85%' } });
+gsap.fromTo('.ab-case-card', { y: 40, opacity: 0 },
+  { y: 0, opacity: 1, duration: 0.9, ease: 'power3.out',
+    scrollTrigger: { trigger: '.ab-case-card', start: 'top 82%' } });
+
+const ctaSplit = new SplitType('.cta-h2', { types: 'chars', tagName: 'span' });
+gsap.fromTo(ctaSplit.chars, { y: 40, opacity: 0 },
+  { y: 0, opacity: 1, duration: 0.6, stagger: 0.025, ease: 'power3.out',
+    scrollTrigger: { trigger: '.cta-band', start: 'top 75%' } });
+gsap.fromTo('.cta-sub, .cta-band .btn-white, .cta-fine', { y: 20, opacity: 0 },
+  { y: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: 'power3.out',
+    scrollTrigger: { trigger: '.cta-band', start: 'top 70%' } });
+
+// Segment tab rotator (visual only, no real switching)
+const segTabs = document.querySelectorAll('.ab-seg-tab');
+let segIdx = 1; // pyme is initially active
+setInterval(() => {
+  segTabs.forEach(t => t.classList.remove('active'));
+  segIdx = (segIdx + 1) % segTabs.length;
+  segTabs[segIdx].classList.add('active');
+}, 3500);
+
+// MIX COMPOSER — All Business
+const AB_PLATFORMS = [
+  // CORE (4 — más amplio que otras soluciones)
+  { id: 'smart',  name: 'IC Smart Platform', tier: 'core', aporte: 'Multi-tier, multi-segmento. Mismo motor para monotributo, pyme y corporate.', icon: 'grid' },
+  { id: 'web',    name: 'IC Web Banking',    tier: 'core', aporte: 'Workspaces adaptados a cada tier. Mismo backend, distintas caras según segmento.', icon: 'web' },
+  { id: 'mobile', name: 'IC Mobile Banking', tier: 'core', aporte: 'Una app que se adapta del freelancer al CFO multinacional. Identidad de canal compartida.', icon: 'mobile' },
+  { id: 'back',   name: 'IC Back Office',    tier: 'core', aporte: 'Operativa centralizada para todos los tiers. Sumar productos no requiere proyecto de TI.', icon: 'gear' },
+  // ADD-ON (5)
+  { id: 'analytics', name: 'IC Analytics (GURU)',     tier: 'addon', aporte: 'GURU lee comportamiento por tier y dispara cross-sell con contexto: factoring para pymes, FX para corporates.', icon: 'chart' },
+  { id: 'open',      name: 'IC Open Finance',         tier: 'addon', aporte: 'APIs para ERPs (SAP, Oracle), POS y fintechs. Sin esto, el ecosistema empresa queda afuera.', icon: 'plug' },
+  { id: 'onboarding',name: 'IC Onboarding',           tier: 'addon', aporte: 'KYC tier-aware: detecta si es monotributo, pyme o corporate y arma el flujo correcto.', icon: 'shield' },
+  { id: 'marketing', name: 'IC Marketing Automation', tier: 'addon', aporte: 'Campañas multi-segmento por canal preferido. Llega con el mensaje correcto al freelance, a la pyme y al CFO.', icon: 'megaphone' },
+  { id: 'social',    name: 'IC Social Banking',       tier: 'addon', aporte: 'SARA por WhatsApp para todos los segmentos. Freelancers, owners de pyme y empleados de corporate — todos prefieren WhatsApp.', icon: 'chat' },
+  // OPTIONAL (2)
+  { id: 'pfm',    name: 'IC Personal Finance', tier: 'optional', aporte: 'Bienestar financiero embebido en plan de beneficios para empleados de empresas cliente.', icon: 'wallet' },
+  { id: 'portal', name: 'IC Public Portal',    tier: 'optional', aporte: 'Sitio Empresas con simuladores por tier. Captación de prospects que aún no son clientes.', icon: 'globe' },
+];
+
+const ICONS = {
+  grid: '<rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>',
+  web: '<circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>',
+  mobile: '<rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/>',
+  gear: '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33"/>',
+  chart: '<line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>',
+  plug: '<path d="M22 12h-4M6 12H2M12 22v-4M12 6V2"/><circle cx="12" cy="12" r="4"/>',
+  shield: '<path d="M12 22s-8-4.5-8-12V5l8-3 8 3v5c0 7.5-8 12-8 12z"/><polyline points="9 12 11 14 15 10"/>',
+  megaphone: '<path d="M3 11l18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/>',
+  chat: '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
+  wallet: '<path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h4v-8z"/>',
+  globe: '<circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>',
+};
+
+const tagText = { core: 'CORE', addon: 'ALL BUSINESS', optional: 'OPCIONAL' };
+
+function mixCard(p) {
+  return `<div class="ab-mix-card ${p.tier}" data-id="${p.id}" tabindex="0" role="button">
+    <span class="ab-mix-card-tag">${tagText[p.tier]}</span>
+    <div class="ab-mix-card-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ICONS[p.icon]}</svg>
+    </div>
+    <div class="ab-mix-card-name">${p.name}</div>
+    <div class="ab-mix-card-aporte">${p.aporte}</div>
+    <span class="ab-mix-card-action"></span>
+  </div>`;
+}
+
+function renderMix() {
+  const coreGrid     = document.getElementById('coreGrid');
+  const addonGrid    = document.getElementById('addonGrid');
+  const optionalGrid = document.getElementById('optionalGrid');
+  const core     = AB_PLATFORMS.filter(p => p.tier === 'core');
+  const addons   = AB_PLATFORMS.filter(p => p.tier === 'addon');
+  const optional = AB_PLATFORMS.filter(p => p.tier === 'optional');
+  coreGrid.innerHTML     = core.map(mixCard).join('');
+  addonGrid.innerHTML    = addons.map(mixCard).join('');
+  optionalGrid.innerHTML = optional.map(mixCard).join('');
+  document.getElementById('coreCount').textContent = core.length;
+  document.getElementById('addonCount').textContent = addons.length;
+  document.getElementById('optionalCount').textContent = optional.length;
+  const activeTotal = core.length + addons.length;
+  document.getElementById('mixSummary').textContent =
+    `${activeTotal} plataformas — ${addons.length >= 4 ? 'banca empresa end-to-end multi-segmento' : 'mix base'}`;
+  bindMixCards();
+}
+
+function toggleAddon(id) {
+  const p = AB_PLATFORMS.find(x => x.id === id);
+  if (!p) return;
+  if (p.tier === 'core') return;
+  if (p.tier === 'addon') p.tier = 'optional';
+  else if (p.tier === 'optional') p.tier = 'addon';
+  renderMix();
+}
+
+function bindMixCards() {
+  document.querySelectorAll('.ab-mix-card').forEach(card => {
+    if (card.classList.contains('core')) return;
+    const id = card.dataset.id;
+    card.addEventListener('click', () => toggleAddon(id));
+    card.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleAddon(id); }
+    });
+  });
+}
+
+renderMix();
+</script>
+
+</body>
+</html>

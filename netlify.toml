@@ -100,3 +100,13 @@
   from = "/soluciones/pymes"
   to = "/soluciones-pymes.html"
   status = 200
+
+[[redirects]]
+  from = "/soluciones/corporativa"
+  to = "/soluciones-corporativa.html"
+  status = 200
+
+[[redirects]]
+  from = "/soluciones/all-business"
+  to = "/soluciones-all-business.html"
+  status = 200

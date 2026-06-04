@@ -732,63 +732,111 @@
       align-self: flex-start;
     }
 
-    /* ACTIVE state */
-    .pe-mod-card.active {
-      background: linear-gradient(140deg, var(--brand) 0%, var(--brand-d) 70%, var(--navy-3) 130%);
-      color: #fff;
-      box-shadow: 0 12px 32px rgba(0,99,242,0.25);
-      border: 1px solid var(--brand);
+    /* Zone tag (CORE / Mix / Disponibles) */
+    .pe-mod-zone-tag {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 4px 10px; border-radius: 14px;
+      font-size: 10px; font-weight: 800; letter-spacing: 0.06em;
+      margin-left: 8px;
     }
-    .pe-mod-card.active::before {
+    .pe-mod-zone-tag.core { background: rgba(0,99,242,0.12); color: var(--brand-d); }
+    .pe-mod-zone-tag.addon { background: rgba(44,164,255,0.16); color: var(--brand); }
+    .pe-mod-zone-tag.optional { background: var(--bg-alt); color: var(--muted); }
+
+    /* Zone description below the title */
+    .pe-mod-zone-desc {
+      font-size: 13px; color: var(--muted);
+      max-width: 480px; line-height: 1.5;
+      margin-top: 4px;
+    }
+
+    /* Card top-right tag */
+    .pe-mod-card-tag {
+      display: inline-flex; align-items: center; gap: 4px;
+      position: absolute; top: 12px; right: 12px;
+      padding: 3px 8px; border-radius: 12px;
+      font-size: 9px; font-weight: 800; letter-spacing: 0.05em;
+    }
+
+    /* CORE state — locked, brand gradient */
+    .pe-mod-card.core {
+      background: linear-gradient(140deg, var(--brand) 0%, var(--brand-d) 100%);
+      color: #fff;
+      box-shadow: 0 16px 36px rgba(0,99,242,0.30);
+      border: 2px solid var(--brand);
+      cursor: not-allowed;
+    }
+    .pe-mod-card.core::before {
       content: ''; position: absolute; inset: 0;
       background: linear-gradient(135deg, rgba(255,255,255,0.12), transparent 60%);
-      pointer-events: none;
+      pointer-events: none; border-radius: inherit;
     }
-    .pe-mod-card.active .pe-mod-card-icon {
-      background: rgba(255,255,255,0.18);
-      border: 1px solid rgba(255,255,255,0.3);
-    }
-    .pe-mod-card.active .pe-mod-card-icon svg { color: #fff; }
-    .pe-mod-card.active .pe-mod-card-desc { color: rgba(255,255,255,0.75); }
-    .pe-mod-card.active .pe-mod-card-action {
-      background: rgba(255,255,255,0.12);
-      color: #fff;
-      border: 1px solid rgba(255,255,255,0.2);
-    }
-    .pe-mod-card.active:hover { transform: translateY(-3px); box-shadow: 0 18px 44px rgba(0,99,242,0.32); }
-    .pe-mod-card.active:hover .pe-mod-card-action {
+    .pe-mod-card.core .pe-mod-card-tag { background: rgba(255,255,255,0.22); color: #fff; }
+    .pe-mod-card.core .pe-mod-card-tag::before { content: '🔒 '; }
+    .pe-mod-card.core .pe-mod-card-icon {
       background: rgba(255,255,255,0.22);
+      border: 1px solid rgba(255,255,255,0.4);
     }
-    .pe-mod-card.active .pe-mod-card-action::before { content: '×'; font-size: 14px; font-weight: 700; }
+    .pe-mod-card.core .pe-mod-card-icon svg { color: #fff; }
+    .pe-mod-card.core .pe-mod-card-desc { color: rgba(255,255,255,0.85); }
+    .pe-mod-card.core .pe-mod-card-action {
+      background: rgba(255,255,255,0.16);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.20);
+    }
+    .pe-mod-card.core .pe-mod-card-action::before { content: '✓ Base'; }
 
-    /* AVAILABLE state */
-    .pe-mod-card.available {
+    /* ADD-ON state — recommended, removable */
+    .pe-mod-card.addon {
+      background: linear-gradient(140deg, var(--brand-l) 0%, #EEF4FF 100%);
+      border: 1px solid var(--brand);
+      color: var(--ink);
+    }
+    .pe-mod-card.addon .pe-mod-card-tag { background: rgba(0,99,242,0.18); color: var(--brand-d); }
+    .pe-mod-card.addon .pe-mod-card-tag::before { content: '★ '; }
+    .pe-mod-card.addon .pe-mod-card-icon {
+      background: linear-gradient(135deg, var(--brand), var(--brand-d));
+    }
+    .pe-mod-card.addon .pe-mod-card-icon svg { color: #fff; }
+    .pe-mod-card.addon .pe-mod-card-desc { color: var(--sec); }
+    .pe-mod-card.addon .pe-mod-card-action {
+      background: #fff; color: var(--brand-d); border: 1px solid rgba(0,99,242,0.2);
+    }
+    .pe-mod-card.addon .pe-mod-card-action::before { content: '× Quitar'; }
+    .pe-mod-card.addon:hover { transform: translateY(-3px); box-shadow: 0 14px 28px rgba(0,99,242,0.18); }
+
+    /* OPTIONAL state — dashed, can be added */
+    .pe-mod-card.optional {
       background: var(--bg);
       color: var(--ink);
       border: 1.5px dashed rgba(15,23,41,0.18);
     }
-    .pe-mod-card.available .pe-mod-card-icon {
+    .pe-mod-card.optional .pe-mod-card-tag { background: var(--bg-alt); color: var(--muted); }
+    .pe-mod-card.optional .pe-mod-card-tag::before { content: '+ '; }
+    .pe-mod-card.optional .pe-mod-card-icon {
       background: linear-gradient(135deg, var(--brand-l), #EBF2FF);
       border: 1px solid rgba(0,99,242,0.15);
     }
-    .pe-mod-card.available .pe-mod-card-icon svg { color: var(--brand); }
-    .pe-mod-card.available .pe-mod-card-desc { color: var(--muted); }
-    .pe-mod-card.available .pe-mod-card-action {
-      background: #fff;
-      color: var(--brand);
-      border: 1px solid rgba(0,99,242,0.25);
+    .pe-mod-card.optional .pe-mod-card-icon svg { color: var(--brand); }
+    .pe-mod-card.optional .pe-mod-card-desc { color: var(--muted); }
+    .pe-mod-card.optional .pe-mod-card-action {
+      background: #fff; color: var(--brand); border: 1px solid rgba(0,99,242,0.25);
     }
-    .pe-mod-card.available:hover {
+    .pe-mod-card.optional .pe-mod-card-action::before { content: '+ Sumar'; }
+    .pe-mod-card.optional:hover {
       transform: translateY(-3px);
       border-color: var(--brand);
       background: #fff;
       box-shadow: 0 12px 28px rgba(0,99,242,0.12);
     }
-    .pe-mod-card.available:hover .pe-mod-card-action {
-      background: var(--brand);
-      color: #fff;
-    }
-    .pe-mod-card.available .pe-mod-card-action::before { content: '+'; font-size: 14px; font-weight: 800; }
+    .pe-mod-card.optional:hover .pe-mod-card-action { background: var(--brand); color: #fff; }
+
+    /* Update zone-head layout to support description below title */
+    .pe-mod-zone-head { flex-wrap: wrap; align-items: flex-start; }
+    .pe-mod-zone-head > div:first-child { flex: 1; min-width: 200px; }
+
+    /* Slightly taller cards to fit aporte texts */
+    .pe-mod-card { min-height: 192px; }
 
     /* Hint text */
     .pe-mod-hint {
@@ -1402,37 +1450,64 @@
 
   <div class="container">
     <div class="pe-mod-composer">
-      <!-- Active platforms -->
+
+      <!-- CORE — base estructural -->
       <div class="pe-mod-zone">
         <div class="pe-mod-zone-head">
-          <div class="pe-mod-zone-title">Tu solución actual</div>
+          <div>
+            <div class="pe-mod-zone-title">
+              CORE de Banca Personas
+              <span class="pe-mod-zone-tag core">🔒 Base</span>
+            </div>
+            <div class="pe-mod-zone-desc">Las plataformas que definen la solución. Banca Personas sin estas, no es Banca Personas.</div>
+          </div>
           <div class="pe-mod-counter">
             <span class="pe-mod-counter-dot"></span>
-            <span id="activeCount">5</span> plataformas activas
+            <span id="coreCount">3</span> de 3 activas
           </div>
         </div>
-        <div class="pe-mod-grid active" id="activeGrid">
-          <!-- Cards inyectadas por JS -->
-        </div>
+        <div class="pe-mod-grid" id="coreGrid"></div>
       </div>
 
-      <!-- Available platforms -->
+      <!-- ADD-ON ACTIVAS — el mix recomendado -->
       <div class="pe-mod-zone">
         <div class="pe-mod-zone-head">
-          <div class="pe-mod-zone-title available">Sumá más plataformas</div>
-          <div class="pe-mod-counter muted">
+          <div>
+            <div class="pe-mod-zone-title">
+              Add-ons recomendados
+              <span class="pe-mod-zone-tag addon">★ Mix Personas</span>
+            </div>
+            <div class="pe-mod-zone-desc">El mix curado que recomendamos para Personas. Podés quitar las que no apliquen a tu estrategia.</div>
+          </div>
+          <div class="pe-mod-counter">
             <span class="pe-mod-counter-dot"></span>
-            <span id="availCount">6</span> disponibles
+            <span id="addonCount">4</span> activas
           </div>
         </div>
-        <div class="pe-mod-grid" id="availableGrid">
-          <!-- Cards inyectadas por JS -->
+        <div class="pe-mod-grid" id="addonGrid"></div>
+      </div>
+
+      <!-- OPCIONALES — sumar según estrategia -->
+      <div class="pe-mod-zone">
+        <div class="pe-mod-zone-head">
+          <div>
+            <div class="pe-mod-zone-title available">
+              Sumá según tu estrategia
+              <span class="pe-mod-zone-tag optional">+ Disponibles</span>
+            </div>
+            <div class="pe-mod-zone-desc">Plataformas opcionales para personalizar tu solución de Banca Personas.</div>
+          </div>
+          <div class="pe-mod-counter muted">
+            <span class="pe-mod-counter-dot"></span>
+            <span id="optionalCount">4</span> disponibles
+          </div>
         </div>
+        <div class="pe-mod-grid" id="optionalGrid"></div>
       </div>
 
       <div class="pe-mod-hint">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-        Probá cómo se siente. Tocá las cards para sumar o quitar plataformas y armar tu mix ideal.
+        El CORE no se toca. Los add-ons sí: tocá las cards para personalizar tu mix.
       </div>
     </div>
 
@@ -1767,19 +1842,22 @@ gsap.fromTo('.cta-sub, .cta-band .btn-white, .cta-fine',
 // ║  MODULAR COMPOSER — Plataformas interactivas                         ║
 // ╚════════════════════════════════════════════════════════════════════╝
 const MOD_PLATFORMS = [
-  // Active by default in Personas solution
-  { id: 'mobile',     name: 'IC Mobile Banking',         desc: 'App nativa segura para tus clientes.',                  icon: 'mobile',  active: true  },
-  { id: 'web',        name: 'IC Web Banking',            desc: 'Canal responsive y personalizable.',                    icon: 'web',     active: true  },
-  { id: 'social',     name: 'IC Social Banking',         desc: 'Banca en WhatsApp con SARA, sin apps.',                 icon: 'chat',    active: true  },
-  { id: 'onboarding', name: 'IC Onboarding & Origination', desc: 'Alta 100% digital con biometría.',                   icon: 'shield',  active: true  },
-  { id: 'analytics',  name: 'IC Analytics (GURU)',       desc: 'Dashboards e insights asistidos por IA.',              icon: 'chart',   active: true  },
-  // Available — can be added
-  { id: 'smart',      name: 'IC Smart Platform',         desc: 'Base modular para crecer sin límites.',                icon: 'grid',    active: false },
-  { id: 'marketing',  name: 'IC Marketing Automation',   desc: 'Campañas microsegmentadas con IA.',                    icon: 'megaphone', active: false },
-  { id: 'open',       name: 'IC Open Finance',           desc: 'APIs para integrar fintechs y terceros.',              icon: 'plug',    active: false },
-  { id: 'portal',     name: 'IC Public Portal',          desc: 'Sitio institucional editable y rebrandable.',          icon: 'globe',   active: false },
-  { id: 'pfm',        name: 'IC Personal Finance',       desc: 'PFM con visualizaciones y nudges de ahorro.',          icon: 'wallet',  active: false },
-  { id: 'back',       name: 'IC Back Office',            desc: 'Operación, monitoreo y control granular.',             icon: 'gear',    active: false },
+  // CORE — base estructural de Banca Personas
+  { id: 'smart',  name: 'IC Smart Platform', tier: 'core',  aporte: 'Orquesta la experiencia del cliente entre app, web y canales conversacionales.', icon: 'grid' },
+  { id: 'mobile', name: 'IC Mobile Banking', tier: 'core',  aporte: 'App nativa premium: lo primero que el cliente abre cada día.', icon: 'mobile' },
+  { id: 'web',    name: 'IC Web Banking',    tier: 'core',  aporte: 'Continuidad desde el navegador para operaciones complejas o de oficina.', icon: 'web' },
+
+  // ADD-ON ACTIVAS — el mix recomendado para Personas
+  { id: 'social',     name: 'IC Social Banking (SARA)',    tier: 'addon', aporte: 'Banca por WhatsApp para el 60% que no descarga apps. Sin barreras.', icon: 'chat' },
+  { id: 'onboarding', name: 'IC Onboarding & Origination', tier: 'addon', aporte: 'Alta digital con biometría en 60s. De prospecto a cliente, sin papel.', icon: 'shield' },
+  { id: 'pfm',        name: 'IC Personal Finance',         tier: 'addon', aporte: 'PFM con goals + nudges. El coach financiero que cambia el hábito.', icon: 'wallet' },
+  { id: 'analytics',  name: 'IC Analytics (GURU)',         tier: 'addon', aporte: 'Insights por cliente y segmento. GURU sugiere ofertas que tienen sentido.', icon: 'chart' },
+
+  // OPCIONALES — sumar según estrategia
+  { id: 'marketing', name: 'IC Marketing Automation', tier: 'optional', aporte: 'Journeys segmentados que aprenden. Pasar de blast genérico a relevancia 1:1.', icon: 'megaphone' },
+  { id: 'open',      name: 'IC Open Finance',         tier: 'optional', aporte: 'APIs para integrar fintechs (PFM apps, BNPL, wallets) al ecosistema del cliente.', icon: 'plug' },
+  { id: 'portal',    name: 'IC Public Portal',        tier: 'optional', aporte: 'Sitio institucional con simuladores y tasas en vivo. La vidriera que convierte.', icon: 'globe' },
+  { id: 'back',      name: 'IC Back Office',          tier: 'optional', aporte: 'Resuelve disputas con IA. Las consultas del cliente se cierran en minutos, no días.', icon: 'gear' },
 ];
 
 const MOD_ICONS = {
@@ -1796,40 +1874,51 @@ const MOD_ICONS = {
   gear:      '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>',
 };
 
+const TIER_TAG = { core: 'CORE', addon: 'PERSONAS', optional: 'OPCIONAL' };
+
 function modBuildCard(p) {
-  const actionLabel = p.active ? 'Quitar' : 'Sumar';
-  return `<div class="pe-mod-card ${p.active ? 'active' : 'available'}" data-id="${p.id}" role="button" tabindex="0" aria-pressed="${p.active}">
+  return `<div class="pe-mod-card ${p.tier}" data-id="${p.id}" role="button" tabindex="0">
+    <span class="pe-mod-card-tag">${TIER_TAG[p.tier]}</span>
     <div class="pe-mod-card-icon">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${MOD_ICONS[p.icon] || ''}</svg>
     </div>
     <div class="pe-mod-card-name">${p.name}</div>
-    <div class="pe-mod-card-desc">${p.desc}</div>
-    <span class="pe-mod-card-action">${actionLabel}</span>
+    <div class="pe-mod-card-desc">${p.aporte}</div>
+    <span class="pe-mod-card-action"></span>
   </div>`;
 }
 
 function modRender() {
-  const activeGrid = document.getElementById('activeGrid');
-  const availGrid  = document.getElementById('availableGrid');
-  if (!activeGrid || !availGrid) return;
-  const active = MOD_PLATFORMS.filter(p => p.active);
-  const avail  = MOD_PLATFORMS.filter(p => !p.active);
-  activeGrid.innerHTML = active.map(modBuildCard).join('');
-  availGrid.innerHTML  = avail.map(modBuildCard).join('');
-  document.getElementById('activeCount').textContent = active.length;
-  document.getElementById('availCount').textContent  = avail.length;
+  const coreGrid     = document.getElementById('coreGrid');
+  const addonGrid    = document.getElementById('addonGrid');
+  const optionalGrid = document.getElementById('optionalGrid');
+  if (!coreGrid || !addonGrid || !optionalGrid) return;
+
+  const core     = MOD_PLATFORMS.filter(p => p.tier === 'core');
+  const addons   = MOD_PLATFORMS.filter(p => p.tier === 'addon');
+  const optional = MOD_PLATFORMS.filter(p => p.tier === 'optional');
+
+  coreGrid.innerHTML     = core.map(modBuildCard).join('');
+  addonGrid.innerHTML    = addons.map(modBuildCard).join('');
+  optionalGrid.innerHTML = optional.map(modBuildCard).join('');
+
+  document.getElementById('coreCount').textContent     = core.length;
+  document.getElementById('addonCount').textContent    = addons.length;
+  document.getElementById('optionalCount').textContent = optional.length;
+
   modBindCards();
 }
 
 function modToggle(id) {
   const p = MOD_PLATFORMS.find(x => x.id === id);
   if (!p) return;
-  // Prevent removing last active
-  const activeCount = MOD_PLATFORMS.filter(x => x.active).length;
-  if (p.active && activeCount <= 1) return;
-  p.active = !p.active;
+  if (p.tier === 'core') return; // locked
+  if (p.tier === 'addon') {
+    p.tier = 'optional';
+  } else if (p.tier === 'optional') {
+    p.tier = 'addon';
+  }
   modRender();
-  // Add pop animation to the moved card
   requestAnimationFrame(() => {
     const moved = document.querySelector(`.pe-mod-card[data-id="${id}"]`);
     if (moved) {
@@ -1841,6 +1930,7 @@ function modToggle(id) {
 
 function modBindCards() {
   document.querySelectorAll('.pe-mod-card').forEach(card => {
+    if (card.classList.contains('core')) return; // locked
     const id = card.dataset.id;
     card.addEventListener('click', () => modToggle(id));
     card.addEventListener('keydown', (e) => {

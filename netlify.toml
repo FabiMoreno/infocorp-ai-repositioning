@@ -60,3 +60,13 @@
   from = "/plataforma/ic-marketing-automation"
   to = "/plataforma-ic-marketing-automation.html"
   status = 200
+
+[[redirects]]
+  from = "/plataforma/ic-marketing-automation"
+  to = "/plataforma-ic-marketing-automation.html"
+  status = 200
+
+[[redirects]]
+  from = "/plataforma/ic-analytics"
+  to = "/plataforma-ic-analytics.html"
+  status = 200

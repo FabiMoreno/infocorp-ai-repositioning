@@ -1,0 +1,1693 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IC Analytics (GURU) — Infocorp</title>
+  <meta name="description" content="Insights bancarios asistidos por IA. GURU responde tus preguntas de negocio en lenguaje natural, con dashboards configurables, modelos predictivos y real-time analytics." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,700&display=swap" rel="stylesheet" />
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/split-type@0.3.4/umd/index.min.js"></script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:         #F8FAFC;
+      --bg-alt:     #F1F5F9;
+      --white:      #FFFFFF;
+      --ink:        #0F1729;
+      --ink-deep:   #0A1226;
+      --sec:        #334155;
+      --muted:      #64748B;
+      --border:     #E2E8F0;
+      --surface:    #EBEEF5;
+
+      /* DATA accent — amber */
+      --accent:     #F59E0B;
+      --accent-d:   #D97706;
+      --accent-l:   #FEF3C7;
+      --accent-2:   #FCD34D;
+      --accent-2-l: #FDE68A;
+      --amber-deep: #92400E;
+
+      --brand:      #0063F2;
+      --brand-d:    #004fd4;
+      --brand-l:    #DBEAFE;
+      --cyan:       #2CA4FF;
+      --cyan-l:     #BAE0FF;
+      --navy:       #051030;
+      --navy-2:     #0A1A48;
+      --navy-3:     #0E2461;
+      --gold-deep:  #3D2F0E;
+      --teal:       #18BCBC;
+      --purple:     #7B5BFF;
+      --green:      #22C55E;
+      --pink:       #FF6BB5;
+
+      --font:       'Plus Jakarta Sans', sans-serif;
+      --ease:       cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font); background: var(--bg); color: var(--ink);
+      overflow-x: hidden; -webkit-font-smoothing: antialiased;
+    }
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
+    img, svg { display: block; max-width: 100%; }
+
+    .label {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--accent-d);
+    }
+    .label.on-dark { color: var(--accent-2); }
+    .container { max-width: 1240px; margin: 0 auto; padding: 0 64px; }
+
+    .cursor-glow {
+      position: fixed; width: 480px; height: 480px;
+      border-radius: 50%; pointer-events: none; z-index: 1;
+      background: radial-gradient(circle, rgba(245,158,11,0.10) 0%, transparent 60%);
+      transform: translate(-50%, -50%); mix-blend-mode: multiply;
+    }
+
+    /* ── NAV ─────────────────────────────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100; height: 68px;
+      background: rgba(255,255,255,0.85);
+      backdrop-filter: blur(20px) saturate(180%);
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.3s, box-shadow 0.3s;
+      transform: translateY(-100%); animation: nav-in 0.6s 0.05s var(--ease) forwards;
+    }
+    nav.scrolled { border-color: var(--border); box-shadow: 0 1px 24px rgba(15,23,41,0.07); }
+    @keyframes nav-in { to { transform: translateY(0); } }
+    .nav-inner { max-width: 1240px; margin: 0 auto; padding: 0 64px; height: 100%; display: flex; align-items: center; gap: 40px; }
+    .nav-logo { font-size: 18px; font-weight: 700; color: var(--ink); letter-spacing: -0.3px; flex-shrink: 0; }
+    .nav-logo span { color: var(--brand); }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a { font-size: 14px; color: var(--sec); transition: color 0.2s; position: relative; }
+    .nav-links a:hover { color: var(--ink); }
+    .nav-links a.active { color: var(--accent-d); font-weight: 600; }
+    .nav-links a.active::after {
+      content: ''; position: absolute; left: 0; right: 0; bottom: -22px;
+      height: 2px; background: var(--accent-d); border-radius: 2px;
+    }
+    .nav-crumb { font-size: 11px; color: var(--muted); margin-left: 4px; letter-spacing: 0.06em; text-transform: uppercase; }
+    .nav-crumb::before { content: '/ '; color: var(--border); }
+    .nav-cta {
+      margin-left: auto; padding: 9px 22px;
+      background: var(--accent-d); color: #fff;
+      font-size: 13px; font-weight: 600; border-radius: 6px;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+      box-shadow: 0 2px 12px rgba(217,119,6,0.25);
+      position: relative; overflow: hidden;
+    }
+    .nav-cta::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.25) 50%, transparent 60%);
+      transform: translateX(-100%); transition: transform 0.5s;
+    }
+    .nav-cta:hover::after { transform: translateX(100%); }
+    .nav-cta:hover { background: var(--amber-deep); transform: translateY(-1px); box-shadow: 0 4px 20px rgba(217,119,6,0.35); }
+
+    .btn { display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 24px; border-radius: 8px; font-weight: 600; font-size: 14px;
+      transition: all 0.2s; cursor: pointer; border: none; font-family: var(--font);
+    }
+    .btn-primary { background: var(--accent-d); color: #fff;
+      box-shadow: 0 2px 12px rgba(217,119,6,0.25); }
+    .btn-primary:hover { background: var(--amber-deep); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(217,119,6,0.35); }
+    .btn-ghost { background: transparent; color: var(--accent-d); border: 1px solid rgba(217,119,6,0.3); }
+    .btn-ghost:hover { background: var(--accent-l); border-color: var(--accent-d); }
+    .btn-white { background: #fff; color: var(--accent-d);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15); }
+    .btn-white:hover { transform: translateY(-1px); box-shadow: 0 8px 30px rgba(0,0,0,0.25); }
+    .btn-arrow::after { content: '→'; margin-left: 4px; transition: transform 0.2s; }
+    .btn-arrow:hover::after { transform: translateX(4px); }
+
+    /* ╔═══════════════════════════════════════════════════════════════════╗
+       ║  SECTION 2 — HERO with GURU AI chat console                        ║
+       ╚═══════════════════════════════════════════════════════════════════╝ */
+    .an-hero {
+      position: relative; min-height: 100vh;
+      background: linear-gradient(135deg, var(--navy) 0%, #1F1505 60%, var(--gold-deep) 100%);
+      color: #fff; overflow: hidden;
+      padding: 168px 0 100px;
+      display: flex; align-items: center;
+    }
+    .an-hero::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 80% 40%, rgba(245,158,11,0.30), transparent 50%),
+                  radial-gradient(ellipse at 20% 90%, rgba(252,211,77,0.16), transparent 55%);
+    }
+    .an-hero-grid {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse at center, #000 35%, transparent 75%);
+      -webkit-mask-image: radial-gradient(ellipse at center, #000 35%, transparent 75%);
+    }
+    .an-hero-inner {
+      position: relative; z-index: 3;
+      max-width: 1240px; margin: 0 auto; padding: 0 64px;
+      display: grid; grid-template-columns: 1fr 1.1fr; gap: 60px;
+      align-items: center; width: 100%;
+    }
+    .an-hero-label {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 14px; border-radius: 20px;
+      background: rgba(252,211,77,0.16);
+      border: 1px solid rgba(252,211,77,0.3);
+      font-size: 11px; font-weight: 600; letter-spacing: 0.18em;
+      color: var(--accent-2); text-transform: uppercase;
+      margin-bottom: 28px;
+    }
+    .an-hero-label::before {
+      content: ''; width: 6px; height: 6px; border-radius: 50%;
+      background: var(--accent-2); box-shadow: 0 0 8px var(--accent-2);
+      animation: an-pulse 2s ease-in-out infinite;
+    }
+    @keyframes an-pulse {
+      0%,100% { box-shadow: 0 0 0 0 rgba(252,211,77,0.5); }
+      50% { box-shadow: 0 0 0 6px rgba(252,211,77,0); }
+    }
+    .an-hero-h1 {
+      font-size: clamp(48px, 5.4vw, 78px);
+      font-weight: 800; line-height: 1.04;
+      letter-spacing: -2.2px; margin-bottom: 24px; color: #fff;
+    }
+    .an-hero-h1 em,
+    .an-hero-h1 em .char,
+    .an-hero-h1 em .word {
+      font-style: normal; font-weight: 800;
+      background: linear-gradient(135deg, var(--accent-2) 0%, #FFE9A8 100%);
+      -webkit-background-clip: text; background-clip: text;
+      color: transparent; -webkit-text-fill-color: transparent;
+    }
+    .an-hero-sub {
+      font-size: 18px; line-height: 1.55; color: rgba(255,255,255,0.72);
+      max-width: 540px; margin-bottom: 36px;
+    }
+    .an-hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+    .an-hero-actions .btn-primary { background: #fff; color: var(--accent-d); box-shadow: 0 4px 20px rgba(0,0,0,0.18); }
+    .an-hero-actions .btn-primary:hover { background: #FFF8E1; }
+    .an-hero-actions .btn-ghost { color: #fff; border-color: rgba(255,255,255,0.25); }
+    .an-hero-actions .btn-ghost:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.5); }
+
+    /* GURU chat console */
+    .an-guru {
+      position: relative;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 24px;
+      padding: 28px;
+      backdrop-filter: blur(14px);
+      box-shadow: 0 30px 80px rgba(245,158,11,0.30);
+    }
+    .an-guru-head {
+      display: flex; align-items: center; justify-content: space-between;
+      padding-bottom: 16px; margin-bottom: 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .an-guru-title {
+      display: flex; align-items: center; gap: 12px;
+      font-size: 13px; font-weight: 700; color: #fff;
+      letter-spacing: 0.04em; text-transform: uppercase;
+    }
+    .an-guru-avatar {
+      width: 32px; height: 36px;
+      clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+      background: linear-gradient(135deg, var(--accent-2), var(--accent-d));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 800; color: #fff;
+      box-shadow: 0 4px 12px rgba(245,158,11,0.4);
+    }
+    .an-guru-status {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 10px; font-weight: 700; color: var(--accent-2);
+      letter-spacing: 0.06em; text-transform: uppercase;
+    }
+    .an-guru-status::before {
+      content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--accent-2);
+      box-shadow: 0 0 10px var(--accent-2);
+      animation: an-pulse 2s ease-in-out infinite;
+    }
+
+    /* User message */
+    .an-msg-user {
+      max-width: 88%;
+      background: rgba(255,255,255,0.08);
+      border-radius: 14px;
+      padding: 12px 16px;
+      margin-bottom: 16px;
+      margin-left: auto;
+      font-size: 13px;
+      color: rgba(255,255,255,0.9);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    .an-msg-user b { font-weight: 700; color: #fff; }
+
+    /* GURU response */
+    .an-msg-guru {
+      display: flex; gap: 12px;
+      align-items: flex-start;
+    }
+    .an-msg-guru-avatar {
+      width: 32px; height: 36px;
+      clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+      background: linear-gradient(135deg, var(--accent-2), var(--accent-d));
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      font-size: 12px; font-weight: 800; color: #fff;
+      box-shadow: 0 4px 12px rgba(245,158,11,0.4);
+    }
+    .an-msg-guru-body { flex: 1; }
+    .an-msg-guru-text {
+      background: linear-gradient(135deg, rgba(252,211,77,0.14), rgba(245,158,11,0.06));
+      border: 1px solid rgba(252,211,77,0.2);
+      border-radius: 14px;
+      padding: 14px 16px;
+      font-size: 13px;
+      line-height: 1.5;
+      color: rgba(255,255,255,0.88);
+      margin-bottom: 14px;
+    }
+    .an-msg-guru-text b { color: #fff; font-weight: 700; }
+    .an-msg-guru-text .num { color: var(--accent-2); font-weight: 800; font-variant-numeric: tabular-nums; }
+
+    /* Inline chart */
+    .an-chart {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 14px;
+    }
+    .an-chart-head {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 14px;
+    }
+    .an-chart-title { font-size: 11px; font-weight: 700; color: #fff; letter-spacing: 0.04em; text-transform: uppercase; }
+    .an-chart-meta { font-size: 10px; color: rgba(255,255,255,0.55); }
+    .an-chart-bars {
+      display: flex; align-items: flex-end; gap: 6px;
+      height: 86px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      position: relative;
+    }
+    .an-chart-bar {
+      flex: 1;
+      background: linear-gradient(180deg, var(--accent-2), var(--accent-d));
+      border-radius: 4px 4px 0 0;
+      position: relative;
+      box-shadow: 0 0 12px rgba(245,158,11,0.4);
+      animation: an-bar-grow 1.2s var(--ease) backwards;
+    }
+    .an-chart-bar:nth-child(1) { height: 35%; animation-delay: 0s; }
+    .an-chart-bar:nth-child(2) { height: 52%; animation-delay: 0.1s; }
+    .an-chart-bar:nth-child(3) { height: 38%; animation-delay: 0.2s; }
+    .an-chart-bar:nth-child(4) { height: 78%; animation-delay: 0.3s; }
+    .an-chart-bar:nth-child(5) { height: 95%; animation-delay: 0.4s; background: linear-gradient(180deg, #FF6B6B, #DC2626); box-shadow: 0 0 12px rgba(220,38,38,0.5); }
+    .an-chart-bar:nth-child(6) { height: 88%; animation-delay: 0.5s; background: linear-gradient(180deg, #FF6B6B, #DC2626); box-shadow: 0 0 12px rgba(220,38,38,0.5); }
+    @keyframes an-bar-grow {
+      from { height: 0%; opacity: 0; }
+    }
+    .an-chart-labels {
+      display: flex; gap: 6px;
+      margin-top: 6px;
+    }
+    .an-chart-labels span {
+      flex: 1; text-align: center;
+      font-size: 9px; color: rgba(255,255,255,0.5);
+    }
+
+    /* Suggestions */
+    .an-suggestions {
+      display: flex; flex-wrap: wrap; gap: 8px;
+    }
+    .an-suggestion {
+      padding: 7px 12px;
+      background: rgba(252,211,77,0.10);
+      border: 1px solid rgba(252,211,77,0.25);
+      border-radius: 18px;
+      font-size: 11px; font-weight: 600;
+      color: var(--accent-2);
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+    .an-suggestion:hover {
+      background: rgba(252,211,77,0.18);
+      border-color: var(--accent-2);
+      transform: translateY(-1px);
+    }
+
+    /* Floating tags */
+    .an-floating-tag {
+      position: absolute; padding: 9px 14px;
+      border-radius: 12px;
+      background: #fff;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.18);
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 11px; font-weight: 700; color: var(--ink);
+      z-index: 6;
+      animation: an-tag-float 6s ease-in-out infinite;
+    }
+    .an-floating-tag svg { width: 14px; height: 14px; color: var(--accent-d); }
+    .an-floating-tag.tag-1 { top: -10px; right: 12%; }
+    .an-floating-tag.tag-2 { top: 28%; left: -36px; animation-delay: -2s; background: linear-gradient(135deg, var(--accent), var(--accent-d)); color: #fff; }
+    .an-floating-tag.tag-2 svg { color: #fff; }
+    .an-floating-tag.tag-3 { bottom: -8px; left: 12%; animation-delay: -4s; }
+    @keyframes an-tag-float {
+      0%,100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    /* ╔═══════════════════════════════════════════════════════════════════╗
+       ║  SECTION 3 — STATS                                                  ║
+       ╚═══════════════════════════════════════════════════════════════════╝ */
+    .an-stats { background: var(--bg); padding: 80px 0; position: relative; }
+    .an-stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; align-items: center; }
+    .an-stat {
+      position: relative; padding: 20px 24px;
+      border-left: 3px solid var(--accent-l);
+      transition: border-color 0.3s var(--ease);
+    }
+    .an-stat:hover { border-left-color: var(--accent); }
+    .an-stat-num {
+      font-size: 44px; font-weight: 800; color: var(--ink);
+      line-height: 1; letter-spacing: -1.6px;
+      font-variant-numeric: tabular-nums;
+      margin-bottom: 8px;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-d) 100%);
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .an-stat-desc { font-size: 13px; line-height: 1.5; color: var(--sec); }
+
+    /* ╔═══════════════════════════════════════════════════════════════════╗
+       ║  SECTION 4 — PROBLEM → SOLUTION                                     ║
+       ╚═══════════════════════════════════════════════════════════════════╝ */
+    .an-problem { padding: 140px 0; background: #fff; position: relative; overflow: hidden; }
+    .an-problem-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+    .an-problem-h2 {
+      font-size: clamp(36px, 3.6vw, 50px);
+      font-weight: 800; line-height: 1.08; letter-spacing: -1.5px;
+      margin: 12px 0 20px;
+    }
+    .an-problem-h2 em { font-style: normal; color: var(--accent-d); }
+    .an-problem-list { display: flex; flex-direction: column; gap: 14px; }
+    .an-problem-item {
+      display: flex; gap: 14px; align-items: flex-start;
+      padding: 16px 18px;
+      background: #FEF2F2;
+      border-left: 3px solid #FCA5A5;
+      border-radius: 8px;
+    }
+    .an-problem-item svg { width: 18px; height: 18px; color: #DC2626; flex-shrink: 0; margin-top: 1px; }
+    .an-problem-item-text { font-size: 14px; line-height: 1.5; color: #7F1D1D; }
+    .an-problem-item-text strong { color: #991B1B; font-weight: 700; }
+
+    .an-arrow-down {
+      display: flex; align-items: center; justify-content: center; gap: 14px;
+      margin: 24px 0;
+      color: var(--accent-d); font-weight: 700; font-size: 13px;
+      letter-spacing: 0.1em; text-transform: uppercase;
+    }
+    .an-arrow-down::before, .an-arrow-down::after {
+      content: ''; flex: 1; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--accent-l), transparent);
+    }
+
+    .an-solution-list { display: flex; flex-direction: column; gap: 14px; }
+    .an-solution-item {
+      display: flex; gap: 14px; align-items: flex-start;
+      padding: 16px 18px;
+      background: #ECFDF5;
+      border-left: 3px solid #6EE7B7;
+      border-radius: 8px;
+    }
+    .an-solution-item svg { width: 18px; height: 18px; color: #059669; flex-shrink: 0; margin-top: 1px; }
+    .an-solution-item-text { font-size: 14px; line-height: 1.5; color: #064E3B; }
+    .an-solution-item-text strong { color: #047857; font-weight: 700; }
+
+    /* Speed comparison visual */
+    .an-speed {
+      position: relative;
+      aspect-ratio: 1/1;
+      border-radius: 24px;
+      background: linear-gradient(135deg, #FFFBEB 0%, #FEF3C7 100%);
+      padding: 36px;
+      overflow: hidden;
+    }
+    .an-speed::before {
+      content: ''; position: absolute; inset: 0;
+      background-image: radial-gradient(circle at 1px 1px, rgba(245,158,11,0.10) 1px, transparent 0);
+      background-size: 24px 24px;
+    }
+    .an-speed-head { position: relative; text-align: center; margin-bottom: 24px; }
+    .an-speed-head-label {
+      font-size: 10px; font-weight: 800; color: var(--accent-d);
+      letter-spacing: 0.16em; text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .an-speed-head-title {
+      font-size: 15px; font-weight: 700; color: var(--ink);
+      letter-spacing: -0.2px;
+    }
+    .an-speed-rows {
+      position: relative; display: flex; flex-direction: column; gap: 18px;
+    }
+    .an-speed-row { }
+    .an-speed-row-head {
+      display: flex; justify-content: space-between; align-items: baseline;
+      margin-bottom: 6px;
+    }
+    .an-speed-row-label {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 12px; font-weight: 700; color: var(--ink);
+    }
+    .an-speed-row-num {
+      font-size: 13px; font-weight: 800;
+      font-variant-numeric: tabular-nums;
+    }
+    .an-speed-row-num.fast { color: var(--accent-d); }
+    .an-speed-row-num.slow { color: var(--muted); }
+    .an-speed-bar {
+      height: 10px; border-radius: 6px;
+      background: rgba(255,255,255,0.7);
+      overflow: hidden; position: relative;
+    }
+    .an-speed-bar-fill {
+      height: 100%; border-radius: inherit;
+      background: linear-gradient(90deg, var(--accent), var(--accent-d));
+    }
+    .an-speed-bar-fill.slow {
+      background: linear-gradient(90deg, #CBD5E1, #94A3B8);
+    }
+    .an-speed-foot {
+      position: relative;
+      margin-top: 22px; padding-top: 20px;
+      border-top: 1px solid rgba(15,23,41,0.08);
+      text-align: center;
+      font-size: 11px; color: var(--muted);
+    }
+    .an-speed-foot strong { color: var(--ink); font-weight: 800; }
+
+    /* ╔═══════════════════════════════════════════════════════════════════╗
+       ║  SECTION 5 — CAPABILITIES                                           ║
+       ╚═══════════════════════════════════════════════════════════════════╝ */
+    .an-caps { padding: 140px 0; background: var(--bg); position: relative; overflow: hidden; }
+    .an-caps::before {
+      content: ''; position: absolute; inset: 0;
+      background-image: radial-gradient(circle at 1px 1px, rgba(15,23,41,0.05) 1px, transparent 0);
+      background-size: 32px 32px;
+      mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%);
+      -webkit-mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%);
+    }
+    .an-caps-head { text-align: center; margin-bottom: 64px; position: relative; z-index: 2; }
+    .an-caps-head h2 {
+      font-size: clamp(36px, 3.6vw, 50px);
+      font-weight: 800; line-height: 1.08; letter-spacing: -1.5px;
+      margin: 12px 0 16px;
+    }
+    .an-caps-head h2 em { font-style: normal; color: var(--accent-d); }
+    .an-caps-head p {
+      font-size: 17px; line-height: 1.6; color: var(--sec);
+      max-width: 620px; margin: 0 auto;
+    }
+    .an-caps-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;
+      position: relative; z-index: 2;
+    }
+    .an-cap-card {
+      background: #fff; border: 1px solid var(--border);
+      border-radius: 16px; padding: 28px 24px;
+      transition: all 0.3s var(--ease);
+      position: relative; overflow: hidden;
+    }
+    .an-cap-card::before {
+      content: ''; position: absolute; left: 0; top: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      transform: scaleX(0); transform-origin: left;
+      transition: transform 0.4s var(--ease);
+    }
+    .an-cap-card:hover::before { transform: scaleX(1); }
+    .an-cap-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 50px rgba(15,23,41,0.08);
+      border-color: rgba(245,158,11,0.2);
+    }
+    .an-cap-icon {
+      width: 48px; height: 56px;
+      clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+      background: linear-gradient(135deg, var(--accent), var(--accent-d));
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 20px;
+      box-shadow: 0 8px 20px rgba(245,158,11,0.30);
+    }
+    .an-cap-icon svg { width: 22px; height: 22px; color: #fff; }
+    .an-cap-card h4 {
+      font-size: 17px; font-weight: 700; color: var(--ink);
+      margin-bottom: 10px; line-height: 1.3;
+    }
+    .an-cap-card p { font-size: 13px; line-height: 1.55; color: var(--sec); }
+
+    /* ╔═══════════════════════════════════════════════════════════════════╗
+       ║  SECTION 6 — IN ACTION — Live GURU conversation                    ║
+       ╚═══════════════════════════════════════════════════════════════════╝ */
+    .an-action {
+      padding: 140px 0;
+      background: linear-gradient(180deg, var(--navy) 0%, #2A1F0A 100%);
+      color: #fff;
+      position: relative; overflow: hidden;
+    }
+    .an-action::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 30% 50%, rgba(245,158,11,0.25), transparent 50%),
+                  radial-gradient(ellipse at 80% 70%, rgba(252,211,77,0.16), transparent 55%);
+    }
+    .an-action-inner {
+      position: relative; z-index: 2;
+      display: grid; grid-template-columns: 1fr 1.05fr; gap: 80px;
+      align-items: center;
+    }
+    .an-action-h2 {
+      font-size: clamp(36px, 3.6vw, 50px);
+      font-weight: 800; line-height: 1.08; letter-spacing: -1.5px;
+      margin: 12px 0 24px;
+    }
+    .an-action-h2 em {
+      font-style: normal;
+      background: linear-gradient(135deg, var(--accent-2), #FFE9A8);
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .an-action-sub {
+      font-size: 16px; line-height: 1.6; color: rgba(255,255,255,0.72);
+      margin-bottom: 36px;
+    }
+    .an-flow-steps { display: flex; flex-direction: column; gap: 16px; }
+    .an-flow-step {
+      display: flex; gap: 18px;
+      padding: 18px 22px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px;
+      transition: all 0.25s var(--ease);
+    }
+    .an-flow-step:hover {
+      background: rgba(255,255,255,0.08);
+      border-color: rgba(252,211,77,0.4);
+    }
+    .an-flow-step-num {
+      width: 38px; height: 38px; border-radius: 10px; flex-shrink: 0;
+      background: linear-gradient(135deg, var(--accent), var(--accent-d));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; font-weight: 800; color: #fff;
+      box-shadow: 0 4px 12px rgba(245,158,11,0.4);
+    }
+    .an-flow-step-text h5 {
+      font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 6px;
+    }
+    .an-flow-step-text p {
+      font-size: 13px; line-height: 1.55; color: rgba(255,255,255,0.65);
+    }
+
+    /* Conversation drill-down */
+    .an-conv {
+      position: relative;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 24px;
+      padding: 24px;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 30px 80px rgba(0,0,0,0.3);
+      max-height: 580px;
+      overflow: hidden;
+    }
+    .an-conv-head {
+      display: flex; align-items: center; justify-content: space-between;
+      padding-bottom: 14px; margin-bottom: 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .an-conv-title {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 12px; font-weight: 700; color: #fff;
+      letter-spacing: 0.04em; text-transform: uppercase;
+    }
+    .an-conv-title .an-guru-avatar { width: 24px; height: 28px; font-size: 11px; }
+
+    .an-conv-msg-user {
+      max-width: 80%;
+      background: rgba(255,255,255,0.08);
+      border-radius: 12px;
+      padding: 10px 14px;
+      margin-bottom: 14px;
+      margin-left: auto;
+      font-size: 12px;
+      color: rgba(255,255,255,0.9);
+    }
+    .an-conv-msg-guru {
+      display: flex; gap: 10px;
+      margin-bottom: 14px;
+    }
+    .an-conv-msg-guru-body {
+      flex: 1;
+      background: linear-gradient(135deg, rgba(252,211,77,0.12), rgba(245,158,11,0.05));
+      border: 1px solid rgba(252,211,77,0.18);
+      border-radius: 12px;
+      padding: 10px 14px;
+      font-size: 12px;
+      color: rgba(255,255,255,0.85);
+      line-height: 1.5;
+    }
+    .an-conv-msg-guru-body b { color: #fff; }
+    .an-conv-msg-guru-body .num { color: var(--accent-2); font-weight: 800; }
+    .an-conv-msg-guru-avatar {
+      width: 26px; height: 30px;
+      clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+      background: linear-gradient(135deg, var(--accent-2), var(--accent-d));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 800; color: #fff;
+      flex-shrink: 0;
+    }
+    .an-conv-actions {
+      display: flex; flex-wrap: wrap; gap: 6px;
+      margin-top: 10px;
+    }
+    .an-conv-action {
+      padding: 5px 10px;
+      background: rgba(252,211,77,0.12);
+      border: 1px solid rgba(252,211,77,0.22);
+      border-radius: 14px;
+      font-size: 10px; font-weight: 700;
+      color: var(--accent-2);
+    }
+    .an-conv-mini-donut {
+      display: flex; align-items: center; gap: 14px;
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+    .an-conv-mini-donut-vis {
+      position: relative;
+      width: 56px; height: 56px;
+      flex-shrink: 0;
+    }
+    .an-conv-mini-donut-vis svg { width: 56px; height: 56px; transform: rotate(-90deg); }
+    .an-conv-mini-donut-vis circle { fill: none; }
+    .an-conv-mini-donut-track { stroke: rgba(255,255,255,0.08); stroke-width: 7; }
+    .an-conv-mini-donut-fill { stroke: url(#donutGrad); stroke-width: 7; stroke-linecap: round;
+      stroke-dasharray: 138; stroke-dashoffset: 28;
+      filter: drop-shadow(0 0 6px rgba(245,158,11,0.5));
+    }
+    .an-conv-mini-donut-center {
+      position: absolute; left: 50%; top: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 13px; font-weight: 800; color: #fff;
+      font-variant-numeric: tabular-nums;
+    }
+    .an-conv-mini-donut-info { font-size: 11px; color: rgba(255,255,255,0.75); line-height: 1.4; }
+    .an-conv-mini-donut-info b { color: #fff; }
+
+    /* ╔═══════════════════════════════════════════════════════════════════╗
+       ║  SECTION 7 — MODULAR FIT                                            ║
+       ╚═══════════════════════════════════════════════════════════════════╝ */
+    .an-modular {
+      padding: 140px 0;
+      background: linear-gradient(180deg, var(--bg) 0%, #fff 100%);
+      position: relative; overflow: hidden;
+    }
+    .an-modular::before {
+      content: ''; position: absolute; inset: 0;
+      background-image: radial-gradient(circle at 1px 1px, rgba(245,158,11,0.06) 1px, transparent 0);
+      background-size: 28px 28px;
+      mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%);
+      -webkit-mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%);
+    }
+    .an-mod-head { text-align: center; margin-bottom: 50px; position: relative; z-index: 2; }
+    .an-mod-head h2 {
+      font-size: clamp(36px, 3.6vw, 50px);
+      font-weight: 800; line-height: 1.08; letter-spacing: -1.5px;
+      margin: 12px 0 16px;
+    }
+    .an-mod-head h2 em { font-style: normal; color: var(--accent-d); }
+    .an-mod-head p {
+      font-size: 17px; line-height: 1.6; color: var(--sec);
+      max-width: 620px; margin: 0 auto;
+    }
+    .an-mod-composer {
+      position: relative; z-index: 2;
+      max-width: 1080px; margin: 0 auto;
+      background: #fff; border: 1px solid var(--border);
+      border-radius: 24px; padding: 40px;
+      box-shadow: 0 30px 80px rgba(15,23,41,0.08);
+    }
+    .an-mod-zone { margin-bottom: 36px; padding-bottom: 36px; border-bottom: 1px dashed var(--border); }
+    .an-mod-zone:last-of-type { border-bottom: none; padding-bottom: 0; margin-bottom: 0; }
+    .an-mod-zone-head {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 24px; gap: 16px;
+    }
+    .an-mod-zone-title {
+      display: flex; align-items: center; gap: 12px;
+      font-size: 14px; font-weight: 700; color: var(--ink);
+      letter-spacing: 0.04em; text-transform: uppercase;
+    }
+    .an-mod-zone-title::before {
+      content: ''; display: inline-block;
+      width: 18px; height: 1.5px; background: var(--accent-d); border-radius: 1.5px;
+    }
+    .an-mod-zone-title.complement { color: var(--muted); }
+    .an-mod-zone-title.complement::before { background: var(--muted); }
+    .an-mod-counter {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 4px 12px; border-radius: 20px;
+      background: var(--accent-l); color: var(--accent-d);
+      font-size: 12px; font-weight: 700;
+    }
+    .an-mod-counter.muted { background: var(--bg-alt); color: var(--sec); }
+    .an-mod-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .an-mod-card {
+      position: relative; border-radius: 14px;
+      padding: 20px 16px 16px;
+      transition: all 0.3s var(--ease);
+      display: flex; flex-direction: column;
+      min-height: 168px; overflow: hidden;
+    }
+    .an-mod-card-icon {
+      width: 38px; height: 44px;
+      clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 12px;
+    }
+    .an-mod-card-icon svg { width: 16px; height: 16px; }
+    .an-mod-card-name { font-size: 13px; font-weight: 700; line-height: 1.25; margin-bottom: 4px; }
+    .an-mod-card-desc { font-size: 11px; line-height: 1.4; flex: 1; margin-bottom: 12px; }
+    .an-mod-card-action {
+      display: inline-flex; align-items: center; justify-content: center; gap: 5px;
+      padding: 6px 10px; border-radius: 8px;
+      font-size: 11px; font-weight: 700; letter-spacing: 0.02em;
+      align-self: flex-start;
+    }
+    .an-mod-card.spotlight {
+      background: linear-gradient(140deg, var(--accent) 0%, var(--accent-d) 70%, var(--amber-deep) 130%);
+      color: #fff;
+      box-shadow: 0 18px 50px rgba(245,158,11,0.4);
+      border: 2px solid var(--accent);
+      grid-column: span 2;
+      min-height: 200px;
+      transform: scale(1.02);
+      position: relative;
+    }
+    .an-mod-card.spotlight::after {
+      content: 'ESTÁS ACÁ';
+      position: absolute; top: 14px; right: 14px;
+      background: rgba(255,255,255,0.2); color: #fff;
+      padding: 4px 8px; border-radius: 6px;
+      font-size: 9px; font-weight: 800; letter-spacing: 0.12em;
+      backdrop-filter: blur(8px);
+    }
+    .an-mod-card.spotlight .an-mod-card-icon {
+      background: rgba(255,255,255,0.22);
+      border: 1px solid rgba(255,255,255,0.4);
+      width: 48px; height: 56px;
+    }
+    .an-mod-card.spotlight .an-mod-card-icon svg { width: 20px; height: 20px; color: #fff; }
+    .an-mod-card.spotlight .an-mod-card-name { font-size: 18px; }
+    .an-mod-card.spotlight .an-mod-card-desc { color: rgba(255,255,255,0.85); font-size: 13px; }
+    .an-mod-card.active {
+      background: linear-gradient(140deg, var(--accent-l) 0%, #FFFBEB 100%);
+      border: 1px solid var(--accent);
+      color: var(--ink);
+    }
+    .an-mod-card.active .an-mod-card-icon {
+      background: linear-gradient(135deg, var(--accent), var(--accent-d));
+    }
+    .an-mod-card.active .an-mod-card-icon svg { color: #fff; }
+    .an-mod-card.active .an-mod-card-desc { color: var(--sec); }
+    .an-mod-card.active .an-mod-card-action {
+      background: #fff; color: var(--accent-d); border: 1px solid rgba(245,158,11,0.2);
+    }
+    .an-mod-card.active .an-mod-card-action::before { content: '✓'; font-size: 11px; font-weight: 800; }
+    .an-mod-card.active:hover { transform: translateY(-3px); box-shadow: 0 12px 28px rgba(245,158,11,0.18); }
+    .an-mod-card.available {
+      background: var(--bg);
+      color: var(--ink);
+      border: 1.5px dashed rgba(15,23,41,0.18);
+      cursor: pointer;
+    }
+    .an-mod-card.available .an-mod-card-icon {
+      background: linear-gradient(135deg, var(--accent-l), #FFFBEB);
+      border: 1px solid rgba(245,158,11,0.15);
+    }
+    .an-mod-card.available .an-mod-card-icon svg { color: var(--accent-d); }
+    .an-mod-card.available .an-mod-card-desc { color: var(--muted); }
+    .an-mod-card.available .an-mod-card-action {
+      background: #fff; color: var(--accent-d); border: 1px solid rgba(245,158,11,0.25);
+    }
+    .an-mod-card.available:hover {
+      transform: translateY(-3px); border-color: var(--accent);
+      background: #fff; box-shadow: 0 12px 28px rgba(245,158,11,0.12);
+    }
+    .an-mod-card.available:hover .an-mod-card-action { background: var(--accent); color: #fff; }
+    .an-mod-card.available .an-mod-card-action::before { content: '+'; font-size: 14px; font-weight: 800; }
+    .an-mod-hint {
+      display: flex; align-items: center; gap: 8px;
+      justify-content: center;
+      font-size: 12px; color: var(--muted);
+      margin-top: 28px; padding: 14px 20px;
+      background: var(--bg);
+      border-radius: 12px;
+      border: 1px dashed var(--border);
+    }
+    .an-mod-hint svg { width: 16px; height: 16px; color: var(--accent-d); flex-shrink: 0; }
+
+    /* ╔═══════════════════════════════════════════════════════════════════╗
+       ║  SECTION 8 — CASE STUDY                                             ║
+       ╚═══════════════════════════════════════════════════════════════════╝ */
+    .an-case { padding: 140px 0; background: #fff; position: relative; overflow: hidden; }
+    .an-case-card {
+      max-width: 1100px; margin: 0 auto;
+      background: linear-gradient(135deg, #FFFBEB 0%, #FEF3C7 100%);
+      border-radius: 28px; padding: 60px;
+      position: relative; overflow: hidden;
+      box-shadow: 0 30px 80px rgba(245,158,11,0.18);
+    }
+    .an-case-card::before {
+      content: ''; position: absolute; right: -100px; top: -100px;
+      width: 360px; height: 360px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(245,158,11,0.16), transparent 70%);
+    }
+    .an-case-grid {
+      position: relative; z-index: 2;
+      display: grid; grid-template-columns: 1fr 1.3fr; gap: 60px;
+      align-items: center;
+    }
+    .an-case-customer { text-align: center; }
+    .an-case-logo {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 92px; height: 92px; border-radius: 22px;
+      background: linear-gradient(135deg, #1E40AF 0%, #1E3A8A 100%);
+      color: #fff;
+      font-size: 28px; font-weight: 800;
+      letter-spacing: -1px;
+      margin-bottom: 18px;
+      box-shadow: 0 16px 36px rgba(30,64,175,0.25);
+    }
+    .an-case-customer-name {
+      font-size: 18px; font-weight: 700; color: var(--ink); margin-bottom: 4px;
+    }
+    .an-case-customer-role { font-size: 13px; color: var(--muted); margin-bottom: 24px; }
+    .an-case-flag {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 14px; border-radius: 20px;
+      background: var(--accent-l);
+      font-size: 11px; font-weight: 700; color: var(--accent-d);
+      letter-spacing: 0.06em; text-transform: uppercase;
+    }
+    .an-case-content { position: relative; }
+    .an-case-quote-mark {
+      font-size: 80px; line-height: 0.8;
+      color: var(--accent-d); opacity: 0.25;
+      margin-bottom: -16px;
+      font-family: Georgia, serif;
+    }
+    .an-case-quote {
+      font-size: clamp(22px, 2.2vw, 30px);
+      font-weight: 700; line-height: 1.35; color: var(--ink);
+      letter-spacing: -0.5px;
+      margin-bottom: 32px;
+    }
+    .an-case-metrics {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+      padding-top: 28px;
+      border-top: 1px solid rgba(15,23,41,0.08);
+    }
+    .an-case-metric-num {
+      font-size: 32px; font-weight: 800; line-height: 1;
+      letter-spacing: -1px; margin-bottom: 6px;
+      font-variant-numeric: tabular-nums;
+      background: linear-gradient(135deg, var(--accent), var(--accent-d));
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .an-case-metric-desc { font-size: 12px; color: var(--sec); line-height: 1.45; }
+
+    /* ╔═══════════════════════════════════════════════════════════════════╗
+       ║  SECTION 9 — CTA BAND                                               ║
+       ╚═══════════════════════════════════════════════════════════════════╝ */
+    .cta-band {
+      position: relative;
+      padding: 120px 0;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-d) 60%, var(--amber-deep) 100%);
+      color: #fff; text-align: center;
+      overflow: hidden;
+    }
+    .cta-band::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 50% 0%, rgba(252,211,77,0.35), transparent 60%);
+    }
+    .cta-band .container { position: relative; z-index: 2; }
+    .cta-h2 {
+      font-size: clamp(40px, 4vw, 60px);
+      font-weight: 800; line-height: 1.08; letter-spacing: -1.5px;
+      margin-bottom: 18px;
+    }
+    .cta-sub {
+      font-size: 18px; line-height: 1.6; color: rgba(255,255,255,0.85);
+      max-width: 540px; margin: 0 auto 32px;
+    }
+    .cta-band .btn-white { color: var(--accent-d); }
+    .cta-fine { font-size: 13px; color: rgba(255,255,255,0.65); margin-top: 20px; }
+
+    /* ╔═══════════════════════════════════════════════════════════════════╗
+       ║  SECTION 10 — FOOTER                                                ║
+       ╚═══════════════════════════════════════════════════════════════════╝ */
+    footer {
+      background: var(--ink-deep); color: rgba(255,255,255,0.65);
+      padding: 80px 0 30px;
+    }
+    .footer-inner {
+      max-width: 1240px; margin: 0 auto; padding: 0 64px;
+      display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 64px;
+      margin-bottom: 60px;
+    }
+    .footer-logo { font-size: 22px; font-weight: 800; color: #fff; margin-bottom: 14px; }
+    .footer-logo span { color: var(--accent-2); }
+    .footer-tagline { font-size: 14px; line-height: 1.55; color: rgba(255,255,255,0.6); max-width: 240px; }
+    .footer-col-title {
+      font-size: 13px; font-weight: 700; color: #fff;
+      letter-spacing: 0.05em; text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    .footer-links { display: flex; flex-direction: column; gap: 10px; }
+    .footer-links a { font-size: 14px; color: rgba(255,255,255,0.6); transition: color 0.2s; }
+    .footer-links a:hover { color: var(--accent-2); }
+    .footer-helping {
+      text-align: center; padding: 40px 0 30px;
+      font-size: 14px; color: rgba(255,255,255,0.55);
+    }
+    .footer-helping em { font-style: normal; color: var(--pink); font-weight: 700; }
+    .footer-helping em::before { content: '♥ '; color: var(--pink); }
+    .footer-bottom {
+      max-width: 1240px; margin: 0 auto; padding: 24px 64px 0;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      display: flex; justify-content: space-between;
+      font-size: 13px; color: rgba(255,255,255,0.45);
+    }
+
+    @media (max-width: 980px) {
+      .an-hero-inner { grid-template-columns: 1fr; gap: 60px; }
+      .an-stats-grid { grid-template-columns: repeat(2, 1fr); gap: 24px; }
+      .an-problem-grid { grid-template-columns: 1fr; gap: 50px; }
+      .an-caps-grid { grid-template-columns: repeat(2, 1fr); }
+      .an-action-inner { grid-template-columns: 1fr; gap: 50px; }
+      .an-mod-grid { grid-template-columns: repeat(3, 1fr); }
+      .an-mod-card.spotlight { grid-column: span 3; }
+      .an-case-grid { grid-template-columns: 1fr; gap: 32px; text-align: center; }
+      .an-case-card { padding: 40px 32px; }
+      .footer-inner { grid-template-columns: 1fr 1fr; gap: 40px; }
+    }
+    @media (max-width: 600px) {
+      .container, .nav-inner, .footer-inner, .footer-bottom { padding-left: 24px; padding-right: 24px; }
+      .an-stats-grid, .an-caps-grid { grid-template-columns: 1fr; }
+      .an-mod-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+      .an-mod-card.spotlight { grid-column: span 2; }
+      .nav-links { display: none; }
+      .nav-crumb { display: none; }
+      .an-hero { padding-top: 130px; padding-bottom: 60px; min-height: auto; }
+      .an-stats, .an-problem, .an-caps, .an-action, .an-modular, .an-case, .cta-band { padding: 80px 0; }
+      .an-case-metrics { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <linearGradient id="donutGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FCD34D"/>
+      <stop offset="100%" stop-color="#D97706"/>
+    </linearGradient>
+  </defs>
+</svg>
+
+<div class="cursor-glow" id="cursorGlow"></div>
+
+<!-- ═══ 1. NAV ═══ -->
+<nav id="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">info<span>corp</span></a>
+    <ul class="nav-links">
+      <li><a href="plataforma.html" class="active">Productos <span class="nav-crumb">IC Analytics</span></a></li>
+      <li><a href="soluciones-personas.html">Soluciones</a></li>
+      <li><a href="#">Clientes</a></li>
+      <li><a href="#">Recursos</a></li>
+    </ul>
+    <a href="#demo" class="nav-cta">Solicitar demo</a>
+  </div>
+</nav>
+
+<!-- ═══ 2. HERO ═══ -->
+<section class="an-hero">
+  <div class="an-hero-grid"></div>
+  <div class="an-hero-inner">
+    <div>
+      <span class="an-hero-label" id="heroLabel">IC Analytics · GURU</span>
+      <h1 class="an-hero-h1" id="heroH1">Insights bancarios,<br><em>asistidos por IA</em></h1>
+      <p class="an-hero-sub" id="heroSub">GURU es un agente analítico que responde tus preguntas de negocio en lenguaje natural. Sin SQL, sin esperar al equipo de data, sin reportes que llegan tarde.</p>
+      <div class="an-hero-actions" id="heroActions">
+        <a href="#demo" class="btn btn-primary btn-arrow">Solicitá una demo</a>
+        <a href="#how" class="btn btn-ghost">Ver GURU en acción</a>
+      </div>
+    </div>
+
+    <!-- GURU chat console -->
+    <div id="guruStage" style="position: relative;">
+      <span class="an-floating-tag tag-1">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        5× más rápido
+      </span>
+      <span class="an-floating-tag tag-2">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 4 12 14.01 9 11.01"/><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/></svg>
+        0 SQL
+      </span>
+      <span class="an-floating-tag tag-3">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        +200 dashboards
+      </span>
+
+      <div class="an-guru">
+        <div class="an-guru-head">
+          <div class="an-guru-title">
+            <div class="an-guru-avatar">G</div>
+            GURU · Analytics Agent
+          </div>
+          <div class="an-guru-status">PENSANDO · LIVE</div>
+        </div>
+
+        <div class="an-msg-user">
+          ¿Qué clientes están <b>a punto de irse</b> este trimestre?
+        </div>
+
+        <div class="an-msg-guru">
+          <div class="an-msg-guru-avatar">G</div>
+          <div class="an-msg-guru-body">
+            <div class="an-msg-guru-text">
+              Identifiqué <span class="num">1,247</span> clientes con alta probabilidad de churn en Q3. El modelo predictivo destaca <b>caída de uso de app</b> (-62%) y <b>llamadas al call center sin resolución</b> como señales principales.
+            </div>
+
+            <div class="an-chart">
+              <div class="an-chart-head">
+                <div class="an-chart-title">Score churn · Top 6 segmentos</div>
+                <div class="an-chart-meta">Q3 · 2025</div>
+              </div>
+              <div class="an-chart-bars">
+                <div class="an-chart-bar"></div>
+                <div class="an-chart-bar"></div>
+                <div class="an-chart-bar"></div>
+                <div class="an-chart-bar"></div>
+                <div class="an-chart-bar"></div>
+                <div class="an-chart-bar"></div>
+              </div>
+              <div class="an-chart-labels">
+                <span>S1</span>
+                <span>S2</span>
+                <span>S3</span>
+                <span>S4</span>
+                <span>S5</span>
+                <span>S6</span>
+              </div>
+            </div>
+
+            <div class="an-suggestions">
+              <span class="an-suggestion">Mostrame los nombres</span>
+              <span class="an-suggestion">Causas en S5 y S6</span>
+              <span class="an-suggestion">Plan de retención</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 3. STATS STRIP ═══ -->
+<section class="an-stats">
+  <div class="container an-stats-grid">
+    <div class="an-stat">
+      <div class="an-stat-num" data-target="5" data-suffix="×">0×</div>
+      <div class="an-stat-desc">más rápido que<br>BI tradicional</div>
+    </div>
+    <div class="an-stat">
+      <div class="an-stat-num" data-target="90" data-suffix="%">0%</div>
+      <div class="an-stat-desc">de preguntas de negocio<br>resueltas por GURU</div>
+    </div>
+    <div class="an-stat">
+      <div class="an-stat-num" data-target="0">0</div>
+      <div class="an-stat-desc">líneas de SQL<br>para empezar</div>
+    </div>
+    <div class="an-stat">
+      <div class="an-stat-num" data-target="200" data-prefix="+">+0</div>
+      <div class="an-stat-desc">dashboards configurables<br>en producción</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 4. PROBLEM → SOLUTION ═══ -->
+<section class="an-problem">
+  <div class="container an-problem-grid">
+    <div>
+      <span class="label">EL RETO · LA SOLUCIÓN</span>
+      <h2 class="an-problem-h2 split-lines">Si el negocio depende<br>del equipo de data, <em>algo está mal</em></h2>
+
+      <div class="an-problem-list">
+        <div class="an-problem-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <div class="an-problem-item-text"><strong>Data warehouse caro y lento:</strong> cada nuevo dashboard requiere ingestar tablas, escribir ETL y modelar. Para una respuesta de negocio, dos semanas.</div>
+        </div>
+        <div class="an-problem-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <div class="an-problem-item-text"><strong>Equipo de data como cuello de botella:</strong> 8 analistas, 60 stakeholders, 200 pedidos en la cola. Las preguntas urgentes esperan días.</div>
+        </div>
+        <div class="an-problem-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <div class="an-problem-item-text"><strong>Self-service que no funciona:</strong> Tableau, Power BI, Looker — y nadie del negocio los usa porque aprender SQL no es su trabajo.</div>
+        </div>
+      </div>
+
+      <div class="an-arrow-down">Lo que cambiamos</div>
+
+      <div class="an-solution-list">
+        <div class="an-solution-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+          <div class="an-solution-item-text"><strong>GURU responde en lenguaje natural.</strong> "¿Qué clientes están por irse?" — GURU consulta, calcula, grafica y explica. En segundos.</div>
+        </div>
+        <div class="an-solution-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+          <div class="an-solution-item-text"><strong>Modelos predictivos pre-entrenados.</strong> Churn, propensión, scoring crediticio, detección de fraude. Listos de fábrica, ajustados a banca LATAM.</div>
+        </div>
+        <div class="an-solution-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+          <div class="an-solution-item-text"><strong>Conectado a Smart Platform en tiempo real.</strong> No hay data warehouse separado: los eventos del banco son la base de los insights. Sin lag, sin sincronizaciones.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Speed comparison visual -->
+    <div class="an-speed">
+      <div class="an-speed-head">
+        <div class="an-speed-head-label">Velocidad de respuesta</div>
+        <div class="an-speed-head-title">De pregunta a insight</div>
+      </div>
+      <div class="an-speed-rows">
+        <div class="an-speed-row">
+          <div class="an-speed-row-head">
+            <div class="an-speed-row-label">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;color:var(--accent-d)"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82"/></svg>
+              GURU
+            </div>
+            <div class="an-speed-row-num fast">3 seg</div>
+          </div>
+          <div class="an-speed-bar"><div class="an-speed-bar-fill" style="width: 8%"></div></div>
+        </div>
+        <div class="an-speed-row">
+          <div class="an-speed-row-head">
+            <div class="an-speed-row-label">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;color:var(--muted)"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/></svg>
+              Dashboard prebuilt
+            </div>
+            <div class="an-speed-row-num slow">2 horas</div>
+          </div>
+          <div class="an-speed-bar"><div class="an-speed-bar-fill slow" style="width: 35%"></div></div>
+        </div>
+        <div class="an-speed-row">
+          <div class="an-speed-row-head">
+            <div class="an-speed-row-label">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;color:var(--muted)"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+              Query SQL custom
+            </div>
+            <div class="an-speed-row-num slow">3 días</div>
+          </div>
+          <div class="an-speed-bar"><div class="an-speed-bar-fill slow" style="width: 70%"></div></div>
+        </div>
+        <div class="an-speed-row">
+          <div class="an-speed-row-head">
+            <div class="an-speed-row-label">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;color:var(--muted)"><circle cx="9" cy="7" r="4"/><path d="M17 11v6a4 4 0 0 1-4 4H5a4 4 0 0 1-4-4v-2"/><path d="M22 21l-3-3 3-3"/></svg>
+              Pedido a equipo data
+            </div>
+            <div class="an-speed-row-num slow">2 semanas</div>
+          </div>
+          <div class="an-speed-bar"><div class="an-speed-bar-fill slow" style="width: 100%"></div></div>
+        </div>
+      </div>
+      <div class="an-speed-foot">
+        Si esperás dos semanas por una respuesta, <strong>ya pasó la oportunidad</strong>.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 5. CAPABILITIES ═══ -->
+<section class="an-caps" id="how">
+  <div class="container an-caps-head">
+    <span class="label">Qué hace</span>
+    <h2 class="split-lines">Cuatro capacidades que<br>convierten data en <em>decisiones</em></h2>
+    <p>GURU no es un dashboard más. Es un agente que entiende lenguaje natural, modelos pre-entrenados en banca y conexión directa al motor del banco.</p>
+  </div>
+  <div class="container an-caps-grid">
+    <div class="an-cap-card">
+      <div class="an-cap-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4"/></svg>
+      </div>
+      <h4>GURU AI agent</h4>
+      <p>Preguntas en lenguaje natural ("¿qué clientes están por irse?"). GURU consulta, calcula, grafica y explica. Te ofrece drill-down con sugerencias.</p>
+    </div>
+    <div class="an-cap-card">
+      <div class="an-cap-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      </div>
+      <h4>Dashboards configurables</h4>
+      <p>Widgets drag-and-drop, drill-down sin programación, alertas por umbral. Cada área del banco arma su propio dashboard sin pasar por IT.</p>
+    </div>
+    <div class="an-cap-card">
+      <div class="an-cap-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/><path d="M12 2L2 7l10 5 10-5-10-5z"/></svg>
+      </div>
+      <h4>Modelos predictivos pre-entrenados</h4>
+      <p>Churn, propensión a productos, scoring crediticio, anomalías, detección de fraude. Modelos ajustados a banca LATAM, listos de fábrica.</p>
+    </div>
+    <div class="an-cap-card">
+      <div class="an-cap-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+      </div>
+      <h4>Real-time insights</h4>
+      <p>Conectado al motor de Smart Platform: los eventos del banco alimentan GURU al instante. Sin data warehouse separado, sin lag, sin sincronización.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 6. IN ACTION — Drill-down conversation ═══ -->
+<section class="an-action">
+  <div class="container an-action-inner">
+    <div>
+      <span class="label on-dark">CÓMO FUNCIONA</span>
+      <h2 class="an-action-h2 split-lines">Una conversación,<br><em>un insight accionable</em></h2>
+      <p class="an-action-sub">Un Head de Retención necesita entender un pico de cancelaciones. Esto es lo que pasa cuando lo pregunta a GURU.</p>
+
+      <div class="an-flow-steps">
+        <div class="an-flow-step">
+          <div class="an-flow-step-num">1</div>
+          <div class="an-flow-step-text">
+            <h5>Pregunta en lenguaje natural</h5>
+            <p>"¿Por qué se duplicaron las cancelaciones esta semana?" — sin filtros, sin SQL.</p>
+          </div>
+        </div>
+        <div class="an-flow-step">
+          <div class="an-flow-step-num">2</div>
+          <div class="an-flow-step-text">
+            <h5>GURU consulta + razona</h5>
+            <p>Cruza eventos del último mes, identifica anomalías y construye una respuesta narrada.</p>
+          </div>
+        </div>
+        <div class="an-flow-step">
+          <div class="an-flow-step-num">3</div>
+          <div class="an-flow-step-text">
+            <h5>Responde con chart + sugerencias</h5>
+            <p>Muestra los segmentos críticos con un mini-chart y propone los siguientes pasos de drill-down.</p>
+          </div>
+        </div>
+        <div class="an-flow-step">
+          <div class="an-flow-step-num">4</div>
+          <div class="an-flow-step-text">
+            <h5>Conecta con Marketing Auto</h5>
+            <p>"Activá una campaña de retención" — GURU crea el segmento y lo pasa a Marketing Automation para ejecutarla.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Live GURU conversation -->
+    <div class="an-conv">
+      <div class="an-conv-head">
+        <div class="an-conv-title">
+          <div class="an-guru-avatar">G</div>
+          GURU · Conversación
+        </div>
+        <div class="an-guru-status">EN VIVO</div>
+      </div>
+
+      <div class="an-conv-msg-user">
+        ¿Por qué se duplicaron las cancelaciones esta semana?
+      </div>
+
+      <div class="an-conv-msg-guru">
+        <div class="an-conv-msg-guru-avatar">G</div>
+        <div class="an-conv-msg-guru-body">
+          Detecté un pico del <span class="num">+108%</span> en cancelaciones de cuenta sueldo. <b>El 73% viene del segmento "PyMEs nuevas"</b>, dentro de los 90 días post-alta.
+          <div class="an-conv-mini-donut">
+            <div class="an-conv-mini-donut-vis">
+              <svg viewBox="0 0 50 50">
+                <circle class="an-conv-mini-donut-track" cx="25" cy="25" r="22"/>
+                <circle class="an-conv-mini-donut-fill" cx="25" cy="25" r="22"/>
+              </svg>
+              <div class="an-conv-mini-donut-center">73%</div>
+            </div>
+            <div class="an-conv-mini-donut-info">
+              <b>PyMEs nuevas</b> dominan el churn. Causa principal: <b>fee inesperado en el mes 3</b>.
+            </div>
+          </div>
+          <div class="an-conv-actions">
+            <span class="an-conv-action">Drill por causa</span>
+            <span class="an-conv-action">Ver lista de cuentas</span>
+            <span class="an-conv-action">Activar retención</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="an-conv-msg-user">
+        Activá la retención
+      </div>
+
+      <div class="an-conv-msg-guru">
+        <div class="an-conv-msg-guru-avatar">G</div>
+        <div class="an-conv-msg-guru-body">
+          Listo. Creé el segmento <b>"PyMEs nuevas · alta probabilidad churn"</b> con <span class="num">312 cuentas</span> y lo pasé a Marketing Automation con la plantilla <b>"Beneficio fee"</b>. Email + WhatsApp + push.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 7. MODULAR FIT ═══ -->
+<section class="an-modular">
+  <div class="container an-mod-head">
+    <span class="label">DÓNDE ENCAJA EN LA SUITE</span>
+    <h2 class="split-lines">GURU <em>convierte</em> los eventos<br>del banco en decisiones</h2>
+    <p>GURU recibe en tiempo real lo que Smart Platform orquesta, lo entiende con IA y se conecta con Marketing Automation y los canales para activar acción inmediata.</p>
+  </div>
+
+  <div class="container">
+    <div class="an-mod-composer">
+      <div class="an-mod-zone">
+        <div class="an-mod-zone-head">
+          <div class="an-mod-zone-title">Esta plataforma</div>
+          <div class="an-mod-counter">Estás explorando</div>
+        </div>
+        <div class="an-mod-grid">
+          <div class="an-mod-card spotlight">
+            <div class="an-mod-card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+            </div>
+            <div class="an-mod-card-name">IC Analytics (GURU)</div>
+            <div class="an-mod-card-desc">Agente analítico con IA. Lenguaje natural, modelos predictivos y real-time insights conectados a Smart Platform.</div>
+            <span class="an-mod-card-action" style="opacity:0;">Activa</span>
+          </div>
+          <div class="an-mod-card active" data-id="smart">
+            <div class="an-mod-card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            </div>
+            <div class="an-mod-card-name">IC Smart Platform</div>
+            <div class="an-mod-card-desc">Fuente de eventos en tiempo real.</div>
+            <span class="an-mod-card-action">Recomendada</span>
+          </div>
+          <div class="an-mod-card active" data-id="marketing">
+            <div class="an-mod-card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            </div>
+            <div class="an-mod-card-name">IC Marketing Automation</div>
+            <div class="an-mod-card-desc">Activa las acciones que GURU sugiere.</div>
+            <span class="an-mod-card-action">Recomendada</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="an-mod-zone">
+        <div class="an-mod-zone-head">
+          <div class="an-mod-zone-title complement">Sumá según tu estrategia</div>
+          <div class="an-mod-counter muted">8 plataformas disponibles</div>
+        </div>
+        <div class="an-mod-grid">
+          <div class="an-mod-card available">
+            <div class="an-mod-card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/></svg>
+            </div>
+            <div class="an-mod-card-name">IC Mobile Banking</div>
+            <div class="an-mod-card-desc">Eventos in-app para enriquecer GURU.</div>
+            <span class="an-mod-card-action">Sumar</span>
+          </div>
+          <div class="an-mod-card available">
+            <div class="an-mod-card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/></svg>
+            </div>
+            <div class="an-mod-card-name">IC Web Banking</div>
+            <div class="an-mod-card-desc">Heatmaps + funnels desde web.</div>
+            <span class="an-mod-card-action">Sumar</span>
+          </div>
+          <div class="an-mod-card available">
+            <div class="an-mod-card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            </div>
+            <div class="an-mod-card-name">IC Social Banking</div>
+            <div class="an-mod-card-desc">NLP sobre conversaciones SARA.</div>
+            <span class="an-mod-card-action">Sumar</span>
+          </div>
+          <div class="an-mod-card available">
+            <div class="an-mod-card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s-8-4.5-8-12V5l8-3 8 3v5c0 7.5-8 12-8 12z"/></svg>
+            </div>
+            <div class="an-mod-card-name">IC Onboarding</div>
+            <div class="an-mod-card-desc">Insights sobre tasas de aprobación.</div>
+            <span class="an-mod-card-action">Sumar</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="an-mod-hint">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+        GURU rinde más cuanto más canales hay activos. Cada canal nuevo es más data para que el agente razone mejor.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 8. CASE STUDY ═══ -->
+<section class="an-case">
+  <div class="container">
+    <div class="an-case-card">
+      <div class="an-case-grid">
+        <div class="an-case-customer">
+          <div class="an-case-logo">A</div>
+          <div class="an-case-customer-name">Banco Agrario</div>
+          <div class="an-case-customer-role">Chief Data Officer</div>
+          <span class="an-case-flag">Caso real · Colombia</span>
+        </div>
+        <div class="an-case-content">
+          <div class="an-case-quote-mark">"</div>
+          <blockquote class="an-case-quote">Pasamos de tener 8 analistas como cuello de botella a tener 60 stakeholders haciendo preguntas directas. GURU democratizó la data sin romper el control ni la gobernanza.</blockquote>
+          <div class="an-case-metrics">
+            <div>
+              <div class="an-case-metric-num" data-target="5" data-suffix="×">0×</div>
+              <div class="an-case-metric-desc">más rápido que<br>BI tradicional</div>
+            </div>
+            <div>
+              <div class="an-case-metric-num" data-target="7.5" data-suffix="×">0×</div>
+              <div class="an-case-metric-desc">stakeholders con acceso<br>a insights directos</div>
+            </div>
+            <div>
+              <div class="an-case-metric-num" data-target="68" data-prefix="-" data-suffix="%">-0%</div>
+              <div class="an-case-metric-desc">menos pedidos<br>al equipo de data</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 9. CTA BAND ═══ -->
+<section class="cta-band" id="demo">
+  <div class="container">
+    <h2 class="cta-h2 split-lines">¿Hablamos del agente<br>analítico de tu banco?</h2>
+    <p class="cta-sub">Ayudamos a las personas a amar a su banco. Hablemos del tuyo.</p>
+    <a href="#" class="btn btn-white btn-arrow">¿Conversamos?</a>
+    <div class="cta-fine">Sin compromisos · Demo personalizada · 30 minutos</div>
+  </div>
+</section>
+
+<!-- ═══ 10. FOOTER ═══ -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-logo">info<span>corp</span></div>
+      <p class="footer-tagline">Desde Uruguay, hacia el mundo.</p>
+    </div>
+    <div>
+      <div class="footer-col-title">IC Banking Suite</div>
+      <ul class="footer-links">
+        <li><a href="plataforma-ic-smart-platform.html">IC Smart Platform</a></li>
+        <li><a href="plataforma-ic-mobile-banking.html">IC Mobile Banking</a></li>
+        <li><a href="plataforma-ic-web-banking.html">IC Web Banking</a></li>
+        <li><a href="plataforma-ic-social-banking.html">IC Social Banking (SARA)</a></li>
+        <li><a href="plataforma-ic-marketing-automation.html">IC Marketing Automation</a></li>
+        <li><a href="plataforma-ic-analytics.html">IC Analytics (GURU)</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Compañía</div>
+      <ul class="footer-links">
+        <li><a href="#">Sobre nosotros</a></li>
+        <li><a href="#">Método B-Fly</a></li>
+        <li><a href="#">Casos de éxito</a></li>
+        <li><a href="#">Carreras</a></li>
+        <li><a href="#">Blog</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Recursos</div>
+      <ul class="footer-links">
+        <li><a href="#">Estudio Banca Digital 2025</a></li>
+        <li><a href="#">Privacidad</a></li>
+        <li><a href="#">Términos</a></li>
+        <li><a href="#">Seguridad</a></li>
+      </ul>
+    </div>
+  </div>
+  <p class="footer-helping">Helping people <em>love</em> their bank</p>
+  <div class="footer-bottom">
+    <span>© 2025 Infocorp Group</span>
+    <span>Lima, Perú · hola@infocorp.net</span>
+  </div>
+</footer>
+
+<script>
+gsap.registerPlugin(ScrollTrigger);
+
+const glow = document.getElementById('cursorGlow');
+let mx=0, my=0, gx=0, gy=0;
+window.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; }, {passive:true});
+(function lerp(){ gx+=(mx-gx)*0.08; gy+=(my-gy)*0.08; if(glow){ glow.style.left=gx+'px'; glow.style.top=gy+'px'; } requestAnimationFrame(lerp); })();
+
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 20), {passive:true});
+
+gsap.set('#heroLabel',   { y: 12, opacity: 0 });
+gsap.set('#heroSub',     { y: 16, opacity: 0 });
+gsap.set('#heroActions', { y: 16, opacity: 0 });
+gsap.set('#guruStage',   { scale: 0.85, opacity: 0 });
+
+const heroTL = gsap.timeline({ delay: 0.15 });
+heroTL.to('#heroLabel', { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }, 0.2);
+
+const heroSplit = new SplitType('#heroH1', { types: 'words,chars', tagName: 'span' });
+heroTL.fromTo(heroSplit.chars,
+  { y: 60, opacity: 0, rotationX: -40 },
+  { y: 0, opacity: 1, rotationX: 0, duration: 0.7, stagger: 0.012, ease: 'power3.out', transformOrigin: '50% 100%' },
+  0.4
+);
+heroTL.to('#heroSub',     { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' }, 0.9);
+heroTL.to('#heroActions', { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' }, 1.0);
+heroTL.to('#guruStage',   { opacity: 1, scale: 1, duration: 1.1, ease: 'power3.out' }, 0.6);
+
+document.querySelectorAll('.split-lines').forEach(el => {
+  const split = new SplitType(el, { types: 'lines', tagName: 'span' });
+  split.lines.forEach(line => {
+    line.style.overflow = 'hidden';
+    line.style.display = 'block';
+  });
+  gsap.fromTo(split.lines,
+    { y: '100%', opacity: 0 },
+    { y: '0%', opacity: 1, duration: 0.85, stagger: 0.12, ease: 'power3.out',
+      scrollTrigger: { trigger: el, start: 'top 82%', toggleActions: 'play none none none' } }
+  );
+});
+
+document.querySelectorAll('.an-stat-num, .an-case-metric-num').forEach(el => {
+  const target = parseFloat(el.dataset.target);
+  const prefix = el.dataset.prefix || '';
+  const suffix = el.dataset.suffix || '';
+  if (isNaN(target)) return;
+  el.textContent = prefix + '0' + suffix;
+  ScrollTrigger.create({
+    trigger: el, start: 'top 88%', once: true,
+    onEnter: () => {
+      gsap.fromTo({ v: 0 }, { v: target },
+        { duration: 1.4, ease: 'power2.out',
+          onUpdate: function(){
+            const v = this.targets()[0].v;
+            const isFloat = target % 1 !== 0;
+            el.textContent = prefix + (isFloat ? v.toFixed(1) : Math.round(v)) + suffix;
+          }
+        }
+      );
+    }
+  });
+});
+
+gsap.fromTo('.an-stat', { x: -20, opacity: 0 },
+  { x: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: 'power3.out',
+    scrollTrigger: { trigger: '.an-stats-grid', start: 'top 85%' } });
+gsap.fromTo('.an-problem-item', { x: -30, opacity: 0 },
+  { x: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: 'power3.out',
+    scrollTrigger: { trigger: '.an-problem-list', start: 'top 82%' } });
+gsap.fromTo('.an-solution-item', { x: -30, opacity: 0 },
+  { x: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: 'power3.out',
+    scrollTrigger: { trigger: '.an-solution-list', start: 'top 82%' } });
+gsap.fromTo('.an-speed', { x: 40, opacity: 0 },
+  { x: 0, opacity: 1, duration: 0.9, ease: 'power3.out',
+    scrollTrigger: { trigger: '.an-speed', start: 'top 82%' } });
+gsap.fromTo('.an-cap-card', { y: 30, opacity: 0 },
+  { y: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: 'power3.out',
+    scrollTrigger: { trigger: '.an-caps-grid', start: 'top 82%' } });
+gsap.fromTo('.an-flow-step', { x: -30, opacity: 0 },
+  { x: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: 'power3.out',
+    scrollTrigger: { trigger: '.an-flow-steps', start: 'top 80%' } });
+gsap.fromTo('.an-conv', { x: 40, opacity: 0 },
+  { x: 0, opacity: 1, duration: 0.9, ease: 'power3.out',
+    scrollTrigger: { trigger: '.an-conv', start: 'top 80%' } });
+gsap.fromTo('.an-mod-composer', { y: 40, opacity: 0 },
+  { y: 0, opacity: 1, duration: 0.9, ease: 'power3.out',
+    scrollTrigger: { trigger: '.an-mod-composer', start: 'top 82%' } });
+gsap.fromTo('.an-mod-card', { scale: 0.9, opacity: 0 },
+  { scale: 1, opacity: 1, duration: 0.6, stagger: 0.06, ease: 'back.out(1.4)',
+    scrollTrigger: { trigger: '.an-mod-composer', start: 'top 78%' } });
+gsap.fromTo('.an-case-card', { y: 40, opacity: 0 },
+  { y: 0, opacity: 1, duration: 0.9, ease: 'power3.out',
+    scrollTrigger: { trigger: '.an-case-card', start: 'top 82%' } });
+
+const ctaSplit = new SplitType('.cta-h2', { types: 'chars', tagName: 'span' });
+gsap.fromTo(ctaSplit.chars, { y: 40, opacity: 0 },
+  { y: 0, opacity: 1, duration: 0.6, stagger: 0.025, ease: 'power3.out',
+    scrollTrigger: { trigger: '.cta-band', start: 'top 75%' } });
+gsap.fromTo('.cta-sub, .cta-band .btn-white, .cta-fine', { y: 20, opacity: 0 },
+  { y: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: 'power3.out',
+    scrollTrigger: { trigger: '.cta-band', start: 'top 70%' } });
+
+document.querySelectorAll('.an-mod-card.available, .an-mod-card.active').forEach(card => {
+  if (card.classList.contains('spotlight')) return;
+  card.addEventListener('click', () => {
+    if (card.classList.contains('available')) {
+      card.classList.remove('available');
+      card.classList.add('active');
+      card.querySelector('.an-mod-card-action').textContent = 'Sumada';
+    } else {
+      card.classList.remove('active');
+      card.classList.add('available');
+      card.querySelector('.an-mod-card-action').textContent = 'Sumar';
+    }
+  });
+});
+</script>
+
+</body>
+</html>

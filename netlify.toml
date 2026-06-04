@@ -70,3 +70,8 @@
   from = "/plataforma/ic-analytics"
   to = "/plataforma-ic-analytics.html"
   status = 200
+
+[[redirects]]
+  from = "/plataforma/ic-onboarding"
+  to = "/plataforma-ic-onboarding.html"
+  status = 200

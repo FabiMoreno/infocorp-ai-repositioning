@@ -1,0 +1,1745 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IC Onboarding & Origination — Infocorp</title>
+  <meta name="description" content="De prospecto a cliente activo, sin papel. Onboarding biométrico, KYC en tiempo real con IA, firma digital y compliance bancario por diseño." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,700&display=swap" rel="stylesheet" />
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/split-type@0.3.4/umd/index.min.js"></script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:         #F8FAFC;
+      --bg-alt:     #F1F5F9;
+      --white:      #FFFFFF;
+      --ink:        #0F1729;
+      --ink-deep:   #0A1226;
+      --sec:        #334155;
+      --muted:      #64748B;
+      --border:     #E2E8F0;
+      --surface:    #EBEEF5;
+
+      /* OPERATIONS accent — green */
+      --accent:     #16A34A;
+      --accent-d:   #15803D;
+      --accent-l:   #DCFCE7;
+      --accent-2:   #4ADE80;
+      --accent-2-l: #BBF7D0;
+      --green-deep: #064E3B;
+
+      --brand:      #0063F2;
+      --brand-d:    #004fd4;
+      --brand-l:    #DBEAFE;
+      --cyan:       #2CA4FF;
+      --cyan-l:     #BAE0FF;
+      --navy:       #051030;
+      --navy-2:     #0A1A48;
+      --navy-3:     #0E2461;
+      --teal:       #18BCBC;
+      --purple:     #7B5BFF;
+      --amber:      #F59E0B;
+      --pink:       #FF6BB5;
+
+      --font:       'Plus Jakarta Sans', sans-serif;
+      --ease:       cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font); background: var(--bg); color: var(--ink);
+      overflow-x: hidden; -webkit-font-smoothing: antialiased;
+    }
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
+    img, svg { display: block; max-width: 100%; }
+
+    .label {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--accent-d);
+    }
+    .label.on-dark { color: var(--accent-2); }
+    .container { max-width: 1240px; margin: 0 auto; padding: 0 64px; }
+
+    .cursor-glow {
+      position: fixed; width: 480px; height: 480px;
+      border-radius: 50%; pointer-events: none; z-index: 1;
+      background: radial-gradient(circle, rgba(22,163,74,0.10) 0%, transparent 60%);
+      transform: translate(-50%, -50%); mix-blend-mode: multiply;
+    }
+
+    /* ── NAV ─────────────────────────────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100; height: 68px;
+      background: rgba(255,255,255,0.85);
+      backdrop-filter: blur(20px) saturate(180%);
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.3s, box-shadow 0.3s;
+      transform: translateY(-100%); animation: nav-in 0.6s 0.05s var(--ease) forwards;
+    }
+    nav.scrolled { border-color: var(--border); box-shadow: 0 1px 24px rgba(15,23,41,0.07); }
+    @keyframes nav-in { to { transform: translateY(0); } }
+    .nav-inner { max-width: 1240px; margin: 0 auto; padding: 0 64px; height: 100%; display: flex; align-items: center; gap: 40px; }
+    .nav-logo { font-size: 18px; font-weight: 700; color: var(--ink); letter-spacing: -0.3px; flex-shrink: 0; }
+    .nav-logo span { color: var(--brand); }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a { font-size: 14px; color: var(--sec); transition: color 0.2s; position: relative; }
+    .nav-links a:hover { color: var(--ink); }
+    .nav-links a.active { color: var(--accent-d); font-weight: 600; }
+    .nav-links a.active::after {
+      content: ''; position: absolute; left: 0; right: 0; bottom: -22px;
+      height: 2px; background: var(--accent-d); border-radius: 2px;
+    }
+    .nav-crumb { font-size: 11px; color: var(--muted); margin-left: 4px; letter-spacing: 0.06em; text-transform: uppercase; }
+    .nav-crumb::before { content: '/ '; color: var(--border); }
+    .nav-cta {
+      margin-left: auto; padding: 9px 22px;
+      background: var(--accent-d); color: #fff;
+      font-size: 13px; font-weight: 600; border-radius: 6px;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+      box-shadow: 0 2px 12px rgba(21,128,61,0.25);
+      position: relative; overflow: hidden;
+    }
+    .nav-cta::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.25) 50%, transparent 60%);
+      transform: translateX(-100%); transition: transform 0.5s;
+    }
+    .nav-cta:hover::after { transform: translateX(100%); }
+    .nav-cta:hover { background: var(--green-deep); transform: translateY(-1px); box-shadow: 0 4px 20px rgba(21,128,61,0.35); }
+
+    .btn { display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 24px; border-radius: 8px; font-weight: 600; font-size: 14px;
+      transition: all 0.2s; cursor: pointer; border: none; font-family: var(--font);
+    }
+    .btn-primary { background: var(--accent-d); color: #fff;
+      box-shadow: 0 2px 12px rgba(21,128,61,0.25); }
+    .btn-primary:hover { background: var(--green-deep); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(21,128,61,0.35); }
+    .btn-ghost { background: transparent; color: var(--accent-d); border: 1px solid rgba(21,128,61,0.3); }
+    .btn-ghost:hover { background: var(--accent-l); border-color: var(--accent-d); }
+    .btn-white { background: #fff; color: var(--accent-d);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15); }
+    .btn-white:hover { transform: translateY(-1px); box-shadow: 0 8px 30px rgba(0,0,0,0.25); }
+    .btn-arrow::after { content: '→'; margin-left: 4px; transition: transform 0.2s; }
+    .btn-arrow:hover::after { transform: translateX(4px); }
+
+    /* ╔═══════════════════════════════════════════════════════════════════╗
+       ║  SECTION 2 — HERO with biometric phone mockup                      ║
+       ╚═══════════════════════════════════════════════════════════════════╝ */
+    .ob-hero {
+      position: relative; min-height: 100vh;
+      background: linear-gradient(135deg, var(--navy) 0%, #052E1A 60%, var(--green-deep) 100%);
+      color: #fff; overflow: hidden;
+      padding: 168px 0 100px;
+      display: flex; align-items: center;
+    }
+    .ob-hero::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 80% 40%, rgba(22,163,74,0.30), transparent 50%),
+                  radial-gradient(ellipse at 20% 90%, rgba(74,222,128,0.18), transparent 55%);
+    }
+    .ob-hero-grid {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse at center, #000 35%, transparent 75%);
+      -webkit-mask-image: radial-gradient(ellipse at center, #000 35%, transparent 75%);
+    }
+    .ob-hero-inner {
+      position: relative; z-index: 3;
+      max-width: 1240px; margin: 0 auto; padding: 0 64px;
+      display: grid; grid-template-columns: 1.05fr 1fr; gap: 80px;
+      align-items: center; width: 100%;
+    }
+    .ob-hero-label {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 14px; border-radius: 20px;
+      background: rgba(74,222,128,0.14);
+      border: 1px solid rgba(74,222,128,0.3);
+      font-size: 11px; font-weight: 600; letter-spacing: 0.18em;
+      color: var(--accent-2); text-transform: uppercase;
+      margin-bottom: 28px;
+    }
+    .ob-hero-label::before {
+      content: ''; width: 6px; height: 6px; border-radius: 50%;
+      background: var(--accent-2); box-shadow: 0 0 8px var(--accent-2);
+      animation: ob-pulse 2s ease-in-out infinite;
+    }
+    @keyframes ob-pulse {
+      0%,100% { box-shadow: 0 0 0 0 rgba(74,222,128,0.5); }
+      50% { box-shadow: 0 0 0 6px rgba(74,222,128,0); }
+    }
+    .ob-hero-h1 {
+      font-size: clamp(48px, 5.4vw, 78px);
+      font-weight: 800; line-height: 1.04;
+      letter-spacing: -2.2px; margin-bottom: 24px; color: #fff;
+    }
+    .ob-hero-h1 em,
+    .ob-hero-h1 em .char,
+    .ob-hero-h1 em .word {
+      font-style: normal; font-weight: 800;
+      background: linear-gradient(135deg, var(--accent-2) 0%, #A7F3D0 100%);
+      -webkit-background-clip: text; background-clip: text;
+      color: transparent; -webkit-text-fill-color: transparent;
+    }
+    .ob-hero-sub {
+      font-size: 18px; line-height: 1.55; color: rgba(255,255,255,0.72);
+      max-width: 540px; margin-bottom: 36px;
+    }
+    .ob-hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+    .ob-hero-actions .btn-primary { background: #fff; color: var(--accent-d); box-shadow: 0 4px 20px rgba(0,0,0,0.18); }
+    .ob-hero-actions .btn-primary:hover { background: #F0FDF4; }
+    .ob-hero-actions .btn-ghost { color: #fff; border-color: rgba(255,255,255,0.25); }
+    .ob-hero-actions .btn-ghost:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.5); }
+
+    /* Biometric phone mockup */
+    .ob-phone-stage {
+      position: relative;
+      perspective: 1400px;
+      display: flex; justify-content: center;
+      width: 100%;
+    }
+    .ob-phone {
+      position: relative;
+      width: 320px; height: 640px;
+      border-radius: 44px;
+      background: linear-gradient(180deg, #0A1A48 0%, #051030 100%);
+      padding: 14px;
+      box-shadow:
+        0 60px 120px rgba(22,163,74,0.30),
+        0 30px 60px rgba(0,0,0,0.4),
+        0 0 0 1px rgba(255,255,255,0.05);
+      transform: rotateY(-10deg) rotateX(3deg);
+      animation: ob-phone-float 7s ease-in-out infinite;
+    }
+    @keyframes ob-phone-float {
+      0%,100% { transform: rotateY(-10deg) rotateX(3deg) translateY(0); }
+      50% { transform: rotateY(-8deg) rotateX(2deg) translateY(-10px); }
+    }
+    .ob-phone::before {
+      content: ''; position: absolute; top: 14px; left: 50%;
+      transform: translateX(-50%);
+      width: 100px; height: 26px; border-radius: 14px;
+      background: #000; z-index: 5;
+    }
+    .ob-phone-screen {
+      width: 100%; height: 100%; border-radius: 32px;
+      background: linear-gradient(180deg, #061640 0%, #0A2356 100%);
+      overflow: hidden; position: relative;
+      padding: 56px 18px 18px;
+      color: #fff;
+      display: flex; flex-direction: column; gap: 12px;
+    }
+
+    /* Onboarding UI */
+    .ob-ph-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .ob-ph-logo {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 13px; font-weight: 800; color: #fff;
+    }
+    .ob-ph-logo-mark {
+      width: 24px; height: 24px; border-radius: 6px;
+      background: linear-gradient(135deg, var(--accent-2), var(--accent-d));
+    }
+    .ob-ph-step {
+      font-size: 11px; color: var(--accent-2); font-weight: 700;
+    }
+
+    /* Progress bar */
+    .ob-ph-progress-wrap {
+      padding: 12px 0;
+    }
+    .ob-ph-progress-bar {
+      height: 6px; border-radius: 3px;
+      background: rgba(255,255,255,0.08);
+      overflow: hidden;
+      position: relative;
+    }
+    .ob-ph-progress-fill {
+      height: 100%; width: 75%;
+      background: linear-gradient(90deg, var(--accent-2), var(--accent));
+      border-radius: inherit;
+      box-shadow: 0 0 8px rgba(74,222,128,0.5);
+    }
+    .ob-ph-progress-meta {
+      display: flex; justify-content: space-between;
+      margin-top: 6px;
+      font-size: 9px; color: rgba(255,255,255,0.55);
+      letter-spacing: 0.04em;
+    }
+
+    /* Biometric face scan */
+    .ob-ph-scan {
+      flex: 1;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 12px 0;
+    }
+    .ob-ph-scan-frame {
+      position: relative;
+      width: 180px; height: 220px;
+      border-radius: 100px / 130px;
+      background: radial-gradient(ellipse at center, rgba(22,163,74,0.20), rgba(22,163,74,0.05));
+      border: 2px solid rgba(74,222,128,0.6);
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 0 32px rgba(74,222,128,0.35), inset 0 0 32px rgba(74,222,128,0.10);
+      animation: ob-scan-pulse 2.5s ease-in-out infinite;
+    }
+    @keyframes ob-scan-pulse {
+      0%,100% { box-shadow: 0 0 32px rgba(74,222,128,0.35), inset 0 0 32px rgba(74,222,128,0.10); }
+      50% { box-shadow: 0 0 48px rgba(74,222,128,0.55), inset 0 0 48px rgba(74,222,128,0.18); }
+    }
+    .ob-ph-scan-frame::before, .ob-ph-scan-frame::after {
+      content: '';
+      position: absolute;
+      width: 22px; height: 22px;
+      border: 2px solid var(--accent-2);
+      filter: drop-shadow(0 0 6px var(--accent-2));
+    }
+    .ob-ph-scan-frame::before {
+      top: 10px; left: 10px;
+      border-right: none; border-bottom: none;
+      border-radius: 6px 0 0 0;
+    }
+    .ob-ph-scan-frame::after {
+      bottom: 10px; right: 10px;
+      border-left: none; border-top: none;
+      border-radius: 0 0 6px 0;
+    }
+    /* Person face (abstract) */
+    .ob-face {
+      width: 110px; height: 140px;
+      position: relative;
+    }
+    .ob-face-head {
+      position: absolute; left: 50%; top: 0;
+      transform: translateX(-50%);
+      width: 90px; height: 95px;
+      border-radius: 50% 50% 45% 45%;
+      background: linear-gradient(135deg, #FFD9B8 0%, #E8B894 100%);
+    }
+    .ob-face-hair {
+      position: absolute; left: 50%; top: -4px;
+      transform: translateX(-50%);
+      width: 96px; height: 50px;
+      background: #3D2515;
+      border-radius: 50% 50% 35% 35%;
+    }
+    .ob-face-eye {
+      position: absolute; width: 8px; height: 8px;
+      border-radius: 50%;
+      background: #1F1108;
+      top: 40px;
+    }
+    .ob-face-eye-l { left: 38px; }
+    .ob-face-eye-r { right: 38px; }
+    .ob-face-mouth {
+      position: absolute; left: 50%; top: 64px;
+      transform: translateX(-50%);
+      width: 22px; height: 8px;
+      border: 2px solid #1F1108;
+      border-radius: 0 0 14px 14px;
+      border-top: none;
+    }
+    .ob-face-neck {
+      position: absolute; left: 50%; top: 92px;
+      transform: translateX(-50%);
+      width: 36px; height: 30px;
+      background: #E8B894;
+      border-radius: 0 0 6px 6px;
+    }
+    .ob-face-shoulders {
+      position: absolute; left: 0; right: 0; bottom: -4px;
+      height: 36px;
+      background: #F5F5F0;
+      border-radius: 50% 50% 0 0;
+    }
+
+    /* Scan line */
+    .ob-scan-line {
+      position: absolute;
+      left: 6%; right: 6%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--accent-2), transparent);
+      box-shadow: 0 0 12px var(--accent-2);
+      top: 50%;
+      animation: ob-scan-move 2.2s ease-in-out infinite;
+    }
+    @keyframes ob-scan-move {
+      0% { top: 18%; }
+      50% { top: 78%; }
+      100% { top: 18%; }
+    }
+
+    /* Status text */
+    .ob-ph-status {
+      text-align: center;
+      padding: 8px 0;
+    }
+    .ob-ph-status-title {
+      font-size: 13px; font-weight: 700; color: var(--accent-2);
+      margin-bottom: 2px;
+      display: inline-flex; align-items: center; gap: 6px;
+    }
+    .ob-ph-status-title::before {
+      content: ''; width: 6px; height: 6px; border-radius: 50%;
+      background: var(--accent-2);
+      animation: ob-pulse 1.5s ease-in-out infinite;
+    }
+    .ob-ph-status-sub {
+      font-size: 10px; color: rgba(255,255,255,0.55);
+    }
+
+    /* Step list */
+    .ob-ph-steps-list {
+      display: flex; flex-direction: column; gap: 6px;
+      margin-top: 6px;
+    }
+    .ob-ph-step-row {
+      display: flex; align-items: center; gap: 8px;
+      padding: 6px 8px;
+      border-radius: 6px;
+      background: rgba(255,255,255,0.03);
+      font-size: 10px;
+    }
+    .ob-ph-step-row.done { background: rgba(22,163,74,0.15); }
+    .ob-ph-step-row.active { background: rgba(74,222,128,0.15); border: 1px solid rgba(74,222,128,0.3); }
+    .ob-ph-step-icon {
+      width: 16px; height: 16px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      font-size: 9px; font-weight: 800;
+    }
+    .ob-ph-step-icon.done { background: var(--accent-2); color: var(--green-deep); }
+    .ob-ph-step-icon.active { background: var(--accent-2); color: #fff; animation: ob-pulse 1.5s ease-in-out infinite; }
+    .ob-ph-step-icon.pending { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.4); }
+    .ob-ph-step-label { flex: 1; font-weight: 600; color: rgba(255,255,255,0.85); }
+    .ob-ph-step-time { font-size: 9px; color: rgba(255,255,255,0.5); font-variant-numeric: tabular-nums; }
+
+    /* Floating tags */
+    .ob-floating-tag {
+      position: absolute; padding: 9px 14px;
+      border-radius: 12px;
+      background: #fff;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.18);
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 11px; font-weight: 700; color: var(--ink);
+      z-index: 6;
+      animation: ob-tag-float 6s ease-in-out infinite;
+    }
+    .ob-floating-tag svg { width: 14px; height: 14px; color: var(--accent-d); }
+    .ob-floating-tag.tag-1 { top: 4%; left: -30px; }
+    .ob-floating-tag.tag-2 { top: 32%; right: -36px; animation-delay: -2s; background: linear-gradient(135deg, var(--accent), var(--accent-d)); color: #fff; }
+    .ob-floating-tag.tag-2 svg { color: #fff; }
+    .ob-floating-tag.tag-3 { bottom: 8%; left: -36px; animation-delay: -4s; }
+    @keyframes ob-tag-float {
+      0%,100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    /* ╔═══════════════════════════════════════════════════════════════════╗
+       ║  SECTION 3 — STATS                                                  ║
+       ╚═══════════════════════════════════════════════════════════════════╝ */
+    .ob-stats { background: var(--bg); padding: 80px 0; position: relative; }
+    .ob-stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; align-items: center; }
+    .ob-stat {
+      position: relative; padding: 20px 24px;
+      border-left: 3px solid var(--accent-l);
+      transition: border-color 0.3s var(--ease);
+    }
+    .ob-stat:hover { border-left-color: var(--accent); }
+    .ob-stat-num {
+      font-size: 44px; font-weight: 800; color: var(--ink);
+      line-height: 1; letter-spacing: -1.6px;
+      font-variant-numeric: tabular-nums;
+      margin-bottom: 8px;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-d) 100%);
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .ob-stat-desc { font-size: 13px; line-height: 1.5; color: var(--sec); }
+
+    /* ╔═══════════════════════════════════════════════════════════════════╗
+       ║  SECTION 4 — PROBLEM → SOLUTION                                     ║
+       ╚═══════════════════════════════════════════════════════════════════╝ */
+    .ob-problem { padding: 140px 0; background: #fff; position: relative; overflow: hidden; }
+    .ob-problem-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+    .ob-problem-h2 {
+      font-size: clamp(36px, 3.6vw, 50px);
+      font-weight: 800; line-height: 1.08; letter-spacing: -1.5px;
+      margin: 12px 0 20px;
+    }
+    .ob-problem-h2 em { font-style: normal; color: var(--accent-d); }
+    .ob-problem-list { display: flex; flex-direction: column; gap: 14px; }
+    .ob-problem-item {
+      display: flex; gap: 14px; align-items: flex-start;
+      padding: 16px 18px;
+      background: #FEF2F2;
+      border-left: 3px solid #FCA5A5;
+      border-radius: 8px;
+    }
+    .ob-problem-item svg { width: 18px; height: 18px; color: #DC2626; flex-shrink: 0; margin-top: 1px; }
+    .ob-problem-item-text { font-size: 14px; line-height: 1.5; color: #7F1D1D; }
+    .ob-problem-item-text strong { color: #991B1B; font-weight: 700; }
+
+    .ob-arrow-down {
+      display: flex; align-items: center; justify-content: center; gap: 14px;
+      margin: 24px 0;
+      color: var(--accent-d); font-weight: 700; font-size: 13px;
+      letter-spacing: 0.1em; text-transform: uppercase;
+    }
+    .ob-arrow-down::before, .ob-arrow-down::after {
+      content: ''; flex: 1; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--accent-l), transparent);
+    }
+
+    .ob-solution-list { display: flex; flex-direction: column; gap: 14px; }
+    .ob-solution-item {
+      display: flex; gap: 14px; align-items: flex-start;
+      padding: 16px 18px;
+      background: #ECFDF5;
+      border-left: 3px solid #6EE7B7;
+      border-radius: 8px;
+    }
+    .ob-solution-item svg { width: 18px; height: 18px; color: #059669; flex-shrink: 0; margin-top: 1px; }
+    .ob-solution-item-text { font-size: 14px; line-height: 1.5; color: #064E3B; }
+    .ob-solution-item-text strong { color: #047857; font-weight: 700; }
+
+    /* Funnel comparison */
+    .ob-funnel {
+      position: relative;
+      aspect-ratio: 1/1;
+      border-radius: 24px;
+      background: linear-gradient(135deg, #F0FDF4 0%, #DCFCE7 100%);
+      padding: 36px;
+      overflow: hidden;
+    }
+    .ob-funnel::before {
+      content: ''; position: absolute; inset: 0;
+      background-image: radial-gradient(circle at 1px 1px, rgba(22,163,74,0.10) 1px, transparent 0);
+      background-size: 24px 24px;
+    }
+    .ob-funnel-head { position: relative; text-align: center; margin-bottom: 28px; }
+    .ob-funnel-head-label {
+      font-size: 10px; font-weight: 800; color: var(--accent-d);
+      letter-spacing: 0.16em; text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .ob-funnel-head-title {
+      font-size: 15px; font-weight: 700; color: var(--ink);
+      letter-spacing: -0.2px;
+    }
+    .ob-funnel-cols {
+      position: relative;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 18px;
+      align-items: end;
+      min-height: 240px;
+    }
+    .ob-funnel-col { text-align: center; }
+    .ob-funnel-col-label {
+      font-size: 11px; font-weight: 800; color: var(--ink);
+      letter-spacing: 0.06em; text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .ob-funnel-bars {
+      position: relative;
+      display: flex; flex-direction: column; gap: 4px;
+    }
+    .ob-funnel-bar {
+      padding: 10px 12px;
+      border-radius: 6px;
+      font-size: 11px; font-weight: 700;
+      text-align: center;
+      display: flex; justify-content: space-between;
+      align-items: center;
+    }
+    .ob-funnel-bar.start {
+      background: rgba(15,23,41,0.85);
+      color: #fff;
+    }
+    .ob-funnel-col.us .ob-funnel-bar {
+      background: linear-gradient(135deg, var(--accent), var(--accent-d));
+      color: #fff;
+      box-shadow: 0 6px 14px rgba(22,163,74,0.3);
+    }
+    .ob-funnel-col.them .ob-funnel-bar {
+      background: rgba(15,23,41,0.5);
+      color: #fff;
+    }
+    .ob-funnel-bar:nth-child(2) { width: 100%; }
+    .ob-funnel-col.us .ob-funnel-bar:nth-child(3) { width: 92%; margin: 0 auto; }
+    .ob-funnel-col.us .ob-funnel-bar:nth-child(4) { width: 84%; margin: 0 auto; }
+    .ob-funnel-col.us .ob-funnel-bar:nth-child(5) { width: 76%; margin: 0 auto; opacity: 1; }
+    .ob-funnel-col.them .ob-funnel-bar:nth-child(3) { width: 72%; margin: 0 auto; }
+    .ob-funnel-col.them .ob-funnel-bar:nth-child(4) { width: 52%; margin: 0 auto; }
+    .ob-funnel-col.them .ob-funnel-bar:nth-child(5) { width: 38%; margin: 0 auto; opacity: 1; background: linear-gradient(135deg, #DC2626, #991B1B); }
+    .ob-funnel-final {
+      position: relative;
+      margin-top: 22px; padding-top: 18px;
+      border-top: 1px solid rgba(15,23,41,0.08);
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px;
+      text-align: center;
+    }
+    .ob-funnel-final-num {
+      font-size: 24px; font-weight: 800;
+      font-variant-numeric: tabular-nums; letter-spacing: -0.6px; line-height: 1;
+    }
+    .ob-funnel-final-num.us { color: var(--accent-d); }
+    .ob-funnel-final-num.them { color: #DC2626; }
+    .ob-funnel-final-lbl {
+      font-size: 10px; color: var(--muted);
+      letter-spacing: 0.06em; text-transform: uppercase;
+      margin-top: 4px;
+    }
+
+    /* ╔═══════════════════════════════════════════════════════════════════╗
+       ║  SECTION 5 — CAPABILITIES                                           ║
+       ╚═══════════════════════════════════════════════════════════════════╝ */
+    .ob-caps { padding: 140px 0; background: var(--bg); position: relative; overflow: hidden; }
+    .ob-caps::before {
+      content: ''; position: absolute; inset: 0;
+      background-image: radial-gradient(circle at 1px 1px, rgba(15,23,41,0.05) 1px, transparent 0);
+      background-size: 32px 32px;
+      mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%);
+      -webkit-mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%);
+    }
+    .ob-caps-head { text-align: center; margin-bottom: 64px; position: relative; z-index: 2; }
+    .ob-caps-head h2 {
+      font-size: clamp(36px, 3.6vw, 50px);
+      font-weight: 800; line-height: 1.08; letter-spacing: -1.5px;
+      margin: 12px 0 16px;
+    }
+    .ob-caps-head h2 em { font-style: normal; color: var(--accent-d); }
+    .ob-caps-head p {
+      font-size: 17px; line-height: 1.6; color: var(--sec);
+      max-width: 620px; margin: 0 auto;
+    }
+    .ob-caps-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;
+      position: relative; z-index: 2;
+    }
+    .ob-cap-card {
+      background: #fff; border: 1px solid var(--border);
+      border-radius: 16px; padding: 28px 24px;
+      transition: all 0.3s var(--ease);
+      position: relative; overflow: hidden;
+    }
+    .ob-cap-card::before {
+      content: ''; position: absolute; left: 0; top: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      transform: scaleX(0); transform-origin: left;
+      transition: transform 0.4s var(--ease);
+    }
+    .ob-cap-card:hover::before { transform: scaleX(1); }
+    .ob-cap-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 50px rgba(15,23,41,0.08);
+      border-color: rgba(22,163,74,0.2);
+    }
+    .ob-cap-icon {
+      width: 48px; height: 56px;
+      clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+      background: linear-gradient(135deg, var(--accent), var(--accent-d));
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 20px;
+      box-shadow: 0 8px 20px rgba(22,163,74,0.30);
+    }
+    .ob-cap-icon svg { width: 22px; height: 22px; color: #fff; }
+    .ob-cap-card h4 {
+      font-size: 17px; font-weight: 700; color: var(--ink);
+      margin-bottom: 10px; line-height: 1.3;
+    }
+    .ob-cap-card p { font-size: 13px; line-height: 1.55; color: var(--sec); }
+
+    /* ╔═══════════════════════════════════════════════════════════════════╗
+       ║  SECTION 6 — IN ACTION — 60s onboarding timeline                   ║
+       ╚═══════════════════════════════════════════════════════════════════╝ */
+    .ob-action {
+      padding: 140px 0;
+      background: linear-gradient(180deg, var(--navy) 0%, #052E1A 100%);
+      color: #fff;
+      position: relative; overflow: hidden;
+    }
+    .ob-action::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 30% 50%, rgba(22,163,74,0.25), transparent 50%),
+                  radial-gradient(ellipse at 80% 70%, rgba(74,222,128,0.16), transparent 55%);
+    }
+    .ob-action-inner {
+      position: relative; z-index: 2;
+      display: grid; grid-template-columns: 1fr 1.05fr; gap: 80px;
+      align-items: center;
+    }
+    .ob-action-h2 {
+      font-size: clamp(36px, 3.6vw, 50px);
+      font-weight: 800; line-height: 1.08; letter-spacing: -1.5px;
+      margin: 12px 0 24px;
+    }
+    .ob-action-h2 em {
+      font-style: normal;
+      background: linear-gradient(135deg, var(--accent-2), #A7F3D0);
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .ob-action-sub {
+      font-size: 16px; line-height: 1.6; color: rgba(255,255,255,0.72);
+      margin-bottom: 36px;
+    }
+    .ob-flow-steps { display: flex; flex-direction: column; gap: 16px; }
+    .ob-flow-step {
+      display: flex; gap: 18px;
+      padding: 18px 22px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px;
+      transition: all 0.25s var(--ease);
+    }
+    .ob-flow-step:hover {
+      background: rgba(255,255,255,0.08);
+      border-color: rgba(74,222,128,0.4);
+    }
+    .ob-flow-step-num {
+      width: 38px; height: 38px; border-radius: 10px; flex-shrink: 0;
+      background: linear-gradient(135deg, var(--accent), var(--accent-d));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; font-weight: 800; color: #fff;
+      box-shadow: 0 4px 12px rgba(22,163,74,0.4);
+    }
+    .ob-flow-step-text h5 {
+      font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 6px;
+    }
+    .ob-flow-step-text p {
+      font-size: 13px; line-height: 1.55; color: rgba(255,255,255,0.65);
+    }
+    .ob-flow-step-time {
+      font-size: 11px; font-weight: 700; color: var(--accent-2);
+      letter-spacing: 0.06em; text-transform: uppercase;
+      margin-top: 4px;
+    }
+
+    /* Stopwatch visual */
+    .ob-stopwatch {
+      position: relative;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 24px;
+      padding: 40px;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 30px 80px rgba(0,0,0,0.3);
+      text-align: center;
+    }
+    .ob-stopwatch-label {
+      font-size: 11px; font-weight: 700; letter-spacing: 0.18em;
+      color: var(--accent-2); text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+    .ob-stopwatch-circle {
+      position: relative;
+      width: 260px; height: 260px;
+      margin: 0 auto 28px;
+    }
+    .ob-stopwatch-svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+    .ob-stopwatch-svg circle { fill: none; }
+    .ob-stopwatch-track { stroke: rgba(255,255,255,0.08); stroke-width: 12; }
+    .ob-stopwatch-progress {
+      stroke: url(#ob-watch-grad);
+      stroke-width: 12; stroke-linecap: round;
+      stroke-dasharray: 660;
+      stroke-dashoffset: 165;
+      filter: drop-shadow(0 0 12px rgba(74,222,128,0.6));
+    }
+    .ob-stopwatch-center {
+      position: absolute; left: 50%; top: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+    }
+    .ob-stopwatch-num {
+      font-size: 56px; font-weight: 800; color: #fff;
+      letter-spacing: -2px; line-height: 1;
+      font-variant-numeric: tabular-nums;
+      background: linear-gradient(135deg, #fff, var(--accent-2));
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .ob-stopwatch-unit {
+      font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.6);
+      letter-spacing: 0.08em; text-transform: uppercase;
+      margin-top: 4px;
+    }
+    .ob-stopwatch-foot {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+      padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.08);
+    }
+    .ob-sw-stat-num {
+      font-size: 20px; font-weight: 800; color: var(--accent-2);
+      font-variant-numeric: tabular-nums; letter-spacing: -0.4px;
+    }
+    .ob-sw-stat-lbl {
+      font-size: 10px; color: rgba(255,255,255,0.5);
+      letter-spacing: 0.06em; text-transform: uppercase;
+      margin-top: 2px;
+    }
+
+    /* ╔═══════════════════════════════════════════════════════════════════╗
+       ║  SECTION 7 — MODULAR FIT                                            ║
+       ╚═══════════════════════════════════════════════════════════════════╝ */
+    .ob-modular {
+      padding: 140px 0;
+      background: linear-gradient(180deg, var(--bg) 0%, #fff 100%);
+      position: relative; overflow: hidden;
+    }
+    .ob-modular::before {
+      content: ''; position: absolute; inset: 0;
+      background-image: radial-gradient(circle at 1px 1px, rgba(22,163,74,0.06) 1px, transparent 0);
+      background-size: 28px 28px;
+      mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%);
+      -webkit-mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%);
+    }
+    .ob-mod-head { text-align: center; margin-bottom: 50px; position: relative; z-index: 2; }
+    .ob-mod-head h2 {
+      font-size: clamp(36px, 3.6vw, 50px);
+      font-weight: 800; line-height: 1.08; letter-spacing: -1.5px;
+      margin: 12px 0 16px;
+    }
+    .ob-mod-head h2 em { font-style: normal; color: var(--accent-d); }
+    .ob-mod-head p {
+      font-size: 17px; line-height: 1.6; color: var(--sec);
+      max-width: 620px; margin: 0 auto;
+    }
+    .ob-mod-composer {
+      position: relative; z-index: 2;
+      max-width: 1080px; margin: 0 auto;
+      background: #fff; border: 1px solid var(--border);
+      border-radius: 24px; padding: 40px;
+      box-shadow: 0 30px 80px rgba(15,23,41,0.08);
+    }
+    .ob-mod-zone { margin-bottom: 36px; padding-bottom: 36px; border-bottom: 1px dashed var(--border); }
+    .ob-mod-zone:last-of-type { border-bottom: none; padding-bottom: 0; margin-bottom: 0; }
+    .ob-mod-zone-head {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 24px; gap: 16px;
+    }
+    .ob-mod-zone-title {
+      display: flex; align-items: center; gap: 12px;
+      font-size: 14px; font-weight: 700; color: var(--ink);
+      letter-spacing: 0.04em; text-transform: uppercase;
+    }
+    .ob-mod-zone-title::before {
+      content: ''; display: inline-block;
+      width: 18px; height: 1.5px; background: var(--accent-d); border-radius: 1.5px;
+    }
+    .ob-mod-zone-title.complement { color: var(--muted); }
+    .ob-mod-zone-title.complement::before { background: var(--muted); }
+    .ob-mod-counter {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 4px 12px; border-radius: 20px;
+      background: var(--accent-l); color: var(--accent-d);
+      font-size: 12px; font-weight: 700;
+    }
+    .ob-mod-counter.muted { background: var(--bg-alt); color: var(--sec); }
+    .ob-mod-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .ob-mod-card {
+      position: relative; border-radius: 14px;
+      padding: 20px 16px 16px;
+      transition: all 0.3s var(--ease);
+      display: flex; flex-direction: column;
+      min-height: 168px; overflow: hidden;
+    }
+    .ob-mod-card-icon {
+      width: 38px; height: 44px;
+      clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 12px;
+    }
+    .ob-mod-card-icon svg { width: 16px; height: 16px; }
+    .ob-mod-card-name { font-size: 13px; font-weight: 700; line-height: 1.25; margin-bottom: 4px; }
+    .ob-mod-card-desc { font-size: 11px; line-height: 1.4; flex: 1; margin-bottom: 12px; }
+    .ob-mod-card-action {
+      display: inline-flex; align-items: center; justify-content: center; gap: 5px;
+      padding: 6px 10px; border-radius: 8px;
+      font-size: 11px; font-weight: 700; letter-spacing: 0.02em;
+      align-self: flex-start;
+    }
+    .ob-mod-card.spotlight {
+      background: linear-gradient(140deg, var(--accent) 0%, var(--accent-d) 70%, var(--green-deep) 130%);
+      color: #fff;
+      box-shadow: 0 18px 50px rgba(22,163,74,0.4);
+      border: 2px solid var(--accent);
+      grid-column: span 2;
+      min-height: 200px;
+      transform: scale(1.02);
+      position: relative;
+    }
+    .ob-mod-card.spotlight::after {
+      content: 'ESTÁS ACÁ';
+      position: absolute; top: 14px; right: 14px;
+      background: rgba(255,255,255,0.2); color: #fff;
+      padding: 4px 8px; border-radius: 6px;
+      font-size: 9px; font-weight: 800; letter-spacing: 0.12em;
+      backdrop-filter: blur(8px);
+    }
+    .ob-mod-card.spotlight .ob-mod-card-icon {
+      background: rgba(255,255,255,0.22);
+      border: 1px solid rgba(255,255,255,0.4);
+      width: 48px; height: 56px;
+    }
+    .ob-mod-card.spotlight .ob-mod-card-icon svg { width: 20px; height: 20px; color: #fff; }
+    .ob-mod-card.spotlight .ob-mod-card-name { font-size: 18px; }
+    .ob-mod-card.spotlight .ob-mod-card-desc { color: rgba(255,255,255,0.85); font-size: 13px; }
+    .ob-mod-card.active {
+      background: linear-gradient(140deg, var(--accent-l) 0%, #F0FDF4 100%);
+      border: 1px solid var(--accent);
+      color: var(--ink);
+    }
+    .ob-mod-card.active .ob-mod-card-icon {
+      background: linear-gradient(135deg, var(--accent), var(--accent-d));
+    }
+    .ob-mod-card.active .ob-mod-card-icon svg { color: #fff; }
+    .ob-mod-card.active .ob-mod-card-desc { color: var(--sec); }
+    .ob-mod-card.active .ob-mod-card-action {
+      background: #fff; color: var(--accent-d); border: 1px solid rgba(22,163,74,0.2);
+    }
+    .ob-mod-card.active .ob-mod-card-action::before { content: '✓'; font-size: 11px; font-weight: 800; }
+    .ob-mod-card.active:hover { transform: translateY(-3px); box-shadow: 0 12px 28px rgba(22,163,74,0.18); }
+    .ob-mod-card.available {
+      background: var(--bg);
+      color: var(--ink);
+      border: 1.5px dashed rgba(15,23,41,0.18);
+      cursor: pointer;
+    }
+    .ob-mod-card.available .ob-mod-card-icon {
+      background: linear-gradient(135deg, var(--accent-l), #F0FDF4);
+      border: 1px solid rgba(22,163,74,0.15);
+    }
+    .ob-mod-card.available .ob-mod-card-icon svg { color: var(--accent-d); }
+    .ob-mod-card.available .ob-mod-card-desc { color: var(--muted); }
+    .ob-mod-card.available .ob-mod-card-action {
+      background: #fff; color: var(--accent-d); border: 1px solid rgba(22,163,74,0.25);
+    }
+    .ob-mod-card.available:hover {
+      transform: translateY(-3px); border-color: var(--accent);
+      background: #fff; box-shadow: 0 12px 28px rgba(22,163,74,0.12);
+    }
+    .ob-mod-card.available:hover .ob-mod-card-action { background: var(--accent); color: #fff; }
+    .ob-mod-card.available .ob-mod-card-action::before { content: '+'; font-size: 14px; font-weight: 800; }
+    .ob-mod-hint {
+      display: flex; align-items: center; gap: 8px;
+      justify-content: center;
+      font-size: 12px; color: var(--muted);
+      margin-top: 28px; padding: 14px 20px;
+      background: var(--bg);
+      border-radius: 12px;
+      border: 1px dashed var(--border);
+    }
+    .ob-mod-hint svg { width: 16px; height: 16px; color: var(--accent-d); flex-shrink: 0; }
+
+    /* ╔═══════════════════════════════════════════════════════════════════╗
+       ║  SECTION 8 — CASE STUDY                                             ║
+       ╚═══════════════════════════════════════════════════════════════════╝ */
+    .ob-case { padding: 140px 0; background: #fff; position: relative; overflow: hidden; }
+    .ob-case-card {
+      max-width: 1100px; margin: 0 auto;
+      background: linear-gradient(135deg, #F0FDF4 0%, #DCFCE7 100%);
+      border-radius: 28px; padding: 60px;
+      position: relative; overflow: hidden;
+      box-shadow: 0 30px 80px rgba(22,163,74,0.18);
+    }
+    .ob-case-card::before {
+      content: ''; position: absolute; right: -100px; top: -100px;
+      width: 360px; height: 360px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(22,163,74,0.16), transparent 70%);
+    }
+    .ob-case-grid {
+      position: relative; z-index: 2;
+      display: grid; grid-template-columns: 1fr 1.3fr; gap: 60px;
+      align-items: center;
+    }
+    .ob-case-customer { text-align: center; }
+    .ob-case-logo {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 92px; height: 92px; border-radius: 22px;
+      background: linear-gradient(135deg, #047857 0%, #064E3B 100%);
+      color: #fff;
+      font-size: 28px; font-weight: 800;
+      letter-spacing: -1px;
+      margin-bottom: 18px;
+      box-shadow: 0 16px 36px rgba(4,120,87,0.25);
+    }
+    .ob-case-customer-name {
+      font-size: 18px; font-weight: 700; color: var(--ink); margin-bottom: 4px;
+    }
+    .ob-case-customer-role { font-size: 13px; color: var(--muted); margin-bottom: 24px; }
+    .ob-case-flag {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 14px; border-radius: 20px;
+      background: var(--accent-l);
+      font-size: 11px; font-weight: 700; color: var(--accent-d);
+      letter-spacing: 0.06em; text-transform: uppercase;
+    }
+    .ob-case-content { position: relative; }
+    .ob-case-quote-mark {
+      font-size: 80px; line-height: 0.8;
+      color: var(--accent-d); opacity: 0.25;
+      margin-bottom: -16px;
+      font-family: Georgia, serif;
+    }
+    .ob-case-quote {
+      font-size: clamp(22px, 2.2vw, 30px);
+      font-weight: 700; line-height: 1.35; color: var(--ink);
+      letter-spacing: -0.5px;
+      margin-bottom: 32px;
+    }
+    .ob-case-metrics {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+      padding-top: 28px;
+      border-top: 1px solid rgba(15,23,41,0.08);
+    }
+    .ob-case-metric-num {
+      font-size: 32px; font-weight: 800; line-height: 1;
+      letter-spacing: -1px; margin-bottom: 6px;
+      font-variant-numeric: tabular-nums;
+      background: linear-gradient(135deg, var(--accent), var(--accent-d));
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .ob-case-metric-desc { font-size: 12px; color: var(--sec); line-height: 1.45; }
+
+    /* ╔═══════════════════════════════════════════════════════════════════╗
+       ║  SECTION 9 — CTA BAND                                               ║
+       ╚═══════════════════════════════════════════════════════════════════╝ */
+    .cta-band {
+      position: relative;
+      padding: 120px 0;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-d) 60%, var(--green-deep) 100%);
+      color: #fff; text-align: center;
+      overflow: hidden;
+    }
+    .cta-band::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 50% 0%, rgba(74,222,128,0.35), transparent 60%);
+    }
+    .cta-band .container { position: relative; z-index: 2; }
+    .cta-h2 {
+      font-size: clamp(40px, 4vw, 60px);
+      font-weight: 800; line-height: 1.08; letter-spacing: -1.5px;
+      margin-bottom: 18px;
+    }
+    .cta-sub {
+      font-size: 18px; line-height: 1.6; color: rgba(255,255,255,0.85);
+      max-width: 540px; margin: 0 auto 32px;
+    }
+    .cta-band .btn-white { color: var(--accent-d); }
+    .cta-fine { font-size: 13px; color: rgba(255,255,255,0.65); margin-top: 20px; }
+
+    /* ╔═══════════════════════════════════════════════════════════════════╗
+       ║  SECTION 10 — FOOTER                                                ║
+       ╚═══════════════════════════════════════════════════════════════════╝ */
+    footer {
+      background: var(--ink-deep); color: rgba(255,255,255,0.65);
+      padding: 80px 0 30px;
+    }
+    .footer-inner {
+      max-width: 1240px; margin: 0 auto; padding: 0 64px;
+      display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 64px;
+      margin-bottom: 60px;
+    }
+    .footer-logo { font-size: 22px; font-weight: 800; color: #fff; margin-bottom: 14px; }
+    .footer-logo span { color: var(--accent-2); }
+    .footer-tagline { font-size: 14px; line-height: 1.55; color: rgba(255,255,255,0.6); max-width: 240px; }
+    .footer-col-title {
+      font-size: 13px; font-weight: 700; color: #fff;
+      letter-spacing: 0.05em; text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    .footer-links { display: flex; flex-direction: column; gap: 10px; }
+    .footer-links a { font-size: 14px; color: rgba(255,255,255,0.6); transition: color 0.2s; }
+    .footer-links a:hover { color: var(--accent-2); }
+    .footer-helping {
+      text-align: center; padding: 40px 0 30px;
+      font-size: 14px; color: rgba(255,255,255,0.55);
+    }
+    .footer-helping em { font-style: normal; color: var(--pink); font-weight: 700; }
+    .footer-helping em::before { content: '♥ '; color: var(--pink); }
+    .footer-bottom {
+      max-width: 1240px; margin: 0 auto; padding: 24px 64px 0;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      display: flex; justify-content: space-between;
+      font-size: 13px; color: rgba(255,255,255,0.45);
+    }
+
+    @media (max-width: 980px) {
+      .ob-hero-inner { grid-template-columns: 1fr; gap: 60px; }
+      .ob-phone-stage { transform: scale(0.85); }
+      .ob-stats-grid { grid-template-columns: repeat(2, 1fr); gap: 24px; }
+      .ob-problem-grid { grid-template-columns: 1fr; gap: 50px; }
+      .ob-caps-grid { grid-template-columns: repeat(2, 1fr); }
+      .ob-action-inner { grid-template-columns: 1fr; gap: 50px; }
+      .ob-mod-grid { grid-template-columns: repeat(3, 1fr); }
+      .ob-mod-card.spotlight { grid-column: span 3; }
+      .ob-case-grid { grid-template-columns: 1fr; gap: 32px; text-align: center; }
+      .ob-case-card { padding: 40px 32px; }
+      .footer-inner { grid-template-columns: 1fr 1fr; gap: 40px; }
+    }
+    @media (max-width: 600px) {
+      .container, .nav-inner, .footer-inner, .footer-bottom { padding-left: 24px; padding-right: 24px; }
+      .ob-stats-grid, .ob-caps-grid { grid-template-columns: 1fr; }
+      .ob-mod-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+      .ob-mod-card.spotlight { grid-column: span 2; }
+      .nav-links { display: none; }
+      .nav-crumb { display: none; }
+      .ob-hero { padding-top: 130px; padding-bottom: 60px; min-height: auto; }
+      .ob-stats, .ob-problem, .ob-caps, .ob-action, .ob-modular, .ob-case, .cta-band { padding: 80px 0; }
+      .ob-case-metrics { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <linearGradient id="ob-watch-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4ADE80"/>
+      <stop offset="100%" stop-color="#15803D"/>
+    </linearGradient>
+  </defs>
+</svg>
+
+<div class="cursor-glow" id="cursorGlow"></div>
+
+<!-- ═══ 1. NAV ═══ -->
+<nav id="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">info<span>corp</span></a>
+    <ul class="nav-links">
+      <li><a href="plataforma.html" class="active">Productos <span class="nav-crumb">IC Onboarding</span></a></li>
+      <li><a href="soluciones-personas.html">Soluciones</a></li>
+      <li><a href="#">Clientes</a></li>
+      <li><a href="#">Recursos</a></li>
+    </ul>
+    <a href="#demo" class="nav-cta">Solicitar demo</a>
+  </div>
+</nav>
+
+<!-- ═══ 2. HERO ═══ -->
+<section class="ob-hero">
+  <div class="ob-hero-grid"></div>
+  <div class="ob-hero-inner">
+    <div>
+      <span class="ob-hero-label" id="heroLabel">IC Onboarding · OPERATIONS</span>
+      <h1 class="ob-hero-h1" id="heroH1">De prospecto a cliente activo,<br><em>sin papel</em></h1>
+      <p class="ob-hero-sub" id="heroSub">Onboarding biométrico con liveness check, KYC en tiempo real con IA, firma digital y compliance bancario por diseño. De prospecto a cliente activo en menos de 60 segundos.</p>
+      <div class="ob-hero-actions" id="heroActions">
+        <a href="#demo" class="btn btn-primary btn-arrow">Solicitá una demo</a>
+        <a href="#how" class="btn btn-ghost">Ver flow en acción</a>
+      </div>
+    </div>
+
+    <!-- Biometric phone mockup -->
+    <div class="ob-phone-stage" id="phoneStage">
+      <span class="ob-floating-tag tag-1">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Alta en 60s
+      </span>
+      <span class="ob-floating-tag tag-2">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s-8-4.5-8-12V5l8-3 8 3v5c0 7.5-8 12-8 12z"/><polyline points="9 12 11 14 15 10"/></svg>
+        KYC en vivo
+      </span>
+      <span class="ob-floating-tag tag-3">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 4 12 14.01 9 11.01"/><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/></svg>
+        92% aprobación
+      </span>
+
+      <div class="ob-phone">
+        <div class="ob-phone-screen">
+          <div class="ob-ph-header">
+            <div class="ob-ph-logo">
+              <div class="ob-ph-logo-mark"></div>
+              MIBANCO
+            </div>
+            <div class="ob-ph-step">PASO 3 / 4</div>
+          </div>
+
+          <div class="ob-ph-progress-wrap">
+            <div class="ob-ph-progress-bar">
+              <div class="ob-ph-progress-fill"></div>
+            </div>
+            <div class="ob-ph-progress-meta">
+              <span>Verificación biométrica</span>
+              <span>75%</span>
+            </div>
+          </div>
+
+          <div class="ob-ph-scan">
+            <div class="ob-ph-scan-frame">
+              <div class="ob-face">
+                <div class="ob-face-hair"></div>
+                <div class="ob-face-head">
+                  <div class="ob-face-eye ob-face-eye-l"></div>
+                  <div class="ob-face-eye ob-face-eye-r"></div>
+                  <div class="ob-face-mouth"></div>
+                </div>
+                <div class="ob-face-neck"></div>
+                <div class="ob-face-shoulders"></div>
+              </div>
+              <div class="ob-scan-line"></div>
+            </div>
+          </div>
+
+          <div class="ob-ph-status">
+            <div class="ob-ph-status-title">Liveness OK</div>
+            <div class="ob-ph-status-sub">Procesando con IA en tiempo real…</div>
+          </div>
+
+          <div class="ob-ph-steps-list">
+            <div class="ob-ph-step-row done">
+              <div class="ob-ph-step-icon done">✓</div>
+              <div class="ob-ph-step-label">Documento</div>
+              <div class="ob-ph-step-time">+3.2s</div>
+            </div>
+            <div class="ob-ph-step-row active">
+              <div class="ob-ph-step-icon active">3</div>
+              <div class="ob-ph-step-label">Biometría</div>
+              <div class="ob-ph-step-time">en curso</div>
+            </div>
+            <div class="ob-ph-step-row">
+              <div class="ob-ph-step-icon pending">4</div>
+              <div class="ob-ph-step-label">KYC + bienvenida</div>
+              <div class="ob-ph-step-time">próximo</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 3. STATS STRIP ═══ -->
+<section class="ob-stats">
+  <div class="container ob-stats-grid">
+    <div class="ob-stat">
+      <div class="ob-stat-num" data-target="92" data-suffix="%">0%</div>
+      <div class="ob-stat-desc">tasa de aprobación<br>en altas digitales</div>
+    </div>
+    <div class="ob-stat">
+      <div class="ob-stat-num" data-target="60" data-suffix="s">0s</div>
+      <div class="ob-stat-desc">tiempo promedio<br>de onboarding</div>
+    </div>
+    <div class="ob-stat">
+      <div class="ob-stat-num" data-target="68" data-prefix="-" data-suffix="%">-0%</div>
+      <div class="ob-stat-desc">drop-off vs<br>flujos tradicionales</div>
+    </div>
+    <div class="ob-stat">
+      <div class="ob-stat-num" data-target="100" data-suffix="%">0%</div>
+      <div class="ob-stat-desc">compliance KYC<br>y firma digital</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 4. PROBLEM → SOLUTION ═══ -->
+<section class="ob-problem">
+  <div class="container ob-problem-grid">
+    <div>
+      <span class="label">EL RETO · LA SOLUCIÓN</span>
+      <h2 class="ob-problem-h2 split-lines">El cliente nuevo no <em>llega</em><br>al final del formulario</h2>
+
+      <div class="ob-problem-list">
+        <div class="ob-problem-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <div class="ob-problem-item-text"><strong>Formularios eternos:</strong> 32 campos, 3 selfies, 4 reintentos. El 60% abandona antes de tener cuenta. Los que terminan, sienten que el banco les hizo perder el día.</div>
+        </div>
+        <div class="ob-problem-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <div class="ob-problem-item-text"><strong>OCR que falla en el peor momento:</strong> la foto del DNI sale movida, el sistema rechaza tres veces seguidas. El usuario cierra la app.</div>
+        </div>
+        <div class="ob-problem-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <div class="ob-problem-item-text"><strong>KYC manual lento:</strong> la solicitud queda 48 horas esperando aprobación. Para cuando llega el "bienvenido", el cliente ya abrió cuenta en otro banco.</div>
+        </div>
+      </div>
+
+      <div class="ob-arrow-down">Lo que cambiamos</div>
+
+      <div class="ob-solution-list">
+        <div class="ob-solution-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+          <div class="ob-solution-item-text"><strong>Biometría + liveness en una sola toma.</strong> No hay reintentos: el algoritmo guía al usuario al frame exacto y captura cuando está bien.</div>
+        </div>
+        <div class="ob-solution-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+          <div class="ob-solution-item-text"><strong>OCR + KYC en tiempo real con IA.</strong> Documento, validación PEP, sanciones, scoring — todo en paralelo, en menos de 8 segundos.</div>
+        </div>
+        <div class="ob-solution-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+          <div class="ob-solution-item-text"><strong>Firma digital + compliance por diseño.</strong> Contratos electrónicos firmados con el mismo gesto. Trazabilidad y auditoría listas para Riesgos.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Funnel comparison -->
+    <div class="ob-funnel">
+      <div class="ob-funnel-head">
+        <div class="ob-funnel-head-label">Funnel de altas digitales</div>
+        <div class="ob-funnel-head-title">Drop-off vs aprobación</div>
+      </div>
+      <div class="ob-funnel-cols">
+        <div class="ob-funnel-col us">
+          <div class="ob-funnel-col-label">IC Onboarding</div>
+          <div class="ob-funnel-bars">
+            <div class="ob-funnel-bar start">Inicia <span>1,000</span></div>
+            <div class="ob-funnel-bar">Documento <span>955</span></div>
+            <div class="ob-funnel-bar">Biometría <span>920</span></div>
+            <div class="ob-funnel-bar">Aprobado <span>918</span></div>
+          </div>
+        </div>
+        <div class="ob-funnel-col them">
+          <div class="ob-funnel-col-label">Tradicional</div>
+          <div class="ob-funnel-bars">
+            <div class="ob-funnel-bar start">Inicia <span>1,000</span></div>
+            <div class="ob-funnel-bar">Documento <span>720</span></div>
+            <div class="ob-funnel-bar">Biometría <span>510</span></div>
+            <div class="ob-funnel-bar">Aprobado <span>380</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="ob-funnel-final">
+        <div>
+          <div class="ob-funnel-final-num us">91.8%</div>
+          <div class="ob-funnel-final-lbl">conversión</div>
+        </div>
+        <div>
+          <div class="ob-funnel-final-num them">38.0%</div>
+          <div class="ob-funnel-final-lbl">conversión</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 5. CAPABILITIES ═══ -->
+<section class="ob-caps" id="how">
+  <div class="container ob-caps-head">
+    <span class="label">Qué hace</span>
+    <h2 class="split-lines">Cuatro capacidades para que<br>el cliente nuevo <em>llegue al final</em></h2>
+    <p>Onboarding no es un formulario, es la primera promesa que tu banco le hace al cliente. Esto es lo que diferencia una promesa cumplida de una abandonada.</p>
+  </div>
+  <div class="container ob-caps-grid">
+    <div class="ob-cap-card">
+      <div class="ob-cap-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="10" r="3"/><path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662"/></svg>
+      </div>
+      <h4>Biometría + liveness</h4>
+      <p>Detección de selfies vs persona viva, anti-spoofing, control de calidad. El algoritmo guía al usuario al frame correcto sin reintentos manuales.</p>
+    </div>
+    <div class="ob-cap-card">
+      <div class="ob-cap-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+      </div>
+      <h4>OCR + KYC en tiempo real</h4>
+      <p>Lectura de documentos con IA, validación PEP y listas de sanciones, scoring crediticio inicial. Todo en paralelo, en menos de 8 segundos.</p>
+    </div>
+    <div class="ob-cap-card">
+      <div class="ob-cap-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 1 1 3.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+      </div>
+      <h4>Firma digital + compliance</h4>
+      <p>Contratos electrónicos firmados con biometría. Trazabilidad legal, auditoría completa y cumplimiento de normas locales (LATAM y Caribe).</p>
+    </div>
+    <div class="ob-cap-card">
+      <div class="ob-cap-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      </div>
+      <h4>Adaptive flows</h4>
+      <p>Diferentes productos, diferentes pasos. Cuenta sueldo, plazo fijo, crédito personal — cada producto con su flujo optimizado, configurable sin desarrollo.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 6. IN ACTION — 60s timeline ═══ -->
+<section class="ob-action">
+  <div class="container ob-action-inner">
+    <div>
+      <span class="label on-dark">CÓMO FUNCIONA</span>
+      <h2 class="ob-action-h2 split-lines">De prospecto a cliente activo<br><em>en menos de 60 segundos</em></h2>
+      <p class="ob-action-sub">Un nuevo cliente entra desde una campaña de Marketing Automation. Toca "Abrir cuenta" en el push. Esto es lo que pasa en menos de un minuto.</p>
+
+      <div class="ob-flow-steps">
+        <div class="ob-flow-step">
+          <div class="ob-flow-step-num">1</div>
+          <div class="ob-flow-step-text">
+            <div class="ob-flow-step-time">0–3s</div>
+            <h5>Tap en push + abre la app</h5>
+            <p>Bienvenida personalizada con su nombre (deep link desde Marketing Automation).</p>
+          </div>
+        </div>
+        <div class="ob-flow-step">
+          <div class="ob-flow-step-num">2</div>
+          <div class="ob-flow-step-text">
+            <div class="ob-flow-step-time">3–18s</div>
+            <h5>Captura de documento con IA</h5>
+            <p>OCR detecta DNI, valida campos y guía al usuario al ángulo correcto. Sin reintentos.</p>
+          </div>
+        </div>
+        <div class="ob-flow-step">
+          <div class="ob-flow-step-num">3</div>
+          <div class="ob-flow-step-text">
+            <div class="ob-flow-step-time">18–35s</div>
+            <h5>Biometría con liveness</h5>
+            <p>Selfie con detección de prueba de vida. El sistema confirma identidad en segundos.</p>
+          </div>
+        </div>
+        <div class="ob-flow-step">
+          <div class="ob-flow-step-num">4</div>
+          <div class="ob-flow-step-text">
+            <div class="ob-flow-step-time">35–58s</div>
+            <h5>KYC + firma digital + bienvenida</h5>
+            <p>Validación PEP, listas de sanciones, scoring. Firma electrónica. Cuenta activa.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stopwatch -->
+    <div class="ob-stopwatch">
+      <div class="ob-stopwatch-label">Benchmark vs onboarding tradicional</div>
+      <div class="ob-stopwatch-circle">
+        <svg class="ob-stopwatch-svg" viewBox="0 0 240 240">
+          <circle class="ob-stopwatch-track" cx="120" cy="120" r="105"/>
+          <circle class="ob-stopwatch-progress" cx="120" cy="120" r="105"/>
+        </svg>
+        <div class="ob-stopwatch-center">
+          <div class="ob-stopwatch-num">58s</div>
+          <div class="ob-stopwatch-unit">prospecto → cliente</div>
+        </div>
+      </div>
+      <div class="ob-stopwatch-foot">
+        <div>
+          <div class="ob-sw-stat-num">48h</div>
+          <div class="ob-sw-stat-lbl">vs tradicional</div>
+        </div>
+        <div>
+          <div class="ob-sw-stat-num">3.0×</div>
+          <div class="ob-sw-stat-lbl">más altas</div>
+        </div>
+        <div>
+          <div class="ob-sw-stat-num">0</div>
+          <div class="ob-sw-stat-lbl">papel</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 7. MODULAR FIT ═══ -->
+<section class="ob-modular">
+  <div class="container ob-mod-head">
+    <span class="label">DÓNDE ENCAJA EN LA SUITE</span>
+    <h2 class="split-lines">Onboarding es <em>la puerta</em><br>al resto del banco</h2>
+    <p>El nuevo cliente entra por Onboarding y empieza a usar Mobile, Web o Social. Smart Platform orquesta. Analytics aprende del funnel para optimizar.</p>
+  </div>
+
+  <div class="container">
+    <div class="ob-mod-composer">
+      <div class="ob-mod-zone">
+        <div class="ob-mod-zone-head">
+          <div class="ob-mod-zone-title">Esta plataforma</div>
+          <div class="ob-mod-counter">Estás explorando</div>
+        </div>
+        <div class="ob-mod-grid">
+          <div class="ob-mod-card spotlight">
+            <div class="ob-mod-card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s-8-4.5-8-12V5l8-3 8 3v5c0 7.5-8 12-8 12z"/><polyline points="9 12 11 14 15 10"/></svg>
+            </div>
+            <div class="ob-mod-card-name">IC Onboarding &amp; Origination</div>
+            <div class="ob-mod-card-desc">Alta digital con biometría, KYC en tiempo real, firma electrónica y compliance bancario.</div>
+            <span class="ob-mod-card-action" style="opacity:0;">Activa</span>
+          </div>
+          <div class="ob-mod-card active" data-id="smart">
+            <div class="ob-mod-card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            </div>
+            <div class="ob-mod-card-name">IC Smart Platform</div>
+            <div class="ob-mod-card-desc">Orquesta la activación cross-canal.</div>
+            <span class="ob-mod-card-action">Recomendada</span>
+          </div>
+          <div class="ob-mod-card active" data-id="mobile">
+            <div class="ob-mod-card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/></svg>
+            </div>
+            <div class="ob-mod-card-name">IC Mobile Banking</div>
+            <div class="ob-mod-card-desc">Canal por donde se activa el alta.</div>
+            <span class="ob-mod-card-action">Recomendada</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="ob-mod-zone">
+        <div class="ob-mod-zone-head">
+          <div class="ob-mod-zone-title complement">Sumá según tu estrategia</div>
+          <div class="ob-mod-counter muted">8 plataformas disponibles</div>
+        </div>
+        <div class="ob-mod-grid">
+          <div class="ob-mod-card available">
+            <div class="ob-mod-card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+            </div>
+            <div class="ob-mod-card-name">IC Analytics (GURU)</div>
+            <div class="ob-mod-card-desc">Optimización del funnel.</div>
+            <span class="ob-mod-card-action">Sumar</span>
+          </div>
+          <div class="ob-mod-card available">
+            <div class="ob-mod-card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            </div>
+            <div class="ob-mod-card-name">IC Marketing Automation</div>
+            <div class="ob-mod-card-desc">Activación + nurturing post-alta.</div>
+            <span class="ob-mod-card-action">Sumar</span>
+          </div>
+          <div class="ob-mod-card available">
+            <div class="ob-mod-card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/></svg>
+            </div>
+            <div class="ob-mod-card-name">IC Web Banking</div>
+            <div class="ob-mod-card-desc">Onboarding también desde web.</div>
+            <span class="ob-mod-card-action">Sumar</span>
+          </div>
+          <div class="ob-mod-card available">
+            <div class="ob-mod-card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            </div>
+            <div class="ob-mod-card-name">IC Social Banking</div>
+            <div class="ob-mod-card-desc">Alta desde WhatsApp.</div>
+            <span class="ob-mod-card-action">Sumar</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="ob-mod-hint">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+        Onboarding rinde mejor con Marketing Automation conectada: cada nuevo cliente entra a un nurturing journey desde el segundo 60.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 8. CASE STUDY ═══ -->
+<section class="ob-case">
+  <div class="container">
+    <div class="ob-case-card">
+      <div class="ob-case-grid">
+        <div class="ob-case-customer">
+          <div class="ob-case-logo">G</div>
+          <div class="ob-case-customer-name">Banco Galicia</div>
+          <div class="ob-case-customer-role">Director de Captación Digital</div>
+          <span class="ob-case-flag">Caso real · Argentina</span>
+        </div>
+        <div class="ob-case-content">
+          <div class="ob-case-quote-mark">"</div>
+          <blockquote class="ob-case-quote">Pasamos de un flujo de 14 minutos con 60% de drop-off, a una alta de menos de un minuto con 92% de aprobación. Lo más importante: el nuevo cliente llega al final con energía para usar la cuenta.</blockquote>
+          <div class="ob-case-metrics">
+            <div>
+              <div class="ob-case-metric-num" data-target="92" data-suffix="%">0%</div>
+              <div class="ob-case-metric-desc">tasa de aprobación<br>en altas digitales</div>
+            </div>
+            <div>
+              <div class="ob-case-metric-num" data-target="3" data-suffix="×">0×</div>
+              <div class="ob-case-metric-desc">más altas digitales<br>por mes</div>
+            </div>
+            <div>
+              <div class="ob-case-metric-num" data-target="68" data-prefix="-" data-suffix="%">-0%</div>
+              <div class="ob-case-metric-desc">menos llamadas al<br>call center para activar</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 9. CTA BAND ═══ -->
+<section class="cta-band" id="demo">
+  <div class="container">
+    <h2 class="cta-h2 split-lines">¿Hablamos del onboarding<br>de tu banco?</h2>
+    <p class="cta-sub">Ayudamos a las personas a amar a su banco. Hablemos del tuyo.</p>
+    <a href="#" class="btn btn-white btn-arrow">¿Conversamos?</a>
+    <div class="cta-fine">Sin compromisos · Demo personalizada · 30 minutos</div>
+  </div>
+</section>
+
+<!-- ═══ 10. FOOTER ═══ -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-logo">info<span>corp</span></div>
+      <p class="footer-tagline">Desde Uruguay, hacia el mundo.</p>
+    </div>
+    <div>
+      <div class="footer-col-title">IC Banking Suite</div>
+      <ul class="footer-links">
+        <li><a href="plataforma-ic-smart-platform.html">IC Smart Platform</a></li>
+        <li><a href="plataforma-ic-mobile-banking.html">IC Mobile Banking</a></li>
+        <li><a href="plataforma-ic-web-banking.html">IC Web Banking</a></li>
+        <li><a href="plataforma-ic-social-banking.html">IC Social Banking (SARA)</a></li>
+        <li><a href="plataforma-ic-marketing-automation.html">IC Marketing Automation</a></li>
+        <li><a href="plataforma-ic-analytics.html">IC Analytics (GURU)</a></li>
+        <li><a href="plataforma-ic-onboarding.html">IC Onboarding &amp; Origination</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Compañía</div>
+      <ul class="footer-links">
+        <li><a href="#">Sobre nosotros</a></li>
+        <li><a href="#">Método B-Fly</a></li>
+        <li><a href="#">Casos de éxito</a></li>
+        <li><a href="#">Carreras</a></li>
+        <li><a href="#">Blog</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Recursos</div>
+      <ul class="footer-links">
+        <li><a href="#">Estudio Banca Digital 2025</a></li>
+        <li><a href="#">Privacidad</a></li>
+        <li><a href="#">Términos</a></li>
+        <li><a href="#">Seguridad</a></li>
+      </ul>
+    </div>
+  </div>
+  <p class="footer-helping">Helping people <em>love</em> their bank</p>
+  <div class="footer-bottom">
+    <span>© 2025 Infocorp Group</span>
+    <span>Lima, Perú · hola@infocorp.net</span>
+  </div>
+</footer>
+
+<script>
+gsap.registerPlugin(ScrollTrigger);
+
+const glow = document.getElementById('cursorGlow');
+let mx=0, my=0, gx=0, gy=0;
+window.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; }, {passive:true});
+(function lerp(){ gx+=(mx-gx)*0.08; gy+=(my-gy)*0.08; if(glow){ glow.style.left=gx+'px'; glow.style.top=gy+'px'; } requestAnimationFrame(lerp); })();
+
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 20), {passive:true});
+
+gsap.set('#heroLabel',   { y: 12, opacity: 0 });
+gsap.set('#heroSub',     { y: 16, opacity: 0 });
+gsap.set('#heroActions', { y: 16, opacity: 0 });
+gsap.set('#phoneStage',  { scale: 0.85, opacity: 0 });
+
+const heroTL = gsap.timeline({ delay: 0.15 });
+heroTL.to('#heroLabel', { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }, 0.2);
+
+const heroSplit = new SplitType('#heroH1', { types: 'words,chars', tagName: 'span' });
+heroTL.fromTo(heroSplit.chars,
+  { y: 60, opacity: 0, rotationX: -40 },
+  { y: 0, opacity: 1, rotationX: 0, duration: 0.7, stagger: 0.012, ease: 'power3.out', transformOrigin: '50% 100%' },
+  0.4
+);
+heroTL.to('#heroSub',     { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' }, 0.9);
+heroTL.to('#heroActions', { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' }, 1.0);
+heroTL.to('#phoneStage',  { opacity: 1, scale: 1, duration: 1.1, ease: 'power3.out' }, 0.6);
+
+document.querySelectorAll('.split-lines').forEach(el => {
+  const split = new SplitType(el, { types: 'lines', tagName: 'span' });
+  split.lines.forEach(line => {
+    line.style.overflow = 'hidden';
+    line.style.display = 'block';
+  });
+  gsap.fromTo(split.lines,
+    { y: '100%', opacity: 0 },
+    { y: '0%', opacity: 1, duration: 0.85, stagger: 0.12, ease: 'power3.out',
+      scrollTrigger: { trigger: el, start: 'top 82%', toggleActions: 'play none none none' } }
+  );
+});
+
+document.querySelectorAll('.ob-stat-num, .ob-case-metric-num').forEach(el => {
+  const target = parseFloat(el.dataset.target);
+  const prefix = el.dataset.prefix || '';
+  const suffix = el.dataset.suffix || '';
+  if (isNaN(target)) return;
+  el.textContent = prefix + '0' + suffix;
+  ScrollTrigger.create({
+    trigger: el, start: 'top 88%', once: true,
+    onEnter: () => {
+      gsap.fromTo({ v: 0 }, { v: target },
+        { duration: 1.4, ease: 'power2.out',
+          onUpdate: function(){
+            const v = this.targets()[0].v;
+            const isFloat = target % 1 !== 0;
+            el.textContent = prefix + (isFloat ? v.toFixed(1) : Math.round(v)) + suffix;
+          }
+        }
+      );
+    }
+  });
+});
+
+gsap.fromTo('.ob-stat', { x: -20, opacity: 0 },
+  { x: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: 'power3.out',
+    scrollTrigger: { trigger: '.ob-stats-grid', start: 'top 85%' } });
+gsap.fromTo('.ob-problem-item', { x: -30, opacity: 0 },
+  { x: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: 'power3.out',
+    scrollTrigger: { trigger: '.ob-problem-list', start: 'top 82%' } });
+gsap.fromTo('.ob-solution-item', { x: -30, opacity: 0 },
+  { x: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: 'power3.out',
+    scrollTrigger: { trigger: '.ob-solution-list', start: 'top 82%' } });
+gsap.fromTo('.ob-funnel', { x: 40, opacity: 0 },
+  { x: 0, opacity: 1, duration: 0.9, ease: 'power3.out',
+    scrollTrigger: { trigger: '.ob-funnel', start: 'top 82%' } });
+gsap.fromTo('.ob-cap-card', { y: 30, opacity: 0 },
+  { y: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: 'power3.out',
+    scrollTrigger: { trigger: '.ob-caps-grid', start: 'top 82%' } });
+gsap.fromTo('.ob-flow-step', { x: -30, opacity: 0 },
+  { x: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: 'power3.out',
+    scrollTrigger: { trigger: '.ob-flow-steps', start: 'top 80%' } });
+gsap.fromTo('.ob-stopwatch', { x: 40, opacity: 0 },
+  { x: 0, opacity: 1, duration: 0.9, ease: 'power3.out',
+    scrollTrigger: { trigger: '.ob-stopwatch', start: 'top 80%' } });
+gsap.fromTo('.ob-mod-composer', { y: 40, opacity: 0 },
+  { y: 0, opacity: 1, duration: 0.9, ease: 'power3.out',
+    scrollTrigger: { trigger: '.ob-mod-composer', start: 'top 82%' } });
+gsap.fromTo('.ob-mod-card', { scale: 0.9, opacity: 0 },
+  { scale: 1, opacity: 1, duration: 0.6, stagger: 0.06, ease: 'back.out(1.4)',
+    scrollTrigger: { trigger: '.ob-mod-composer', start: 'top 78%' } });
+gsap.fromTo('.ob-case-card', { y: 40, opacity: 0 },
+  { y: 0, opacity: 1, duration: 0.9, ease: 'power3.out',
+    scrollTrigger: { trigger: '.ob-case-card', start: 'top 82%' } });
+
+const ctaSplit = new SplitType('.cta-h2', { types: 'chars', tagName: 'span' });
+gsap.fromTo(ctaSplit.chars, { y: 40, opacity: 0 },
+  { y: 0, opacity: 1, duration: 0.6, stagger: 0.025, ease: 'power3.out',
+    scrollTrigger: { trigger: '.cta-band', start: 'top 75%' } });
+gsap.fromTo('.cta-sub, .cta-band .btn-white, .cta-fine', { y: 20, opacity: 0 },
+  { y: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: 'power3.out',
+    scrollTrigger: { trigger: '.cta-band', start: 'top 70%' } });
+
+document.querySelectorAll('.ob-mod-card.available, .ob-mod-card.active').forEach(card => {
+  if (card.classList.contains('spotlight')) return;
+  card.addEventListener('click', () => {
+    if (card.classList.contains('available')) {
+      card.classList.remove('available');
+      card.classList.add('active');
+      card.querySelector('.ob-mod-card-action').textContent = 'Sumada';
+    } else {
+      card.classList.remove('active');
+      card.classList.add('available');
+      card.querySelector('.ob-mod-card-action').textContent = 'Sumar';
+    }
+  });
+});
+</script>
+
+</body>
+</html>

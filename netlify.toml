@@ -85,3 +85,8 @@
   from = "/plataforma/ic-public-portal"
   to = "/plataforma-ic-public-portal.html"
   status = 200
+
+[[redirects]]
+  from = "/plataforma/ic-personal-finance"
+  to = "/plataforma-ic-personal-finance.html"
+  status = 200

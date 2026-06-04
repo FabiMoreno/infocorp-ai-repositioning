@@ -226,9 +226,11 @@
     .co-rs-left  { display: flex; }
     .co-rs-right { display: flex; flex-direction: column; gap: 16px; }
 
-    /* SLIDER */
+    /* SLIDER — altura sincronizada con schema (flex: 1 dentro del right column) */
     .co-rs-slider {
       position: relative;
+      flex: 1;
+      min-height: 380px;
       background: #fff;
       border-radius: 22px;
       overflow: hidden;
@@ -241,14 +243,16 @@
       opacity: 0;
       transition: opacity 0.6s var(--ease);
       pointer-events: none;
+      display: flex;
+      flex-direction: column;
     }
     .co-slide.is-active { opacity: 1; pointer-events: auto; }
-    .co-slide:first-child { position: relative; } /* establishes height */
 
     .co-slide-img {
       position: relative;
       width: 100%;
-      aspect-ratio: 16/10;
+      flex: 1;
+      min-height: 0;
       display: grid;
       grid-template-columns: 1fr 1fr;
       overflow: hidden;
@@ -305,6 +309,7 @@
     .co-slide-img-divider::after  { bottom: 14px; }
 
     .co-slide-copy {
+      flex-shrink: 0;
       display: grid;
       grid-template-columns: 1fr 1fr;
     }
@@ -333,7 +338,7 @@
     .co-slide-copy-pain p { color: #7F1D1D; }
     .co-slide-copy-fix p  { color: #064E3B; }
 
-    /* DOTS */
+    /* DOTS — with progress fill */
     .co-rs-dots {
       display: flex;
       align-items: center;
@@ -342,6 +347,7 @@
       padding: 4px 0 2px;
     }
     .co-rs-dot {
+      position: relative;
       width: 28px; height: 6px;
       border-radius: 3px;
       border: none;
@@ -350,9 +356,18 @@
       transition: background 0.3s, width 0.4s var(--ease);
       padding: 0;
       font-family: inherit;
+      overflow: hidden;
     }
     .co-rs-dot:hover { background: var(--muted); }
-    .co-rs-dot.is-active { background: var(--accent); width: 44px; }
+    .co-rs-dot.is-active { width: 56px; background: rgba(0,99,242,0.18); }
+    .co-rs-dot-fill {
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 0;
+      background: var(--accent);
+      border-radius: inherit;
+      pointer-events: none;
+    }
 
     /* Adjust schema to match slider height */
     .co-rs-left .co-hier {
@@ -944,10 +959,10 @@
       </div>
 
       <div class="co-rs-dots" role="tablist">
-        <button class="co-rs-dot is-active" data-slide="0" aria-label="Multi-moneda" role="tab"></button>
-        <button class="co-rs-dot" data-slide="1" aria-label="Batch jerárquico" role="tab"></button>
-        <button class="co-rs-dot" data-slide="2" aria-label="Factoring digital" role="tab"></button>
-        <button class="co-rs-dot" data-slide="3" aria-label="Audit by design" role="tab"></button>
+        <button class="co-rs-dot is-active" data-slide="0" aria-label="Multi-moneda" role="tab"><span class="co-rs-dot-fill"></span></button>
+        <button class="co-rs-dot" data-slide="1" aria-label="Batch jerárquico" role="tab"><span class="co-rs-dot-fill"></span></button>
+        <button class="co-rs-dot" data-slide="2" aria-label="Factoring digital" role="tab"><span class="co-rs-dot-fill"></span></button>
+        <button class="co-rs-dot" data-slide="3" aria-label="Audit by design" role="tab"><span class="co-rs-dot-fill"></span></button>
       </div>
     </div>
 
@@ -1342,38 +1357,116 @@ gsap.fromTo('.co-rs-right', { x: 30, opacity: 0 },
   { x: 0, opacity: 1, duration: 0.9, ease: 'power3.out',
     scrollTrigger: { trigger: '.co-rs-grid', start: 'top 78%' } });
 
-// ═══ Image slider ═══
+// ═══ Image slider with progress + pause/resume ═══
 const rsSlider = document.getElementById('rsSlider');
-if (rsSlider) {
-  const slides = rsSlider.querySelectorAll('.co-slide');
-  const dots   = document.querySelectorAll('.co-rs-dot');
-  let current = 0;
-  let interval = null;
+const rsRight  = document.querySelector('.co-rs-right');
+if (rsSlider && rsRight) {
+  const slides   = rsSlider.querySelectorAll('.co-slide');
+  const dots     = document.querySelectorAll('.co-rs-dot');
   const DURATION = 5500;
 
+  let current  = 0;
+  let timer    = null;     // setTimeout for next slide
+  let paused   = false;
+  let started  = false;    // first-run flag
+
+  function activeFill() {
+    return dots[current].querySelector('.co-rs-dot-fill');
+  }
+
+  function resetAllFills() {
+    dots.forEach(d => {
+      const f = d.querySelector('.co-rs-dot-fill');
+      f.style.transition = 'none';
+      f.style.width = '0';
+    });
+  }
+
+  function startProgress(ms) {
+    const fill = activeFill();
+    // Reset to 0 instantly
+    fill.style.transition = 'none';
+    fill.style.width = '0';
+    // Force reflow so the next transition applies
+    void fill.offsetWidth;
+    // Animate to 100%
+    fill.style.transition = `width ${ms}ms linear`;
+    fill.style.width = '100%';
+  }
+
+  function pauseProgress() {
+    const fill = activeFill();
+    // Freeze at current computed width
+    const w = fill.getBoundingClientRect().width;
+    fill.style.transition = 'none';
+    fill.style.width = w + 'px';
+    return w;
+  }
+
+  function getRemainingMs() {
+    const dot = dots[current];
+    const fill = activeFill();
+    const dotW  = dot.getBoundingClientRect().width;
+    const fillW = fill.getBoundingClientRect().width;
+    const ratio = dotW > 0 ? fillW / dotW : 0;
+    return Math.max(0, DURATION * (1 - ratio));
+  }
+
+  function scheduleNext(ms) {
+    if (timer) clearTimeout(timer);
+    timer = setTimeout(() => goTo((current + 1) % slides.length), ms);
+  }
+
   function goTo(idx) {
-    if (idx === current) return;
+    if (timer) { clearTimeout(timer); timer = null; }
     slides.forEach((s, i) => s.classList.toggle('is-active', i === idx));
     dots.forEach((d, i)   => d.classList.toggle('is-active', i === idx));
     current = idx;
+    resetAllFills();
+    if (!paused) {
+      startProgress(DURATION);
+      scheduleNext(DURATION);
+    }
   }
-  function next() { goTo((current + 1) % slides.length); }
-  function startAuto() {
-    stopAuto();
-    interval = setInterval(next, DURATION);
-  }
-  function stopAuto() { if (interval) { clearInterval(interval); interval = null; } }
 
+  function pause() {
+    if (paused) return;
+    paused = true;
+    if (timer) { clearTimeout(timer); timer = null; }
+    pauseProgress();
+  }
+
+  function resume() {
+    if (!paused) return;
+    paused = false;
+    const remaining = getRemainingMs();
+    startProgress(remaining);
+    scheduleNext(remaining);
+  }
+
+  function startFirst() {
+    if (started) return;
+    started = true;
+    startProgress(DURATION);
+    scheduleNext(DURATION);
+  }
+
+  // Click on dot
   dots.forEach((d, i) => {
-    d.addEventListener('click', () => { goTo(i); startAuto(); });
+    d.addEventListener('click', () => {
+      paused = false;
+      goTo(i);
+    });
   });
-  rsSlider.addEventListener('mouseenter', stopAuto);
-  rsSlider.addEventListener('mouseleave', startAuto);
 
-  // Auto-start once the section enters viewport
+  // Pause on hover of slider OR dots (anywhere in right column)
+  rsRight.addEventListener('mouseenter', pause);
+  rsRight.addEventListener('mouseleave', resume);
+
+  // First-run trigger when section enters viewport
   ScrollTrigger.create({
     trigger: rsSlider, start: 'top 75%', once: true,
-    onEnter: startAuto
+    onEnter: startFirst
   });
 }
 gsap.fromTo('.co-mix-board', { y: 40, opacity: 0 },

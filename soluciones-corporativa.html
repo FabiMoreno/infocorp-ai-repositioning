@@ -213,125 +213,159 @@
     .co-problem-head h2 em { font-style: normal; color: var(--accent); }
     .co-problem-head p { font-size: 17px; line-height: 1.6; color: var(--sec); }
 
-    .co-pairs {
-      position: relative;
-      max-width: 1140px; margin: 0 auto;
+    /* Reto/Solución layout: schema + slider */
+    .co-rs-grid {
+      display: grid;
+      grid-template-columns: 0.95fr 1.1fr;
+      gap: 48px;
+      align-items: stretch;
+      max-width: 1180px;
+      margin: 0 auto;
       padding: 0 24px;
     }
-    .co-pairs-svg {
+    .co-rs-left  { display: flex; }
+    .co-rs-right { display: flex; flex-direction: column; gap: 16px; }
+
+    /* SLIDER */
+    .co-rs-slider {
+      position: relative;
+      background: #fff;
+      border-radius: 22px;
+      overflow: hidden;
+      box-shadow: 0 20px 50px rgba(15,23,41,0.08);
+      border: 1px solid var(--border);
+    }
+    .co-slide {
       position: absolute;
       inset: 0;
-      width: 100%; height: 100%;
+      opacity: 0;
+      transition: opacity 0.6s var(--ease);
       pointer-events: none;
-      z-index: 1;
-      overflow: visible;
     }
-    .co-pair-path {
-      fill: none;
-      stroke: url(#coPairGrad);
-      stroke-width: 2;
-      stroke-linecap: round;
-      opacity: 0.45;
-      transition: stroke-width 0.3s var(--ease), opacity 0.3s var(--ease);
-    }
-    .co-pair-path.is-active {
-      stroke-width: 3.5;
-      opacity: 1;
-      filter: drop-shadow(0 4px 10px rgba(0,99,242,0.25));
-    }
-    .co-pair-path.is-dim {
-      opacity: 0.12;
-    }
+    .co-slide.is-active { opacity: 1; pointer-events: auto; }
+    .co-slide:first-child { position: relative; } /* establishes height */
 
-    .co-pairs-cols-head {
-      display: grid; grid-template-columns: 1fr 1fr;
-      gap: 0 200px;
-      max-width: 1140px;
-      margin: 0 auto 26px;
-      padding: 0 24px;
-    }
-    .co-pairs-col-head {
-      display: flex; align-items: center; gap: 10px;
-      font-size: 12px; font-weight: 800;
-      letter-spacing: 0.14em; text-transform: uppercase;
-    }
-    .co-pairs-col-head .dot { width: 10px; height: 10px; border-radius: 50%; }
-    .co-pairs-col-head.pain { color: #DC2626; }
-    .co-pairs-col-head.pain .dot { background: #DC2626; box-shadow: 0 0 0 4px rgba(220,38,38,0.16); }
-    .co-pairs-col-head.fix  { color: #059669; }
-    .co-pairs-col-head.fix .dot { background: #059669; box-shadow: 0 0 0 4px rgba(5,150,105,0.16); }
-
-    .co-pairs-grid {
-      position: relative; z-index: 2;
+    .co-slide-img {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16/10;
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 26px 200px;
-      align-items: stretch;
+      overflow: hidden;
     }
-
-    .co-pair-card {
+    .co-slide-img-pain, .co-slide-img-fix {
       position: relative;
-      padding: 18px 20px;
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .co-slide-img-pain { background: linear-gradient(135deg, #7F1D1D 0%, #DC2626 55%, #B91C1C 100%); }
+    .co-slide-img-fix  { background: linear-gradient(135deg, #064E3B 0%, #059669 55%, #047857 100%); }
+    .co-slide-img-pain::after, .co-slide-img-fix::after {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(circle at 50% 100%, rgba(0,0,0,0.30), transparent 60%);
+    }
+    .co-slide-ph {
+      position: relative; z-index: 2;
+      color: rgba(255,255,255,0.96);
+      text-align: center;
+      padding: 16px 20px;
+      background: rgba(0,0,0,0.20);
+      border: 1.5px dashed rgba(255,255,255,0.45);
       border-radius: 12px;
-      display: flex; gap: 12px; align-items: flex-start;
-      transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease), opacity 0.3s, background 0.3s;
-      cursor: pointer;
-      min-height: 100%;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      display: flex; flex-direction: column; align-items: center; gap: 4px;
+      min-width: 180px;
     }
-    .co-pair-card svg { width: 18px; height: 18px; flex-shrink: 0; margin-top: 1px; }
-    .co-pair-card-text { font-size: 14px; line-height: 1.55; }
-    .co-pair-card-text strong { font-weight: 700; }
+    .co-slide-ph svg { width: 24px; height: 24px; opacity: 0.92; margin-bottom: 4px; }
+    .co-slide-ph b { font-size: 13px; font-weight: 800; letter-spacing: 0.05em; }
+    .co-slide-ph span { font-size: 10px; opacity: 0.78; font-family: var(--font-mono); letter-spacing: 0.04em; }
 
-    .co-pair-card.pain  { background: #FEF2F2; border-left: 3px solid #FCA5A5; grid-column: 1; }
-    .co-pair-card.pain svg { color: #DC2626; }
-    .co-pair-card.pain .co-pair-card-text { color: #7F1D1D; }
-    .co-pair-card.pain .co-pair-card-text strong { color: #991B1B; }
-
-    .co-pair-card.fix   { background: #ECFDF5; border-left: 3px solid #6EE7B7; grid-column: 2; }
-    .co-pair-card.fix svg { color: #059669; }
-    .co-pair-card.fix .co-pair-card-text { color: #064E3B; }
-    .co-pair-card.fix .co-pair-card-text strong { color: #047857; }
-
-    /* Connector anchor dots */
-    .co-pair-anchor {
+    .co-slide-img-divider {
       position: absolute;
-      width: 10px; height: 10px;
-      border-radius: 50%;
-      top: 50%; transform: translateY(-50%);
+      left: 50%; top: 0; bottom: 0;
+      width: 2px;
+      background: #fff;
+      transform: translateX(-50%);
+      box-shadow: 0 0 16px rgba(0,0,0,0.25);
       z-index: 3;
-      transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
     }
-    .co-pair-card.pain .co-pair-anchor {
-      right: -5px;
-      background: #DC2626;
-      box-shadow: 0 0 0 4px rgba(220,38,38,0.20);
+    .co-slide-img-divider::before, .co-slide-img-divider::after {
+      content: ''; position: absolute;
+      left: 50%; transform: translateX(-50%);
+      width: 10px; height: 10px;
+      background: #fff;
+      border-radius: 50%;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.22);
     }
-    .co-pair-card.fix .co-pair-anchor {
-      left: -5px;
-      background: #059669;
-      box-shadow: 0 0 0 4px rgba(5,150,105,0.20);
-    }
-    .co-pair-card.is-active .co-pair-anchor {
-      transform: translateY(-50%) scale(1.4);
-    }
-    .co-pair-card.pain.is-active .co-pair-anchor { box-shadow: 0 0 0 6px rgba(220,38,38,0.28); }
-    .co-pair-card.fix.is-active .co-pair-anchor { box-shadow: 0 0 0 6px rgba(5,150,105,0.28); }
+    .co-slide-img-divider::before { top: 14px; }
+    .co-slide-img-divider::after  { bottom: 14px; }
 
-    /* Active / dim states */
-    .co-pairs.has-active .co-pair-card:not(.is-active) { opacity: 0.38; }
-    .co-pair-card.is-active {
-      transform: translateY(-3px);
-      box-shadow: 0 18px 38px rgba(15,23,41,0.10);
+    .co-slide-copy {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
     }
-    .co-pair-card.pain.is-active { background: linear-gradient(135deg, #FEF2F2 0%, #FECACA 100%); border-left-color: #DC2626; }
-    .co-pair-card.fix.is-active  { background: linear-gradient(135deg, #ECFDF5 0%, #A7F3D0 100%); border-left-color: #059669; }
+    .co-slide-copy-pain, .co-slide-copy-fix {
+      padding: 22px 24px;
+      display: flex; flex-direction: column; gap: 6px;
+    }
+    .co-slide-copy-pain { background: #FEF2F2; }
+    .co-slide-copy-fix  { background: #ECFDF5; }
+    .co-slide-lbl {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 10px; font-weight: 800;
+      letter-spacing: 0.14em; text-transform: uppercase;
+    }
+    .co-slide-lbl::before { content: ''; width: 6px; height: 6px; border-radius: 50%; }
+    .co-slide-copy-pain .co-slide-lbl { color: #DC2626; }
+    .co-slide-copy-pain .co-slide-lbl::before { background: #DC2626; }
+    .co-slide-copy-fix .co-slide-lbl  { color: #059669; }
+    .co-slide-copy-fix .co-slide-lbl::before  { background: #059669; }
+    .co-slide-copy-pain p, .co-slide-copy-fix p {
+      font-size: 14px;
+      line-height: 1.5;
+      font-weight: 600;
+      letter-spacing: -0.1px;
+    }
+    .co-slide-copy-pain p { color: #7F1D1D; }
+    .co-slide-copy-fix p  { color: #064E3B; }
 
-    /* Hier sub-section */
-    .co-hier-wrap { max-width: 760px; margin: 100px auto 0; }
-    .co-hier-wrap-intro { text-align: center; margin-bottom: 28px; }
-    .co-hier-wrap-intro .label { display: inline-block; }
-    .co-hier-wrap-intro h3 { font-size: clamp(22px, 2vw, 28px); font-weight: 800; line-height: 1.2; margin-top: 10px; color: var(--ink); letter-spacing: -0.4px; }
-    .co-hier-wrap-intro h3 em { font-style: normal; color: var(--accent); }
+    /* DOTS */
+    .co-rs-dots {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 4px 0 2px;
+    }
+    .co-rs-dot {
+      width: 28px; height: 6px;
+      border-radius: 3px;
+      border: none;
+      background: var(--border);
+      cursor: pointer;
+      transition: background 0.3s, width 0.4s var(--ease);
+      padding: 0;
+      font-family: inherit;
+    }
+    .co-rs-dot:hover { background: var(--muted); }
+    .co-rs-dot.is-active { background: var(--accent); width: 44px; }
+
+    /* Adjust schema to match slider height */
+    .co-rs-left .co-hier {
+      width: 100%;
+      aspect-ratio: auto;
+      padding: 32px 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .co-rs-left .co-hier-tree { flex: 0; }
+    .co-rs-left .co-hier-head { margin-bottom: 22px; }
+    .co-rs-left .co-hier-foot { margin-top: 22px; padding-top: 14px; }
 
     /* Hierarchy visual */
     .co-hier {
@@ -557,19 +591,8 @@
     @media (max-width: 980px) {
       .co-hero-inner { grid-template-columns: 1fr; gap: 60px; }
       .co-stats-grid { grid-template-columns: repeat(2, 1fr); gap: 24px; }
-      .co-pairs-cols-head { grid-template-columns: 1fr; gap: 0; }
-      .co-pairs-cols-head .co-pairs-col-head.fix { display: none; }
-      .co-pairs-grid { grid-template-columns: 1fr; gap: 14px; }
-      .co-pair-card.pain, .co-pair-card.fix { grid-column: 1; }
-      .co-pair-card.fix { margin-bottom: 18px; }
-      .co-pair-card.fix::before {
-        content: ''; position: absolute;
-        left: 24px; top: -22px; width: 2px; height: 18px;
-        background: linear-gradient(180deg, #FCA5A5, #6EE7B7);
-        border-radius: 2px;
-      }
-      .co-pair-anchor { display: none; }
-      .co-pairs-svg { display: none; }
+      .co-rs-grid { grid-template-columns: 1fr; gap: 36px; }
+      .co-rs-left .co-hier { padding: 28px 24px; }
       .co-mix-grid { grid-template-columns: repeat(3, 1fr); }
       .co-mix-board { padding: 28px; }
       .co-outcomes-grid { grid-template-columns: 1fr; }
@@ -587,6 +610,9 @@
       .co-hero { padding-top: 130px; padding-bottom: 60px; min-height: auto; }
       .co-stats, .co-problem, .co-mix, .co-outcomes, .co-day, .co-case, .cta-band { padding: 80px 0; }
       .co-case-metrics { grid-template-columns: 1fr; }
+      .co-slide-img { aspect-ratio: 4/3; }
+      .co-slide-copy { grid-template-columns: 1fr; }
+      .co-slide-copy-pain { border-bottom: 1px dashed rgba(15,23,41,0.10); }
     }
   </style>
 </head>
@@ -731,92 +757,22 @@
   </div>
 </section>
 
-<!-- PROBLEM → SOLUTION (connected pairs) -->
+<!-- PROBLEM → SOLUTION (schema + image slider) -->
 <section class="co-problem">
   <div class="co-problem-head">
     <span class="label">EL RETO · LA SOLUCIÓN</span>
     <h2 class="split-lines">Una corporación<br>vive en <em>otra escala</em></h2>
-    <p>Cada pain del CFO y la tesorería tiene una solución concreta en la plataforma. Pasá el mouse sobre cualquiera y mirá cómo se conecta.</p>
+    <p>Cuatro problemas reales del CFO y su tesorería. Cuatro soluciones concretas.</p>
   </div>
 
-  <div class="co-pairs-cols-head">
-    <div class="co-pairs-col-head pain"><span class="dot"></span>El reto</div>
-    <div class="co-pairs-col-head fix"><span class="dot"></span>La solución</div>
-  </div>
+  <div class="co-rs-grid">
 
-  <div class="co-pairs">
-    <svg class="co-pairs-svg" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <linearGradient id="coPairGrad" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0%" stop-color="#DC2626"/>
-          <stop offset="50%" stop-color="#0063F2"/>
-          <stop offset="100%" stop-color="#059669"/>
-        </linearGradient>
-      </defs>
-    </svg>
-
-    <div class="co-pairs-grid">
-      <!-- PAIR 0 -->
-      <div class="co-pair-card pain" data-pair="0" tabindex="0">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-        <div class="co-pair-card-text"><strong>Multi-moneda con bancos distintos:</strong> el CFO pide la posición de la semana y vienen 7 archivos de 7 bancos. Conciliar toma 3 días, y para entonces ya cambiaron las tasas.</div>
-        <span class="co-pair-anchor"></span>
-      </div>
-      <div class="co-pair-card fix" data-pair="0" tabindex="0">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-        <div class="co-pair-card-text"><strong>Multimoneda nativo con FX live.</strong> Posición consolidada en USD, equivalentes en cualquier moneda, conciliación automática diaria. El CFO ve el cash global en un dashboard.</div>
-        <span class="co-pair-anchor"></span>
-      </div>
-
-      <!-- PAIR 1 -->
-      <div class="co-pair-card pain" data-pair="1" tabindex="0">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-        <div class="co-pair-card-text"><strong>Batch de nómina sin jerarquía:</strong> 482 empleados, pago en USD, EUR y BRL, requiere 4 firmas configurables. La planilla espera porque el CFO viaja.</div>
-        <span class="co-pair-anchor"></span>
-      </div>
-      <div class="co-pair-card fix" data-pair="1" tabindex="0">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-        <div class="co-pair-card-text"><strong>Batch jerárquico con multi-firma móvil.</strong> El CFO firma desde el celu con biometría. Los directores aprueban desde donde estén. La nómina sale a tiempo, siempre.</div>
-        <span class="co-pair-anchor"></span>
-      </div>
-
-      <!-- PAIR 2 -->
-      <div class="co-pair-card pain" data-pair="2" tabindex="0">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-        <div class="co-pair-card-text"><strong>Factoring que va y vuelve por mail:</strong> el cliente quiere descuento sobre 200 facturas. Cada una con su due date. El admin hace Excel + scan + mail al gerente. Días perdidos.</div>
-        <span class="co-pair-anchor"></span>
-      </div>
-      <div class="co-pair-card fix" data-pair="2" tabindex="0">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-        <div class="co-pair-card-text"><strong>Factoring digital con scoring automático.</strong> Subís las 200 facturas, GURU calcula tasa, vos aprobás. Liquidez instantánea sin pelearte con el banco.</div>
-        <span class="co-pair-anchor"></span>
-      </div>
-
-      <!-- PAIR 3 -->
-      <div class="co-pair-card pain" data-pair="3" tabindex="0">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-        <div class="co-pair-card-text"><strong>Audit que requiere meses:</strong> auditoría externa pide trace de cada aprobación de 12 meses. El equipo de Cumplimiento reconstruye desde mails. Estrés y errores.</div>
-        <span class="co-pair-anchor"></span>
-      </div>
-      <div class="co-pair-card fix" data-pair="3" tabindex="0">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-        <div class="co-pair-card-text"><strong>Audit by design.</strong> Cada aprobación, cada firma, cada movimiento queda registrado con timestamp y actor. Auditoría externa lista en un click.</div>
-        <span class="co-pair-anchor"></span>
-      </div>
-    </div>
-  </div>
-
-  <!-- Sub-block: Hierarchy visual -->
-  <div class="container">
-    <div class="co-hier-wrap">
-      <div class="co-hier-wrap-intro">
-        <span class="label">UN EJEMPLO: BATCH JERÁRQUICO</span>
-        <h3>El banco entiende <em>cómo está organizada</em> tu empresa</h3>
-      </div>
+    <!-- LEFT: Schema (jerarquía visual) -->
+    <div class="co-rs-left">
       <div class="co-hier">
         <div class="co-hier-head">
-          <div class="co-hier-head-label">Multi-firma jerárquica</div>
-          <div class="co-hier-head-title">El CFO, su equipo, sus límites</div>
+          <div class="co-hier-head-label">El banco entiende tu empresa</div>
+          <div class="co-hier-head-title">Roles, límites y firmas configurables</div>
         </div>
         <div class="co-hier-tree">
           <div class="co-hier-node master">
@@ -852,10 +808,149 @@
           </div>
         </div>
         <div class="co-hier-foot">
-          <b>Roles, límites y secuencias</b> configurables sin tocar IT.
+          <b>Modular y configurable</b> — el banco se acomoda a tu org, no al revés.
         </div>
       </div>
     </div>
+
+    <!-- RIGHT: Image slider con pain/fix pareados -->
+    <div class="co-rs-right">
+      <div class="co-rs-slider" id="rsSlider" aria-roledescription="carousel">
+
+        <!-- SLIDE 0 — Multi-moneda -->
+        <div class="co-slide is-active" data-slide="0">
+          <div class="co-slide-img">
+            <div class="co-slide-img-pain">
+              <div class="co-slide-ph" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                <b>Foto del reto</b>
+                <span>1600 × 1000 · CFO frustrado</span>
+              </div>
+            </div>
+            <div class="co-slide-img-fix">
+              <div class="co-slide-ph" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                <b>Foto de la solución</b>
+                <span>1600 × 1000 · CFO en control</span>
+              </div>
+            </div>
+            <div class="co-slide-img-divider"></div>
+          </div>
+          <div class="co-slide-copy">
+            <div class="co-slide-copy-pain">
+              <span class="co-slide-lbl">El reto</span>
+              <p>Conciliar 7 bancos toma 3 días — para entonces ya cambiaron las tasas.</p>
+            </div>
+            <div class="co-slide-copy-fix">
+              <span class="co-slide-lbl">La solución</span>
+              <p>El CFO ve el cash global multimoneda en un solo dashboard.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- SLIDE 1 — Batch jerárquico -->
+        <div class="co-slide" data-slide="1">
+          <div class="co-slide-img">
+            <div class="co-slide-img-pain">
+              <div class="co-slide-ph" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                <b>Foto del reto</b>
+                <span>1600 × 1000 · planilla esperando</span>
+              </div>
+            </div>
+            <div class="co-slide-img-fix">
+              <div class="co-slide-ph" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                <b>Foto de la solución</b>
+                <span>1600 × 1000 · CFO firmando en celu</span>
+              </div>
+            </div>
+            <div class="co-slide-img-divider"></div>
+          </div>
+          <div class="co-slide-copy">
+            <div class="co-slide-copy-pain">
+              <span class="co-slide-lbl">El reto</span>
+              <p>La planilla espera porque el CFO viaja y no firma a tiempo.</p>
+            </div>
+            <div class="co-slide-copy-fix">
+              <span class="co-slide-lbl">La solución</span>
+              <p>Multi-firma móvil con biometría — la nómina sale siempre a tiempo.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- SLIDE 2 — Factoring -->
+        <div class="co-slide" data-slide="2">
+          <div class="co-slide-img">
+            <div class="co-slide-img-pain">
+              <div class="co-slide-ph" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                <b>Foto del reto</b>
+                <span>1600 × 1000 · admin con Excel</span>
+              </div>
+            </div>
+            <div class="co-slide-img-fix">
+              <div class="co-slide-ph" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                <b>Foto de la solución</b>
+                <span>1600 × 1000 · tesorero feliz</span>
+              </div>
+            </div>
+            <div class="co-slide-img-divider"></div>
+          </div>
+          <div class="co-slide-copy">
+            <div class="co-slide-copy-pain">
+              <span class="co-slide-lbl">El reto</span>
+              <p>El admin hace Excel + scan + mail al gerente. Días perdidos.</p>
+            </div>
+            <div class="co-slide-copy-fix">
+              <span class="co-slide-lbl">La solución</span>
+              <p>Factoring digital con scoring automático: liquidez en minutos.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- SLIDE 3 — Audit -->
+        <div class="co-slide" data-slide="3">
+          <div class="co-slide-img">
+            <div class="co-slide-img-pain">
+              <div class="co-slide-ph" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                <b>Foto del reto</b>
+                <span>1600 × 1000 · Compliance estresado</span>
+              </div>
+            </div>
+            <div class="co-slide-img-fix">
+              <div class="co-slide-ph" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                <b>Foto de la solución</b>
+                <span>1600 × 1000 · audit con un click</span>
+              </div>
+            </div>
+            <div class="co-slide-img-divider"></div>
+          </div>
+          <div class="co-slide-copy">
+            <div class="co-slide-copy-pain">
+              <span class="co-slide-lbl">El reto</span>
+              <p>Compliance reconstruye 12 meses de aprobaciones desde mails.</p>
+            </div>
+            <div class="co-slide-copy-fix">
+              <span class="co-slide-lbl">La solución</span>
+              <p>Audit by design: trace completo SOX-ready, exportable en un click.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="co-rs-dots" role="tablist">
+        <button class="co-rs-dot is-active" data-slide="0" aria-label="Multi-moneda" role="tab"></button>
+        <button class="co-rs-dot" data-slide="1" aria-label="Batch jerárquico" role="tab"></button>
+        <button class="co-rs-dot" data-slide="2" aria-label="Factoring digital" role="tab"></button>
+        <button class="co-rs-dot" data-slide="3" aria-label="Audit by design" role="tab"></button>
+      </div>
+    </div>
+
   </div>
 </section>
 
@@ -1239,126 +1334,48 @@ document.querySelectorAll('.co-stat-num, .co-case-metric-num').forEach(el => {
 gsap.fromTo('.co-stat', { x: -20, opacity: 0 },
   { x: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: 'power3.out',
     scrollTrigger: { trigger: '.co-stats-grid', start: 'top 85%' } });
-// Pair cards reveal — pain from left, fix from right, paired in time
-gsap.fromTo('.co-pair-card.pain', { x: -24, opacity: 0 },
-  { x: 0, opacity: 1, duration: 0.7, stagger: 0.14, ease: 'power3.out',
-    scrollTrigger: { trigger: '.co-pairs', start: 'top 78%' } });
-gsap.fromTo('.co-pair-card.fix', { x: 24, opacity: 0 },
-  { x: 0, opacity: 1, duration: 0.7, stagger: 0.14, ease: 'power3.out',
-    scrollTrigger: { trigger: '.co-pairs', start: 'top 78%' } });
-gsap.fromTo('.co-hier-wrap', { y: 30, opacity: 0 },
-  { y: 0, opacity: 1, duration: 0.9, ease: 'power3.out',
-    scrollTrigger: { trigger: '.co-hier-wrap', start: 'top 82%' } });
+// Section reveal — schema desde izq, slider desde der
+gsap.fromTo('.co-rs-left', { x: -30, opacity: 0 },
+  { x: 0, opacity: 1, duration: 0.9, ease: 'power3.out',
+    scrollTrigger: { trigger: '.co-rs-grid', start: 'top 78%' } });
+gsap.fromTo('.co-rs-right', { x: 30, opacity: 0 },
+  { x: 0, opacity: 1, duration: 0.9, ease: 'power3.out',
+    scrollTrigger: { trigger: '.co-rs-grid', start: 'top 78%' } });
 
-// ═══ Pair connectors (SVG curves) ═══
-const pairsWrap = document.querySelector('.co-pairs');
-const pairsSvg  = document.querySelector('.co-pairs-svg');
+// ═══ Image slider ═══
+const rsSlider = document.getElementById('rsSlider');
+if (rsSlider) {
+  const slides = rsSlider.querySelectorAll('.co-slide');
+  const dots   = document.querySelectorAll('.co-rs-dot');
+  let current = 0;
+  let interval = null;
+  const DURATION = 5500;
 
-function drawPairCurves() {
-  if (!pairsWrap || !pairsSvg) return;
-  if (window.matchMedia('(max-width: 980px)').matches) {
-    pairsSvg.querySelectorAll('.co-pair-path').forEach(p => p.remove());
-    return;
+  function goTo(idx) {
+    if (idx === current) return;
+    slides.forEach((s, i) => s.classList.toggle('is-active', i === idx));
+    dots.forEach((d, i)   => d.classList.toggle('is-active', i === idx));
+    current = idx;
   }
-  const wrapRect = pairsWrap.getBoundingClientRect();
-  pairsSvg.setAttribute('viewBox', `0 0 ${wrapRect.width} ${wrapRect.height}`);
-
-  // Clear previous paths (keep <defs>)
-  pairsSvg.querySelectorAll('.co-pair-path').forEach(p => p.remove());
-
-  const painCards = pairsWrap.querySelectorAll('.co-pair-card.pain');
-  const fixCards  = pairsWrap.querySelectorAll('.co-pair-card.fix');
-
-  for (let i = 0; i < painCards.length; i++) {
-    const painRect = painCards[i].getBoundingClientRect();
-    const fixRect  = fixCards[i].getBoundingClientRect();
-
-    const x1 = painRect.right - wrapRect.left + 4;
-    const y1 = painRect.top   + painRect.height / 2 - wrapRect.top;
-    const x2 = fixRect.left   - wrapRect.left - 4;
-    const y2 = fixRect.top    + fixRect.height  / 2 - wrapRect.top;
-
-    const dx  = (x2 - x1) * 0.55;
-    const c1x = x1 + dx;
-    const c2x = x2 - dx;
-    const d   = `M ${x1} ${y1} C ${c1x} ${y1}, ${c2x} ${y2}, ${x2} ${y2}`;
-
-    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-    path.setAttribute('d', d);
-    path.setAttribute('class', 'co-pair-path');
-    path.dataset.pair = i;
-    pairsSvg.appendChild(path);
+  function next() { goTo((current + 1) % slides.length); }
+  function startAuto() {
+    stopAuto();
+    interval = setInterval(next, DURATION);
   }
-}
+  function stopAuto() { if (interval) { clearInterval(interval); interval = null; } }
 
-function animatePairCurvesOnEnter() {
-  const paths = pairsSvg ? pairsSvg.querySelectorAll('.co-pair-path') : [];
-  if (!paths.length) return;
-  paths.forEach(path => {
-    const len = path.getTotalLength();
-    path.style.strokeDasharray = len;
-    path.style.strokeDashoffset = len;
+  dots.forEach((d, i) => {
+    d.addEventListener('click', () => { goTo(i); startAuto(); });
   });
+  rsSlider.addEventListener('mouseenter', stopAuto);
+  rsSlider.addEventListener('mouseleave', startAuto);
+
+  // Auto-start once the section enters viewport
   ScrollTrigger.create({
-    trigger: pairsWrap, start: 'top 70%', once: true,
-    onEnter: () => {
-      paths.forEach((path, i) => {
-        gsap.to(path, {
-          strokeDashoffset: 0,
-          duration: 1.2,
-          delay: 0.15 + i * 0.18,
-          ease: 'power2.inOut'
-        });
-      });
-    }
+    trigger: rsSlider, start: 'top 75%', once: true,
+    onEnter: startAuto
   });
 }
-
-function bindPairHover() {
-  if (!pairsWrap) return;
-  const cards = pairsWrap.querySelectorAll('.co-pair-card');
-  const setActive = (pair) => {
-    pairsWrap.classList.add('has-active');
-    pairsWrap.querySelectorAll('.co-pair-card').forEach(c => {
-      c.classList.toggle('is-active', c.dataset.pair === pair);
-    });
-    pairsSvg.querySelectorAll('.co-pair-path').forEach(p => {
-      p.classList.toggle('is-active', p.dataset.pair === pair);
-      p.classList.toggle('is-dim', p.dataset.pair !== pair);
-    });
-  };
-  const clearActive = () => {
-    pairsWrap.classList.remove('has-active');
-    pairsWrap.querySelectorAll('.is-active').forEach(el => el.classList.remove('is-active'));
-    pairsSvg.querySelectorAll('.is-dim').forEach(el => el.classList.remove('is-dim'));
-  };
-  cards.forEach(card => {
-    const pair = card.dataset.pair;
-    card.addEventListener('mouseenter', () => setActive(pair));
-    card.addEventListener('mouseleave', clearActive);
-    card.addEventListener('focus',  () => setActive(pair));
-    card.addEventListener('blur',   clearActive);
-  });
-}
-
-// Init connectors after layout settles
-window.addEventListener('load', () => {
-  drawPairCurves();
-  animatePairCurvesOnEnter();
-  bindPairHover();
-});
-let resizeTimer;
-window.addEventListener('resize', () => {
-  clearTimeout(resizeTimer);
-  resizeTimer = setTimeout(() => {
-    drawPairCurves();
-    // Skip re-animation on resize, just keep them drawn
-    pairsSvg && pairsSvg.querySelectorAll('.co-pair-path').forEach(p => {
-      p.style.strokeDasharray = '';
-      p.style.strokeDashoffset = '';
-    });
-  }, 150);
-});
 gsap.fromTo('.co-mix-board', { y: 40, opacity: 0 },
   { y: 0, opacity: 1, duration: 0.9, ease: 'power3.out',
     scrollTrigger: { trigger: '.co-mix-board', start: 'top 82%' } });

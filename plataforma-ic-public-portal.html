@@ -6,6 +6,7 @@
   <title>IC Public Portal — Infocorp</title>
   <meta name="description" content="Tu vidriera digital, conectada al transaccional. Headless CMS visual, simuladores con tasas en vivo, A/B testing nativo y multi-país. El sitio institucional que vende, no que muestra." />
 
+  <link rel="stylesheet" href="css/nav-mega.css">
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,700&display=swap" rel="stylesheet" />
@@ -519,16 +520,158 @@
 <div class="cursor-glow" id="cursorGlow"></div>
 
 <!-- NAV -->
-<nav id="nav">
-  <div class="nav-inner">
-    <a href="index.html" class="nav-logo">info<span>corp</span></a>
-    <ul class="nav-links">
-      <li><a href="plataforma.html" class="active">Productos <span class="nav-crumb">IC Public Portal</span></a></li>
-      <li><a href="soluciones-personas.html">Soluciones</a></li>
-      <li><a href="#">Clientes</a></li>
-      <li><a href="#">Recursos</a></li>
+<!-- ═══ NAV MEGA ═══ -->
+<nav id="nav-mega" class="nm-wrap" aria-label="Navegación principal">
+  <div class="nm-bar">
+
+    <a href="index.html" class="nm-logo" aria-label="Infocorp — inicio">
+      info<svg class="nm-logo-heart" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 21s-7-4.35-9.5-9c-1.5-2.8 0-6.5 3.5-6.5 2 0 3.5 1 4.5 2.5 1-1.5 2.5-2.5 4.5-2.5 3.5 0 5 3.7 3.5 6.5C19 16.65 12 21 12 21z"/></svg>rp
+    </a>
+
+    <ul class="nm-items">
+
+      <!-- SOLUCIONES -->
+      <li class="nm-item has-dropdown" data-nav="soluciones">
+        <button class="nm-trigger" type="button" aria-expanded="false" aria-haspopup="true">
+          Soluciones
+          <svg class="nm-chev" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="nm-mega nm-mega-solutions" role="menu">
+          <div class="nm-mega-inner">
+
+            <div class="nm-mega-intro">
+              <div>
+                <h3 class="nm-mega-intro-title">Soluciones para cada modelo de banca</h3>
+                <p class="nm-mega-intro-desc">Diseñamos experiencias digitales para distintos segmentos, integrando canales, procesos, operación e inteligencia artificial.</p>
+              </div>
+            </div>
+
+            <a href="soluciones-personas.html" class="nm-sol-card" role="menuitem">
+              <div class="nm-sol-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a8 8 0 0 1 16 0v1"/></svg></div>
+              <h4 class="nm-sol-card-title">Banca Personas</h4>
+              <p class="nm-sol-card-desc">Canales digitales para ofrecer experiencias simples, personalizadas y siempre disponibles.</p>
+              <span class="nm-sol-card-cta">Conocé más</span>
+            </a>
+
+            <a href="soluciones-pymes.html" class="nm-sol-card" role="menuitem">
+              <div class="nm-sol-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-6 9 6v11a1 1 0 0 1-1 1h-5v-7H10v7H5a1 1 0 0 1-1-1z"/></svg></div>
+              <h4 class="nm-sol-card-title">Banca Pyme</h4>
+              <p class="nm-sol-card-desc">Soluciones para facilitar la gestión financiera diaria y acompañar el crecimiento de las empresas.</p>
+              <span class="nm-sol-card-cta">Conocé más</span>
+            </a>
+
+            <a href="soluciones-corporativa.html" class="nm-sol-card" role="menuitem">
+              <div class="nm-sol-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="14" rx="2"/><path d="M9 7V3h6v4"/></svg></div>
+              <h4 class="nm-sol-card-title">Banca Corporativa</h4>
+              <p class="nm-sol-card-desc">Experiencias seguras y eficientes para operaciones complejas, aprobaciones y gestión empresarial.</p>
+              <span class="nm-sol-card-cta">Conocé más</span>
+            </a>
+
+            <a href="soluciones-all-business.html" class="nm-sol-card" role="menuitem">
+              <div class="nm-sol-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="8" height="16" rx="1.5"/><rect x="13" y="9" width="8" height="11" rx="1.5"/></svg></div>
+              <h4 class="nm-sol-card-title">Banca All-Business</h4>
+              <p class="nm-sol-card-desc">Una solución flexible para atender distintos segmentos de negocio desde una misma plataforma.</p>
+              <span class="nm-sol-card-cta">Conocé más</span>
+            </a>
+
+            <div class="nm-ia">
+              <div>
+                <h4 class="nm-ia-title">Soluciones potenciadas por IA</h4>
+                <p class="nm-ia-desc">Integramos IA en atención, onboarding, operaciones e insights para crear experiencias bancarias más rápidas, inteligentes y humanas.</p>
+              </div>
+              <a href="#" class="nm-ia-link">Explora IA</a>
+            </div>
+
+          </div>
+        </div>
+      </li>
+
+      <!-- PLATAFORMA -->
+      <li class="nm-item has-dropdown" data-nav="plataforma">
+        <button class="nm-trigger" type="button" aria-expanded="false" aria-haspopup="true">
+          Plataforma
+          <svg class="nm-chev" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="nm-mega nm-mega-platform" role="menu">
+          <div class="nm-mega-inner">
+
+            <div class="nm-mega-intro">
+              <div>
+                <h3 class="nm-mega-intro-title">Nuestra Plataforma</h3>
+                <p class="nm-mega-intro-desc">La suite modular para crear, operar y evolucionar experiencias bancarias digitales.</p>
+              </div>
+              <a href="plataforma.html" class="nm-mega-intro-link">Descubre Plataforma</a>
+            </div>
+
+            <div class="nm-cat">
+              <p class="nm-cat-label">Acquire &amp; Onboard</p>
+              <ul class="nm-cat-list">
+                <li><a class="nm-cat-link" href="plataforma-ic-public-portal.html">IC Public Portal</a></li>
+                <li><a class="nm-cat-link" href="plataforma-ic-onboarding.html">IC Onboarding &amp; Origination</a></li>
+              </ul>
+            </div>
+
+            <div class="nm-cat">
+              <p class="nm-cat-label">Everyday Banking</p>
+              <ul class="nm-cat-list">
+                <li><a class="nm-cat-link" href="plataforma-ic-web-banking.html">IC Web Banking</a></li>
+                <li><a class="nm-cat-link" href="plataforma-ic-mobile-banking.html">IC Mobile Banking</a></li>
+                <li><a class="nm-cat-link" href="plataforma-ic-social-banking.html">IC Social Banking</a></li>
+              </ul>
+            </div>
+
+            <div class="nm-cat">
+              <p class="nm-cat-label">Engage &amp; Grow</p>
+              <ul class="nm-cat-list">
+                <li><a class="nm-cat-link" href="plataforma-ic-marketing-automation.html">IC Marketing Automation</a></li>
+                <li><a class="nm-cat-link" href="plataforma-ic-personal-finance.html">IC Personal Finance</a></li>
+                <li><a class="nm-cat-link" href="plataforma-ic-analytics.html">IC Analytics</a></li>
+              </ul>
+            </div>
+
+            <div class="nm-cat">
+              <p class="nm-cat-label">Operate &amp; Observe</p>
+              <ul class="nm-cat-list">
+                <li><a class="nm-cat-link" href="plataforma-ic-back-office.html">IC Back Office</a></li>
+                <li><span class="nm-cat-link is-soon">IC Health Monitor <span class="nm-soon-badge">Pronto</span></span></li>
+                <li><a class="nm-cat-link" href="plataforma-ic-smart-platform.html">IC Smart Platform</a></li>
+              </ul>
+            </div>
+
+            <div class="nm-cat">
+              <p class="nm-cat-label">Open &amp; Integrate</p>
+              <ul class="nm-cat-list">
+                <li><span class="nm-cat-link is-soon">IC Agent Connect <span class="nm-soon-badge">Pronto</span></span></li>
+                <li><a class="nm-cat-link" href="plataforma-ic-open-finance.html">IC Open Finance</a></li>
+              </ul>
+            </div>
+
+            <div class="nm-ia">
+              <div>
+                <h4 class="nm-ia-title">Impulsada por IA</h4>
+                <p class="nm-ia-desc">Conoce cómo la inteligencia artificial potencia cada capa de la plataforma.</p>
+              </div>
+              <a href="#" class="nm-ia-link">Explora IA</a>
+            </div>
+
+          </div>
+        </div>
+      </li>
+
+      <li class="nm-item" data-nav="metodo"><a class="nm-trigger" href="#">Método</a></li>
+      <li class="nm-item" data-nav="recursos"><a class="nm-trigger" href="#">Recursos</a></li>
+      <li class="nm-item" data-nav="people"><a class="nm-trigger" href="#">People</a></li>
+      <li class="nm-item" data-nav="compania"><a class="nm-trigger" href="#">Compañía</a></li>
     </ul>
-    <a href="#demo" class="nav-cta">Solicitar demo</a>
+
+    <a href="#" class="nm-lang" aria-label="Cambiar a inglés">English</a>
+    <a href="#demo" class="nm-cta">¿Conversamos?</a>
+
+    <button class="nm-burger" type="button" aria-label="Abrir menú" aria-expanded="false">
+      <svg class="b-open" viewBox="0 0 24 24" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
+      <svg class="b-close" viewBox="0 0 24 24" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
+    </button>
+
   </div>
 </nav>
 
@@ -1235,5 +1378,6 @@ document.querySelectorAll('.pp-mod-card.available, .pp-mod-card.active').forEach
 });
 </script>
 
+<script src="js/nav-mega.js" defer></script>
 </body>
 </html>

@@ -369,47 +369,48 @@
        ║  SECTION 4 — PROBLEM → SOLUTION                                     ║
        ╚═══════════════════════════════════════════════════════════════════╝ */
     .ma-problem { padding: 140px 0; background: #fff; position: relative; overflow: hidden; }
-    .ma-problem-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
-    .ma-problem-h2 {
-      font-size: clamp(36px, 3.6vw, 50px);
-      font-weight: 800; line-height: 1.08; letter-spacing: -1.5px;
-      margin: 12px 0 20px;
-    }
-    .ma-problem-h2 em { font-style: normal; color: var(--accent); }
-    .ma-problem-list { display: flex; flex-direction: column; gap: 14px; }
-    .ma-problem-item {
-      display: flex; gap: 14px; align-items: flex-start;
-      padding: 16px 18px;
-      background: #FEF2F2;
-      border-left: 3px solid #FCA5A5;
-      border-radius: 8px;
-    }
-    .ma-problem-item svg { width: 18px; height: 18px; color: #DC2626; flex-shrink: 0; margin-top: 1px; }
-    .ma-problem-item-text { font-size: 14px; line-height: 1.5; color: #7F1D1D; }
-    .ma-problem-item-text strong { color: #991B1B; font-weight: 700; }
-
-    .ma-arrow-down {
-      display: flex; align-items: center; justify-content: center; gap: 14px;
-      margin: 24px 0;
-      color: var(--accent); font-weight: 700; font-size: 13px;
-      letter-spacing: 0.1em; text-transform: uppercase;
-    }
-    .ma-arrow-down::before, .ma-arrow-down::after {
-      content: ''; flex: 1; height: 1px;
-      background: linear-gradient(90deg, transparent, var(--accent-l), transparent);
-    }
-
-    .ma-solution-list { display: flex; flex-direction: column; gap: 14px; }
-    .ma-solution-item {
-      display: flex; gap: 14px; align-items: flex-start;
-      padding: 16px 18px;
-      background: #ECFDF5;
-      border-left: 3px solid #6EE7B7;
-      border-radius: 8px;
-    }
-    .ma-solution-item svg { width: 18px; height: 18px; color: #059669; flex-shrink: 0; margin-top: 1px; }
-    .ma-solution-item-text { font-size: 14px; line-height: 1.5; color: #064E3B; }
-    .ma-solution-item-text strong { color: #047857; font-weight: 700; }
+    .ma-problem-head { text-align: center; max-width: 760px; margin: 0 auto 80px; padding: 0 24px; }
+    .ma-problem-head h2 { font-size: clamp(36px, 3.6vw, 50px); font-weight: 800; line-height: 1.08; letter-spacing: -1.5px; margin: 12px 0 16px; }
+    .ma-problem-head h2 em { font-style: normal; color: var(--accent); }
+    .ma-problem-head p { font-size: 17px; line-height: 1.6; color: var(--sec); }
+    .ma-rs-grid { display: grid; grid-template-columns: 0.95fr 1.1fr; gap: 48px; align-items: stretch; max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+    .ma-rs-left  { display: flex; }
+    .ma-rs-right { display: flex; flex-direction: column; gap: 16px; }
+    .ma-rs-slider { position: relative; flex: 1; min-height: 380px; background: #fff; border-radius: 22px; overflow: hidden; box-shadow: 0 20px 50px rgba(15,23,41,0.08); border: 1px solid var(--border); }
+    .ma-slide { position: absolute; inset: 0; opacity: 0; transition: opacity 0.6s var(--ease); pointer-events: none; display: flex; flex-direction: column; }
+    .ma-slide.is-active { opacity: 1; pointer-events: auto; }
+    .ma-slide-img { position: relative; width: 100%; flex: 1; min-height: 0; display: grid; grid-template-columns: 1fr 1fr; overflow: hidden; }
+    .ma-slide-img-pain, .ma-slide-img-fix { position: relative; background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; }
+    .ma-slide-img-pain { background: linear-gradient(135deg, #7F1D1D 0%, #DC2626 55%, #B91C1C 100%); }
+    .ma-slide-img-fix  { background: linear-gradient(135deg, #064E3B 0%, #059669 55%, #047857 100%); }
+    .ma-slide-img-pain::after, .ma-slide-img-fix::after { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 50% 100%, rgba(0,0,0,0.30), transparent 60%); }
+    .ma-slide-ph { position: relative; z-index: 2; color: rgba(255,255,255,0.96); text-align: center; padding: 16px 20px; background: rgba(0,0,0,0.20); border: 1.5px dashed rgba(255,255,255,0.45); border-radius: 12px; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 180px; }
+    .ma-slide-ph svg { width: 24px; height: 24px; opacity: 0.92; margin-bottom: 4px; }
+    .ma-slide-ph b { font-size: 13px; font-weight: 800; letter-spacing: 0.05em; }
+    .ma-slide-ph span { font-size: 10px; opacity: 0.78; font-family: var(--font-mono); letter-spacing: 0.04em; }
+    .ma-slide-img-divider { position: absolute; left: 50%; top: 0; bottom: 0; width: 2px; background: #fff; transform: translateX(-50%); box-shadow: 0 0 16px rgba(0,0,0,0.25); z-index: 3; }
+    .ma-slide-img-divider::before, .ma-slide-img-divider::after { content: ''; position: absolute; left: 50%; transform: translateX(-50%); width: 10px; height: 10px; background: #fff; border-radius: 50%; box-shadow: 0 4px 10px rgba(0,0,0,0.22); }
+    .ma-slide-img-divider::before { top: 14px; }
+    .ma-slide-img-divider::after  { bottom: 14px; }
+    .ma-slide-copy { flex-shrink: 0; display: grid; grid-template-columns: 1fr 1fr; }
+    .ma-slide-copy-pain, .ma-slide-copy-fix { padding: 22px 24px; display: flex; flex-direction: column; gap: 6px; }
+    .ma-slide-copy-pain { background: #FEF2F2; }
+    .ma-slide-copy-fix  { background: #ECFDF5; }
+    .ma-slide-lbl { display: inline-flex; align-items: center; gap: 6px; font-size: 10px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; }
+    .ma-slide-lbl::before { content: ''; width: 6px; height: 6px; border-radius: 50%; }
+    .ma-slide-copy-pain .ma-slide-lbl { color: #DC2626; }
+    .ma-slide-copy-pain .ma-slide-lbl::before { background: #DC2626; }
+    .ma-slide-copy-fix .ma-slide-lbl  { color: #059669; }
+    .ma-slide-copy-fix .ma-slide-lbl::before  { background: #059669; }
+    .ma-slide-copy-pain p, .ma-slide-copy-fix p { font-size: 14px; line-height: 1.5; font-weight: 600; letter-spacing: -0.1px; }
+    .ma-slide-copy-pain p { color: #7F1D1D; }
+    .ma-slide-copy-fix p  { color: #064E3B; }
+    .ma-rs-dots { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 4px 0 2px; }
+    .ma-rs-dot { position: relative; width: 28px; height: 6px; border-radius: 3px; border: none; background: var(--border); cursor: pointer; transition: background 0.3s, width 0.4s var(--ease); padding: 0; font-family: inherit; overflow: hidden; }
+    .ma-rs-dot:hover { background: var(--muted); }
+    .ma-rs-dot.is-active { width: 56px; background: rgba(0,99,242,0.18); }
+    .ma-rs-dot-fill { position: absolute; left: 0; top: 0; bottom: 0; width: 0; background: var(--accent); border-radius: inherit; pointer-events: none; }
+    .ma-rs-left .ma-capacity { width: 100%; aspect-ratio: auto; }
 
     /* Capacity chart — Before/After */
     .ma-capacity {
@@ -1021,7 +1022,7 @@
       .ma-hero-inner { grid-template-columns: 1fr; gap: 60px; }
       .ma-canvas-stage { height: 460px; }
       .ma-stats-grid { grid-template-columns: repeat(2, 1fr); gap: 24px; }
-      .ma-problem-grid { grid-template-columns: 1fr; gap: 50px; }
+      .ma-rs-grid { grid-template-columns: 1fr; gap: 36px; }
       .ma-caps-grid { grid-template-columns: repeat(2, 1fr); }
       .ma-action-inner { grid-template-columns: 1fr; gap: 50px; }
       .ma-mod-grid { grid-template-columns: repeat(3, 1fr); }
@@ -1040,6 +1041,9 @@
       .ma-hero { padding-top: 130px; padding-bottom: 60px; min-height: auto; }
       .ma-stats, .ma-problem, .ma-caps, .ma-action, .ma-modular, .ma-case, .cta-band { padding: 80px 0; }
       .ma-case-metrics { grid-template-columns: 1fr; }
+      .ma-slide-img { aspect-ratio: 4/3; }
+      .ma-slide-copy { grid-template-columns: 1fr; }
+      .ma-slide-copy-pain { border-bottom: 1px dashed rgba(15,23,41,0.10); }
     }
   </style>
 </head>
@@ -1211,46 +1215,15 @@
 
 <!-- ═══ 4. PROBLEM → SOLUTION ═══ -->
 <section class="ma-problem">
-  <div class="container ma-problem-grid">
-    <div>
-      <span class="label">EL RETO · LA SOLUCIÓN</span>
-      <h2 class="ma-problem-h2 split-lines">Multiplicá relevancia,<br>no <em>headcount</em></h2>
+  <div class="ma-problem-head">
+    <span class="label">EL RETO · LA SOLUCIÓN</span>
+    <h2 class="split-lines">Multiplicá relevancia,<br>no <em>headcount</em></h2>
+    <p>Tres trabas que matan la capacidad del equipo de marketing. Tres respuestas que liberan escala sin contratar.</p>
+  </div>
 
-      <div class="ma-problem-list">
-        <div class="ma-problem-item">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-          <div class="ma-problem-item-text"><strong>Email blast manual:</strong> el equipo de marketing arma un mail "para todos" cada lunes. 8% open rate, 0.4% conversión.</div>
-        </div>
-        <div class="ma-problem-item">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-          <div class="ma-problem-item-text"><strong>Microsegmentación imposible:</strong> hacer "joven · sueldo alto · usuario app" requiere queries SQL, equipo de data y 2 semanas. Para cada campaña.</div>
-        </div>
-        <div class="ma-problem-item">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-          <div class="ma-problem-item-text"><strong>Reportes post-mortem:</strong> el resultado de la campaña llega 3 días después. Cuando podrías corregir, ya pasó.</div>
-        </div>
-      </div>
-
-      <div class="ma-arrow-down">Lo que cambiamos</div>
-
-      <div class="ma-solution-list">
-        <div class="ma-solution-item">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-          <div class="ma-solution-item-text"><strong>Journey builder visual.</strong> Drag-and-drop, condiciones, esperas, A/B tests. Tu equipo arma un flujo nuevo en horas, no semanas.</div>
-        </div>
-        <div class="ma-solution-item">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-          <div class="ma-solution-item-text"><strong>Microsegmentación con IA.</strong> Definís el target en lenguaje natural; el modelo arma el segmento y lo mantiene vivo a medida que cambia el comportamiento.</div>
-        </div>
-        <div class="ma-solution-item">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-          <div class="ma-solution-item-text"><strong>Real-time analytics que sugiere.</strong> Si el A está ganando 3 a 1, el sistema sugiere pasar todo el tráfico al A. Vos decidís, no esperás al lunes.</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Capacity comparison visual -->
-    <div class="ma-capacity">
+  <div class="ma-rs-grid">
+    <div class="ma-rs-left">
+      <div class="ma-capacity">
       <div class="ma-capacity-head">
         <div class="ma-capacity-head-label">Capacidad del equipo</div>
         <div class="ma-capacity-head-title">Mismo equipo, otra escala</div>
@@ -1281,6 +1254,50 @@
           <div class="ma-cap-foot-num">90+</div>
           <div class="ma-cap-foot-lbl">Segmentos</div>
         </div>
+      </div>
+      </div>
+    </div>
+
+    <div class="ma-rs-right">
+      <div class="ma-rs-slider" id="rsSlider" aria-roledescription="carousel">
+        <div class="ma-slide is-active" data-slide="0">
+          <div class="ma-slide-img">
+            <div class="ma-slide-img-pain"><div class="ma-slide-ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><b>Foto del reto</b><span>1600 × 1000 · email blast manual</span></div></div>
+            <div class="ma-slide-img-fix"><div class="ma-slide-ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><b>Foto de la solución</b><span>1600 × 1000 · journey builder</span></div></div>
+            <div class="ma-slide-img-divider"></div>
+          </div>
+          <div class="ma-slide-copy">
+            <div class="ma-slide-copy-pain"><span class="ma-slide-lbl">El reto</span><p>Email blast "para todos" cada lunes. 8% open rate, 0.4% conversión.</p></div>
+            <div class="ma-slide-copy-fix"><span class="ma-slide-lbl">La solución</span><p>Journey builder visual. Tu equipo arma flujos nuevos en horas, no semanas.</p></div>
+          </div>
+        </div>
+        <div class="ma-slide" data-slide="1">
+          <div class="ma-slide-img">
+            <div class="ma-slide-img-pain"><div class="ma-slide-ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><b>Foto del reto</b><span>1600 × 1000 · SQL bloqueado</span></div></div>
+            <div class="ma-slide-img-fix"><div class="ma-slide-ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><b>Foto de la solución</b><span>1600 × 1000 · IA segmentando</span></div></div>
+            <div class="ma-slide-img-divider"></div>
+          </div>
+          <div class="ma-slide-copy">
+            <div class="ma-slide-copy-pain"><span class="ma-slide-lbl">El reto</span><p>Microsegmentación requiere queries SQL, equipo de data y 2 semanas.</p></div>
+            <div class="ma-slide-copy-fix"><span class="ma-slide-lbl">La solución</span><p>Microsegmentación con IA. Definís el target en lenguaje natural.</p></div>
+          </div>
+        </div>
+        <div class="ma-slide" data-slide="2">
+          <div class="ma-slide-img">
+            <div class="ma-slide-img-pain"><div class="ma-slide-ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><b>Foto del reto</b><span>1600 × 1000 · oportunidad perdida</span></div></div>
+            <div class="ma-slide-img-fix"><div class="ma-slide-ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><b>Foto de la solución</b><span>1600 × 1000 · analytics live</span></div></div>
+            <div class="ma-slide-img-divider"></div>
+          </div>
+          <div class="ma-slide-copy">
+            <div class="ma-slide-copy-pain"><span class="ma-slide-lbl">El reto</span><p>Reportes 3 días después. Cuando podías corregir, ya pasó.</p></div>
+            <div class="ma-slide-copy-fix"><span class="ma-slide-lbl">La solución</span><p>Real-time analytics que sugiere. No esperás al lunes.</p></div>
+          </div>
+        </div>
+      </div>
+      <div class="ma-rs-dots" role="tablist">
+        <button class="ma-rs-dot is-active" data-slide="0" role="tab"><span class="ma-rs-dot-fill"></span></button>
+        <button class="ma-rs-dot" data-slide="1" role="tab"><span class="ma-rs-dot-fill"></span></button>
+        <button class="ma-rs-dot" data-slide="2" role="tab"><span class="ma-rs-dot-fill"></span></button>
       </div>
     </div>
   </div>
@@ -1686,15 +1703,35 @@ document.querySelectorAll('.ma-stat-num, .ma-case-metric-num').forEach(el => {
 gsap.fromTo('.ma-stat', { x: -20, opacity: 0 },
   { x: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: 'power3.out',
     scrollTrigger: { trigger: '.ma-stats-grid', start: 'top 85%' } });
-gsap.fromTo('.ma-problem-item', { x: -30, opacity: 0 },
-  { x: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: 'power3.out',
-    scrollTrigger: { trigger: '.ma-problem-list', start: 'top 82%' } });
-gsap.fromTo('.ma-solution-item', { x: -30, opacity: 0 },
-  { x: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: 'power3.out',
-    scrollTrigger: { trigger: '.ma-solution-list', start: 'top 82%' } });
-gsap.fromTo('.ma-capacity', { x: 40, opacity: 0 },
+gsap.fromTo('.ma-rs-left', { x: -30, opacity: 0 },
   { x: 0, opacity: 1, duration: 0.9, ease: 'power3.out',
-    scrollTrigger: { trigger: '.ma-capacity', start: 'top 82%' } });
+    scrollTrigger: { trigger: '.ma-rs-grid', start: 'top 78%' } });
+gsap.fromTo('.ma-rs-right', { x: 30, opacity: 0 },
+  { x: 0, opacity: 1, duration: 0.9, ease: 'power3.out',
+    scrollTrigger: { trigger: '.ma-rs-grid', start: 'top 78%' } });
+
+const rsSlider = document.getElementById('rsSlider');
+const rsRight  = document.querySelector('.ma-rs-right');
+if (rsSlider && rsRight) {
+  const slides = rsSlider.querySelectorAll('.ma-slide');
+  const dots = document.querySelectorAll('.ma-rs-dot');
+  const DURATION = 5500;
+  let current = 0, timer = null, paused = false, started = false;
+  const activeFill = () => dots[current].querySelector('.ma-rs-dot-fill');
+  const resetAllFills = () => dots.forEach(d => { const f = d.querySelector('.ma-rs-dot-fill'); f.style.transition='none'; f.style.width='0'; });
+  function startProgress(ms){ const f=activeFill(); f.style.transition='none'; f.style.width='0'; void f.offsetWidth; f.style.transition=`width ${ms}ms linear`; f.style.width='100%'; }
+  function pauseProgress(){ const f=activeFill(); const w=f.getBoundingClientRect().width; f.style.transition='none'; f.style.width=w+'px'; }
+  function getRemainingMs(){ const d=dots[current],f=activeFill(); const dw=d.getBoundingClientRect().width,fw=f.getBoundingClientRect().width; return Math.max(0,DURATION*(1-(dw>0?fw/dw:0))); }
+  function scheduleNext(ms){ if(timer)clearTimeout(timer); timer=setTimeout(()=>goTo((current+1)%slides.length),ms); }
+  function goTo(idx){ if(timer){clearTimeout(timer);timer=null;} slides.forEach((s,i)=>s.classList.toggle('is-active',i===idx)); dots.forEach((d,i)=>d.classList.toggle('is-active',i===idx)); current=idx; resetAllFills(); if(!paused){startProgress(DURATION);scheduleNext(DURATION);} }
+  function pause(){ if(paused)return; paused=true; if(timer){clearTimeout(timer);timer=null;} pauseProgress(); }
+  function resume(){ if(!paused)return; paused=false; const r=getRemainingMs(); startProgress(r); scheduleNext(r); }
+  function startFirst(){ if(started)return; started=true; startProgress(DURATION); scheduleNext(DURATION); }
+  dots.forEach((d,i)=>d.addEventListener('click',()=>{paused=false;goTo(i);}));
+  rsRight.addEventListener('mouseenter',pause);
+  rsRight.addEventListener('mouseleave',resume);
+  ScrollTrigger.create({trigger:rsSlider,start:'top 75%',once:true,onEnter:startFirst});
+}
 gsap.fromTo('.ma-cap-card', { y: 30, opacity: 0 },
   { y: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: 'power3.out',
     scrollTrigger: { trigger: '.ma-caps-grid', start: 'top 82%' } });

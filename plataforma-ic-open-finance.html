@@ -396,47 +396,48 @@
        ║  SECTION 4 — PROBLEM → SOLUTION                                     ║
        ╚═══════════════════════════════════════════════════════════════════╝ */
     .of-problem { padding: 140px 0; background: #fff; position: relative; overflow: hidden; }
-    .of-problem-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
-    .of-problem-h2 {
-      font-size: clamp(36px, 3.6vw, 50px);
-      font-weight: 800; line-height: 1.08; letter-spacing: -1.5px;
-      margin: 12px 0 20px;
-    }
-    .of-problem-h2 em { font-style: normal; color: var(--accent-d); }
-    .of-problem-list { display: flex; flex-direction: column; gap: 14px; }
-    .of-problem-item {
-      display: flex; gap: 14px; align-items: flex-start;
-      padding: 16px 18px;
-      background: #FEF2F2;
-      border-left: 3px solid #FCA5A5;
-      border-radius: 8px;
-    }
-    .of-problem-item svg { width: 18px; height: 18px; color: #DC2626; flex-shrink: 0; margin-top: 1px; }
-    .of-problem-item-text { font-size: 14px; line-height: 1.5; color: #7F1D1D; }
-    .of-problem-item-text strong { color: #991B1B; font-weight: 700; }
-
-    .of-arrow-down {
-      display: flex; align-items: center; justify-content: center; gap: 14px;
-      margin: 24px 0;
-      color: var(--accent-d); font-weight: 700; font-size: 13px;
-      letter-spacing: 0.1em; text-transform: uppercase;
-    }
-    .of-arrow-down::before, .of-arrow-down::after {
-      content: ''; flex: 1; height: 1px;
-      background: linear-gradient(90deg, transparent, var(--accent-l), transparent);
-    }
-
-    .of-solution-list { display: flex; flex-direction: column; gap: 14px; }
-    .of-solution-item {
-      display: flex; gap: 14px; align-items: flex-start;
-      padding: 16px 18px;
-      background: #ECFDF5;
-      border-left: 3px solid #6EE7B7;
-      border-radius: 8px;
-    }
-    .of-solution-item svg { width: 18px; height: 18px; color: #059669; flex-shrink: 0; margin-top: 1px; }
-    .of-solution-item-text { font-size: 14px; line-height: 1.5; color: #064E3B; }
-    .of-solution-item-text strong { color: #047857; font-weight: 700; }
+    .of-problem-head { text-align: center; max-width: 760px; margin: 0 auto 80px; padding: 0 24px; }
+    .of-problem-head h2 { font-size: clamp(36px, 3.6vw, 50px); font-weight: 800; line-height: 1.08; letter-spacing: -1.5px; margin: 12px 0 16px; }
+    .of-problem-head h2 em { font-style: normal; color: var(--accent-d); }
+    .of-problem-head p { font-size: 17px; line-height: 1.6; color: var(--sec); }
+    .of-rs-grid { display: grid; grid-template-columns: 0.95fr 1.1fr; gap: 48px; align-items: stretch; max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+    .of-rs-left  { display: flex; }
+    .of-rs-right { display: flex; flex-direction: column; gap: 16px; }
+    .of-rs-slider { position: relative; flex: 1; min-height: 380px; background: #fff; border-radius: 22px; overflow: hidden; box-shadow: 0 20px 50px rgba(15,23,41,0.08); border: 1px solid var(--border); }
+    .of-slide { position: absolute; inset: 0; opacity: 0; transition: opacity 0.6s var(--ease); pointer-events: none; display: flex; flex-direction: column; }
+    .of-slide.is-active { opacity: 1; pointer-events: auto; }
+    .of-slide-img { position: relative; width: 100%; flex: 1; min-height: 0; display: grid; grid-template-columns: 1fr 1fr; overflow: hidden; }
+    .of-slide-img-pain, .of-slide-img-fix { position: relative; background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; }
+    .of-slide-img-pain { background: linear-gradient(135deg, #7F1D1D 0%, #DC2626 55%, #B91C1C 100%); }
+    .of-slide-img-fix  { background: linear-gradient(135deg, #064E3B 0%, #059669 55%, #047857 100%); }
+    .of-slide-img-pain::after, .of-slide-img-fix::after { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 50% 100%, rgba(0,0,0,0.30), transparent 60%); }
+    .of-slide-ph { position: relative; z-index: 2; color: rgba(255,255,255,0.96); text-align: center; padding: 16px 20px; background: rgba(0,0,0,0.20); border: 1.5px dashed rgba(255,255,255,0.45); border-radius: 12px; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 180px; }
+    .of-slide-ph svg { width: 24px; height: 24px; opacity: 0.92; margin-bottom: 4px; }
+    .of-slide-ph b { font-size: 13px; font-weight: 800; letter-spacing: 0.05em; }
+    .of-slide-ph span { font-size: 10px; opacity: 0.78; font-family: var(--font-mono); letter-spacing: 0.04em; }
+    .of-slide-img-divider { position: absolute; left: 50%; top: 0; bottom: 0; width: 2px; background: #fff; transform: translateX(-50%); box-shadow: 0 0 16px rgba(0,0,0,0.25); z-index: 3; }
+    .of-slide-img-divider::before, .of-slide-img-divider::after { content: ''; position: absolute; left: 50%; transform: translateX(-50%); width: 10px; height: 10px; background: #fff; border-radius: 50%; box-shadow: 0 4px 10px rgba(0,0,0,0.22); }
+    .of-slide-img-divider::before { top: 14px; }
+    .of-slide-img-divider::after  { bottom: 14px; }
+    .of-slide-copy { flex-shrink: 0; display: grid; grid-template-columns: 1fr 1fr; }
+    .of-slide-copy-pain, .of-slide-copy-fix { padding: 22px 24px; display: flex; flex-direction: column; gap: 6px; }
+    .of-slide-copy-pain { background: #FEF2F2; }
+    .of-slide-copy-fix  { background: #ECFDF5; }
+    .of-slide-lbl { display: inline-flex; align-items: center; gap: 6px; font-size: 10px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; }
+    .of-slide-lbl::before { content: ''; width: 6px; height: 6px; border-radius: 50%; }
+    .of-slide-copy-pain .of-slide-lbl { color: #DC2626; }
+    .of-slide-copy-pain .of-slide-lbl::before { background: #DC2626; }
+    .of-slide-copy-fix .of-slide-lbl  { color: #059669; }
+    .of-slide-copy-fix .of-slide-lbl::before  { background: #059669; }
+    .of-slide-copy-pain p, .of-slide-copy-fix p { font-size: 14px; line-height: 1.5; font-weight: 600; letter-spacing: -0.1px; }
+    .of-slide-copy-pain p { color: #7F1D1D; }
+    .of-slide-copy-fix p  { color: #064E3B; }
+    .of-rs-dots { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 4px 0 2px; }
+    .of-rs-dot { position: relative; width: 28px; height: 6px; border-radius: 3px; border: none; background: var(--border); cursor: pointer; transition: background 0.3s, width 0.4s var(--ease); padding: 0; font-family: inherit; overflow: hidden; }
+    .of-rs-dot:hover { background: var(--muted); }
+    .of-rs-dot.is-active { width: 56px; background: rgba(0,99,242,0.18); }
+    .of-rs-dot-fill { position: absolute; left: 0; top: 0; bottom: 0; width: 0; background: var(--accent); border-radius: inherit; pointer-events: none; }
+    .of-rs-left .of-ecosystem { width: 100%; aspect-ratio: auto; }
 
     /* Partner ecosystem map */
     .of-ecosystem {
@@ -1046,7 +1047,7 @@
     @media (max-width: 980px) {
       .of-hero-inner { grid-template-columns: 1fr; gap: 60px; }
       .of-stats-grid { grid-template-columns: repeat(2, 1fr); gap: 24px; }
-      .of-problem-grid { grid-template-columns: 1fr; gap: 50px; }
+      .of-rs-grid { grid-template-columns: 1fr; gap: 36px; }
       .of-caps-grid { grid-template-columns: repeat(2, 1fr); }
       .of-action-inner { grid-template-columns: 1fr; gap: 50px; }
       .of-ide-body { grid-template-columns: 1fr; }
@@ -1066,6 +1067,9 @@
       .of-hero { padding-top: 130px; padding-bottom: 60px; min-height: auto; }
       .of-stats, .of-problem, .of-caps, .of-action, .of-modular, .of-case, .cta-band { padding: 80px 0; }
       .of-case-metrics { grid-template-columns: 1fr; }
+      .of-slide-img { aspect-ratio: 4/3; }
+      .of-slide-copy { grid-template-columns: 1fr; }
+      .of-slide-copy-pain { border-bottom: 1px dashed rgba(15,23,41,0.10); }
     }
   </style>
 </head>
@@ -1202,46 +1206,15 @@
 
 <!-- ═══ 4. PROBLEM → SOLUTION ═══ -->
 <section class="of-problem">
-  <div class="container of-problem-grid">
-    <div>
-      <span class="label">EL RETO · LA SOLUCIÓN</span>
-      <h2 class="of-problem-h2 split-lines">Cada integración fintech<br>no <em>puede tomar 3 meses</em></h2>
+  <div class="of-problem-head">
+    <span class="label">EL RETO · LA SOLUCIÓN</span>
+    <h2 class="split-lines">Cada integración fintech<br>no <em>puede tomar 3 meses</em></h2>
+    <p>Tres trabas que matan la velocidad de integración con el ecosistema fintech. Tres respuestas para devs y para Compliance.</p>
+  </div>
 
-      <div class="of-problem-list">
-        <div class="of-problem-item">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-          <div class="of-problem-item-text"><strong>APIs propias inconsistentes:</strong> cada equipo del banco diseñó su propio endpoint. La fintech tiene que entender 3 estilos distintos para mover una transacción.</div>
-        </div>
-        <div class="of-problem-item">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-          <div class="of-problem-item-text"><strong>Sin sandbox para devs:</strong> probar con producción es riesgoso, probar con datos falsos es inútil. Los developers terminan adivinando hasta que algo rompe.</div>
-        </div>
-        <div class="of-problem-item">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-          <div class="of-problem-item-text"><strong>Compliance regulatoria opaca:</strong> "¿qué pide el regulador, exactamente?" termina siendo un PDF de 80 páginas y un equipo legal sobre el desarrollo.</div>
-        </div>
-      </div>
-
-      <div class="of-arrow-down">Lo que cambiamos</div>
-
-      <div class="of-solution-list">
-        <div class="of-solution-item">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-          <div class="of-solution-item-text"><strong>Un solo OpenAPI Spec.</strong> Convenciones consistentes, versionado predecible, SDKs autogenerados en TypeScript, Python y Java. Todo del mismo lugar.</div>
-        </div>
-        <div class="of-solution-item">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-          <div class="of-solution-item-text"><strong>Sandbox 1-click con datos reales sintéticos.</strong> Cuentas, balances, transacciones — todo coherente. La fintech prueba flows completos sin firmar nada con el banco.</div>
-        </div>
-        <div class="of-solution-item">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-          <div class="of-solution-item-text"><strong>Compliance + auditoría nativos.</strong> OAuth 2, scopes granulares, consentimiento del usuario, trazabilidad y reportes regulatorios listos para enviar.</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Partner ecosystem map -->
-    <div class="of-ecosystem">
+  <div class="of-rs-grid">
+    <div class="of-rs-left">
+      <div class="of-ecosystem">
       <div class="of-eco-head">
         <div class="of-eco-head-label">Ecosistema</div>
         <div class="of-eco-head-title">Conectá con fintechs y partners</div>
@@ -1283,6 +1256,50 @@
           <div class="of-eco-foot-num">5</div>
           <div class="of-eco-foot-lbl">Países LATAM</div>
         </div>
+      </div>
+      </div>
+    </div>
+
+    <div class="of-rs-right">
+      <div class="of-rs-slider" id="rsSlider" aria-roledescription="carousel">
+        <div class="of-slide is-active" data-slide="0">
+          <div class="of-slide-img">
+            <div class="of-slide-img-pain"><div class="of-slide-ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><b>Foto del reto</b><span>1600 × 1000 · APIs caos</span></div></div>
+            <div class="of-slide-img-fix"><div class="of-slide-ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><b>Foto de la solución</b><span>1600 × 1000 · spec único</span></div></div>
+            <div class="of-slide-img-divider"></div>
+          </div>
+          <div class="of-slide-copy">
+            <div class="of-slide-copy-pain"><span class="of-slide-lbl">El reto</span><p>Cada equipo del banco con su propio endpoint. La fintech entiende 3 estilos distintos.</p></div>
+            <div class="of-slide-copy-fix"><span class="of-slide-lbl">La solución</span><p>Un solo OpenAPI Spec con SDKs autogenerados en TypeScript, Python y Java.</p></div>
+          </div>
+        </div>
+        <div class="of-slide" data-slide="1">
+          <div class="of-slide-img">
+            <div class="of-slide-img-pain"><div class="of-slide-ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><b>Foto del reto</b><span>1600 × 1000 · dev frustrado</span></div></div>
+            <div class="of-slide-img-fix"><div class="of-slide-ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><b>Foto de la solución</b><span>1600 × 1000 · sandbox live</span></div></div>
+            <div class="of-slide-img-divider"></div>
+          </div>
+          <div class="of-slide-copy">
+            <div class="of-slide-copy-pain"><span class="of-slide-lbl">El reto</span><p>Probar con prod es riesgoso, con datos falsos es inútil. Los devs adivinan.</p></div>
+            <div class="of-slide-copy-fix"><span class="of-slide-lbl">La solución</span><p>Sandbox 1-click con datos sintéticos coherentes. Sin firmar nada con el banco.</p></div>
+          </div>
+        </div>
+        <div class="of-slide" data-slide="2">
+          <div class="of-slide-img">
+            <div class="of-slide-img-pain"><div class="of-slide-ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><b>Foto del reto</b><span>1600 × 1000 · legal sobre dev</span></div></div>
+            <div class="of-slide-img-fix"><div class="of-slide-ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><b>Foto de la solución</b><span>1600 × 1000 · OAuth + scopes</span></div></div>
+            <div class="of-slide-img-divider"></div>
+          </div>
+          <div class="of-slide-copy">
+            <div class="of-slide-copy-pain"><span class="of-slide-lbl">El reto</span><p>Compliance regulatoria opaca: PDF de 80 páginas + legal sobre el dev.</p></div>
+            <div class="of-slide-copy-fix"><span class="of-slide-lbl">La solución</span><p>Compliance + auditoría nativos. OAuth 2, scopes granulares, reportes listos.</p></div>
+          </div>
+        </div>
+      </div>
+      <div class="of-rs-dots" role="tablist">
+        <button class="of-rs-dot is-active" data-slide="0" role="tab"><span class="of-rs-dot-fill"></span></button>
+        <button class="of-rs-dot" data-slide="1" role="tab"><span class="of-rs-dot-fill"></span></button>
+        <button class="of-rs-dot" data-slide="2" role="tab"><span class="of-rs-dot-fill"></span></button>
       </div>
     </div>
   </div>
@@ -1693,15 +1710,35 @@ document.querySelectorAll('.of-stat-num, .of-case-metric-num').forEach(el => {
 gsap.fromTo('.of-stat', { x: -20, opacity: 0 },
   { x: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: 'power3.out',
     scrollTrigger: { trigger: '.of-stats-grid', start: 'top 85%' } });
-gsap.fromTo('.of-problem-item', { x: -30, opacity: 0 },
-  { x: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: 'power3.out',
-    scrollTrigger: { trigger: '.of-problem-list', start: 'top 82%' } });
-gsap.fromTo('.of-solution-item', { x: -30, opacity: 0 },
-  { x: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: 'power3.out',
-    scrollTrigger: { trigger: '.of-solution-list', start: 'top 82%' } });
-gsap.fromTo('.of-ecosystem', { x: 40, opacity: 0 },
+gsap.fromTo('.of-rs-left', { x: -30, opacity: 0 },
   { x: 0, opacity: 1, duration: 0.9, ease: 'power3.out',
-    scrollTrigger: { trigger: '.of-ecosystem', start: 'top 82%' } });
+    scrollTrigger: { trigger: '.of-rs-grid', start: 'top 78%' } });
+gsap.fromTo('.of-rs-right', { x: 30, opacity: 0 },
+  { x: 0, opacity: 1, duration: 0.9, ease: 'power3.out',
+    scrollTrigger: { trigger: '.of-rs-grid', start: 'top 78%' } });
+
+const rsSlider = document.getElementById('rsSlider');
+const rsRight  = document.querySelector('.of-rs-right');
+if (rsSlider && rsRight) {
+  const slides = rsSlider.querySelectorAll('.of-slide');
+  const dots = document.querySelectorAll('.of-rs-dot');
+  const DURATION = 5500;
+  let current = 0, timer = null, paused = false, started = false;
+  const activeFill = () => dots[current].querySelector('.of-rs-dot-fill');
+  const resetAllFills = () => dots.forEach(d => { const f = d.querySelector('.of-rs-dot-fill'); f.style.transition='none'; f.style.width='0'; });
+  function startProgress(ms){ const f=activeFill(); f.style.transition='none'; f.style.width='0'; void f.offsetWidth; f.style.transition=`width ${ms}ms linear`; f.style.width='100%'; }
+  function pauseProgress(){ const f=activeFill(); const w=f.getBoundingClientRect().width; f.style.transition='none'; f.style.width=w+'px'; }
+  function getRemainingMs(){ const d=dots[current],f=activeFill(); const dw=d.getBoundingClientRect().width,fw=f.getBoundingClientRect().width; return Math.max(0,DURATION*(1-(dw>0?fw/dw:0))); }
+  function scheduleNext(ms){ if(timer)clearTimeout(timer); timer=setTimeout(()=>goTo((current+1)%slides.length),ms); }
+  function goTo(idx){ if(timer){clearTimeout(timer);timer=null;} slides.forEach((s,i)=>s.classList.toggle('is-active',i===idx)); dots.forEach((d,i)=>d.classList.toggle('is-active',i===idx)); current=idx; resetAllFills(); if(!paused){startProgress(DURATION);scheduleNext(DURATION);} }
+  function pause(){ if(paused)return; paused=true; if(timer){clearTimeout(timer);timer=null;} pauseProgress(); }
+  function resume(){ if(!paused)return; paused=false; const r=getRemainingMs(); startProgress(r); scheduleNext(r); }
+  function startFirst(){ if(started)return; started=true; startProgress(DURATION); scheduleNext(DURATION); }
+  dots.forEach((d,i)=>d.addEventListener('click',()=>{paused=false;goTo(i);}));
+  rsRight.addEventListener('mouseenter',pause);
+  rsRight.addEventListener('mouseleave',resume);
+  ScrollTrigger.create({trigger:rsSlider,start:'top 75%',once:true,onEnter:startFirst});
+}
 gsap.fromTo('.of-cap-card', { y: 30, opacity: 0 },
   { y: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: 'power3.out',
     scrollTrigger: { trigger: '.of-caps-grid', start: 'top 82%' } });

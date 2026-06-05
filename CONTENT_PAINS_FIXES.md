@@ -19,10 +19,10 @@
 
 | Página | Tiene sección Reto/Solución | # pains | Estado |
 |---|---|---|---|
-| Soluciones / Personas | ❌ No | — | Tiene otra narrativa (personalización) |
+| Soluciones / Personas | ✅ Sí | 4 | Por validar (slider agregado post-doc) |
 | Soluciones / Pymes | ✅ Sí | 4 | Por validar |
 | Soluciones / Corporativa | ✅ Sí | 4 | Por validar (ya con nuevo slider) |
-| Soluciones / All Business | ❌ No | — | Tiene otra narrativa (spectrum 4 tiers) |
+| Soluciones / All Business | ✅ Sí | 4 | Por validar (slider agregado post-doc) |
 | Plataforma / IC Smart Platform | ✅ Sí | 3 | Por validar |
 | Plataforma / IC Mobile Banking | ✅ Sí | 3 | Por validar |
 | Plataforma / IC Web Banking | ✅ Sí | 3 | Por validar |
@@ -35,11 +35,24 @@
 | Plataforma / IC Personal Finance | ✅ Sí | 3 | Por validar |
 | Plataforma / IC Back Office | ✅ Sí | 3 | Por validar |
 
-Total: **13 páginas con Reto/Solución · 41 pares pain/fix a validar**
+Total: **15 páginas con Reto/Solución · 49 pares pain/fix a validar**
 
 ---
 
 ## SOLUCIONES
+
+### Banca Personas — `/soluciones/personas`
+
+> Foco: el cliente individuo a lo largo de su vida con el banco.
+
+| # | El reto (pain) | La solución (fix) |
+|---|---|---|
+| 1 | **Apps que no fidelizan:** el cliente abre la app, hace su trámite y se va. No vuelve hasta la próxima. | **Banca conversacional con SARA:** el cliente vuelve porque su banco le habla. |
+| 2 | **Productos genéricos para todos:** el cliente nuevo y el de 10 años reciben las mismas ofertas. | **GURU + Marketing Automation personalizan** cada producto, cada touchpoint, cada cliente. |
+| 3 | **Onboarding largo:** formularios eternos, 4 selfies, 48hs de espera. El 60% abandona. | **Onboarding biométrico en 8 segundos.** El cliente nuevo llega adentro la primera vez. |
+| 4 | **Sucursales saturadas para trámites de 30 segundos.** El cliente se va al banco vecino. | **Mobile + Web + SARA cubren el 95%** de la operativa. La sucursal queda para lo que importa. |
+
+---
 
 ### Banca Pymes — `/soluciones/pymes`
 
@@ -64,6 +77,19 @@ Total: **13 páginas con Reto/Solución · 41 pares pain/fix a validar**
 | 2 | **Batch de nómina sin jerarquía:** 482 empleados, pago en USD, EUR y BRL, requiere 4 firmas configurables. La planilla espera porque el CFO viaja. | **Batch jerárquico con multi-firma móvil.** El CFO firma desde el celu con biometría. Los directores aprueban desde donde estén. La nómina sale a tiempo, siempre. |
 | 3 | **Factoring que va y vuelve por mail:** el cliente quiere descuento sobre 200 facturas. Cada una con su due date. El admin hace Excel + scan + mail al gerente. Días perdidos. | **Factoring digital con scoring automático.** Subís las 200 facturas, GURU calcula tasa, vos aprobás. Liquidez instantánea sin pelearte con el banco. |
 | 4 | **Audit que requiere meses:** auditoría externa pide trace de cada aprobación de 12 meses. El equipo de Cumplimiento reconstruye desde mails. Estrés y errores. | **Audit by design.** Cada aprobación, cada firma, cada movimiento queda registrado con timestamp y actor. Auditoría externa lista en un click. |
+
+---
+
+### Banca All Business — `/soluciones/all-business`
+
+> Foco: el banco que cubre todo el espectro empresa (mono → pyme → corporate → global) con una sola core.
+
+| # | El reto (pain) | La solución (fix) |
+|---|---|---|
+| 1 | **Cores fragmentados:** una core para personas, otra para pymes, otra para corporate. Mantenimiento triplicado. | **Una sola Smart Platform multi-tier.** Mismo motor, distintas caras según segmento. |
+| 2 | **El cliente que crece pierde su historia:** mono → pyme → corporate. El banco lo trata como cliente nuevo cada vez. | **Tier-upgrade nativo.** El cliente sube de segmento con su historia intacta. |
+| 3 | **Time-to-market lento:** lanzar un producto que sirva a mono + pyme requiere 3 proyectos paralelos. | **Back Office con productos modulares.** Configurás una vez, publicás a todos los tiers. |
+| 4 | **Cross-sell ciego:** el banco no detecta cuándo el mono pasa a pyme, ni cuándo la pyme necesita FX. | **GURU detecta los cambios** y dispara cross-sell tier-aware automáticamente. |
 
 ---
 
@@ -214,11 +240,6 @@ Esto le da brief al fotógrafo / banco de imágenes / stock para que las 26 foto
 
 ---
 
-## Anexo · Páginas sin sección Reto/Solución hoy
+## Anexo · Cobertura completa
 
-Estas dos páginas usan narrativas distintas. Si querés llevar el patrón slider también a ellas, hay que reformular su contenido:
-
-- **Soluciones / Personas** → hoy habla de personalización + capacidades + seguridad. Podríamos extraer 3-4 pain/fix de banca persona (apps que no fidelizan, productos no relevantes, sucursales saturadas, etc.).
-- **Soluciones / All Business** → hoy muestra el spectrum de 4 tiers (mono, pyme, corporate, global). Podríamos extraer pain/fix transversales al desafío de atender todo el espectro empresa.
-
-Si los validan, los agregamos.
+Las 15 páginas con sección Reto/Solución y el slider visual están en el mismo patrón. Los 49 pares pain/fix son construcciones inferidas; este doc es el material de validación para que el equipo de Infocorp los marque y los devuelva.

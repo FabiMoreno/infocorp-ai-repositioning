@@ -448,11 +448,71 @@
     .footer-helping em::before { content: '♥ '; color: var(--pink); }
     .footer-bottom { max-width: 1240px; margin: 0 auto; padding: 24px 64px 0; border-top: 1px solid rgba(255,255,255,0.08); display: flex; justify-content: space-between; font-size: 13px; color: rgba(255,255,255,0.45); }
 
+    /* ═══ RETO/SOLUCIÓN — schema (spectrum compact) + slider ═══ */
+    .ab-rs-grid { display: grid; grid-template-columns: 0.95fr 1.1fr; gap: 48px; align-items: stretch; max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+    .ab-rs-left { display: flex; }
+    .ab-rs-right { display: flex; flex-direction: column; gap: 16px; }
+    .ab-spectrum-vertical { width: 100%; border-radius: 24px; background: linear-gradient(135deg, #EEF4FF 0%, #DBEAFE 100%); padding: 36px 32px; position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: center; gap: 12px; }
+    .ab-spectrum-vertical::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle at 1px 1px, rgba(0,99,242,0.10) 1px, transparent 0); background-size: 24px 24px; pointer-events: none; }
+    .ab-sv-head { position: relative; text-align: center; margin-bottom: 6px; }
+    .ab-sv-head-label { font-size: 10px; font-weight: 800; color: var(--accent-d); letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 6px; }
+    .ab-sv-head-title { font-size: 15px; font-weight: 700; color: var(--ink); letter-spacing: -0.2px; }
+    .ab-sv-tier { position: relative; display: grid; grid-template-columns: 38px 1fr auto; gap: 12px; align-items: center; padding: 12px 14px; background: #fff; border-radius: 10px; box-shadow: 0 4px 12px rgba(15,23,41,0.05); }
+    .ab-sv-tier-icon { width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .ab-sv-tier-icon svg { width: 16px; height: 16px; color: #fff; }
+    .ab-sv-tier-icon.t1 { background: linear-gradient(135deg, #FFAB4D, var(--amber)); }
+    .ab-sv-tier-icon.t2 { background: linear-gradient(135deg, var(--green-2), var(--green)); }
+    .ab-sv-tier-icon.t3 { background: linear-gradient(135deg, var(--accent-2), var(--accent)); }
+    .ab-sv-tier-icon.t4 { background: linear-gradient(135deg, #C5B0FF, var(--purple)); }
+    .ab-sv-tier-text { line-height: 1.25; }
+    .ab-sv-tier-name { font-size: 13px; font-weight: 800; color: var(--ink); }
+    .ab-sv-tier-sub { font-size: 10px; color: var(--muted); margin-top: 1px; }
+    .ab-sv-tier-arrow { font-size: 14px; color: var(--accent-d); font-weight: 700; }
+    .ab-sv-foot { position: relative; text-align: center; padding-top: 12px; margin-top: 4px; border-top: 1px solid rgba(15,23,41,0.08); font-size: 11px; color: var(--sec); line-height: 1.5; }
+    .ab-sv-foot b { color: var(--ink); font-weight: 800; }
+    /* Slider */
+    .ab-rs-slider { position: relative; flex: 1; min-height: 380px; background: #fff; border-radius: 22px; overflow: hidden; box-shadow: 0 20px 50px rgba(15,23,41,0.08); border: 1px solid var(--border); }
+    .ab-slide { position: absolute; inset: 0; opacity: 0; transition: opacity 0.6s var(--ease); pointer-events: none; display: flex; flex-direction: column; }
+    .ab-slide.is-active { opacity: 1; pointer-events: auto; }
+    .ab-slide-img { position: relative; width: 100%; flex: 1; min-height: 0; display: grid; grid-template-columns: 1fr 1fr; overflow: hidden; }
+    .ab-slide-img-pain, .ab-slide-img-fix { position: relative; background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; }
+    .ab-slide-img-pain { background: linear-gradient(135deg, #7F1D1D 0%, #DC2626 55%, #B91C1C 100%); }
+    .ab-slide-img-fix  { background: linear-gradient(135deg, #064E3B 0%, #059669 55%, #047857 100%); }
+    .ab-slide-img-pain::after, .ab-slide-img-fix::after { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 50% 100%, rgba(0,0,0,0.30), transparent 60%); }
+    .ab-slide-ph { position: relative; z-index: 2; color: rgba(255,255,255,0.96); text-align: center; padding: 16px 20px; background: rgba(0,0,0,0.20); border: 1.5px dashed rgba(255,255,255,0.45); border-radius: 12px; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 180px; }
+    .ab-slide-ph svg { width: 24px; height: 24px; opacity: 0.92; margin-bottom: 4px; }
+    .ab-slide-ph b { font-size: 13px; font-weight: 800; letter-spacing: 0.05em; }
+    .ab-slide-ph span { font-size: 10px; opacity: 0.78; font-family: var(--font-mono); letter-spacing: 0.04em; }
+    .ab-slide-img-divider { position: absolute; left: 50%; top: 0; bottom: 0; width: 2px; background: #fff; transform: translateX(-50%); box-shadow: 0 0 16px rgba(0,0,0,0.25); z-index: 3; }
+    .ab-slide-img-divider::before, .ab-slide-img-divider::after { content: ''; position: absolute; left: 50%; transform: translateX(-50%); width: 10px; height: 10px; background: #fff; border-radius: 50%; box-shadow: 0 4px 10px rgba(0,0,0,0.22); }
+    .ab-slide-img-divider::before { top: 14px; }
+    .ab-slide-img-divider::after  { bottom: 14px; }
+    .ab-slide-copy { flex-shrink: 0; display: grid; grid-template-columns: 1fr 1fr; }
+    .ab-slide-copy-pain, .ab-slide-copy-fix { padding: 22px 24px; display: flex; flex-direction: column; gap: 6px; }
+    .ab-slide-copy-pain { background: #FEF2F2; }
+    .ab-slide-copy-fix  { background: #ECFDF5; }
+    .ab-slide-lbl { display: inline-flex; align-items: center; gap: 6px; font-size: 10px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; }
+    .ab-slide-lbl::before { content: ''; width: 6px; height: 6px; border-radius: 50%; }
+    .ab-slide-copy-pain .ab-slide-lbl { color: #DC2626; }
+    .ab-slide-copy-pain .ab-slide-lbl::before { background: #DC2626; }
+    .ab-slide-copy-fix .ab-slide-lbl  { color: #059669; }
+    .ab-slide-copy-fix .ab-slide-lbl::before  { background: #059669; }
+    .ab-slide-copy-pain p, .ab-slide-copy-fix p { font-size: 14px; line-height: 1.5; font-weight: 600; letter-spacing: -0.1px; }
+    .ab-slide-copy-pain p { color: #7F1D1D; }
+    .ab-slide-copy-fix p  { color: #064E3B; }
+    .ab-rs-dots { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 4px 0 2px; }
+    .ab-rs-dot { position: relative; width: 28px; height: 6px; border-radius: 3px; border: none; background: var(--border); cursor: pointer; transition: background 0.3s, width 0.4s var(--ease); padding: 0; font-family: inherit; overflow: hidden; }
+    .ab-rs-dot:hover { background: var(--muted); }
+    .ab-rs-dot.is-active { width: 56px; background: rgba(0,99,242,0.18); }
+    .ab-rs-dot-fill { position: absolute; left: 0; top: 0; bottom: 0; width: 0; background: var(--accent); border-radius: inherit; pointer-events: none; }
+
     @media (max-width: 980px) {
       .ab-hero-inner { grid-template-columns: 1fr; gap: 60px; }
       .ab-stats-grid { grid-template-columns: repeat(2, 1fr); gap: 24px; }
       .ab-spectrum { grid-template-columns: repeat(2, 1fr); }
       .ab-spectrum::before { display: none; }
+      .ab-rs-grid { grid-template-columns: 1fr; gap: 36px; }
+      .ab-spectrum-vertical { padding: 28px 24px; }
       .ab-mix-grid { grid-template-columns: repeat(3, 1fr); }
       .ab-mix-board { padding: 28px; }
       .ab-outcomes-grid { grid-template-columns: 1fr; }
@@ -473,6 +533,9 @@
       .ab-hero { padding-top: 130px; padding-bottom: 60px; min-height: auto; }
       .ab-stats, .ab-problem, .ab-mix, .ab-outcomes, .ab-arch, .ab-case, .cta-band { padding: 80px 0; }
       .ab-case-metrics { grid-template-columns: 1fr; }
+      .ab-slide-img { aspect-ratio: 4/3; }
+      .ab-slide-copy { grid-template-columns: 1fr; }
+      .ab-slide-copy-pain { border-bottom: 1px dashed rgba(15,23,41,0.10); }
     }
   </style>
 </head>
@@ -605,63 +668,132 @@
 
 <!-- THE SPECTRUM -->
 <section class="ab-problem">
-  <div class="container">
-    <div class="ab-problem-head">
-      <span class="label">EL ESPECTRO QUE NO PODÉS PARTIR EN PEDAZOS</span>
-      <h2 class="split-lines">Cuatro <em>perfiles</em>, un solo banco</h2>
-      <p>El mismo cliente puede ser una persona física, después un emprendedor, después una pyme y después una corporación. El banco no debería pedirle que migre cada vez.</p>
+  <div class="ab-problem-head">
+    <span class="label">EL RETO · LA SOLUCIÓN</span>
+    <h2 class="split-lines">Cuatro problemas reales<br>de atender <em>todo el espectro</em></h2>
+    <p>El mismo cliente atraviesa varios tiers en su vida empresarial. Lo que un core fragmentado no resuelve, All Business sí.</p>
+  </div>
+
+  <div class="ab-rs-grid">
+
+    <!-- LEFT: Spectrum vertical compact -->
+    <div class="ab-rs-left">
+      <div class="ab-spectrum-vertical">
+        <div class="ab-sv-head">
+          <div class="ab-sv-head-label">El espectro empresa</div>
+          <div class="ab-sv-head-title">Una core para 4 tiers</div>
+        </div>
+        <div class="ab-sv-tier">
+          <div class="ab-sv-tier-icon t1">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <div class="ab-sv-tier-text">
+            <div class="ab-sv-tier-name">Monotributo · Indep.</div>
+            <div class="ab-sv-tier-sub">Freelance, kioskero, médico</div>
+          </div>
+          <span class="ab-sv-tier-arrow">↓</span>
+        </div>
+        <div class="ab-sv-tier">
+          <div class="ab-sv-tier-icon t2">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          </div>
+          <div class="ab-sv-tier-text">
+            <div class="ab-sv-tier-name">Pyme</div>
+            <div class="ab-sv-tier-sub">10–100 empleados, multi-rol</div>
+          </div>
+          <span class="ab-sv-tier-arrow">↓</span>
+        </div>
+        <div class="ab-sv-tier">
+          <div class="ab-sv-tier-icon t3">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+          </div>
+          <div class="ab-sv-tier-text">
+            <div class="ab-sv-tier-name">Corporativa</div>
+            <div class="ab-sv-tier-sub">CFO + tesorería, multi-país</div>
+          </div>
+          <span class="ab-sv-tier-arrow">↓</span>
+        </div>
+        <div class="ab-sv-tier">
+          <div class="ab-sv-tier-icon t4">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          </div>
+          <div class="ab-sv-tier-text">
+            <div class="ab-sv-tier-name">Empresas globales</div>
+            <div class="ab-sv-tier-sub">Holdings, BU internacionales</div>
+          </div>
+        </div>
+        <div class="ab-sv-foot">
+          <b>El cliente crece</b> — el banco lo acompaña sin que tenga que migrar
+        </div>
+      </div>
     </div>
 
-    <div class="ab-spectrum">
-      <div class="ab-segment">
-        <div class="ab-segment-icon s1">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    <!-- RIGHT: Slider con 4 pain/fix pareados -->
+    <div class="ab-rs-right">
+      <div class="ab-rs-slider" id="rsSlider" aria-roledescription="carousel">
+
+        <!-- SLIDE 0 — Cores fragmentados -->
+        <div class="ab-slide is-active" data-slide="0">
+          <div class="ab-slide-img">
+            <div class="ab-slide-img-pain"><div class="ab-slide-ph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><b>Foto del reto</b><span>1600 × 1000 · 3 cores aislados</span></div></div>
+            <div class="ab-slide-img-fix"><div class="ab-slide-ph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><b>Foto de la solución</b><span>1600 × 1000 · una core unificada</span></div></div>
+            <div class="ab-slide-img-divider"></div>
+          </div>
+          <div class="ab-slide-copy">
+            <div class="ab-slide-copy-pain"><span class="ab-slide-lbl">El reto</span><p>Una core para personas, otra para pymes, otra para corporate. Mantenimiento triplicado.</p></div>
+            <div class="ab-slide-copy-fix"><span class="ab-slide-lbl">La solución</span><p>Una sola Smart Platform multi-tier. Mismo motor, distintas caras según segmento.</p></div>
+          </div>
         </div>
-        <div class="ab-segment-label">Tier 1</div>
-        <div class="ab-segment-name">Monotributista &<br>Trabajador Indep.</div>
-        <div class="ab-segment-desc">Diseñadora freelance, kioskero, médico independiente. Quiere cobrar fácil, facturar y separar gastos.</div>
-        <div class="ab-segment-stack">
-          <span>Mobile</span><span>Smart</span><span>Social</span>
+
+        <!-- SLIDE 1 — Cliente que crece pierde historia -->
+        <div class="ab-slide" data-slide="1">
+          <div class="ab-slide-img">
+            <div class="ab-slide-img-pain"><div class="ab-slide-ph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><b>Foto del reto</b><span>1600 × 1000 · cliente migrando</span></div></div>
+            <div class="ab-slide-img-fix"><div class="ab-slide-ph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><b>Foto de la solución</b><span>1600 × 1000 · upgrade sin fricción</span></div></div>
+            <div class="ab-slide-img-divider"></div>
+          </div>
+          <div class="ab-slide-copy">
+            <div class="ab-slide-copy-pain"><span class="ab-slide-lbl">El reto</span><p>Mono → pyme → corporate. El banco lo trata como cliente nuevo cada vez.</p></div>
+            <div class="ab-slide-copy-fix"><span class="ab-slide-lbl">La solución</span><p>Tier-upgrade nativo. El cliente sube de segmento con su historia intacta.</p></div>
+          </div>
         </div>
+
+        <!-- SLIDE 2 — Time-to-market lento -->
+        <div class="ab-slide" data-slide="2">
+          <div class="ab-slide-img">
+            <div class="ab-slide-img-pain"><div class="ab-slide-ph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><b>Foto del reto</b><span>1600 × 1000 · 3 proyectos paralelos</span></div></div>
+            <div class="ab-slide-img-fix"><div class="ab-slide-ph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><b>Foto de la solución</b><span>1600 × 1000 · una config publicada</span></div></div>
+            <div class="ab-slide-img-divider"></div>
+          </div>
+          <div class="ab-slide-copy">
+            <div class="ab-slide-copy-pain"><span class="ab-slide-lbl">El reto</span><p>Lanzar un producto que sirva a mono + pyme requiere 3 proyectos paralelos.</p></div>
+            <div class="ab-slide-copy-fix"><span class="ab-slide-lbl">La solución</span><p>Back Office con productos modulares. Configurás una vez, publicás a todos los tiers.</p></div>
+          </div>
+        </div>
+
+        <!-- SLIDE 3 — Cross-sell ciego -->
+        <div class="ab-slide" data-slide="3">
+          <div class="ab-slide-img">
+            <div class="ab-slide-img-pain"><div class="ab-slide-ph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><b>Foto del reto</b><span>1600 × 1000 · oportunidad perdida</span></div></div>
+            <div class="ab-slide-img-fix"><div class="ab-slide-ph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><b>Foto de la solución</b><span>1600 × 1000 · oferta tier-aware</span></div></div>
+            <div class="ab-slide-img-divider"></div>
+          </div>
+          <div class="ab-slide-copy">
+            <div class="ab-slide-copy-pain"><span class="ab-slide-lbl">El reto</span><p>El banco no detecta cuándo el mono pasa a pyme, ni cuándo la pyme necesita FX.</p></div>
+            <div class="ab-slide-copy-fix"><span class="ab-slide-lbl">La solución</span><p>GURU detecta los cambios y dispara cross-sell tier-aware automáticamente.</p></div>
+          </div>
+        </div>
+
       </div>
-      <div class="ab-segment">
-        <div class="ab-segment-icon s2">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-        </div>
-        <div class="ab-segment-label">Tier 2</div>
-        <div class="ab-segment-name">Pyme</div>
-        <div class="ab-segment-desc">Panadería, software house, distribuidora. 10–100 empleados. Necesita cobrar, pagar nómina y entender su cash.</div>
-        <div class="ab-segment-stack">
-          <span>Web</span><span>Mobile</span><span>Smart</span>
-        </div>
-      </div>
-      <div class="ab-segment">
-        <div class="ab-segment-icon s3">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
-        </div>
-        <div class="ab-segment-label">Tier 3</div>
-        <div class="ab-segment-name">Corporativa</div>
-        <div class="ab-segment-desc">Multi-país, multimoneda, tesorería con CFO. Batch payments con multi-firma jerárquica, factoring y audit SOX.</div>
-        <div class="ab-segment-stack">
-          <span>Web</span><span>Back Office</span><span>Analytics</span>
-        </div>
-      </div>
-      <div class="ab-segment">
-        <div class="ab-segment-icon s4">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-        </div>
-        <div class="ab-segment-label">Tier 4</div>
-        <div class="ab-segment-name">Empresas<br>Globales</div>
-        <div class="ab-segment-desc">Grupos, holdings, BU internacionales. ERPs conectados, FX hedging, observability global. Open Finance API-first.</div>
-        <div class="ab-segment-stack">
-          <span>Open Finance</span><span>Analytics</span><span>Smart</span>
-        </div>
+
+      <div class="ab-rs-dots" role="tablist">
+        <button class="ab-rs-dot is-active" data-slide="0" aria-label="Cores fragmentados" role="tab"><span class="ab-rs-dot-fill"></span></button>
+        <button class="ab-rs-dot" data-slide="1" aria-label="Cliente que crece" role="tab"><span class="ab-rs-dot-fill"></span></button>
+        <button class="ab-rs-dot" data-slide="2" aria-label="Time-to-market" role="tab"><span class="ab-rs-dot-fill"></span></button>
+        <button class="ab-rs-dot" data-slide="3" aria-label="Cross-sell tier-aware" role="tab"><span class="ab-rs-dot-fill"></span></button>
       </div>
     </div>
 
-    <div class="ab-spectrum-note">
-      <b>El insight:</b> el mismo cliente atraviesa varios tiers a lo largo de su vida empresarial. Si el banco le obliga a cambiar de producto, app o canal en cada salto, lo pierde a la competencia. <b>All Business</b> mantiene la misma core con experiencias adaptadas — el cliente crece sin migrar.
-    </div>
   </div>
 </section>
 
@@ -1129,6 +1261,37 @@ function bindMixCards() {
 }
 
 renderMix();
+
+// ═══ Reto/Solución slider — All Business ═══
+gsap.fromTo('.ab-rs-left', { x: -30, opacity: 0 },
+  { x: 0, opacity: 1, duration: 0.9, ease: 'power3.out',
+    scrollTrigger: { trigger: '.ab-rs-grid', start: 'top 78%' } });
+gsap.fromTo('.ab-rs-right', { x: 30, opacity: 0 },
+  { x: 0, opacity: 1, duration: 0.9, ease: 'power3.out',
+    scrollTrigger: { trigger: '.ab-rs-grid', start: 'top 78%' } });
+
+const rsSlider = document.getElementById('rsSlider');
+const rsRight  = document.querySelector('.ab-rs-right');
+if (rsSlider && rsRight) {
+  const slides = rsSlider.querySelectorAll('.ab-slide');
+  const dots = document.querySelectorAll('.ab-rs-dot');
+  const DURATION = 5500;
+  let current = 0, timer = null, paused = false, started = false;
+  const activeFill = () => dots[current].querySelector('.ab-rs-dot-fill');
+  const resetAllFills = () => dots.forEach(d => { const f = d.querySelector('.ab-rs-dot-fill'); f.style.transition='none'; f.style.width='0'; });
+  function startProgress(ms){ const f=activeFill(); f.style.transition='none'; f.style.width='0'; void f.offsetWidth; f.style.transition=`width ${ms}ms linear`; f.style.width='100%'; }
+  function pauseProgress(){ const f=activeFill(); const w=f.getBoundingClientRect().width; f.style.transition='none'; f.style.width=w+'px'; }
+  function getRemainingMs(){ const d=dots[current],f=activeFill(); const dw=d.getBoundingClientRect().width,fw=f.getBoundingClientRect().width; return Math.max(0,DURATION*(1-(dw>0?fw/dw:0))); }
+  function scheduleNext(ms){ if(timer)clearTimeout(timer); timer=setTimeout(()=>goTo((current+1)%slides.length),ms); }
+  function goTo(idx){ if(timer){clearTimeout(timer);timer=null;} slides.forEach((s,i)=>s.classList.toggle('is-active',i===idx)); dots.forEach((d,i)=>d.classList.toggle('is-active',i===idx)); current=idx; resetAllFills(); if(!paused){startProgress(DURATION);scheduleNext(DURATION);} }
+  function pause(){ if(paused)return; paused=true; if(timer){clearTimeout(timer);timer=null;} pauseProgress(); }
+  function resume(){ if(!paused)return; paused=false; const r=getRemainingMs(); startProgress(r); scheduleNext(r); }
+  function startFirst(){ if(started)return; started=true; startProgress(DURATION); scheduleNext(DURATION); }
+  dots.forEach((d,i)=>d.addEventListener('click',()=>{paused=false;goTo(i);}));
+  rsRight.addEventListener('mouseenter',pause);
+  rsRight.addEventListener('mouseleave',resume);
+  ScrollTrigger.create({trigger:rsSlider,start:'top 75%',once:true,onEnter:startFirst});
+}
 </script>
 
 </body>

@@ -1114,9 +1114,70 @@
       position: relative; z-index: 2;
     }
 
+    /* ═══ RETO / SOLUCIÓN — schema (journey) + slider ═══ */
+    .pe-problem { padding: 140px 0; background: #fff; position: relative; overflow: hidden; }
+    .pe-problem-head { text-align: center; max-width: 760px; margin: 0 auto 80px; padding: 0 24px; }
+    .pe-problem-head h2 { font-size: clamp(36px, 3.6vw, 50px); font-weight: 800; line-height: 1.08; letter-spacing: -1.5px; margin: 12px 0 16px; }
+    .pe-problem-head h2 em { font-style: normal; color: var(--accent); }
+    .pe-problem-head p { font-size: 17px; line-height: 1.6; color: var(--sec); }
+    .pe-rs-grid { display: grid; grid-template-columns: 0.95fr 1.1fr; gap: 48px; align-items: stretch; max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+    .pe-rs-left { display: flex; }
+    .pe-rs-right { display: flex; flex-direction: column; gap: 16px; }
+    /* Lifecycle schema */
+    .pe-lifecycle { width: 100%; border-radius: 24px; background: linear-gradient(135deg, #EEF4FF 0%, #DBEAFE 100%); padding: 36px 32px; position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: center; gap: 14px; }
+    .pe-lifecycle::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle at 1px 1px, rgba(0,99,242,0.10) 1px, transparent 0); background-size: 24px 24px; pointer-events: none; }
+    .pe-lifecycle-head { position: relative; text-align: center; margin-bottom: 6px; }
+    .pe-lifecycle-head-label { font-size: 10px; font-weight: 800; color: var(--accent-d); letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 6px; }
+    .pe-lifecycle-head-title { font-size: 15px; font-weight: 700; color: var(--ink); letter-spacing: -0.2px; }
+    .pe-life-step { position: relative; display: grid; grid-template-columns: 40px 1fr auto; gap: 12px; align-items: center; padding: 14px 16px; background: #fff; border-radius: 12px; box-shadow: 0 6px 16px rgba(15,23,41,0.06); }
+    .pe-life-num { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--accent-d)); color: #fff; font-size: 14px; font-weight: 800; display: flex; align-items: center; justify-content: center; }
+    .pe-life-text { line-height: 1.25; }
+    .pe-life-title { font-size: 13px; font-weight: 800; color: var(--ink); }
+    .pe-life-sub { font-size: 10px; color: var(--muted); margin-top: 1px; }
+    .pe-life-tag { font-size: 9px; font-weight: 800; color: var(--accent-d); padding: 4px 8px; background: rgba(0,99,242,0.10); border-radius: 8px; letter-spacing: 0.04em; }
+    .pe-life-foot { position: relative; text-align: center; padding-top: 14px; margin-top: 6px; border-top: 1px solid rgba(15,23,41,0.08); font-size: 11px; color: var(--sec); }
+    .pe-life-foot b { color: var(--ink); font-weight: 800; }
+    /* Slider */
+    .pe-rs-slider { position: relative; flex: 1; min-height: 380px; background: #fff; border-radius: 22px; overflow: hidden; box-shadow: 0 20px 50px rgba(15,23,41,0.08); border: 1px solid var(--border); }
+    .pe-slide { position: absolute; inset: 0; opacity: 0; transition: opacity 0.6s var(--ease); pointer-events: none; display: flex; flex-direction: column; }
+    .pe-slide.is-active { opacity: 1; pointer-events: auto; }
+    .pe-slide-img { position: relative; width: 100%; flex: 1; min-height: 0; display: grid; grid-template-columns: 1fr 1fr; overflow: hidden; }
+    .pe-slide-img-pain, .pe-slide-img-fix { position: relative; background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; }
+    .pe-slide-img-pain { background: linear-gradient(135deg, #7F1D1D 0%, #DC2626 55%, #B91C1C 100%); }
+    .pe-slide-img-fix  { background: linear-gradient(135deg, #064E3B 0%, #059669 55%, #047857 100%); }
+    .pe-slide-img-pain::after, .pe-slide-img-fix::after { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 50% 100%, rgba(0,0,0,0.30), transparent 60%); }
+    .pe-slide-ph { position: relative; z-index: 2; color: rgba(255,255,255,0.96); text-align: center; padding: 16px 20px; background: rgba(0,0,0,0.20); border: 1.5px dashed rgba(255,255,255,0.45); border-radius: 12px; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 180px; }
+    .pe-slide-ph svg { width: 24px; height: 24px; opacity: 0.92; margin-bottom: 4px; }
+    .pe-slide-ph b { font-size: 13px; font-weight: 800; letter-spacing: 0.05em; }
+    .pe-slide-ph span { font-size: 10px; opacity: 0.78; font-family: var(--font-mono); letter-spacing: 0.04em; }
+    .pe-slide-img-divider { position: absolute; left: 50%; top: 0; bottom: 0; width: 2px; background: #fff; transform: translateX(-50%); box-shadow: 0 0 16px rgba(0,0,0,0.25); z-index: 3; }
+    .pe-slide-img-divider::before, .pe-slide-img-divider::after { content: ''; position: absolute; left: 50%; transform: translateX(-50%); width: 10px; height: 10px; background: #fff; border-radius: 50%; box-shadow: 0 4px 10px rgba(0,0,0,0.22); }
+    .pe-slide-img-divider::before { top: 14px; }
+    .pe-slide-img-divider::after  { bottom: 14px; }
+    .pe-slide-copy { flex-shrink: 0; display: grid; grid-template-columns: 1fr 1fr; }
+    .pe-slide-copy-pain, .pe-slide-copy-fix { padding: 22px 24px; display: flex; flex-direction: column; gap: 6px; }
+    .pe-slide-copy-pain { background: #FEF2F2; }
+    .pe-slide-copy-fix  { background: #ECFDF5; }
+    .pe-slide-lbl { display: inline-flex; align-items: center; gap: 6px; font-size: 10px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; }
+    .pe-slide-lbl::before { content: ''; width: 6px; height: 6px; border-radius: 50%; }
+    .pe-slide-copy-pain .pe-slide-lbl { color: #DC2626; }
+    .pe-slide-copy-pain .pe-slide-lbl::before { background: #DC2626; }
+    .pe-slide-copy-fix .pe-slide-lbl  { color: #059669; }
+    .pe-slide-copy-fix .pe-slide-lbl::before  { background: #059669; }
+    .pe-slide-copy-pain p, .pe-slide-copy-fix p { font-size: 14px; line-height: 1.5; font-weight: 600; letter-spacing: -0.1px; }
+    .pe-slide-copy-pain p { color: #7F1D1D; }
+    .pe-slide-copy-fix p  { color: #064E3B; }
+    .pe-rs-dots { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 4px 0 2px; }
+    .pe-rs-dot { position: relative; width: 28px; height: 6px; border-radius: 3px; border: none; background: var(--border); cursor: pointer; transition: background 0.3s, width 0.4s var(--ease); padding: 0; font-family: inherit; overflow: hidden; }
+    .pe-rs-dot:hover { background: var(--muted); }
+    .pe-rs-dot.is-active { width: 56px; background: rgba(0,99,242,0.18); }
+    .pe-rs-dot-fill { position: absolute; left: 0; top: 0; bottom: 0; width: 0; background: var(--accent); border-radius: inherit; pointer-events: none; }
+
     /* ── Responsive ──────────────────────────────────────────────────── */
     @media (max-width: 980px) {
       .pe-stats-row { grid-template-columns: repeat(2, 1fr); }
+      .pe-rs-grid { grid-template-columns: 1fr; gap: 36px; }
+      .pe-lifecycle { padding: 28px 24px; }
       .pe-mobile-inner { grid-template-columns: 1fr; gap: 60px; }
       .pe-pers-cards { grid-template-columns: 1fr; }
       .pe-conv-cards, .pe-conv-dark-cards { grid-template-columns: 1fr; }
@@ -1139,6 +1200,9 @@
       .pe-mod-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
       .pe-mod-card { min-height: 156px; padding: 16px 12px 12px; }
       .pe-mod-zone-head { flex-direction: column; align-items: flex-start; gap: 10px; }
+      .pe-slide-img { aspect-ratio: 4/3; }
+      .pe-slide-copy { grid-template-columns: 1fr; }
+      .pe-slide-copy-pain { border-bottom: 1px dashed rgba(15,23,41,0.10); }
     }
   </style>
 </head>
@@ -1209,6 +1273,128 @@
         </div>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- ═══ RETO · SOLUCIÓN ═══ -->
+<section class="pe-problem">
+  <div class="pe-problem-head">
+    <span class="label">EL RETO · LA SOLUCIÓN</span>
+    <h2 class="split-lines">Cuatro problemas reales<br>de la <em>banca persona</em></h2>
+    <p>Lo que los bancos siguen sin resolver para sus clientes individuos. Lo que IC Banking Suite responde.</p>
+  </div>
+
+  <div class="pe-rs-grid">
+
+    <!-- LEFT: Lifecycle schema -->
+    <div class="pe-rs-left">
+      <div class="pe-lifecycle">
+        <div class="pe-lifecycle-head">
+          <div class="pe-lifecycle-head-label">Toda la vida del cliente</div>
+          <div class="pe-lifecycle-head-title">Mismo banco, todas las etapas</div>
+        </div>
+        <div class="pe-life-step">
+          <div class="pe-life-num">1</div>
+          <div class="pe-life-text">
+            <div class="pe-life-title">Descubre el banco</div>
+            <div class="pe-life-sub">Web + SARA + campañas</div>
+          </div>
+          <span class="pe-life-tag">Captación</span>
+        </div>
+        <div class="pe-life-step">
+          <div class="pe-life-num">2</div>
+          <div class="pe-life-text">
+            <div class="pe-life-title">Se vuelve cliente</div>
+            <div class="pe-life-sub">Onboarding biométrico 8s</div>
+          </div>
+          <span class="pe-life-tag">Alta</span>
+        </div>
+        <div class="pe-life-step">
+          <div class="pe-life-num">3</div>
+          <div class="pe-life-text">
+            <div class="pe-life-title">Vive en el banco</div>
+            <div class="pe-life-sub">Mobile + Web + SARA + PFM</div>
+          </div>
+          <span class="pe-life-tag">Día a día</span>
+        </div>
+        <div class="pe-life-step">
+          <div class="pe-life-num">4</div>
+          <div class="pe-life-text">
+            <div class="pe-life-title">Crece con el banco</div>
+            <div class="pe-life-sub">Marketing + Analytics</div>
+          </div>
+          <span class="pe-life-tag">Fidelización</span>
+        </div>
+        <div class="pe-life-foot"><b>Una sola experiencia</b> que evoluciona con cada cliente</div>
+      </div>
+    </div>
+
+    <!-- RIGHT: Slider con 4 pain/fix pareados -->
+    <div class="pe-rs-right">
+      <div class="pe-rs-slider" id="rsSlider" aria-roledescription="carousel">
+
+        <!-- SLIDE 0 — App que no fideliza -->
+        <div class="pe-slide is-active" data-slide="0">
+          <div class="pe-slide-img">
+            <div class="pe-slide-img-pain"><div class="pe-slide-ph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><b>Foto del reto</b><span>1600 × 1000 · app abierta y cerrada</span></div></div>
+            <div class="pe-slide-img-fix"><div class="pe-slide-ph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><b>Foto de la solución</b><span>1600 × 1000 · cliente conversando</span></div></div>
+            <div class="pe-slide-img-divider"></div>
+          </div>
+          <div class="pe-slide-copy">
+            <div class="pe-slide-copy-pain"><span class="pe-slide-lbl">El reto</span><p>El cliente abre la app, hace su trámite y se va. No vuelve hasta la próxima.</p></div>
+            <div class="pe-slide-copy-fix"><span class="pe-slide-lbl">La solución</span><p>Banca conversacional con SARA: el cliente vuelve porque su banco le habla.</p></div>
+          </div>
+        </div>
+
+        <!-- SLIDE 1 — Productos genéricos -->
+        <div class="pe-slide" data-slide="1">
+          <div class="pe-slide-img">
+            <div class="pe-slide-img-pain"><div class="pe-slide-ph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><b>Foto del reto</b><span>1600 × 1000 · oferta genérica</span></div></div>
+            <div class="pe-slide-img-fix"><div class="pe-slide-ph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><b>Foto de la solución</b><span>1600 × 1000 · oferta personalizada</span></div></div>
+            <div class="pe-slide-img-divider"></div>
+          </div>
+          <div class="pe-slide-copy">
+            <div class="pe-slide-copy-pain"><span class="pe-slide-lbl">El reto</span><p>Todos reciben las mismas ofertas. El cliente nuevo y el de 10 años, igual.</p></div>
+            <div class="pe-slide-copy-fix"><span class="pe-slide-lbl">La solución</span><p>GURU + Marketing Automation personalizan cada producto, cada touchpoint, cada cliente.</p></div>
+          </div>
+        </div>
+
+        <!-- SLIDE 2 — Onboarding largo -->
+        <div class="pe-slide" data-slide="2">
+          <div class="pe-slide-img">
+            <div class="pe-slide-img-pain"><div class="pe-slide-ph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><b>Foto del reto</b><span>1600 × 1000 · formulario eterno</span></div></div>
+            <div class="pe-slide-img-fix"><div class="pe-slide-ph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><b>Foto de la solución</b><span>1600 × 1000 · alta en 8 segundos</span></div></div>
+            <div class="pe-slide-img-divider"></div>
+          </div>
+          <div class="pe-slide-copy">
+            <div class="pe-slide-copy-pain"><span class="pe-slide-lbl">El reto</span><p>Formularios eternos, 4 selfies, 48hs de espera. El 60% abandona el alta.</p></div>
+            <div class="pe-slide-copy-fix"><span class="pe-slide-lbl">La solución</span><p>Onboarding biométrico en 8 segundos. El cliente nuevo llega adentro la primera vez.</p></div>
+          </div>
+        </div>
+
+        <!-- SLIDE 3 — Sucursales saturadas -->
+        <div class="pe-slide" data-slide="3">
+          <div class="pe-slide-img">
+            <div class="pe-slide-img-pain"><div class="pe-slide-ph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><b>Foto del reto</b><span>1600 × 1000 · cola en sucursal</span></div></div>
+            <div class="pe-slide-img-fix"><div class="pe-slide-ph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><b>Foto de la solución</b><span>1600 × 1000 · cliente operando en mobile</span></div></div>
+            <div class="pe-slide-img-divider"></div>
+          </div>
+          <div class="pe-slide-copy">
+            <div class="pe-slide-copy-pain"><span class="pe-slide-lbl">El reto</span><p>Sucursales saturadas con trámites de 30 segundos. El cliente se va al banco vecino.</p></div>
+            <div class="pe-slide-copy-fix"><span class="pe-slide-lbl">La solución</span><p>Mobile + Web + SARA cubren el 95% de la operativa. La sucursal queda para lo que importa.</p></div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="pe-rs-dots" role="tablist">
+        <button class="pe-rs-dot is-active" data-slide="0" aria-label="Apps que no fidelizan" role="tab"><span class="pe-rs-dot-fill"></span></button>
+        <button class="pe-rs-dot" data-slide="1" aria-label="Productos genéricos" role="tab"><span class="pe-rs-dot-fill"></span></button>
+        <button class="pe-rs-dot" data-slide="2" aria-label="Onboarding largo" role="tab"><span class="pe-rs-dot-fill"></span></button>
+        <button class="pe-rs-dot" data-slide="3" aria-label="Sucursales saturadas" role="tab"><span class="pe-rs-dot-fill"></span></button>
+      </div>
+    </div>
+
   </div>
 </section>
 
@@ -1961,6 +2147,37 @@ gsap.fromTo('.pe-mod-cta',
   { y: 0, opacity: 1, duration: 0.7, ease: 'power3.out',
     scrollTrigger: { trigger: '.pe-mod-cta', start: 'top 90%' } }
 );
+
+// ═══ Reto/Solución slider — Personas ═══
+gsap.fromTo('.pe-rs-left', { x: -30, opacity: 0 },
+  { x: 0, opacity: 1, duration: 0.9, ease: 'power3.out',
+    scrollTrigger: { trigger: '.pe-rs-grid', start: 'top 78%' } });
+gsap.fromTo('.pe-rs-right', { x: 30, opacity: 0 },
+  { x: 0, opacity: 1, duration: 0.9, ease: 'power3.out',
+    scrollTrigger: { trigger: '.pe-rs-grid', start: 'top 78%' } });
+
+const rsSlider = document.getElementById('rsSlider');
+const rsRight  = document.querySelector('.pe-rs-right');
+if (rsSlider && rsRight) {
+  const slides = rsSlider.querySelectorAll('.pe-slide');
+  const dots = document.querySelectorAll('.pe-rs-dot');
+  const DURATION = 5500;
+  let current = 0, timer = null, paused = false, started = false;
+  const activeFill = () => dots[current].querySelector('.pe-rs-dot-fill');
+  const resetAllFills = () => dots.forEach(d => { const f = d.querySelector('.pe-rs-dot-fill'); f.style.transition='none'; f.style.width='0'; });
+  function startProgress(ms){ const f=activeFill(); f.style.transition='none'; f.style.width='0'; void f.offsetWidth; f.style.transition=`width ${ms}ms linear`; f.style.width='100%'; }
+  function pauseProgress(){ const f=activeFill(); const w=f.getBoundingClientRect().width; f.style.transition='none'; f.style.width=w+'px'; }
+  function getRemainingMs(){ const d=dots[current],f=activeFill(); const dw=d.getBoundingClientRect().width,fw=f.getBoundingClientRect().width; return Math.max(0,DURATION*(1-(dw>0?fw/dw:0))); }
+  function scheduleNext(ms){ if(timer)clearTimeout(timer); timer=setTimeout(()=>goTo((current+1)%slides.length),ms); }
+  function goTo(idx){ if(timer){clearTimeout(timer);timer=null;} slides.forEach((s,i)=>s.classList.toggle('is-active',i===idx)); dots.forEach((d,i)=>d.classList.toggle('is-active',i===idx)); current=idx; resetAllFills(); if(!paused){startProgress(DURATION);scheduleNext(DURATION);} }
+  function pause(){ if(paused)return; paused=true; if(timer){clearTimeout(timer);timer=null;} pauseProgress(); }
+  function resume(){ if(!paused)return; paused=false; const r=getRemainingMs(); startProgress(r); scheduleNext(r); }
+  function startFirst(){ if(started)return; started=true; startProgress(DURATION); scheduleNext(DURATION); }
+  dots.forEach((d,i)=>d.addEventListener('click',()=>{paused=false;goTo(i);}));
+  rsRight.addEventListener('mouseenter',pause);
+  rsRight.addEventListener('mouseleave',resume);
+  ScrollTrigger.create({trigger:rsSlider,start:'top 75%',once:true,onEnter:startFirst});
+}
 </script>
 
 </body>

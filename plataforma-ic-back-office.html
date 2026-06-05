@@ -375,21 +375,49 @@
 
     /* PROBLEM */
     .bo-problem { padding: 140px 0; background: #fff; position: relative; overflow: hidden; }
-    .bo-problem-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
-    .bo-problem-h2 { font-size: clamp(36px, 3.6vw, 50px); font-weight: 800; line-height: 1.08; letter-spacing: -1.5px; margin: 12px 0 20px; }
-    .bo-problem-h2 em { font-style: normal; color: var(--accent-d); }
-    .bo-problem-list { display: flex; flex-direction: column; gap: 14px; }
-    .bo-problem-item { display: flex; gap: 14px; align-items: flex-start; padding: 16px 18px; background: #FEF2F2; border-left: 3px solid #FCA5A5; border-radius: 8px; }
-    .bo-problem-item svg { width: 18px; height: 18px; color: #DC2626; flex-shrink: 0; margin-top: 1px; }
-    .bo-problem-item-text { font-size: 14px; line-height: 1.5; color: #7F1D1D; }
-    .bo-problem-item-text strong { color: #991B1B; font-weight: 700; }
-    .bo-arrow-down { display: flex; align-items: center; justify-content: center; gap: 14px; margin: 24px 0; color: var(--accent-d); font-weight: 700; font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; }
-    .bo-arrow-down::before, .bo-arrow-down::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, transparent, var(--accent-l), transparent); }
-    .bo-solution-list { display: flex; flex-direction: column; gap: 14px; }
-    .bo-solution-item { display: flex; gap: 14px; align-items: flex-start; padding: 16px 18px; background: #ECFDF5; border-left: 3px solid #6EE7B7; border-radius: 8px; }
-    .bo-solution-item svg { width: 18px; height: 18px; color: #059669; flex-shrink: 0; margin-top: 1px; }
-    .bo-solution-item-text { font-size: 14px; line-height: 1.5; color: #064E3B; }
-    .bo-solution-item-text strong { color: #047857; font-weight: 700; }
+        .bo-problem-head { text-align: center; max-width: 760px; margin: 0 auto 80px; padding: 0 24px; }
+    .bo-problem-head h2 { font-size: clamp(36px, 3.6vw, 50px); font-weight: 800; line-height: 1.08; letter-spacing: -1.5px; margin: 12px 0 16px; }
+    .bo-problem-head h2 em { font-style: normal; color: var(--accent); }
+    .bo-problem-head p { font-size: 17px; line-height: 1.6; color: var(--sec); }
+    /* Reto/Solución: schema + slider */
+    .bo-rs-grid { display: grid; grid-template-columns: 0.95fr 1.1fr; gap: 48px; align-items: stretch; max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+    .bo-rs-left  { display: flex; }
+    .bo-rs-right { display: flex; flex-direction: column; gap: 16px; }
+    .bo-rs-slider { position: relative; flex: 1; min-height: 380px; background: #fff; border-radius: 22px; overflow: hidden; box-shadow: 0 20px 50px rgba(15,23,41,0.08); border: 1px solid var(--border); }
+    .bo-slide { position: absolute; inset: 0; opacity: 0; transition: opacity 0.6s var(--ease); pointer-events: none; display: flex; flex-direction: column; }
+    .bo-slide.is-active { opacity: 1; pointer-events: auto; }
+    .bo-slide-img { position: relative; width: 100%; flex: 1; min-height: 0; display: grid; grid-template-columns: 1fr 1fr; overflow: hidden; }
+    .bo-slide-img-pain, .bo-slide-img-fix { position: relative; background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; }
+    .bo-slide-img-pain { background: linear-gradient(135deg, #7F1D1D 0%, #DC2626 55%, #B91C1C 100%); }
+    .bo-slide-img-fix  { background: linear-gradient(135deg, #064E3B 0%, #059669 55%, #047857 100%); }
+    .bo-slide-img-pain::after, .bo-slide-img-fix::after { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 50% 100%, rgba(0,0,0,0.30), transparent 60%); }
+    .bo-slide-ph { position: relative; z-index: 2; color: rgba(255,255,255,0.96); text-align: center; padding: 16px 20px; background: rgba(0,0,0,0.20); border: 1.5px dashed rgba(255,255,255,0.45); border-radius: 12px; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 180px; }
+    .bo-slide-ph svg { width: 24px; height: 24px; opacity: 0.92; margin-bottom: 4px; }
+    .bo-slide-ph b { font-size: 13px; font-weight: 800; letter-spacing: 0.05em; }
+    .bo-slide-ph span { font-size: 10px; opacity: 0.78; font-family: var(--font-mono); letter-spacing: 0.04em; }
+    .bo-slide-img-divider { position: absolute; left: 50%; top: 0; bottom: 0; width: 2px; background: #fff; transform: translateX(-50%); box-shadow: 0 0 16px rgba(0,0,0,0.25); z-index: 3; }
+    .bo-slide-img-divider::before, .bo-slide-img-divider::after { content: ''; position: absolute; left: 50%; transform: translateX(-50%); width: 10px; height: 10px; background: #fff; border-radius: 50%; box-shadow: 0 4px 10px rgba(0,0,0,0.22); }
+    .bo-slide-img-divider::before { top: 14px; }
+    .bo-slide-img-divider::after  { bottom: 14px; }
+    .bo-slide-copy { flex-shrink: 0; display: grid; grid-template-columns: 1fr 1fr; }
+    .bo-slide-copy-pain, .bo-slide-copy-fix { padding: 22px 24px; display: flex; flex-direction: column; gap: 6px; }
+    .bo-slide-copy-pain { background: #FEF2F2; }
+    .bo-slide-copy-fix  { background: #ECFDF5; }
+    .bo-slide-lbl { display: inline-flex; align-items: center; gap: 6px; font-size: 10px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; }
+    .bo-slide-lbl::before { content: ''; width: 6px; height: 6px; border-radius: 50%; }
+    .bo-slide-copy-pain .bo-slide-lbl { color: #DC2626; }
+    .bo-slide-copy-pain .bo-slide-lbl::before { background: #DC2626; }
+    .bo-slide-copy-fix .bo-slide-lbl  { color: #059669; }
+    .bo-slide-copy-fix .bo-slide-lbl::before  { background: #059669; }
+    .bo-slide-copy-pain p, .bo-slide-copy-fix p { font-size: 14px; line-height: 1.5; font-weight: 600; letter-spacing: -0.1px; }
+    .bo-slide-copy-pain p { color: #7F1D1D; }
+    .bo-slide-copy-fix p  { color: #064E3B; }
+    .bo-rs-dots { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 4px 0 2px; }
+    .bo-rs-dot { position: relative; width: 28px; height: 6px; border-radius: 3px; border: none; background: var(--border); cursor: pointer; transition: background 0.3s, width 0.4s var(--ease); padding: 0; font-family: inherit; overflow: hidden; }
+    .bo-rs-dot:hover { background: var(--muted); }
+    .bo-rs-dot.is-active { width: 56px; background: rgba(0,99,242,0.18); }
+    .bo-rs-dot-fill { position: absolute; left: 0; top: 0; bottom: 0; width: 0; background: var(--accent); border-radius: inherit; pointer-events: none; }
+    .bo-rs-left .bo-sla { width: 100%; aspect-ratio: auto; padding: 36px; display: flex; flex-direction: column; justify-content: center; }
 
     /* SLA comparison */
     .bo-sla { position: relative; aspect-ratio: 1/1; border-radius: 24px; background: linear-gradient(135deg, #F0FDF4 0%, #DCFCE7 100%); padding: 32px; overflow: hidden; }
@@ -691,7 +719,8 @@
       .bo-console-side { display: none; }
       .bo-console-kpi { display: none; }
       .bo-stats-grid { grid-template-columns: repeat(2, 1fr); gap: 24px; }
-      .bo-problem-grid { grid-template-columns: 1fr; gap: 50px; }
+      .bo-rs-grid { grid-template-columns: 1fr; gap: 36px; }
+      .bo-rs-left .bo-sla { padding: 28px; }
       .bo-caps-grid { grid-template-columns: repeat(2, 1fr); }
       .bo-action-inner { grid-template-columns: 1fr; gap: 50px; }
       .bo-mod-grid { grid-template-columns: repeat(3, 1fr); }
@@ -709,6 +738,9 @@
       .bo-hero { padding-top: 130px; padding-bottom: 60px; min-height: auto; }
       .bo-stats, .bo-problem, .bo-caps, .bo-action, .bo-modular, .bo-case, .cta-band { padding: 80px 0; }
       .bo-case-metrics { grid-template-columns: 1fr; }
+      .bo-slide-img { aspect-ratio: 4/3; }
+      .bo-slide-copy { grid-template-columns: 1fr; }
+      .bo-slide-copy-pain { border-bottom: 1px dashed rgba(15,23,41,0.10); }
     }
   </style>
 </head>
@@ -944,47 +976,18 @@
 </section>
 
 <!-- PROBLEM -->
+<!-- ═══ PROBLEM → SOLUTION (schema + slider) ═══ -->
 <section class="bo-problem">
-  <div class="container bo-problem-grid">
-    <div>
-      <span class="label">EL RETO · LA SOLUCIÓN</span>
-      <h2 class="bo-problem-h2 split-lines">El back-office no puede<br>vivir en <em>Excel + email</em></h2>
+  <div class="bo-problem-head">
+    <span class="label">EL RETO · LA SOLUCIÓN</span>
+    <h2 class="split-lines">Operaciones que <em>no necesitan</em><br>el equipo al teléfono</h2>
+    <p>Tres razones por las que las excepciones se vuelven crisis. Tres respuestas de IC Back Office.</p>
+  </div>
 
-      <div class="bo-problem-list">
-        <div class="bo-problem-item">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-          <div class="bo-problem-item-text"><strong>Disputas que duran días:</strong> cliente reclama un cargo, el ticket pasa por tres áreas, vuelve al agente original, llega un mail al gerente. Día 5.</div>
-        </div>
-        <div class="bo-problem-item">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-          <div class="bo-problem-item-text"><strong>Sin visibility real-time:</strong> el head de operaciones se entera de un pico de fraude por el reporte del lunes. Para entonces, ya perdió la batalla.</div>
-        </div>
-        <div class="bo-problem-item">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-          <div class="bo-problem-item-text"><strong>Auditoría = nightmare:</strong> reconstruir quién hizo qué y cuándo requiere tres sprints. El equipo de Riesgos vive pidiendo capturas.</div>
-        </div>
-      </div>
-
-      <div class="bo-arrow-down">Lo que cambiamos</div>
-
-      <div class="bo-solution-list">
-        <div class="bo-solution-item">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-          <div class="bo-solution-item-text"><strong>Console unificado.</strong> Disputas, reconciliaciones, batch, fraude — todo en un solo lugar con queue priorizada. El agente no pierde el contexto.</div>
-        </div>
-        <div class="bo-solution-item">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-          <div class="bo-solution-item-text"><strong>Workflows AI-assisted.</strong> GURU detecta el patrón, sugiere la resolución y prepara el refund. El agente aprueba con un click. La excepción se vuelve la regla.</div>
-        </div>
-        <div class="bo-solution-item">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-          <div class="bo-solution-item-text"><strong>Audit by design.</strong> Cada click, cada cambio, cada aprobación queda registrada. Auditoría externa pide el log, no las capturas.</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- SLA Comparison -->
-    <div class="bo-sla">
+  <div class="bo-rs-grid">
+    <!-- LEFT: Schema visual -->
+    <div class="bo-rs-left">
+      <div class="bo-sla">
       <div class="bo-sla-head">
         <div class="bo-sla-head-label">SLA · Resolución de disputas</div>
         <div class="bo-sla-head-title">Tiempo de ticket → resolución</div>
@@ -1008,6 +1011,51 @@
       <div class="bo-sla-foot">
         <div class="bo-sla-foot-num">540×</div>
         <div class="bo-sla-foot-lbl">más rápido</div>
+      
+      </div>
+    </div>
+
+    <!-- RIGHT: Slider con 3 pain/fix pareados -->
+    <div class="bo-rs-right">
+      <div class="bo-rs-slider" id="rsSlider" aria-roledescription="carousel">
+        <div class="bo-slide is-active" data-slide="0">
+          <div class="bo-slide-img">
+            <div class="bo-slide-img-pain"><div class="bo-slide-ph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><b>Foto del reto</b><span>1600 × 1000 · disputas que duran días</span></div></div>
+            <div class="bo-slide-img-fix"><div class="bo-slide-ph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><b>Foto de la solución</b><span>1600 × 1000 · ticket pasando entre áreas</span></div></div>
+            <div class="bo-slide-img-divider"></div>
+          </div>
+          <div class="bo-slide-copy">
+            <div class="bo-slide-copy-pain"><span class="bo-slide-lbl">El reto</span><p>El reclamo pasa por tres áreas, vuelve al agente original, llega un mail al gerente. Día 5.</p></div>
+            <div class="bo-slide-copy-fix"><span class="bo-slide-lbl">La solución</span><p>Console unificado. Disputas, batch, fraude — todo con queue priorizada sin perder contexto.</p></div>
+          </div>
+        </div>
+        <div class="bo-slide" data-slide="1">
+          <div class="bo-slide-img">
+            <div class="bo-slide-img-pain"><div class="bo-slide-ph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><b>Foto del reto</b><span>1600 × 1000 · sin visibility real-time</span></div></div>
+            <div class="bo-slide-img-fix"><div class="bo-slide-ph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><b>Foto de la solución</b><span>1600 × 1000 · head de ops enterándose el lunes</span></div></div>
+            <div class="bo-slide-img-divider"></div>
+          </div>
+          <div class="bo-slide-copy">
+            <div class="bo-slide-copy-pain"><span class="bo-slide-lbl">El reto</span><p>El head de operaciones se entera de un pico de fraude por el reporte del lunes.</p></div>
+            <div class="bo-slide-copy-fix"><span class="bo-slide-lbl">La solución</span><p>GURU detecta el patrón, sugiere la resolución. El agente aprueba con un click.</p></div>
+          </div>
+        </div>
+        <div class="bo-slide" data-slide="2">
+          <div class="bo-slide-img">
+            <div class="bo-slide-img-pain"><div class="bo-slide-ph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><b>Foto del reto</b><span>1600 × 1000 · auditoría imposible</span></div></div>
+            <div class="bo-slide-img-fix"><div class="bo-slide-ph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><b>Foto de la solución</b><span>1600 × 1000 · reconstruir quién hizo qué toma sprints</span></div></div>
+            <div class="bo-slide-img-divider"></div>
+          </div>
+          <div class="bo-slide-copy">
+            <div class="bo-slide-copy-pain"><span class="bo-slide-lbl">El reto</span><p>Reconstruir quién hizo qué y cuándo requiere tres sprints. Riesgos vive pidiendo capturas.</p></div>
+            <div class="bo-slide-copy-fix"><span class="bo-slide-lbl">La solución</span><p>Audit by design. Cada click registrado. Auditoría externa pide el log, no las capturas.</p></div>
+          </div>
+        </div>
+      </div>
+      <div class="bo-rs-dots" role="tablist">
+        <button class="bo-rs-dot is-active" data-slide="0" role="tab"><span class="bo-rs-dot-fill"></span></button>
+        <button class="bo-rs-dot" data-slide="1" role="tab"><span class="bo-rs-dot-fill"></span></button>
+        <button class="bo-rs-dot" data-slide="2" role="tab"><span class="bo-rs-dot-fill"></span></button>
       </div>
     </div>
   </div>
@@ -1431,10 +1479,37 @@ document.querySelectorAll('.bo-stat-num, .bo-case-metric-num').forEach(el => {
 gsap.fromTo('.bo-stat', { x: -20, opacity: 0 },
   { x: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: 'power3.out',
     scrollTrigger: { trigger: '.bo-stats-grid', start: 'top 85%' } });
-gsap.fromTo('.bo-problem-item', { x: -30, opacity: 0 },
-  { x: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: 'power3.out',
-    scrollTrigger: { trigger: '.bo-problem-list', start: 'top 82%' } });
-gsap.fromTo('.bo-solution-item', { x: -30, opacity: 0 },
+// Reto/Solución slider — schema entra desde izq, slider desde der
+gsap.fromTo('.bo-rs-left', { x: -30, opacity: 0 },
+  { x: 0, opacity: 1, duration: 0.9, ease: 'power3.out',
+    scrollTrigger: { trigger: '.bo-rs-grid', start: 'top 78%' } });
+gsap.fromTo('.bo-rs-right', { x: 30, opacity: 0 },
+  { x: 0, opacity: 1, duration: 0.9, ease: 'power3.out',
+    scrollTrigger: { trigger: '.bo-rs-grid', start: 'top 78%' } });
+
+// ═══ Image slider with progress + pause/resume ═══
+const rsSliderBO = document.getElementById('rsSlider');
+const rsRightBO  = document.querySelector('.bo-rs-right');
+if (rsSliderBO && rsRightBO) {
+  const slides   = rsSliderBO.querySelectorAll('.bo-slide');
+  const dots     = document.querySelectorAll('.bo-rs-dot');
+  const DURATION = 5500;
+  let current = 0, timer = null, paused = false, started = false;
+  const activeFill = () => dots[current].querySelector('.bo-rs-dot-fill');
+  const resetAllFills = () => dots.forEach(d => { const f = d.querySelector('.bo-rs-dot-fill'); f.style.transition='none'; f.style.width='0'; });
+  function startProgress(ms){ const f=activeFill(); f.style.transition='none'; f.style.width='0'; void f.offsetWidth; f.style.transition=`width ${ms}ms linear`; f.style.width='100%'; }
+  function pauseProgress(){ const f=activeFill(); const w=f.getBoundingClientRect().width; f.style.transition='none'; f.style.width=w+'px'; }
+  function getRemainingMs(){ const d=dots[current],f=activeFill(); const dw=d.getBoundingClientRect().width,fw=f.getBoundingClientRect().width; return Math.max(0,DURATION*(1-(dw>0?fw/dw:0))); }
+  function scheduleNext(ms){ if(timer)clearTimeout(timer); timer=setTimeout(()=>goTo((current+1)%slides.length),ms); }
+  function goTo(idx){ if(timer){clearTimeout(timer);timer=null;} slides.forEach((s,i)=>s.classList.toggle('is-active',i===idx)); dots.forEach((d,i)=>d.classList.toggle('is-active',i===idx)); current=idx; resetAllFills(); if(!paused){startProgress(DURATION);scheduleNext(DURATION);} }
+  function pause(){ if(paused)return; paused=true; if(timer){clearTimeout(timer);timer=null;} pauseProgress(); }
+  function resume(){ if(!paused)return; paused=false; const r=getRemainingMs(); startProgress(r); scheduleNext(r); }
+  function startFirst(){ if(started)return; started=true; startProgress(DURATION); scheduleNext(DURATION); }
+  dots.forEach((d,i)=>d.addEventListener('click',()=>{paused=false;goTo(i);}));
+  rsRightBO.addEventListener('mouseenter',pause);
+  rsRightBO.addEventListener('mouseleave',resume);
+  ScrollTrigger.create({trigger:rsSliderBO,start:'top 75%',once:true,onEnter:startFirst});
+}, { x: -30, opacity: 0 },
   { x: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: 'power3.out',
     scrollTrigger: { trigger: '.bo-solution-list', start: 'top 82%' } });
 gsap.fromTo('.bo-sla', { x: 40, opacity: 0 },

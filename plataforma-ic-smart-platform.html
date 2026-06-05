@@ -325,53 +325,51 @@
       position: relative;
       overflow: hidden;
     }
-    .sp-problem-grid {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
-    }
-    .sp-problem-h2 {
-      font-size: clamp(36px, 3.6vw, 50px);
-      font-weight: 800; line-height: 1.08; letter-spacing: -1.5px;
-      margin: 12px 0 20px;
-    }
-    .sp-problem-h2 em { font-style: normal; color: var(--accent); }
-    .sp-problem-body {
-      font-size: 16px; line-height: 1.65; color: var(--sec);
-      margin-bottom: 24px;
-    }
-    .sp-problem-list { display: flex; flex-direction: column; gap: 14px; }
-    .sp-problem-item {
-      display: flex; gap: 14px; align-items: flex-start;
-      padding: 16px 18px;
-      background: #FEF2F2;
-      border-left: 3px solid #FCA5A5;
-      border-radius: 8px;
-    }
-    .sp-problem-item svg { width: 18px; height: 18px; color: #DC2626; flex-shrink: 0; margin-top: 1px; }
-    .sp-problem-item-text { font-size: 14px; line-height: 1.5; color: #7F1D1D; }
-    .sp-problem-item-text strong { color: #991B1B; font-weight: 700; }
+    .sp-problem-head { text-align: center; max-width: 760px; margin: 0 auto 80px; padding: 0 24px; }
+    .sp-problem-head h2 { font-size: clamp(36px, 3.6vw, 50px); font-weight: 800; line-height: 1.08; letter-spacing: -1.5px; margin: 12px 0 16px; }
+    .sp-problem-head h2 em { font-style: normal; color: var(--accent); }
+    .sp-problem-head p { font-size: 17px; line-height: 1.6; color: var(--sec); }
 
-    .sp-arrow-down {
-      display: flex; align-items: center; justify-content: center; gap: 14px;
-      margin: 24px 0;
-      color: var(--accent); font-weight: 700; font-size: 13px;
-      letter-spacing: 0.1em; text-transform: uppercase;
-    }
-    .sp-arrow-down::before, .sp-arrow-down::after {
-      content: ''; flex: 1; height: 1px;
-      background: linear-gradient(90deg, transparent, var(--accent-l), transparent);
-    }
-
-    .sp-solution-list { display: flex; flex-direction: column; gap: 14px; }
-    .sp-solution-item {
-      display: flex; gap: 14px; align-items: flex-start;
-      padding: 16px 18px;
-      background: #ECFDF5;
-      border-left: 3px solid #6EE7B7;
-      border-radius: 8px;
-    }
-    .sp-solution-item svg { width: 18px; height: 18px; color: #059669; flex-shrink: 0; margin-top: 1px; }
-    .sp-solution-item-text { font-size: 14px; line-height: 1.5; color: #064E3B; }
-    .sp-solution-item-text strong { color: #047857; font-weight: 700; }
+    /* Reto/Solución: schema (orchestrator) + slider */
+    .sp-rs-grid { display: grid; grid-template-columns: 0.95fr 1.1fr; gap: 48px; align-items: stretch; max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+    .sp-rs-left  { display: flex; }
+    .sp-rs-right { display: flex; flex-direction: column; gap: 16px; }
+    .sp-rs-slider { position: relative; flex: 1; min-height: 380px; background: #fff; border-radius: 22px; overflow: hidden; box-shadow: 0 20px 50px rgba(15,23,41,0.08); border: 1px solid var(--border); }
+    .sp-slide { position: absolute; inset: 0; opacity: 0; transition: opacity 0.6s var(--ease); pointer-events: none; display: flex; flex-direction: column; }
+    .sp-slide.is-active { opacity: 1; pointer-events: auto; }
+    .sp-slide-img { position: relative; width: 100%; flex: 1; min-height: 0; display: grid; grid-template-columns: 1fr 1fr; overflow: hidden; }
+    .sp-slide-img-pain, .sp-slide-img-fix { position: relative; background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; }
+    .sp-slide-img-pain { background: linear-gradient(135deg, #7F1D1D 0%, #DC2626 55%, #B91C1C 100%); }
+    .sp-slide-img-fix  { background: linear-gradient(135deg, #064E3B 0%, #059669 55%, #047857 100%); }
+    .sp-slide-img-pain::after, .sp-slide-img-fix::after { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 50% 100%, rgba(0,0,0,0.30), transparent 60%); }
+    .sp-slide-ph { position: relative; z-index: 2; color: rgba(255,255,255,0.96); text-align: center; padding: 16px 20px; background: rgba(0,0,0,0.20); border: 1.5px dashed rgba(255,255,255,0.45); border-radius: 12px; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 180px; }
+    .sp-slide-ph svg { width: 24px; height: 24px; opacity: 0.92; margin-bottom: 4px; }
+    .sp-slide-ph b { font-size: 13px; font-weight: 800; letter-spacing: 0.05em; }
+    .sp-slide-ph span { font-size: 10px; opacity: 0.78; font-family: var(--font-mono); letter-spacing: 0.04em; }
+    .sp-slide-img-divider { position: absolute; left: 50%; top: 0; bottom: 0; width: 2px; background: #fff; transform: translateX(-50%); box-shadow: 0 0 16px rgba(0,0,0,0.25); z-index: 3; }
+    .sp-slide-img-divider::before, .sp-slide-img-divider::after { content: ''; position: absolute; left: 50%; transform: translateX(-50%); width: 10px; height: 10px; background: #fff; border-radius: 50%; box-shadow: 0 4px 10px rgba(0,0,0,0.22); }
+    .sp-slide-img-divider::before { top: 14px; }
+    .sp-slide-img-divider::after  { bottom: 14px; }
+    .sp-slide-copy { flex-shrink: 0; display: grid; grid-template-columns: 1fr 1fr; }
+    .sp-slide-copy-pain, .sp-slide-copy-fix { padding: 22px 24px; display: flex; flex-direction: column; gap: 6px; }
+    .sp-slide-copy-pain { background: #FEF2F2; }
+    .sp-slide-copy-fix  { background: #ECFDF5; }
+    .sp-slide-lbl { display: inline-flex; align-items: center; gap: 6px; font-size: 10px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; }
+    .sp-slide-lbl::before { content: ''; width: 6px; height: 6px; border-radius: 50%; }
+    .sp-slide-copy-pain .sp-slide-lbl { color: #DC2626; }
+    .sp-slide-copy-pain .sp-slide-lbl::before { background: #DC2626; }
+    .sp-slide-copy-fix .sp-slide-lbl  { color: #059669; }
+    .sp-slide-copy-fix .sp-slide-lbl::before  { background: #059669; }
+    .sp-slide-copy-pain p, .sp-slide-copy-fix p { font-size: 14px; line-height: 1.5; font-weight: 600; letter-spacing: -0.1px; }
+    .sp-slide-copy-pain p { color: #7F1D1D; }
+    .sp-slide-copy-fix p  { color: #064E3B; }
+    .sp-rs-dots { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 4px 0 2px; }
+    .sp-rs-dot { position: relative; width: 28px; height: 6px; border-radius: 3px; border: none; background: var(--border); cursor: pointer; transition: background 0.3s, width 0.4s var(--ease); padding: 0; font-family: inherit; overflow: hidden; }
+    .sp-rs-dot:hover { background: var(--muted); }
+    .sp-rs-dot.is-active { width: 56px; background: rgba(0,99,242,0.18); }
+    .sp-rs-dot-fill { position: absolute; left: 0; top: 0; bottom: 0; width: 0; background: var(--accent); border-radius: inherit; pointer-events: none; }
+    .sp-rs-left .sp-problem-visual { width: 100%; aspect-ratio: auto; padding: 36px; display: flex; }
+    .sp-rs-left .sp-orch-stage { width: 100%; min-height: 360px; }
 
     /* Right visual — orchestration diagram */
     .sp-problem-visual {
@@ -973,7 +971,8 @@
       .sp-hero-inner { grid-template-columns: 1fr; gap: 60px; }
       .sp-hex-stage { transform: scale(0.8); }
       .sp-stats-grid { grid-template-columns: repeat(2, 1fr); gap: 24px; }
-      .sp-problem-grid { grid-template-columns: 1fr; gap: 50px; }
+      .sp-rs-grid { grid-template-columns: 1fr; gap: 36px; }
+      .sp-rs-left .sp-problem-visual { padding: 28px; }
       .sp-caps-grid { grid-template-columns: repeat(2, 1fr); }
       .sp-action-inner { grid-template-columns: 1fr; gap: 50px; }
       .sp-mod-grid { grid-template-columns: repeat(3, 1fr); }
@@ -992,6 +991,9 @@
       .sp-hero { padding-top: 130px; padding-bottom: 60px; min-height: auto; }
       .sp-stats, .sp-problem, .sp-caps, .sp-action, .sp-modular, .sp-case, .cta-band { padding: 80px 0; }
       .sp-case-metrics { grid-template-columns: 1fr; }
+      .sp-slide-img { aspect-ratio: 4/3; }
+      .sp-slide-copy { grid-template-columns: 1fr; }
+      .sp-slide-copy-pain { border-bottom: 1px dashed rgba(15,23,41,0.10); }
     }
   </style>
 </head>
@@ -1102,46 +1104,17 @@
 
 <!-- ═══ 4. PROBLEM → SOLUTION ═══ -->
 <section class="sp-problem">
-  <div class="container sp-problem-grid">
-    <div>
-      <span class="label">El reto · La solución</span>
-      <h2 class="sp-problem-h2 split-lines">Por qué <em>importa</em><br>tener un motor central</h2>
+  <div class="sp-problem-head">
+    <span class="label">El reto · La solución</span>
+    <h2 class="split-lines">Por qué <em>importa</em><br>tener un motor central</h2>
+    <p>Tres problemas que enfrenta cualquier banco con canales fragmentados. Tres respuestas concretas de Smart Platform.</p>
+  </div>
 
-      <div class="sp-problem-list">
-        <div class="sp-problem-item">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-          <div class="sp-problem-item-text"><strong>Islas tecnológicas:</strong> cada canal tiene su backend, su lógica, su roadmap. Duplicación que no escala.</div>
-        </div>
-        <div class="sp-problem-item">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-          <div class="sp-problem-item-text"><strong>Experiencias inconsistentes:</strong> el cliente paga distinto en web que en app. Cada canal "interpreta" el banco a su manera.</div>
-        </div>
-        <div class="sp-problem-item">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-          <div class="sp-problem-item-text"><strong>Releases lentos:</strong> cambiar algo simple — un nuevo producto, una promo — toma meses porque hay que tocar 5 sistemas.</div>
-        </div>
-      </div>
+  <div class="sp-rs-grid">
 
-      <div class="sp-arrow-down">Cómo lo resolvemos</div>
-
-      <div class="sp-solution-list">
-        <div class="sp-solution-item">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-          <div class="sp-solution-item-text"><strong>Una sola capa de orquestación</strong> que absorbe las particularidades de los sistemas core y expone una experiencia consistente a cualquier canal.</div>
-        </div>
-        <div class="sp-solution-item">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-          <div class="sp-solution-item-text"><strong>Lo que se decide acá, se ve en todos lados:</strong> reglas de negocio, productos, beneficios. Un solo lugar para gobernar la experiencia.</div>
-        </div>
-        <div class="sp-solution-item">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-          <div class="sp-solution-item-text"><strong>Releases en semanas, no meses,</strong> con componentes reutilizables y APIs que aceleran la entrega sin sacrificar control ni compliance.</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Orchestration visual -->
-    <div class="sp-problem-visual">
+    <!-- LEFT: Schema (orchestration diagram) -->
+    <div class="sp-rs-left">
+      <div class="sp-problem-visual">
       <div class="sp-orch-stage">
         <svg class="sp-orch-lines" viewBox="0 0 400 400" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M 200 200 L 140 30"/>
@@ -1180,7 +1153,61 @@
           Back-Office
         </div>
       </div>
+      </div>
     </div>
+
+    <!-- RIGHT: Slider con 3 pain/fix pareados -->
+    <div class="sp-rs-right">
+      <div class="sp-rs-slider" id="rsSlider" aria-roledescription="carousel">
+
+        <!-- SLIDE 0 — Islas tecnológicas -->
+        <div class="sp-slide is-active" data-slide="0">
+          <div class="sp-slide-img">
+            <div class="sp-slide-img-pain"><div class="sp-slide-ph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><b>Foto del reto</b><span>1600 × 1000 · sistemas desconectados</span></div></div>
+            <div class="sp-slide-img-fix"><div class="sp-slide-ph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><b>Foto de la solución</b><span>1600 × 1000 · arquitectura unificada</span></div></div>
+            <div class="sp-slide-img-divider"></div>
+          </div>
+          <div class="sp-slide-copy">
+            <div class="sp-slide-copy-pain"><span class="sp-slide-lbl">El reto</span><p>Cada canal con su backend, su lógica, su roadmap. Duplicación que no escala.</p></div>
+            <div class="sp-slide-copy-fix"><span class="sp-slide-lbl">La solución</span><p>Una sola capa de orquestación que expone la misma experiencia a todos los canales.</p></div>
+          </div>
+        </div>
+
+        <!-- SLIDE 1 — Experiencias inconsistentes -->
+        <div class="sp-slide" data-slide="1">
+          <div class="sp-slide-img">
+            <div class="sp-slide-img-pain"><div class="sp-slide-ph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><b>Foto del reto</b><span>1600 × 1000 · cliente confundido</span></div></div>
+            <div class="sp-slide-img-fix"><div class="sp-slide-ph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><b>Foto de la solución</b><span>1600 × 1000 · cliente fluyendo</span></div></div>
+            <div class="sp-slide-img-divider"></div>
+          </div>
+          <div class="sp-slide-copy">
+            <div class="sp-slide-copy-pain"><span class="sp-slide-lbl">El reto</span><p>El cliente paga distinto en web que en app. Cada canal interpreta el banco a su manera.</p></div>
+            <div class="sp-slide-copy-fix"><span class="sp-slide-lbl">La solución</span><p>Lo que se decide acá, se ve en todos lados. Un solo lugar para gobernar la experiencia.</p></div>
+          </div>
+        </div>
+
+        <!-- SLIDE 2 — Releases lentos -->
+        <div class="sp-slide" data-slide="2">
+          <div class="sp-slide-img">
+            <div class="sp-slide-img-pain"><div class="sp-slide-ph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><b>Foto del reto</b><span>1600 × 1000 · equipo bloqueado</span></div></div>
+            <div class="sp-slide-img-fix"><div class="sp-slide-ph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><b>Foto de la solución</b><span>1600 × 1000 · release shipping</span></div></div>
+            <div class="sp-slide-img-divider"></div>
+          </div>
+          <div class="sp-slide-copy">
+            <div class="sp-slide-copy-pain"><span class="sp-slide-lbl">El reto</span><p>Cambiar algo simple toma meses porque hay que tocar 5 sistemas distintos.</p></div>
+            <div class="sp-slide-copy-fix"><span class="sp-slide-lbl">La solución</span><p>Releases en semanas con componentes reutilizables y APIs sin sacrificar compliance.</p></div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="sp-rs-dots" role="tablist">
+        <button class="sp-rs-dot is-active" data-slide="0" aria-label="Islas tecnológicas" role="tab"><span class="sp-rs-dot-fill"></span></button>
+        <button class="sp-rs-dot" data-slide="1" aria-label="Experiencias inconsistentes" role="tab"><span class="sp-rs-dot-fill"></span></button>
+        <button class="sp-rs-dot" data-slide="2" aria-label="Releases lentos" role="tab"><span class="sp-rs-dot-fill"></span></button>
+      </div>
+    </div>
+
   </div>
 </section>
 
@@ -1582,22 +1609,37 @@ gsap.fromTo('.sp-stat',
     scrollTrigger: { trigger: '.sp-stats-grid', start: 'top 85%' } }
 );
 
-// Problem/Solution stagger
-gsap.fromTo('.sp-problem-item',
-  { x: -30, opacity: 0 },
-  { x: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: 'power3.out',
-    scrollTrigger: { trigger: '.sp-problem-list', start: 'top 82%' } }
-);
-gsap.fromTo('.sp-solution-item',
-  { x: -30, opacity: 0 },
-  { x: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: 'power3.out',
-    scrollTrigger: { trigger: '.sp-solution-list', start: 'top 82%' } }
-);
-gsap.fromTo('.sp-problem-visual',
-  { x: 40, opacity: 0 },
+// Reto/Solución slider — schema entra desde izq, slider desde der
+gsap.fromTo('.sp-rs-left', { x: -30, opacity: 0 },
   { x: 0, opacity: 1, duration: 0.9, ease: 'power3.out',
-    scrollTrigger: { trigger: '.sp-problem-visual', start: 'top 82%' } }
-);
+    scrollTrigger: { trigger: '.sp-rs-grid', start: 'top 78%' } });
+gsap.fromTo('.sp-rs-right', { x: 30, opacity: 0 },
+  { x: 0, opacity: 1, duration: 0.9, ease: 'power3.out',
+    scrollTrigger: { trigger: '.sp-rs-grid', start: 'top 78%' } });
+
+// ═══ Image slider with progress + pause/resume ═══
+const rsSlider = document.getElementById('rsSlider');
+const rsRight  = document.querySelector('.sp-rs-right');
+if (rsSlider && rsRight) {
+  const slides   = rsSlider.querySelectorAll('.sp-slide');
+  const dots     = document.querySelectorAll('.sp-rs-dot');
+  const DURATION = 5500;
+  let current = 0, timer = null, paused = false, started = false;
+  const activeFill = () => dots[current].querySelector('.sp-rs-dot-fill');
+  const resetAllFills = () => dots.forEach(d => { const f = d.querySelector('.sp-rs-dot-fill'); f.style.transition='none'; f.style.width='0'; });
+  function startProgress(ms){ const f=activeFill(); f.style.transition='none'; f.style.width='0'; void f.offsetWidth; f.style.transition=`width ${ms}ms linear`; f.style.width='100%'; }
+  function pauseProgress(){ const f=activeFill(); const w=f.getBoundingClientRect().width; f.style.transition='none'; f.style.width=w+'px'; }
+  function getRemainingMs(){ const d=dots[current],f=activeFill(); const dw=d.getBoundingClientRect().width,fw=f.getBoundingClientRect().width; return Math.max(0,DURATION*(1-(dw>0?fw/dw:0))); }
+  function scheduleNext(ms){ if(timer)clearTimeout(timer); timer=setTimeout(()=>goTo((current+1)%slides.length),ms); }
+  function goTo(idx){ if(timer){clearTimeout(timer);timer=null;} slides.forEach((s,i)=>s.classList.toggle('is-active',i===idx)); dots.forEach((d,i)=>d.classList.toggle('is-active',i===idx)); current=idx; resetAllFills(); if(!paused){startProgress(DURATION);scheduleNext(DURATION);} }
+  function pause(){ if(paused)return; paused=true; if(timer){clearTimeout(timer);timer=null;} pauseProgress(); }
+  function resume(){ if(!paused)return; paused=false; const r=getRemainingMs(); startProgress(r); scheduleNext(r); }
+  function startFirst(){ if(started)return; started=true; startProgress(DURATION); scheduleNext(DURATION); }
+  dots.forEach((d,i)=>d.addEventListener('click',()=>{paused=false;goTo(i);}));
+  rsRight.addEventListener('mouseenter',pause);
+  rsRight.addEventListener('mouseleave',resume);
+  ScrollTrigger.create({trigger:rsSlider,start:'top 75%',once:true,onEnter:startFirst});
+}
 
 // Caps cards
 gsap.fromTo('.sp-cap-card',

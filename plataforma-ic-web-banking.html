@@ -464,47 +464,48 @@
        ║  SECTION 4 — PROBLEM → SOLUTION                                     ║
        ╚═══════════════════════════════════════════════════════════════════╝ */
     .wb-problem { padding: 140px 0; background: #fff; position: relative; overflow: hidden; }
-    .wb-problem-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
-    .wb-problem-h2 {
-      font-size: clamp(36px, 3.6vw, 50px);
-      font-weight: 800; line-height: 1.08; letter-spacing: -1.5px;
-      margin: 12px 0 20px;
-    }
-    .wb-problem-h2 em { font-style: normal; color: var(--accent); }
-    .wb-problem-list { display: flex; flex-direction: column; gap: 14px; }
-    .wb-problem-item {
-      display: flex; gap: 14px; align-items: flex-start;
-      padding: 16px 18px;
-      background: #FEF2F2;
-      border-left: 3px solid #FCA5A5;
-      border-radius: 8px;
-    }
-    .wb-problem-item svg { width: 18px; height: 18px; color: #DC2626; flex-shrink: 0; margin-top: 1px; }
-    .wb-problem-item-text { font-size: 14px; line-height: 1.5; color: #7F1D1D; }
-    .wb-problem-item-text strong { color: #991B1B; font-weight: 700; }
-
-    .wb-arrow-down {
-      display: flex; align-items: center; justify-content: center; gap: 14px;
-      margin: 24px 0;
-      color: var(--accent); font-weight: 700; font-size: 13px;
-      letter-spacing: 0.1em; text-transform: uppercase;
-    }
-    .wb-arrow-down::before, .wb-arrow-down::after {
-      content: ''; flex: 1; height: 1px;
-      background: linear-gradient(90deg, transparent, var(--accent-l), transparent);
-    }
-
-    .wb-solution-list { display: flex; flex-direction: column; gap: 14px; }
-    .wb-solution-item {
-      display: flex; gap: 14px; align-items: flex-start;
-      padding: 16px 18px;
-      background: #ECFDF5;
-      border-left: 3px solid #6EE7B7;
-      border-radius: 8px;
-    }
-    .wb-solution-item svg { width: 18px; height: 18px; color: #059669; flex-shrink: 0; margin-top: 1px; }
-    .wb-solution-item-text { font-size: 14px; line-height: 1.5; color: #064E3B; }
-    .wb-solution-item-text strong { color: #047857; font-weight: 700; }
+    .wb-problem-head { text-align: center; max-width: 760px; margin: 0 auto 80px; padding: 0 24px; }
+    .wb-problem-head h2 { font-size: clamp(36px, 3.6vw, 50px); font-weight: 800; line-height: 1.08; letter-spacing: -1.5px; margin: 12px 0 16px; }
+    .wb-problem-head h2 em { font-style: normal; color: var(--accent); }
+    .wb-problem-head p { font-size: 17px; line-height: 1.6; color: var(--sec); }
+    .wb-rs-grid { display: grid; grid-template-columns: 0.95fr 1.1fr; gap: 48px; align-items: stretch; max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+    .wb-rs-left  { display: flex; }
+    .wb-rs-right { display: flex; flex-direction: column; gap: 16px; }
+    .wb-rs-slider { position: relative; flex: 1; min-height: 380px; background: #fff; border-radius: 22px; overflow: hidden; box-shadow: 0 20px 50px rgba(15,23,41,0.08); border: 1px solid var(--border); }
+    .wb-slide { position: absolute; inset: 0; opacity: 0; transition: opacity 0.6s var(--ease); pointer-events: none; display: flex; flex-direction: column; }
+    .wb-slide.is-active { opacity: 1; pointer-events: auto; }
+    .wb-slide-img { position: relative; width: 100%; flex: 1; min-height: 0; display: grid; grid-template-columns: 1fr 1fr; overflow: hidden; }
+    .wb-slide-img-pain, .wb-slide-img-fix { position: relative; background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; }
+    .wb-slide-img-pain { background: linear-gradient(135deg, #7F1D1D 0%, #DC2626 55%, #B91C1C 100%); }
+    .wb-slide-img-fix  { background: linear-gradient(135deg, #064E3B 0%, #059669 55%, #047857 100%); }
+    .wb-slide-img-pain::after, .wb-slide-img-fix::after { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 50% 100%, rgba(0,0,0,0.30), transparent 60%); }
+    .wb-slide-ph { position: relative; z-index: 2; color: rgba(255,255,255,0.96); text-align: center; padding: 16px 20px; background: rgba(0,0,0,0.20); border: 1.5px dashed rgba(255,255,255,0.45); border-radius: 12px; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 180px; }
+    .wb-slide-ph svg { width: 24px; height: 24px; opacity: 0.92; margin-bottom: 4px; }
+    .wb-slide-ph b { font-size: 13px; font-weight: 800; letter-spacing: 0.05em; }
+    .wb-slide-ph span { font-size: 10px; opacity: 0.78; font-family: var(--font-mono); letter-spacing: 0.04em; }
+    .wb-slide-img-divider { position: absolute; left: 50%; top: 0; bottom: 0; width: 2px; background: #fff; transform: translateX(-50%); box-shadow: 0 0 16px rgba(0,0,0,0.25); z-index: 3; }
+    .wb-slide-img-divider::before, .wb-slide-img-divider::after { content: ''; position: absolute; left: 50%; transform: translateX(-50%); width: 10px; height: 10px; background: #fff; border-radius: 50%; box-shadow: 0 4px 10px rgba(0,0,0,0.22); }
+    .wb-slide-img-divider::before { top: 14px; }
+    .wb-slide-img-divider::after  { bottom: 14px; }
+    .wb-slide-copy { flex-shrink: 0; display: grid; grid-template-columns: 1fr 1fr; }
+    .wb-slide-copy-pain, .wb-slide-copy-fix { padding: 22px 24px; display: flex; flex-direction: column; gap: 6px; }
+    .wb-slide-copy-pain { background: #FEF2F2; }
+    .wb-slide-copy-fix  { background: #ECFDF5; }
+    .wb-slide-lbl { display: inline-flex; align-items: center; gap: 6px; font-size: 10px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; }
+    .wb-slide-lbl::before { content: ''; width: 6px; height: 6px; border-radius: 50%; }
+    .wb-slide-copy-pain .wb-slide-lbl { color: #DC2626; }
+    .wb-slide-copy-pain .wb-slide-lbl::before { background: #DC2626; }
+    .wb-slide-copy-fix .wb-slide-lbl  { color: #059669; }
+    .wb-slide-copy-fix .wb-slide-lbl::before  { background: #059669; }
+    .wb-slide-copy-pain p, .wb-slide-copy-fix p { font-size: 14px; line-height: 1.5; font-weight: 600; letter-spacing: -0.1px; }
+    .wb-slide-copy-pain p { color: #7F1D1D; }
+    .wb-slide-copy-fix p  { color: #064E3B; }
+    .wb-rs-dots { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 4px 0 2px; }
+    .wb-rs-dot { position: relative; width: 28px; height: 6px; border-radius: 3px; border: none; background: var(--border); cursor: pointer; transition: background 0.3s, width 0.4s var(--ease); padding: 0; font-family: inherit; overflow: hidden; }
+    .wb-rs-dot:hover { background: var(--muted); }
+    .wb-rs-dot.is-active { width: 56px; background: rgba(0,99,242,0.18); }
+    .wb-rs-dot-fill { position: absolute; left: 0; top: 0; bottom: 0; width: 0; background: var(--accent); border-radius: inherit; pointer-events: none; }
+    .wb-rs-left .wb-perf { width: 100%; aspect-ratio: auto; }
 
     /* Web performance visual */
     .wb-perf {
@@ -1052,7 +1053,7 @@
       .wb-hero-inner { grid-template-columns: 1fr; gap: 60px; }
       .wb-devices { height: 400px; }
       .wb-stats-grid { grid-template-columns: repeat(2, 1fr); gap: 24px; }
-      .wb-problem-grid { grid-template-columns: 1fr; gap: 50px; }
+      .wb-rs-grid { grid-template-columns: 1fr; gap: 36px; }
       .wb-caps-grid { grid-template-columns: repeat(2, 1fr); }
       .wb-bp-frame.desktop { max-width: 100%; }
       .wb-mod-grid { grid-template-columns: repeat(3, 1fr); }
@@ -1071,6 +1072,9 @@
       .wb-hero { padding-top: 130px; padding-bottom: 60px; min-height: auto; }
       .wb-stats, .wb-problem, .wb-caps, .wb-action, .wb-modular, .wb-case, .cta-band { padding: 80px 0; }
       .wb-case-metrics { grid-template-columns: 1fr; }
+      .wb-slide-img { aspect-ratio: 4/3; }
+      .wb-slide-copy { grid-template-columns: 1fr; }
+      .wb-slide-copy-pain { border-bottom: 1px dashed rgba(15,23,41,0.10); }
       .wb-bp-tabs { flex-wrap: wrap; }
       .wb-bp-stats { grid-template-columns: repeat(2, 1fr); }
     }
@@ -1267,46 +1271,15 @@
 
 <!-- ═══ 4. PROBLEM → SOLUTION ═══ -->
 <section class="wb-problem">
-  <div class="container wb-problem-grid">
-    <div>
-      <span class="label">EL RETO · LA SOLUCIÓN</span>
-      <h2 class="wb-problem-h2 split-lines">Si la web no <em>sigue el</em><br>ritmo de la app, el cliente se va</h2>
+  <div class="wb-problem-head">
+    <span class="label">EL RETO · LA SOLUCIÓN</span>
+    <h2 class="split-lines">Si la web no <em>sigue el</em><br>ritmo de la app, el cliente se va</h2>
+    <p>Tres problemas que matan la conversión en banca web. Tres respuestas concretas.</p>
+  </div>
 
-      <div class="wb-problem-list">
-        <div class="wb-problem-item">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-          <div class="wb-problem-item-text"><strong>Webs corporativas pesadas:</strong> 6 segundos de carga, frameworks duplicados, scripts de medición sobre scripts de medición.</div>
-        </div>
-        <div class="wb-problem-item">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-          <div class="wb-problem-item-text"><strong>Versión "mobile" que es CSS achicado:</strong> botones imposibles de tocar, formularios fuera de pantalla, scroll horizontal accidental.</div>
-        </div>
-        <div class="wb-problem-item">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-          <div class="wb-problem-item-text"><strong>Web y App que parecen bancos distintos:</strong> mismo logo, distinto lenguaje, distinta lógica. El cliente se confunde y abandona.</div>
-        </div>
-      </div>
-
-      <div class="wb-arrow-down">Lo que cambiamos</div>
-
-      <div class="wb-solution-list">
-        <div class="wb-solution-item">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-          <div class="wb-solution-item-text"><strong>Performance budget de 1.8s.</strong> Si una funcionalidad nueva rompe el budget, no entra. Core Web Vitals verde en producción.</div>
-        </div>
-        <div class="wb-solution-item">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-          <div class="wb-solution-item-text"><strong>Touch-first responsive real.</strong> Áreas táctiles, gestos y formularios pensados para el dedo antes que para el mouse. La compatibilidad con desktop viene gratis.</div>
-        </div>
-        <div class="wb-solution-item">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-          <div class="wb-solution-item-text"><strong>Design system compartido con la app.</strong> Mismo lenguaje, mismas reglas, misma marca. El cliente abre la web o la app y sabe dónde está.</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Performance visual -->
-    <div class="wb-perf">
+  <div class="wb-rs-grid">
+    <div class="wb-rs-left">
+      <div class="wb-perf">
       <div class="wb-perf-head">
         <div class="wb-perf-head-label">Benchmark vs banca tradicional</div>
         <div class="wb-perf-head-title">Core Web Vitals · LCP</div>
@@ -1354,6 +1327,50 @@
           <div class="wb-perf-foot-num">100%</div>
           <div class="wb-perf-foot-lbl">WCAG AA</div>
         </div>
+      </div>
+      </div>
+    </div>
+
+    <div class="wb-rs-right">
+      <div class="wb-rs-slider" id="rsSlider" aria-roledescription="carousel">
+        <div class="wb-slide is-active" data-slide="0">
+          <div class="wb-slide-img">
+            <div class="wb-slide-img-pain"><div class="wb-slide-ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><b>Foto del reto</b><span>1600 × 1000 · pantalla lenta</span></div></div>
+            <div class="wb-slide-img-fix"><div class="wb-slide-ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><b>Foto de la solución</b><span>1600 × 1000 · sitio veloz</span></div></div>
+            <div class="wb-slide-img-divider"></div>
+          </div>
+          <div class="wb-slide-copy">
+            <div class="wb-slide-copy-pain"><span class="wb-slide-lbl">El reto</span><p>6 segundos de carga, frameworks duplicados, scripts sobre scripts.</p></div>
+            <div class="wb-slide-copy-fix"><span class="wb-slide-lbl">La solución</span><p>Performance budget de 1.8s. Core Web Vitals verde en producción.</p></div>
+          </div>
+        </div>
+        <div class="wb-slide" data-slide="1">
+          <div class="wb-slide-img">
+            <div class="wb-slide-img-pain"><div class="wb-slide-ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><b>Foto del reto</b><span>1600 × 1000 · scroll horizontal</span></div></div>
+            <div class="wb-slide-img-fix"><div class="wb-slide-ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><b>Foto de la solución</b><span>1600 × 1000 · touch fluido</span></div></div>
+            <div class="wb-slide-img-divider"></div>
+          </div>
+          <div class="wb-slide-copy">
+            <div class="wb-slide-copy-pain"><span class="wb-slide-lbl">El reto</span><p>Versión "mobile" que es CSS achicado. Botones imposibles de tocar.</p></div>
+            <div class="wb-slide-copy-fix"><span class="wb-slide-lbl">La solución</span><p>Touch-first responsive real. Pensado para el dedo, no para el mouse.</p></div>
+          </div>
+        </div>
+        <div class="wb-slide" data-slide="2">
+          <div class="wb-slide-img">
+            <div class="wb-slide-img-pain"><div class="wb-slide-ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><b>Foto del reto</b><span>1600 × 1000 · web y app distintas</span></div></div>
+            <div class="wb-slide-img-fix"><div class="wb-slide-ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><b>Foto de la solución</b><span>1600 × 1000 · DS unificado</span></div></div>
+            <div class="wb-slide-img-divider"></div>
+          </div>
+          <div class="wb-slide-copy">
+            <div class="wb-slide-copy-pain"><span class="wb-slide-lbl">El reto</span><p>Web y App que parecen bancos distintos. El cliente se confunde y abandona.</p></div>
+            <div class="wb-slide-copy-fix"><span class="wb-slide-lbl">La solución</span><p>Design system compartido. Mismo lenguaje, mismas reglas, misma marca.</p></div>
+          </div>
+        </div>
+      </div>
+      <div class="wb-rs-dots" role="tablist">
+        <button class="wb-rs-dot is-active" data-slide="0" role="tab"><span class="wb-rs-dot-fill"></span></button>
+        <button class="wb-rs-dot" data-slide="1" role="tab"><span class="wb-rs-dot-fill"></span></button>
+        <button class="wb-rs-dot" data-slide="2" role="tab"><span class="wb-rs-dot-fill"></span></button>
       </div>
     </div>
   </div>
@@ -1738,15 +1755,35 @@ document.querySelectorAll('.wb-stat-num, .wb-case-metric-num').forEach(el => {
 gsap.fromTo('.wb-stat', { x: -20, opacity: 0 },
   { x: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: 'power3.out',
     scrollTrigger: { trigger: '.wb-stats-grid', start: 'top 85%' } });
-gsap.fromTo('.wb-problem-item', { x: -30, opacity: 0 },
-  { x: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: 'power3.out',
-    scrollTrigger: { trigger: '.wb-problem-list', start: 'top 82%' } });
-gsap.fromTo('.wb-solution-item', { x: -30, opacity: 0 },
-  { x: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: 'power3.out',
-    scrollTrigger: { trigger: '.wb-solution-list', start: 'top 82%' } });
-gsap.fromTo('.wb-perf', { x: 40, opacity: 0 },
+gsap.fromTo('.wb-rs-left', { x: -30, opacity: 0 },
   { x: 0, opacity: 1, duration: 0.9, ease: 'power3.out',
-    scrollTrigger: { trigger: '.wb-perf', start: 'top 82%' } });
+    scrollTrigger: { trigger: '.wb-rs-grid', start: 'top 78%' } });
+gsap.fromTo('.wb-rs-right', { x: 30, opacity: 0 },
+  { x: 0, opacity: 1, duration: 0.9, ease: 'power3.out',
+    scrollTrigger: { trigger: '.wb-rs-grid', start: 'top 78%' } });
+
+const rsSlider = document.getElementById('rsSlider');
+const rsRight  = document.querySelector('.wb-rs-right');
+if (rsSlider && rsRight) {
+  const slides = rsSlider.querySelectorAll('.wb-slide');
+  const dots = document.querySelectorAll('.wb-rs-dot');
+  const DURATION = 5500;
+  let current = 0, timer = null, paused = false, started = false;
+  const activeFill = () => dots[current].querySelector('.wb-rs-dot-fill');
+  const resetAllFills = () => dots.forEach(d => { const f = d.querySelector('.wb-rs-dot-fill'); f.style.transition='none'; f.style.width='0'; });
+  function startProgress(ms){ const f=activeFill(); f.style.transition='none'; f.style.width='0'; void f.offsetWidth; f.style.transition=`width ${ms}ms linear`; f.style.width='100%'; }
+  function pauseProgress(){ const f=activeFill(); const w=f.getBoundingClientRect().width; f.style.transition='none'; f.style.width=w+'px'; }
+  function getRemainingMs(){ const d=dots[current],f=activeFill(); const dw=d.getBoundingClientRect().width,fw=f.getBoundingClientRect().width; return Math.max(0,DURATION*(1-(dw>0?fw/dw:0))); }
+  function scheduleNext(ms){ if(timer)clearTimeout(timer); timer=setTimeout(()=>goTo((current+1)%slides.length),ms); }
+  function goTo(idx){ if(timer){clearTimeout(timer);timer=null;} slides.forEach((s,i)=>s.classList.toggle('is-active',i===idx)); dots.forEach((d,i)=>d.classList.toggle('is-active',i===idx)); current=idx; resetAllFills(); if(!paused){startProgress(DURATION);scheduleNext(DURATION);} }
+  function pause(){ if(paused)return; paused=true; if(timer){clearTimeout(timer);timer=null;} pauseProgress(); }
+  function resume(){ if(!paused)return; paused=false; const r=getRemainingMs(); startProgress(r); scheduleNext(r); }
+  function startFirst(){ if(started)return; started=true; startProgress(DURATION); scheduleNext(DURATION); }
+  dots.forEach((d,i)=>d.addEventListener('click',()=>{paused=false;goTo(i);}));
+  rsRight.addEventListener('mouseenter',pause);
+  rsRight.addEventListener('mouseleave',resume);
+  ScrollTrigger.create({trigger:rsSlider,start:'top 75%',once:true,onEnter:startFirst});
+}
 gsap.fromTo('.wb-cap-card', { y: 30, opacity: 0 },
   { y: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: 'power3.out',
     scrollTrigger: { trigger: '.wb-caps-grid', start: 'top 82%' } });

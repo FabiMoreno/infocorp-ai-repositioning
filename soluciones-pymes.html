@@ -244,21 +244,50 @@
        ║  PROBLEM → SOLUTION                                                 ║
        ╚═══════════════════════════════════════════════════════════════════╝ */
     .py-problem { padding: 140px 0; background: #fff; position: relative; overflow: hidden; }
-    .py-problem-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
-    .py-problem-h2 { font-size: clamp(36px, 3.6vw, 50px); font-weight: 800; line-height: 1.08; letter-spacing: -1.5px; margin: 12px 0 20px; }
-    .py-problem-h2 em { font-style: normal; color: var(--accent); }
-    .py-problem-list { display: flex; flex-direction: column; gap: 14px; }
-    .py-problem-item { display: flex; gap: 14px; align-items: flex-start; padding: 16px 18px; background: #FEF2F2; border-left: 3px solid #FCA5A5; border-radius: 8px; }
-    .py-problem-item svg { width: 18px; height: 18px; color: #DC2626; flex-shrink: 0; margin-top: 1px; }
-    .py-problem-item-text { font-size: 14px; line-height: 1.5; color: #7F1D1D; }
-    .py-problem-item-text strong { color: #991B1B; font-weight: 700; }
-    .py-arrow-down { display: flex; align-items: center; justify-content: center; gap: 14px; margin: 24px 0; color: var(--accent); font-weight: 700; font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; }
-    .py-arrow-down::before, .py-arrow-down::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, transparent, var(--accent-l), transparent); }
-    .py-solution-list { display: flex; flex-direction: column; gap: 14px; }
-    .py-solution-item { display: flex; gap: 14px; align-items: flex-start; padding: 16px 18px; background: #ECFDF5; border-left: 3px solid #6EE7B7; border-radius: 8px; }
-    .py-solution-item svg { width: 18px; height: 18px; color: #059669; flex-shrink: 0; margin-top: 1px; }
-    .py-solution-item-text { font-size: 14px; line-height: 1.5; color: #064E3B; }
-    .py-solution-item-text strong { color: #047857; font-weight: 700; }
+    .py-problem-head { text-align: center; max-width: 760px; margin: 0 auto 80px; padding: 0 24px; }
+    .py-problem-head h2 { font-size: clamp(36px, 3.6vw, 50px); font-weight: 800; line-height: 1.08; letter-spacing: -1.5px; margin: 12px 0 16px; }
+    .py-problem-head h2 em { font-style: normal; color: var(--accent); }
+    .py-problem-head p { font-size: 17px; line-height: 1.6; color: var(--sec); }
+
+    /* Reto/Solución: schema (personas) + slider */
+    .py-rs-grid { display: grid; grid-template-columns: 0.95fr 1.1fr; gap: 48px; align-items: stretch; max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+    .py-rs-left  { display: flex; }
+    .py-rs-right { display: flex; flex-direction: column; gap: 16px; }
+    .py-rs-slider { position: relative; flex: 1; min-height: 380px; background: #fff; border-radius: 22px; overflow: hidden; box-shadow: 0 20px 50px rgba(15,23,41,0.08); border: 1px solid var(--border); }
+    .py-slide { position: absolute; inset: 0; opacity: 0; transition: opacity 0.6s var(--ease); pointer-events: none; display: flex; flex-direction: column; }
+    .py-slide.is-active { opacity: 1; pointer-events: auto; }
+    .py-slide-img { position: relative; width: 100%; flex: 1; min-height: 0; display: grid; grid-template-columns: 1fr 1fr; overflow: hidden; }
+    .py-slide-img-pain, .py-slide-img-fix { position: relative; background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; }
+    .py-slide-img-pain { background: linear-gradient(135deg, #7F1D1D 0%, #DC2626 55%, #B91C1C 100%); }
+    .py-slide-img-fix  { background: linear-gradient(135deg, #064E3B 0%, #059669 55%, #047857 100%); }
+    .py-slide-img-pain::after, .py-slide-img-fix::after { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 50% 100%, rgba(0,0,0,0.30), transparent 60%); }
+    .py-slide-ph { position: relative; z-index: 2; color: rgba(255,255,255,0.96); text-align: center; padding: 16px 20px; background: rgba(0,0,0,0.20); border: 1.5px dashed rgba(255,255,255,0.45); border-radius: 12px; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 180px; }
+    .py-slide-ph svg { width: 24px; height: 24px; opacity: 0.92; margin-bottom: 4px; }
+    .py-slide-ph b { font-size: 13px; font-weight: 800; letter-spacing: 0.05em; }
+    .py-slide-ph span { font-size: 10px; opacity: 0.78; font-family: var(--font-mono); letter-spacing: 0.04em; }
+    .py-slide-img-divider { position: absolute; left: 50%; top: 0; bottom: 0; width: 2px; background: #fff; transform: translateX(-50%); box-shadow: 0 0 16px rgba(0,0,0,0.25); z-index: 3; }
+    .py-slide-img-divider::before, .py-slide-img-divider::after { content: ''; position: absolute; left: 50%; transform: translateX(-50%); width: 10px; height: 10px; background: #fff; border-radius: 50%; box-shadow: 0 4px 10px rgba(0,0,0,0.22); }
+    .py-slide-img-divider::before { top: 14px; }
+    .py-slide-img-divider::after  { bottom: 14px; }
+    .py-slide-copy { flex-shrink: 0; display: grid; grid-template-columns: 1fr 1fr; }
+    .py-slide-copy-pain, .py-slide-copy-fix { padding: 22px 24px; display: flex; flex-direction: column; gap: 6px; }
+    .py-slide-copy-pain { background: #FEF2F2; }
+    .py-slide-copy-fix  { background: #ECFDF5; }
+    .py-slide-lbl { display: inline-flex; align-items: center; gap: 6px; font-size: 10px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; }
+    .py-slide-lbl::before { content: ''; width: 6px; height: 6px; border-radius: 50%; }
+    .py-slide-copy-pain .py-slide-lbl { color: #DC2626; }
+    .py-slide-copy-pain .py-slide-lbl::before { background: #DC2626; }
+    .py-slide-copy-fix .py-slide-lbl  { color: #059669; }
+    .py-slide-copy-fix .py-slide-lbl::before  { background: #059669; }
+    .py-slide-copy-pain p, .py-slide-copy-fix p { font-size: 14px; line-height: 1.5; font-weight: 600; letter-spacing: -0.1px; }
+    .py-slide-copy-pain p { color: #7F1D1D; }
+    .py-slide-copy-fix p  { color: #064E3B; }
+    .py-rs-dots { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 4px 0 2px; }
+    .py-rs-dot { position: relative; width: 28px; height: 6px; border-radius: 3px; border: none; background: var(--border); cursor: pointer; transition: background 0.3s, width 0.4s var(--ease); padding: 0; font-family: inherit; overflow: hidden; }
+    .py-rs-dot:hover { background: var(--muted); }
+    .py-rs-dot.is-active { width: 56px; background: rgba(0,99,242,0.18); }
+    .py-rs-dot-fill { position: absolute; left: 0; top: 0; bottom: 0; width: 0; background: var(--accent); border-radius: inherit; pointer-events: none; }
+    .py-rs-left .py-personas { width: 100%; aspect-ratio: auto; padding: 32px 28px; display: flex; flex-direction: column; justify-content: center; }
 
     /* Pyme persona card cluster */
     .py-personas {
@@ -677,7 +706,8 @@
       .py-hero-inner { grid-template-columns: 1fr; gap: 60px; }
       .py-phone-overlay { display: none; }
       .py-stats-grid { grid-template-columns: repeat(2, 1fr); gap: 24px; }
-      .py-problem-grid { grid-template-columns: 1fr; gap: 50px; }
+      .py-rs-grid { grid-template-columns: 1fr; gap: 36px; }
+      .py-rs-left .py-personas { padding: 28px 24px; }
       .py-mix-grid { grid-template-columns: repeat(3, 1fr); }
       .py-mix-board { padding: 28px; }
       .py-outcomes-grid { grid-template-columns: 1fr; }
@@ -695,6 +725,9 @@
       .py-hero { padding-top: 130px; padding-bottom: 60px; min-height: auto; }
       .py-stats, .py-problem, .py-mix, .py-outcomes, .py-day, .py-case, .cta-band { padding: 80px 0; }
       .py-case-metrics { grid-template-columns: 1fr; }
+      .py-slide-img { aspect-ratio: 4/3; }
+      .py-slide-copy { grid-template-columns: 1fr; }
+      .py-slide-copy-pain { border-bottom: 1px dashed rgba(15,23,41,0.10); }
     }
   </style>
 </head>
@@ -868,54 +901,17 @@
 
 <!-- ═══ PROBLEM → SOLUTION ═══ -->
 <section class="py-problem">
-  <div class="container py-problem-grid">
-    <div>
-      <span class="label">EL RETO · LA SOLUCIÓN</span>
-      <h2 class="py-problem-h2 split-lines">Una Pyme no es <em>una persona</em>,<br>no es una corporación</h2>
+  <div class="py-problem-head">
+    <span class="label">EL RETO · LA SOLUCIÓN</span>
+    <h2 class="split-lines">Una Pyme no es <em>una persona</em>,<br>no es una corporación</h2>
+    <p>Cuatro problemas reales del dueño y su contador. Cuatro soluciones concretas.</p>
+  </div>
 
-      <div class="py-problem-list">
-        <div class="py-problem-item">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-          <div class="py-problem-item-text"><strong>Multi-firma que no funciona en mobile:</strong> el dueño viaja, el contador autoriza desde la oficina, los pagos quedan colgados días esperando coordinación.</div>
-        </div>
-        <div class="py-problem-item">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-          <div class="py-problem-item-text"><strong>Nómina manual mes a mes:</strong> Excel con CBU's, mails para confirmar, errores que cuestan reputación. La Pyme termina pagando con tarjetas personales.</div>
-        </div>
-        <div class="py-problem-item">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-          <div class="py-problem-item-text"><strong>Cash flow opaco:</strong> el dueño no sabe cuánta plata tiene la empresa hasta que el contador manda el reporte. Y el reporte llega tarde.</div>
-        </div>
-        <div class="py-problem-item">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-          <div class="py-problem-item-text"><strong>Crédito que tarda 3 semanas:</strong> la oportunidad ya pasó. Cuando llegan los fondos, la Pyme ya pidió el préstamo a un competidor o se quedó sin negocio.</div>
-        </div>
-      </div>
+  <div class="py-rs-grid">
 
-      <div class="py-arrow-down">Lo que cambiamos</div>
-
-      <div class="py-solution-list">
-        <div class="py-solution-item">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-          <div class="py-solution-item-text"><strong>Autogestión jerárquica de permisos.</strong> El dueño define quién firma qué, hasta qué monto. El contador opera, el dueño aprueba desde el celu con biometría.</div>
-        </div>
-        <div class="py-solution-item">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-          <div class="py-solution-item-text"><strong>Nómina batch + agenda.</strong> Importás la planilla una vez, validás CBUs automáticamente, programás. El sistema paga sin que vuelvas a pensarlo.</div>
-        </div>
-        <div class="py-solution-item">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-          <div class="py-solution-item-text"><strong>Cash flow en tiempo real.</strong> Dashboard con todos los movimientos pendientes, próximas obligaciones, capacidad real. Sin esperar al lunes para saber dónde estás parado.</div>
-        </div>
-        <div class="py-solution-item">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-          <div class="py-solution-item-text"><strong>Crédito digital con scoring automático.</strong> El motor ya conoce la operación de la Pyme. Oferta pre-aprobada con un click, desembolso en horas.</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Pyme personas/roles visual -->
-    <div class="py-personas">
+    <!-- LEFT: Schema (4 personas Pyme) -->
+    <div class="py-rs-left">
+      <div class="py-personas">
       <div class="py-personas-head">
         <div class="py-personas-head-label">Pyme = múltiples personas</div>
         <div class="py-personas-head-title">4 roles, un solo banco</div>
@@ -969,7 +965,75 @@
       <div class="py-personas-foot">
         <b>Cada rol</b> usa la plataforma que más le conviene. <b>Tu banco</b>, una sola experiencia coherente.
       </div>
+      </div>
     </div>
+
+    <!-- RIGHT: Slider con 4 pain/fix pareados -->
+    <div class="py-rs-right">
+      <div class="py-rs-slider" id="rsSlider" aria-roledescription="carousel">
+
+        <!-- SLIDE 0 — Multi-firma -->
+        <div class="py-slide is-active" data-slide="0">
+          <div class="py-slide-img">
+            <div class="py-slide-img-pain"><div class="py-slide-ph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><b>Foto del reto</b><span>1600 × 1000 · dueño viajando</span></div></div>
+            <div class="py-slide-img-fix"><div class="py-slide-ph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><b>Foto de la solución</b><span>1600 × 1000 · firmando en celu</span></div></div>
+            <div class="py-slide-img-divider"></div>
+          </div>
+          <div class="py-slide-copy">
+            <div class="py-slide-copy-pain"><span class="py-slide-lbl">El reto</span><p>El dueño viaja, los pagos quedan colgados días esperando coordinación.</p></div>
+            <div class="py-slide-copy-fix"><span class="py-slide-lbl">La solución</span><p>El dueño aprueba desde el celu con biometría — al contador no le frena el viaje.</p></div>
+          </div>
+        </div>
+
+        <!-- SLIDE 1 — Nómina -->
+        <div class="py-slide" data-slide="1">
+          <div class="py-slide-img">
+            <div class="py-slide-img-pain"><div class="py-slide-ph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><b>Foto del reto</b><span>1600 × 1000 · Excel + scan</span></div></div>
+            <div class="py-slide-img-fix"><div class="py-slide-ph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><b>Foto de la solución</b><span>1600 × 1000 · empleados cobrando</span></div></div>
+            <div class="py-slide-img-divider"></div>
+          </div>
+          <div class="py-slide-copy">
+            <div class="py-slide-copy-pain"><span class="py-slide-lbl">El reto</span><p>Excel con CBUs, mails para confirmar, errores que cuestan reputación.</p></div>
+            <div class="py-slide-copy-fix"><span class="py-slide-lbl">La solución</span><p>Importás la nómina una vez, el sistema paga sin que vuelvas a pensarlo.</p></div>
+          </div>
+        </div>
+
+        <!-- SLIDE 2 — Cash flow -->
+        <div class="py-slide" data-slide="2">
+          <div class="py-slide-img">
+            <div class="py-slide-img-pain"><div class="py-slide-ph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><b>Foto del reto</b><span>1600 × 1000 · dueño preocupado</span></div></div>
+            <div class="py-slide-img-fix"><div class="py-slide-ph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><b>Foto de la solución</b><span>1600 × 1000 · dashboard live</span></div></div>
+            <div class="py-slide-img-divider"></div>
+          </div>
+          <div class="py-slide-copy">
+            <div class="py-slide-copy-pain"><span class="py-slide-lbl">El reto</span><p>El dueño no sabe cuánta plata tiene la empresa hasta que llega el reporte.</p></div>
+            <div class="py-slide-copy-fix"><span class="py-slide-lbl">La solución</span><p>Cash flow en tiempo real. Sin esperar al lunes para saber dónde estás parado.</p></div>
+          </div>
+        </div>
+
+        <!-- SLIDE 3 — Crédito -->
+        <div class="py-slide" data-slide="3">
+          <div class="py-slide-img">
+            <div class="py-slide-img-pain"><div class="py-slide-ph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><b>Foto del reto</b><span>1600 × 1000 · oportunidad perdida</span></div></div>
+            <div class="py-slide-img-fix"><div class="py-slide-ph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><b>Foto de la solución</b><span>1600 × 1000 · crédito aprobado</span></div></div>
+            <div class="py-slide-img-divider"></div>
+          </div>
+          <div class="py-slide-copy">
+            <div class="py-slide-copy-pain"><span class="py-slide-lbl">El reto</span><p>El crédito tarda 3 semanas. Cuando llegan los fondos, la oportunidad ya pasó.</p></div>
+            <div class="py-slide-copy-fix"><span class="py-slide-lbl">La solución</span><p>Crédito digital con scoring automático: oferta pre-aprobada, desembolso en horas.</p></div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="py-rs-dots" role="tablist">
+        <button class="py-rs-dot is-active" data-slide="0" aria-label="Multi-firma" role="tab"><span class="py-rs-dot-fill"></span></button>
+        <button class="py-rs-dot" data-slide="1" aria-label="Nómina" role="tab"><span class="py-rs-dot-fill"></span></button>
+        <button class="py-rs-dot" data-slide="2" aria-label="Cash flow" role="tab"><span class="py-rs-dot-fill"></span></button>
+        <button class="py-rs-dot" data-slide="3" aria-label="Crédito" role="tab"><span class="py-rs-dot-fill"></span></button>
+      </div>
+    </div>
+
   </div>
 </section>
 
@@ -1365,15 +1429,79 @@ document.querySelectorAll('.py-stat-num, .py-case-metric-num').forEach(el => {
 gsap.fromTo('.py-stat', { x: -20, opacity: 0 },
   { x: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: 'power3.out',
     scrollTrigger: { trigger: '.py-stats-grid', start: 'top 85%' } });
-gsap.fromTo('.py-problem-item', { x: -30, opacity: 0 },
-  { x: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: 'power3.out',
-    scrollTrigger: { trigger: '.py-problem-list', start: 'top 82%' } });
-gsap.fromTo('.py-solution-item', { x: -30, opacity: 0 },
-  { x: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: 'power3.out',
-    scrollTrigger: { trigger: '.py-solution-list', start: 'top 82%' } });
-gsap.fromTo('.py-personas', { x: 40, opacity: 0 },
+gsap.fromTo('.py-rs-left', { x: -30, opacity: 0 },
   { x: 0, opacity: 1, duration: 0.9, ease: 'power3.out',
-    scrollTrigger: { trigger: '.py-personas', start: 'top 82%' } });
+    scrollTrigger: { trigger: '.py-rs-grid', start: 'top 78%' } });
+gsap.fromTo('.py-rs-right', { x: 30, opacity: 0 },
+  { x: 0, opacity: 1, duration: 0.9, ease: 'power3.out',
+    scrollTrigger: { trigger: '.py-rs-grid', start: 'top 78%' } });
+
+// ═══ Image slider with progress + pause/resume ═══
+const rsSlider = document.getElementById('rsSlider');
+const rsRight  = document.querySelector('.py-rs-right');
+if (rsSlider && rsRight) {
+  const slides   = rsSlider.querySelectorAll('.py-slide');
+  const dots     = document.querySelectorAll('.py-rs-dot');
+  const DURATION = 5500;
+  let current = 0, timer = null, paused = false, started = false;
+
+  const activeFill = () => dots[current].querySelector('.py-rs-dot-fill');
+  const resetAllFills = () => dots.forEach(d => {
+    const f = d.querySelector('.py-rs-dot-fill');
+    f.style.transition = 'none'; f.style.width = '0';
+  });
+  function startProgress(ms) {
+    const fill = activeFill();
+    fill.style.transition = 'none'; fill.style.width = '0';
+    void fill.offsetWidth;
+    fill.style.transition = `width ${ms}ms linear`; fill.style.width = '100%';
+  }
+  function pauseProgress() {
+    const fill = activeFill();
+    const w = fill.getBoundingClientRect().width;
+    fill.style.transition = 'none'; fill.style.width = w + 'px';
+  }
+  function getRemainingMs() {
+    const dot = dots[current], fill = activeFill();
+    const dotW = dot.getBoundingClientRect().width;
+    const fillW = fill.getBoundingClientRect().width;
+    const ratio = dotW > 0 ? fillW / dotW : 0;
+    return Math.max(0, DURATION * (1 - ratio));
+  }
+  function scheduleNext(ms) {
+    if (timer) clearTimeout(timer);
+    timer = setTimeout(() => goTo((current + 1) % slides.length), ms);
+  }
+  function goTo(idx) {
+    if (timer) { clearTimeout(timer); timer = null; }
+    slides.forEach((s, i) => s.classList.toggle('is-active', i === idx));
+    dots.forEach((d, i) => d.classList.toggle('is-active', i === idx));
+    current = idx;
+    resetAllFills();
+    if (!paused) { startProgress(DURATION); scheduleNext(DURATION); }
+  }
+  function pause() {
+    if (paused) return;
+    paused = true;
+    if (timer) { clearTimeout(timer); timer = null; }
+    pauseProgress();
+  }
+  function resume() {
+    if (!paused) return;
+    paused = false;
+    const r = getRemainingMs();
+    startProgress(r); scheduleNext(r);
+  }
+  function startFirst() {
+    if (started) return;
+    started = true;
+    startProgress(DURATION); scheduleNext(DURATION);
+  }
+  dots.forEach((d, i) => d.addEventListener('click', () => { paused = false; goTo(i); }));
+  rsRight.addEventListener('mouseenter', pause);
+  rsRight.addEventListener('mouseleave', resume);
+  ScrollTrigger.create({ trigger: rsSlider, start: 'top 75%', once: true, onEnter: startFirst });
+}
 
 gsap.fromTo('.py-mix-board', { y: 40, opacity: 0 },
   { y: 0, opacity: 1, duration: 0.9, ease: 'power3.out',

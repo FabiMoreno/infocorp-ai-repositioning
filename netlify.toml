@@ -110,3 +110,16 @@
   from = "/soluciones/all-business"
   to = "/soluciones-all-business.html"
   status = 200
+
+# ── Explora IA (landing standalone hospedada aparte) ────────────────
+[[redirects]]
+  from = "/explora-ia"
+  to = "https://infocorp-ai-landing.netlify.app/"
+  status = 302
+  force = true
+
+[[redirects]]
+  from = "/explora-ia/*"
+  to = "https://infocorp-ai-landing.netlify.app/:splat"
+  status = 302
+  force = true

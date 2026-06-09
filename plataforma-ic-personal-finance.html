@@ -76,7 +76,7 @@
     .pf-hero-label { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 20px; background: rgba(74,222,128,0.14); border: 1px solid rgba(74,222,128,0.3); font-size: 11px; font-weight: 600; letter-spacing: 0.18em; color: var(--accent-2); text-transform: uppercase; margin-bottom: 28px; }
     .pf-hero-label::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--accent-2); box-shadow: 0 0 8px var(--accent-2); animation: pf-pulse 2s ease-in-out infinite; }
     @keyframes pf-pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(74,222,128,0.5); } 50% { box-shadow: 0 0 0 6px rgba(74,222,128,0); } }
-    .pf-hero-h1 { font-size: clamp(48px, 5.4vw, 78px); font-weight: 800; line-height: 1.04; letter-spacing: -2.2px; margin-bottom: 24px; color: #fff; }
+    .pf-hero-h1 { font-size: clamp(48px, 5.4vw, 78px); font-weight: 500; line-height: 1.04; letter-spacing: -2.2px; margin-bottom: 24px; color: #fff; }
     .pf-hero-h1 em, .pf-hero-h1 em .char, .pf-hero-h1 em .word { font-style: normal; font-weight: 800; background: linear-gradient(135deg, var(--accent-2) 0%, #A7F3D0 100%); -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent; }
     .pf-hero-sub { font-size: 18px; line-height: 1.55; color: rgba(255,255,255,0.72); max-width: 540px; margin-bottom: 36px; }
     .pf-hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
@@ -272,7 +272,7 @@
     /* PROBLEM */
     .pf-problem { padding: 140px 0; background: #fff; position: relative; overflow: hidden; }
     .pf-problem-head { text-align: center; max-width: 760px; margin: 0 auto 80px; padding: 0 24px; }
-    .pf-problem-head h2 { font-size: clamp(36px, 3.6vw, 50px); font-weight: 800; line-height: 1.08; letter-spacing: -1.5px; margin: 12px 0 16px; }
+    .pf-problem-head h2 { font-size: clamp(36px, 3.6vw, 50px); font-weight: 500; line-height: 1.08; letter-spacing: -1.5px; margin: 12px 0 16px; }
     .pf-problem-head h2 em { font-style: normal; color: var(--accent-d); }
     .pf-problem-head p { font-size: 17px; line-height: 1.6; color: var(--sec); }
     .pf-rs-grid { display: grid; grid-template-columns: 0.95fr 1.1fr; gap: 48px; align-items: stretch; max-width: 1180px; margin: 0 auto; padding: 0 24px; }
@@ -384,7 +384,7 @@
     .pf-caps { padding: 140px 0; background: var(--bg); position: relative; overflow: hidden; }
     .pf-caps::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle at 1px 1px, rgba(15,23,41,0.05) 1px, transparent 0); background-size: 32px 32px; mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%); -webkit-mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%); }
     .pf-caps-head { text-align: center; margin-bottom: 64px; position: relative; z-index: 2; }
-    .pf-caps-head h2 { font-size: clamp(36px, 3.6vw, 50px); font-weight: 800; line-height: 1.08; letter-spacing: -1.5px; margin: 12px 0 16px; }
+    .pf-caps-head h2 { font-size: clamp(36px, 3.6vw, 50px); font-weight: 500; line-height: 1.08; letter-spacing: -1.5px; margin: 12px 0 16px; }
     .pf-caps-head h2 em { font-style: normal; color: var(--accent-d); }
     .pf-caps-head p { font-size: 17px; line-height: 1.6; color: var(--sec); max-width: 620px; margin: 0 auto; }
     .pf-caps-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; position: relative; z-index: 2; }
@@ -401,7 +401,7 @@
     .pf-action { padding: 140px 0; background: linear-gradient(180deg, var(--navy) 0%, var(--navy-2) 100%); color: #fff; position: relative; overflow: hidden; }
     .pf-action::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 30% 50%, rgba(0,99,242,0.25), transparent 50%), radial-gradient(ellipse at 80% 70%, rgba(74,222,128,0.16), transparent 55%); }
     .pf-action-inner { position: relative; z-index: 2; display: grid; grid-template-columns: 1fr 1.05fr; gap: 80px; align-items: center; }
-    .pf-action-h2 { font-size: clamp(36px, 3.6vw, 50px); font-weight: 800; line-height: 1.08; letter-spacing: -1.5px; margin: 12px 0 24px; }
+    .pf-action-h2 { font-size: clamp(36px, 3.6vw, 50px); font-weight: 500; line-height: 1.08; letter-spacing: -1.5px; margin: 12px 0 24px; }
     .pf-action-h2 em { font-style: normal; background: linear-gradient(135deg, var(--accent-2), #A7F3D0); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
     .pf-action-sub { font-size: 16px; line-height: 1.6; color: rgba(255,255,255,0.72); margin-bottom: 36px; }
     .pf-flow-steps { display: flex; flex-direction: column; gap: 16px; }
@@ -520,7 +520,7 @@
     .pf-modular { padding: 140px 0; background: linear-gradient(180deg, var(--bg) 0%, #fff 100%); position: relative; overflow: hidden; }
     .pf-modular::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle at 1px 1px, rgba(0,99,242,0.06) 1px, transparent 0); background-size: 28px 28px; mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%); -webkit-mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%); }
     .pf-mod-head { text-align: center; margin-bottom: 50px; position: relative; z-index: 2; }
-    .pf-mod-head h2 { font-size: clamp(36px, 3.6vw, 50px); font-weight: 800; line-height: 1.08; letter-spacing: -1.5px; margin: 12px 0 16px; }
+    .pf-mod-head h2 { font-size: clamp(36px, 3.6vw, 50px); font-weight: 500; line-height: 1.08; letter-spacing: -1.5px; margin: 12px 0 16px; }
     .pf-mod-head h2 em { font-style: normal; color: var(--accent-d); }
     .pf-mod-head p { font-size: 17px; line-height: 1.6; color: var(--sec); max-width: 620px; margin: 0 auto; }
     .pf-mod-composer { position: relative; z-index: 2; max-width: 1080px; margin: 0 auto; background: #fff; border: 1px solid var(--border); border-radius: 24px; padding: 40px; box-shadow: 0 30px 80px rgba(15,23,41,0.08); }
@@ -585,7 +585,7 @@
     .cta-band { position: relative; padding: 120px 0; background: linear-gradient(135deg, var(--accent) 0%, var(--accent-d) 60%, var(--navy-3) 100%); color: #fff; text-align: center; overflow: hidden; }
     .cta-band::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 0%, rgba(74,222,128,0.35), transparent 60%); }
     .cta-band .container { position: relative; z-index: 2; }
-    .cta-h2 { font-size: clamp(40px, 4vw, 60px); font-weight: 800; line-height: 1.08; letter-spacing: -1.5px; margin-bottom: 18px; }
+    .cta-h2 { font-size: clamp(40px, 4vw, 60px); font-weight: 500; line-height: 1.08; letter-spacing: -1.5px; margin-bottom: 18px; }
     .cta-sub { font-size: 18px; line-height: 1.6; color: rgba(255,255,255,0.85); max-width: 540px; margin: 0 auto 32px; }
     .cta-band .btn-white { color: var(--accent-d); }
     .cta-fine { font-size: 13px; color: rgba(255,255,255,0.65); margin-top: 20px; }
@@ -1006,35 +1006,35 @@
       <div class="pf-rs-slider" id="rsSlider" aria-roledescription="carousel">
         <div class="pf-slide is-active" data-slide="0">
           <div class="pf-slide-img">
-            <div class="pf-slide-img-pain"><div class="pf-slide-ph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><b>Foto del reto</b><span>1600 × 1000 · PFM que nadie abre</span></div></div>
-            <div class="pf-slide-img-fix"><div class="pf-slide-ph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><b>Foto de la solución</b><span>1600 × 1000 · app de finanzas abandonada</span></div></div>
+            <div class="pf-slide-img-pain"><div class="pf-slide-ph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><b>Foto del reto</b><span>1600 × 1000 · cliente sin claridad de gasto</span></div></div>
+            <div class="pf-slide-img-fix"><div class="pf-slide-ph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><b>Foto de la solución</b><span>1600 × 1000 · gastos categorizados en vivo</span></div></div>
             <div class="pf-slide-img-divider"></div>
           </div>
           <div class="pf-slide-copy">
-            <div class="pf-slide-copy-pain"><span class="pf-slide-lbl">El reto</span><p>Categorías mal taggeadas, gráficos lindos sin insights. Tres semanas después, nadie lo abre.</p></div>
-            <div class="pf-slide-copy-fix"><span class="pf-slide-lbl">La solución</span><p>Auto-categorización con 96% de accuracy. Si se equivoca, el feedback del usuario lo enseña.</p></div>
+            <div class="pf-slide-copy-pain"><span class="pf-slide-lbl">El reto</span><p>El cliente entra a la app, ve el saldo y se va. No sabe en qué se fue su sueldo este mes.</p></div>
+            <div class="pf-slide-copy-fix"><span class="pf-slide-lbl">La solución</span><p>Gastos e ingresos clasificados por categorías automáticamente — el cliente entiende su dinero apenas abre la app.</p></div>
           </div>
         </div>
         <div class="pf-slide" data-slide="1">
           <div class="pf-slide-img">
-            <div class="pf-slide-img-pain"><div class="pf-slide-ph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><b>Foto del reto</b><span>1600 × 1000 · insights que no son insights</span></div></div>
-            <div class="pf-slide-img-fix"><div class="pf-slide-ph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><b>Foto de la solución</b><span>1600 × 1000 · dato suelto sin acción posible</span></div></div>
+            <div class="pf-slide-img-pain"><div class="pf-slide-ph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><b>Foto del reto</b><span>1600 × 1000 · tendencia oculta hasta fin de mes</span></div></div>
+            <div class="pf-slide-img-fix"><div class="pf-slide-ph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><b>Foto de la solución</b><span>1600 × 1000 · evolución gráfica + presupuesto</span></div></div>
             <div class="pf-slide-img-divider"></div>
           </div>
           <div class="pf-slide-copy">
-            <div class="pf-slide-copy-pain"><span class="pf-slide-lbl">El reto</span><p>'Gastaste 8% más este mes.' OK, ¿y ahora qué? No hay acción sugerida, solo un dato.</p></div>
-            <div class="pf-slide-copy-fix"><span class="pf-slide-lbl">La solución</span><p>Goals + nudges contextuales. El empujoncito justo cuando importa.</p></div>
+            <div class="pf-slide-copy-pain"><span class="pf-slide-lbl">El reto</span><p>El reporte mensual llega tarde. El cliente no detecta tendencias hasta que la deuda explota.</p></div>
+            <div class="pf-slide-copy-fix"><span class="pf-slide-lbl">La solución</span><p>Evolución gráfica mes a mes + presupuesto configurable — el cliente ajusta antes de que sea problema.</p></div>
           </div>
         </div>
         <div class="pf-slide" data-slide="2">
           <div class="pf-slide-img">
-            <div class="pf-slide-img-pain"><div class="pf-slide-ph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><b>Foto del reto</b><span>1600 × 1000 · sin goals</span></div></div>
-            <div class="pf-slide-img-fix"><div class="pf-slide-ph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><b>Foto de la solución</b><span>1600 × 1000 · cliente sin objetivos financieros</span></div></div>
+            <div class="pf-slide-img-pain"><div class="pf-slide-ph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><b>Foto del reto</b><span>1600 × 1000 · ahorrando sin objetivo</span></div></div>
+            <div class="pf-slide-img-fix"><div class="pf-slide-ph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><b>Foto de la solución</b><span>1600 × 1000 · meta con seguimiento</span></div></div>
             <div class="pf-slide-img-divider"></div>
           </div>
           <div class="pf-slide-copy">
-            <div class="pf-slide-copy-pain"><span class="pf-slide-lbl">El reto</span><p>El cliente quiere comprar una moto, ahorrar para vacaciones. Nada de eso aparece en la app.</p></div>
-            <div class="pf-slide-copy-fix"><span class="pf-slide-lbl">La solución</span><p>Wellness score que evoluciona. Un número simple (0-100) que genera sensación de progreso.</p></div>
+            <div class="pf-slide-copy-pain"><span class="pf-slide-lbl">El reto</span><p>El cliente quiere ahorrar para algo concreto (un viaje, una moto). Su banco no lo acompaña en el proceso.</p></div>
+            <div class="pf-slide-copy-fix"><span class="pf-slide-lbl">La solución</span><p>Metas de ahorro con seguimiento + educación financiera embebida — el banco se vuelve coach del cliente.</p></div>
           </div>
         </div>
       </div>

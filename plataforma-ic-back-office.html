@@ -73,7 +73,7 @@
     .bo-hero-label { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 20px; background: rgba(74,222,128,0.14); border: 1px solid rgba(74,222,128,0.3); font-size: 11px; font-weight: 600; letter-spacing: 0.18em; color: var(--accent-2); text-transform: uppercase; margin-bottom: 28px; }
     .bo-hero-label::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--accent-2); box-shadow: 0 0 8px var(--accent-2); animation: bo-pulse 2s ease-in-out infinite; }
     @keyframes bo-pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(74,222,128,0.5); } 50% { box-shadow: 0 0 0 6px rgba(74,222,128,0); } }
-    .bo-hero-h1 { font-size: clamp(48px, 5.4vw, 78px); font-weight: 800; line-height: 1.04; letter-spacing: -2.2px; margin-bottom: 24px; color: #fff; }
+    .bo-hero-h1 { font-size: clamp(48px, 5.4vw, 78px); font-weight: 500; line-height: 1.04; letter-spacing: -2.2px; margin-bottom: 24px; color: #fff; }
     .bo-hero-h1 em, .bo-hero-h1 em .char, .bo-hero-h1 em .word { font-style: normal; font-weight: 800; background: linear-gradient(135deg, var(--accent-2) 0%, #A7F3D0 100%); -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent; }
     .bo-hero-sub { font-size: 18px; line-height: 1.55; color: rgba(255,255,255,0.72); max-width: 540px; margin-bottom: 36px; }
     .bo-hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
@@ -377,7 +377,7 @@
     /* PROBLEM */
     .bo-problem { padding: 140px 0; background: #fff; position: relative; overflow: hidden; }
         .bo-problem-head { text-align: center; max-width: 760px; margin: 0 auto 80px; padding: 0 24px; }
-    .bo-problem-head h2 { font-size: clamp(36px, 3.6vw, 50px); font-weight: 800; line-height: 1.08; letter-spacing: -1.5px; margin: 12px 0 16px; }
+    .bo-problem-head h2 { font-size: clamp(36px, 3.6vw, 50px); font-weight: 500; line-height: 1.08; letter-spacing: -1.5px; margin: 12px 0 16px; }
     .bo-problem-head h2 em { font-style: normal; color: var(--accent); }
     .bo-problem-head p { font-size: 17px; line-height: 1.6; color: var(--sec); }
     /* Reto/Solución: schema + slider */
@@ -483,7 +483,7 @@
     .bo-caps { padding: 140px 0; background: var(--bg); position: relative; overflow: hidden; }
     .bo-caps::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle at 1px 1px, rgba(15,23,41,0.05) 1px, transparent 0); background-size: 32px 32px; mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%); -webkit-mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%); }
     .bo-caps-head { text-align: center; margin-bottom: 64px; position: relative; z-index: 2; }
-    .bo-caps-head h2 { font-size: clamp(36px, 3.6vw, 50px); font-weight: 800; line-height: 1.08; letter-spacing: -1.5px; margin: 12px 0 16px; }
+    .bo-caps-head h2 { font-size: clamp(36px, 3.6vw, 50px); font-weight: 500; line-height: 1.08; letter-spacing: -1.5px; margin: 12px 0 16px; }
     .bo-caps-head h2 em { font-style: normal; color: var(--accent-d); }
     .bo-caps-head p { font-size: 17px; line-height: 1.6; color: var(--sec); max-width: 620px; margin: 0 auto; }
     .bo-caps-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; position: relative; z-index: 2; }
@@ -500,7 +500,7 @@
     .bo-action { padding: 140px 0; background: linear-gradient(180deg, var(--navy) 0%, var(--navy-2) 100%); color: #fff; position: relative; overflow: hidden; }
     .bo-action::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 30% 50%, rgba(0,99,242,0.25), transparent 50%), radial-gradient(ellipse at 80% 70%, rgba(74,222,128,0.16), transparent 55%); }
     .bo-action-inner { position: relative; z-index: 2; display: grid; grid-template-columns: 1fr 1.05fr; gap: 80px; align-items: center; }
-    .bo-action-h2 { font-size: clamp(36px, 3.6vw, 50px); font-weight: 800; line-height: 1.08; letter-spacing: -1.5px; margin: 12px 0 24px; }
+    .bo-action-h2 { font-size: clamp(36px, 3.6vw, 50px); font-weight: 500; line-height: 1.08; letter-spacing: -1.5px; margin: 12px 0 24px; }
     .bo-action-h2 em { font-style: normal; background: linear-gradient(135deg, var(--accent-2), #A7F3D0); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
     .bo-action-sub { font-size: 16px; line-height: 1.6; color: rgba(255,255,255,0.72); margin-bottom: 36px; }
     .bo-flow-steps { display: flex; flex-direction: column; gap: 16px; }
@@ -629,7 +629,7 @@
     .bo-modular { padding: 140px 0; background: linear-gradient(180deg, var(--bg) 0%, #fff 100%); position: relative; overflow: hidden; }
     .bo-modular::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle at 1px 1px, rgba(0,99,242,0.06) 1px, transparent 0); background-size: 28px 28px; mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%); -webkit-mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%); }
     .bo-mod-head { text-align: center; margin-bottom: 50px; position: relative; z-index: 2; }
-    .bo-mod-head h2 { font-size: clamp(36px, 3.6vw, 50px); font-weight: 800; line-height: 1.08; letter-spacing: -1.5px; margin: 12px 0 16px; }
+    .bo-mod-head h2 { font-size: clamp(36px, 3.6vw, 50px); font-weight: 500; line-height: 1.08; letter-spacing: -1.5px; margin: 12px 0 16px; }
     .bo-mod-head h2 em { font-style: normal; color: var(--accent-d); }
     .bo-mod-head p { font-size: 17px; line-height: 1.6; color: var(--sec); max-width: 620px; margin: 0 auto; }
     .bo-mod-composer { position: relative; z-index: 2; max-width: 1080px; margin: 0 auto; background: #fff; border: 1px solid var(--border); border-radius: 24px; padding: 40px; box-shadow: 0 30px 80px rgba(15,23,41,0.08); }
@@ -694,7 +694,7 @@
     .cta-band { position: relative; padding: 120px 0; background: linear-gradient(135deg, var(--accent) 0%, var(--accent-d) 60%, var(--navy-3) 100%); color: #fff; text-align: center; overflow: hidden; }
     .cta-band::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 0%, rgba(74,222,128,0.35), transparent 60%); }
     .cta-band .container { position: relative; z-index: 2; }
-    .cta-h2 { font-size: clamp(40px, 4vw, 60px); font-weight: 800; line-height: 1.08; letter-spacing: -1.5px; margin-bottom: 18px; }
+    .cta-h2 { font-size: clamp(40px, 4vw, 60px); font-weight: 500; line-height: 1.08; letter-spacing: -1.5px; margin-bottom: 18px; }
     .cta-sub { font-size: 18px; line-height: 1.6; color: rgba(255,255,255,0.85); max-width: 540px; margin: 0 auto 32px; }
     .cta-band .btn-white { color: var(--accent-d); }
     .cta-fine { font-size: 13px; color: rgba(255,255,255,0.65); margin-top: 20px; }
@@ -1163,35 +1163,35 @@
       <div class="bo-rs-slider" id="rsSlider" aria-roledescription="carousel">
         <div class="bo-slide is-active" data-slide="0">
           <div class="bo-slide-img">
-            <div class="bo-slide-img-pain"><div class="bo-slide-ph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><b>Foto del reto</b><span>1600 × 1000 · disputas que duran días</span></div></div>
-            <div class="bo-slide-img-fix"><div class="bo-slide-ph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><b>Foto de la solución</b><span>1600 × 1000 · ticket pasando entre áreas</span></div></div>
+            <div class="bo-slide-img-pain"><div class="bo-slide-ph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><b>Foto del reto</b><span>1600 × 1000 · 5 sistemas para 1 operación</span></div></div>
+            <div class="bo-slide-img-fix"><div class="bo-slide-ph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><b>Foto de la solución</b><span>1600 × 1000 · operador con una sola consola</span></div></div>
             <div class="bo-slide-img-divider"></div>
           </div>
           <div class="bo-slide-copy">
-            <div class="bo-slide-copy-pain"><span class="bo-slide-lbl">El reto</span><p>El reclamo pasa por tres áreas, vuelve al agente original, llega un mail al gerente. Día 5.</p></div>
-            <div class="bo-slide-copy-fix"><span class="bo-slide-lbl">La solución</span><p>Console unificado. Disputas, batch, fraude — todo con queue priorizada sin perder contexto.</p></div>
+            <div class="bo-slide-copy-pain"><span class="bo-slide-lbl">El reto</span><p>Los operadores entran a 5 sistemas distintos por día. Cada uno con su lógica, su login y sus permisos.</p></div>
+            <div class="bo-slide-copy-fix"><span class="bo-slide-lbl">La solución</span><p>Un único console donde todos los operadores se vinculan según su rol — sin saltar entre sistemas.</p></div>
           </div>
         </div>
         <div class="bo-slide" data-slide="1">
           <div class="bo-slide-img">
-            <div class="bo-slide-img-pain"><div class="bo-slide-ph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><b>Foto del reto</b><span>1600 × 1000 · sin visibility real-time</span></div></div>
-            <div class="bo-slide-img-fix"><div class="bo-slide-ph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><b>Foto de la solución</b><span>1600 × 1000 · head de ops enterándose el lunes</span></div></div>
+            <div class="bo-slide-img-pain"><div class="bo-slide-ph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><b>Foto del reto</b><span>1600 × 1000 · esperando a IT</span></div></div>
+            <div class="bo-slide-img-fix"><div class="bo-slide-ph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><b>Foto de la solución</b><span>1600 × 1000 · configurando en vivo</span></div></div>
             <div class="bo-slide-img-divider"></div>
           </div>
           <div class="bo-slide-copy">
-            <div class="bo-slide-copy-pain"><span class="bo-slide-lbl">El reto</span><p>El head de operaciones se entera de un pico de fraude por el reporte del lunes.</p></div>
-            <div class="bo-slide-copy-fix"><span class="bo-slide-lbl">La solución</span><p>GURU detecta el patrón, sugiere la resolución. El agente aprueba con un click.</p></div>
+            <div class="bo-slide-copy-pain"><span class="bo-slide-lbl">El reto</span><p>Cambiar un parámetro operativo simple requiere ticket a desarrollo y 2 semanas de espera.</p></div>
+            <div class="bo-slide-copy-fix"><span class="bo-slide-lbl">La solución</span><p>Más de 2.500 configuraciones disponibles directo desde la consola — sin tickets, sin desarrollo.</p></div>
           </div>
         </div>
         <div class="bo-slide" data-slide="2">
           <div class="bo-slide-img">
-            <div class="bo-slide-img-pain"><div class="bo-slide-ph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><b>Foto del reto</b><span>1600 × 1000 · auditoría imposible</span></div></div>
-            <div class="bo-slide-img-fix"><div class="bo-slide-ph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><b>Foto de la solución</b><span>1600 × 1000 · reconstruir quién hizo qué toma sprints</span></div></div>
+            <div class="bo-slide-img-pain"><div class="bo-slide-ph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><b>Foto del reto</b><span>1600 × 1000 · reconstruyendo desde mails</span></div></div>
+            <div class="bo-slide-img-fix"><div class="bo-slide-ph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><b>Foto de la solución</b><span>1600 × 1000 · log exportable en un click</span></div></div>
             <div class="bo-slide-img-divider"></div>
           </div>
           <div class="bo-slide-copy">
-            <div class="bo-slide-copy-pain"><span class="bo-slide-lbl">El reto</span><p>Reconstruir quién hizo qué y cuándo requiere tres sprints. Riesgos vive pidiendo capturas.</p></div>
-            <div class="bo-slide-copy-fix"><span class="bo-slide-lbl">La solución</span><p>Audit by design. Cada click registrado. Auditoría externa pide el log, no las capturas.</p></div>
+            <div class="bo-slide-copy-pain"><span class="bo-slide-lbl">El reto</span><p>Auditoría pide trace de aprobaciones del trimestre. Riesgos reconstruye desde mails. Estrés y errores.</p></div>
+            <div class="bo-slide-copy-fix"><span class="bo-slide-lbl">La solución</span><p>Auditoría nativa con aprobación dual configurable — el log ya está ahí, listo para exportar.</p></div>
           </div>
         </div>
       </div>
